@@ -1,0 +1,10 @@
+[
+  {
+    "id": 0,
+    "name": "Light",
+    "addresses": [
+      "Read address",
+      "Write address"
+    ]
+  }
+]

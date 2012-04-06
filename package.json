@@ -1,0 +1,21 @@
+{
+  "author": "Jed Schmidt <tr@nslator.jp> (http://jed.is)",
+  "name": "homeintouch",
+  "description": "A home automation client/server",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jed/homeintouch.git"
+  },
+  "dependencies": {
+    "express": "2.5.8",
+    "request": "2.9.x",
+    "socket.io": "0.9.4"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "scripts": {
+    "start": "node ./server.js"
+  }
+}

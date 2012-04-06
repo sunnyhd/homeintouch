@@ -1,0 +1,27 @@
+{
+  "credentials": {
+    "username": "admin",
+    "password": "admin"
+  },
+
+  "hosts": {
+    "knx_read": {
+      "hostname": "192.168.2.41",
+      "port": 1039
+    },
+
+    "knx_write": {
+      "hostname": "192.168.2.41",
+      "port": 1037
+    },
+
+    "eib": {
+      "hostname": "localhost"
+    },
+
+    "web": {
+      "hostname": "127.0.0.1",
+      "port": 8081
+    }
+  }
+}

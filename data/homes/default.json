@@ -1,0 +1,37 @@
+{
+  "name": "Default",
+  "order": 0,
+  "floors": [
+    {
+      "id": 0,
+      "name": "Ground floor",
+      "rooms": [
+        {
+          "name": "Office",
+          "id": 0,
+          "devices": [
+            {
+              "id": 0,
+              "name": "Office lights",
+              "type": 0,
+              "read_address": "1/0/1",
+              "write_address": "1/0/0"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": 1,
+      "name": "Basement",
+      "rooms": []
+    },
+
+    {
+      "id": 2,
+      "name": "Second floor",
+      "rooms": []
+    }
+  ]
+}
