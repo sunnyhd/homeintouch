@@ -1,5 +1,41 @@
-Home In Touch: Client
-=====================
+Home In Touch
+=============
+
+Install
+-------
+
+    git clone https://jed@github.com/jed/homeintouch.git
+    cd homeintouch
+    npm install
+
+Run
+---
+
+Server/client:
+
+    node server.js
+
+Standalone client
+
+    node server.js --clientonly
+
+Flow
+----
+
+1. Server startup
+  - sets up socket connections
+  - exposes http and socket.io
+
+2. Client startup
+  - loads all resources from server
+  - renders root app
+  - connects to server
+
+3. Communication
+  - server emits "homes" event with all data
+  - server/client emit "address" event when an address changes
+  - client emits "save" with same format as "homes" to save state
+  - client updates views whenever a device state changes
 
 Models
 ------
@@ -79,7 +115,7 @@ All interaction with the server is performed via Socket.IO.
 
     socket.on("connect", function(){})
     socket.on("disconnect", function(){})
-    socket.on("init", function(data){})
+    socket.on("homes", function(homes){})
     socket.on("address", function(id, value){})
 
-    socket.emit("save", home)
+    socket.emit("save", homes)
