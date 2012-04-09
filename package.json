@@ -10,7 +10,8 @@
   "dependencies": {
     "express": "2.5.8",
     "request": "2.9.x",
-    "socket.io": "0.9.4"
+    "socket.io": "0.9.4",
+    "jade": ">= 0.0.1"
   },
   "engines": {
     "node": "*"

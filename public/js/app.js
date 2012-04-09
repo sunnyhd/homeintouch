@@ -1,4 +1,7 @@
 var HomeInTouch = (function(exports, Backbone, _, $){
+
+  // Core application object
+  // -----------------------
   var hit = new Backbone.Marionette.Application();
 
   var Model      = Backbone.Model

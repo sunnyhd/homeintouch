@@ -17,7 +17,13 @@ var fs = require("fs")
 
 app.use(express.basicAuth(credentials.username, credentials.password))
 app.use(express.static(__dirname + "/public/"))
-app.use(function(req, res){ res.redirect("/") })
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+
+app.get('/', function(req, res){
+  res.render('index');
+});
 
 app.listen(hosts.web.port, function() {
   console.log("now listening on %s...", hosts.web.port)
