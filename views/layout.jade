@@ -15,8 +15,7 @@ html(lang='en')
       b.caret
     ul.dropdown-menu
   script(id="home-item-template", type="text/template")
-    li
-      a(href='#') <%= name %>
+    a(href='#') <%= name %>
 
   body(data-spy='scroll')!= body
 
@@ -28,6 +27,7 @@ html(lang='en')
     script(src='/js/socket.io.min.js')
     script(src='/js/app.js')
     script(src='/js/app.socketadapter.js')
+    script(src='/js/app.homelist.js')
     script
       $(document).ready(function() {
       var options = {

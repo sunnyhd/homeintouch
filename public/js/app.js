@@ -11,56 +11,25 @@ var HomeInTouch = (function(Backbone, _, $){
   var Model      = Backbone.Model
     , Collection = Backbone.Collection
     , View       = Backbone.View
-
-    // Models
-    , App
-    , Socket
-    , Addresses
-    , Home
-    , Floor
-    , Room
-    , Group
-    , Device
-
-    // Collections
-    , HomeList
-    , FloorList
-    , RoomList
-    , GroupList
-    , DeviceList
-
-    // Views
-    , AppView
-    , HomeSelector
-    , HomeItemView
-    , RoomSelector
-    , FloorView
-    , RoomView
-    , GroupView
-    , LightView
-
-    , RoomModal
-    , FloorModal
-    , LightModal
   ;
 
-  // Home Related Models
-  // -------------------
+  // Models And Collections
+  // ----------------------
   
-  Room = Model.extend({});
+  HIT.Room = Model.extend({});
   
-  RoomList = Collection.extend({
-    model: Room
+  HIT.RoomCollection = Collection.extend({
+    model: HIT.Room
   });
 
-  Floor = Model.extend({
+  HIT.Floor = Model.extend({
     initialize: function(){
       this.parseRooms();
     },
 
     parseRooms: function(){
       var roomData = this.get("rooms");
-      var rooms = new RoomList();
+      var rooms = new HIT.RoomCollection();
       if (roomData){
         rooms.reset(roomData);
       }
@@ -68,18 +37,18 @@ var HomeInTouch = (function(Backbone, _, $){
     }
   });
 
-  FloorList = Collection.extend({
-    model: Floor
+  HIT.FloorCollection = Collection.extend({
+    model: HIT.Floor
   });
 
-  Home = Model.extend({
+  HIT.Home = Model.extend({
     initialize: function(){
       this.parseFloors();
     },
 
     parseFloors: function(){
       var floorData = this.get("floors");
-      var floors = new FloorList();
+      var floors = new HIT.FloorCollection();
       if (floorData){
         floors.reset(floorData);
       }
@@ -87,8 +56,8 @@ var HomeInTouch = (function(Backbone, _, $){
     }
   });
 
-  HomeList = Collection.extend({
-    model: Home,
+  HIT.HomeCollection = Collection.extend({
+    model: HIT.Home,
 
     selectDefault: function(){
       var home = this.at(0);
@@ -101,55 +70,11 @@ var HomeInTouch = (function(Backbone, _, $){
     }
   });
 
-  // Views
-  // -----
-  
-  HomeItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "li",
-    template: "#home-item-template"
-  });
-
-  HomeSelector = Backbone.Marionette.CompositeView.extend({
-    tagName: "li",
-    className: "dropdown",
-    template: "#home-list-template",
-    itemView: HomeItemView,
-
-    appendHtml: function(cv, iv){
-      cv.$("ul.dropdown-menu").append(iv.el);
-    }
-  })
-
-  // Application Event Handlers
-  // --------------------------
-
-  HIT.vent.on("homes", function(homeData) {
-    console.log(homeData);
-    HIT.homes.reset(homeData);
-    HIT.homes.selectDefault();
-  }, this)
-
-  // Helper Methods
-  // --------------
-
-  var showHomeList = function(selectedHome){
-    console.log(selectedHome);
-    var view = new HomeSelector({
-      model: selectedHome,
-      collection: HIT.homes
-    });
-
-    HIT.homeList.show(view);
-  };
-
   // Application Initializer
   // -----------------------
 
   HIT.addInitializer(function(options){
     HIT.socketUrl = options.rootUrl;
-
-    HIT.homes = new HomeList();
-    HIT.homes.on("home:selected", showHomeList);
   });
 
   return HIT;
