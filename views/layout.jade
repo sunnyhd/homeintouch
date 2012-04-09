@@ -8,6 +8,16 @@ html(lang='en')
     link(href='/css/style.css', rel='stylesheet')
     //if lt IE 9
       script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+
+  script(id="home-list-template", type="text/template")
+    a.dropdown-toggle(href='#', data-toggle='dropdown')
+      | <%= name %>
+      b.caret
+    ul.dropdown-menu
+  script(id="home-item-template", type="text/template")
+    li
+      a(href='#') <%= name %>
+
   body(data-spy='scroll')!= body
 
     script(src='/js/jquery-1.7.1.min.js')
@@ -17,6 +27,7 @@ html(lang='en')
     script(src='/js/bootstrap.min.js')
     script(src='/js/socket.io.min.js')
     script(src='/js/app.js')
+    script(src='/js/app.socketadapter.js')
     script
       $(document).ready(function() {
       var options = {

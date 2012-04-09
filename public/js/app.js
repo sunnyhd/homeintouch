@@ -1,8 +1,12 @@
-var HomeInTouch = (function(exports, Backbone, _, $){
+var HomeInTouch = (function(Backbone, _, $){
 
   // Core application object
   // -----------------------
   var HIT = new Backbone.Marionette.Application();
+
+  HIT.addRegions({
+    homeList: "#home-select-list"
+  });
 
   var Model      = Backbone.Model
     , Collection = Backbone.Collection
@@ -28,6 +32,7 @@ var HomeInTouch = (function(exports, Backbone, _, $){
     // Views
     , AppView
     , HomeSelector
+    , HomeItemView
     , RoomSelector
     , FloorView
     , RoomView
@@ -83,69 +88,69 @@ var HomeInTouch = (function(exports, Backbone, _, $){
   });
 
   HomeList = Collection.extend({
-    model: Home
-  });
+    model: Home,
 
-  App = Model.extend({
-    defaults: {
-      connected: false,
-      loaded: false
+    selectDefault: function(){
+      var home = this.at(0);
+      this.select(home);
     },
 
-    initialize: function() {
-      this.addresses = new Model
-      this.socket = new Socket
+    select: function(home){
+      this.selected = home;
+      this.trigger("home:selected", home);
+    }
+  });
 
-      this.view = new AppView({
-        model: this,
-        el: document.body
-      })
+  // Views
+  // -----
+  
+  HomeItemView = Backbone.Marionette.ItemView.extend({
+    tagName: "li",
+    template: "#home-item-template"
+  });
 
-      this.homes = new HomeList
+  HomeSelector = Backbone.Marionette.CompositeView.extend({
+    tagName: "li",
+    className: "dropdown",
+    template: "#home-list-template",
+    itemView: HomeItemView,
 
-      this.on("change:home", function(app, home) {
-        console.log(app);
-        console.log(home.get("floors"));
-        home.get("floors").view.render()
-
-      }, this)
+    appendHtml: function(cv, iv){
+      cv.$("ul.dropdown-menu").append(iv.el);
     }
   })
 
-  AppView = View.extend({})
-  HomeList = Collection.extend({})
+  // Application Event Handlers
+  // --------------------------
 
-  Socket = Model.extend({
-    initialize: function() {
-      var socket = io.connect(HIT.socketUrl)
+  HIT.vent.on("homes", function(homeData) {
+    console.log(homeData);
+    HIT.homes.reset(homeData);
+    HIT.homes.selectDefault();
+  }, this)
 
-      socket.on("connect", function() {
-        app.set("connected", true)
-      })
+  // Helper Methods
+  // --------------
 
-      socket.on("disconnect", function() {
-        app.set("connected", false)
-      })
+  var showHomeList = function(selectedHome){
+    console.log(selectedHome);
+    var view = new HomeSelector({
+      model: selectedHome,
+      collection: HIT.homes
+    });
 
-      socket.on("homes", function(homes) {
-        console.log("homes", homes);
-        app.homes.add(homes)
-        app.set("home", app.homes.models[0])
-      })
-
-      socket.on("address", function(id, value) {
-        app.addresses.set(id, value)
-      })
-    }
-  })
+    HIT.homeList.show(view);
+  };
 
   // Application Initializer
   // -----------------------
 
   HIT.addInitializer(function(options){
     HIT.socketUrl = options.rootUrl;
-    exports.app = new App;
+
+    HIT.homes = new HomeList();
+    HIT.homes.on("home:selected", showHomeList);
   });
 
   return HIT;
-})(window, Backbone, _, $);
+})(Backbone, _, $);
