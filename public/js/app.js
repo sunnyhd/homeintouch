@@ -2,7 +2,7 @@ var HomeInTouch = (function(exports, Backbone, _, $){
 
   // Core application object
   // -----------------------
-  var hit = new Backbone.Marionette.Application();
+  var HIT = new Backbone.Marionette.Application();
 
   var Model      = Backbone.Model
     , Collection = Backbone.Collection
@@ -37,6 +37,54 @@ var HomeInTouch = (function(exports, Backbone, _, $){
     , RoomModal
     , FloorModal
     , LightModal
+  ;
+
+  // Home Related Models
+  // -------------------
+  
+  Room = Model.extend({});
+  
+  RoomList = Collection.extend({
+    model: Room
+  });
+
+  Floor = Model.extend({
+    initialize: function(){
+      this.parseRooms();
+    },
+
+    parseRooms: function(){
+      var roomData = this.get("rooms");
+      var rooms = new RoomList();
+      if (roomData){
+        rooms.reset(roomData);
+      }
+      this.rooms = rooms;
+    }
+  });
+
+  FloorList = Collection.extend({
+    model: Floor
+  });
+
+  Home = Model.extend({
+    initialize: function(){
+      this.parseFloors();
+    },
+
+    parseFloors: function(){
+      var floorData = this.get("floors");
+      var floors = new FloorList();
+      if (floorData){
+        floors.reset(floorData);
+      }
+      this.floors = floors;
+    }
+  });
+
+  HomeList = Collection.extend({
+    model: Home
+  });
 
   App = Model.extend({
     defaults: {
@@ -56,7 +104,9 @@ var HomeInTouch = (function(exports, Backbone, _, $){
       this.homes = new HomeList
 
       this.on("change:home", function(app, home) {
-        home.floors.view.render()
+        console.log(app);
+        console.log(home.get("floors"));
+        home.get("floors").view.render()
 
       }, this)
     }
@@ -67,7 +117,7 @@ var HomeInTouch = (function(exports, Backbone, _, $){
 
   Socket = Model.extend({
     initialize: function() {
-      var socket = io.connect("http://trendsetterin.selfhost.eu:8081")
+      var socket = io.connect(HIT.socketUrl)
 
       socket.on("connect", function() {
         app.set("connected", true)
@@ -78,6 +128,7 @@ var HomeInTouch = (function(exports, Backbone, _, $){
       })
 
       socket.on("homes", function(homes) {
+        console.log("homes", homes);
         app.homes.add(homes)
         app.set("home", app.homes.models[0])
       })
@@ -91,9 +142,10 @@ var HomeInTouch = (function(exports, Backbone, _, $){
   // Application Initializer
   // -----------------------
 
-  hit.addInitializer(function(options){
+  HIT.addInitializer(function(options){
+    HIT.socketUrl = options.rootUrl;
     exports.app = new App;
   });
 
-  return hit;
+  return HIT;
 })(window, Backbone, _, $);
