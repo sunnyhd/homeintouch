@@ -20,14 +20,6 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
     }
   })
 
-  // Application Event Handlers
-  // --------------------------
-
-  HIT.vent.on("homes", function(homeData) {
-    HIT.homes.reset(homeData);
-    HIT.homes.selectDefault();
-  }, this)
-
   // Helper Methods
   // --------------
 
@@ -40,12 +32,21 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
     HIT.homeList.show(view);
   };
 
+  // Application Event Handlers
+  // --------------------------
+
+  HIT.vent.on("homes", function(homeData) {
+    HIT.homes.reset(homeData);
+    HIT.homes.selectDefault();
+  }, this)
+
+  HIT.vent.on("home:selected", showHomeList);
+
   // Initializer
   // -----------
 
   HIT.addInitializer(function(options){
     HIT.homes = new HIT.HomeCollection();
-    HIT.homes.on("home:selected", showHomeList);
   });
 
   return HomeList;

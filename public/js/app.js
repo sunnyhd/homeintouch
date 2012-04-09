@@ -5,7 +5,8 @@ var HomeInTouch = (function(Backbone, _, $){
   var HIT = new Backbone.Marionette.Application();
 
   HIT.addRegions({
-    homeList: "#home-select-list"
+    homeList: "#home-list",
+    floorList: "#floor-list"
   });
 
   var Model      = Backbone.Model
@@ -66,7 +67,7 @@ var HomeInTouch = (function(Backbone, _, $){
 
     select: function(home){
       this.selected = home;
-      this.trigger("home:selected", home);
+      HIT.vent.trigger("home:selected", home);
     }
   });
 
