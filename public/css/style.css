@@ -15,3 +15,7 @@ body {
 .modal {
   display: none;
 }
+
+.room, .room-device {
+  background-color: #eee;
+}

@@ -14,6 +14,7 @@ html(lang='en')
       | <%= name %>
       b.caret
     ul.dropdown-menu
+
   script(id="home-item-template", type="text/template")
     a(href='#') <%= name %>
 
@@ -28,7 +29,19 @@ html(lang='en')
     li
       a(href='#') <%= name %>
 
-  body(data-spy='scroll')!= body
+  body(data-spy='scroll')
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand(href='#') HomeInTouch
+          .nav-collapse
+            #floor-list
+            ul#home-list.nav.pull-right
+    != body
 
     script(src='/js/jquery-1.7.1.min.js')
     script(src='/js/underscore-min.js')
@@ -38,6 +51,7 @@ html(lang='en')
     script(src='/js/socket.io.min.js')
     script(src='/js/app.js')
     script(src='/js/app.socketadapter.js')
+    script(src='/js/app.models.js')
     script(src='/js/app.homelist.js')
     script(src='/js/app.floorlist.js')
     script
