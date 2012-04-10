@@ -53,28 +53,12 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
   };
 
   var showRoomDevices = function(roomLayout, room){
-    var deviceTypeGroups = room.devices.byType();
-    var deviceTypeCollection = new Backbone.Collection();
-
-    _.each(deviceTypeGroups, function(group, type){
-      var typeName = getTypeName(type);
-      var deviceType = new Backbone.Model({name: typeName});
-      deviceType.devices = new Backbone.Collection(group);
-      deviceTypeCollection.add(deviceType);
-    });
-
+    var deviceTypeCollection = room.devices.byType();
     var view = new RoomManager.DeviceTypeList({
       collection: deviceTypeCollection
     });
     roomLayout.deviceList.show(view);
   };
-
-  // This needs to be replaced with some real data from
-  // the server, to tell us about the type of device we
-  // are dealing with. Hard coded list for now.
-  var getTypeName = function(index){
-    return ["Light"][index];
-  }
 
   // App Event Handlers
   // ------------------

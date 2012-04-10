@@ -13,10 +13,30 @@
     model: HIT.Device,
 
     byType: function(){
-      return this.groupBy(function(device){
+      var that = this;
+      var deviceTypeCollection = new Backbone.Collection();
+
+      var deviceTypeGroups = this.groupBy(function(device){ 
         return device.get("type");
       });
+
+      _.each(deviceTypeGroups, function(group, type){
+        var typeName = that.getTypeName(type);
+        var deviceType = new Backbone.Model({name: typeName});
+        deviceType.devices = new Backbone.Collection(group);
+        deviceTypeCollection.add(deviceType);
+      });
+
+      return deviceTypeCollection;
+    },
+
+    // This needs to be replaced with some real data from
+    // the server, to tell us about the type of device we
+    // are dealing with. Hard coded list for now.
+    getTypeName: function(index){
+      return ["Light"][index];
     }
+
   });
   
   HIT.Room = Model.extend({
