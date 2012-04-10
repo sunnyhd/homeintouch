@@ -1,12 +1,20 @@
 (function(HIT, Backbone, _, $){
+  var Collection = Backbone.Collection;
   var Model = Backbone.Model.extend({});
   _.extend(Model.prototype, Backbone.Ponzi);
 
-  var Collection = Backbone.Collection;
-
-  // Models And Collections
-  // ----------------------
+  // Device Types
+  // ------------
   
+  HIT.DeviceType = Model.extend({});
+
+  HIT.DeviceTypeCollection = Collection.extend({
+    model: HIT.DeviceType
+  });
+  
+  // Devices
+  // -------
+
   HIT.Device = Model.extend({});
 
   HIT.DeviceCollection = Collection.extend({
@@ -20,24 +28,19 @@
         return device.get("type");
       });
 
-      _.each(deviceTypeGroups, function(group, type){
-        var typeName = that.getTypeName(type);
+      _.each(deviceTypeGroups, function(group, typeId){
+        var typeName = HIT.DeviceTypes.getName(typeId);
         var deviceType = new Backbone.Model({name: typeName});
         deviceType.devices = new Backbone.Collection(group);
         deviceTypeCollection.add(deviceType);
       });
 
       return deviceTypeCollection;
-    },
-
-    // This needs to be replaced with some real data from
-    // the server, to tell us about the type of device we
-    // are dealing with. Hard coded list for now.
-    getTypeName: function(index){
-      return ["Light", "Fan"][index];
     }
-
   });
+
+  // Rooms
+  // -----
   
   HIT.Room = Model.extend({
     initialize: function(){
@@ -49,6 +52,9 @@
     model: HIT.Room,
   });
 
+  // Floors
+  // ------
+
   HIT.Floor = Model.extend({
     initialize: function(){
       this.rooms = this.parseChildren("rooms", HIT.RoomCollection);
@@ -58,6 +64,9 @@
   HIT.FloorCollection = Collection.extend({
     model: HIT.Floor
   });
+
+  // Homes
+  // -----
 
   HIT.Home = Model.extend({
     initialize: function(){
