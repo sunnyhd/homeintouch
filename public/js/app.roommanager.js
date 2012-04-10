@@ -54,6 +54,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
   var showRoomDevices = function(roomLayout, room){
     var deviceTypeCollection = room.devices.byType();
+    console.log(deviceTypeCollection);
     var view = new RoomManager.DeviceTypeList({
       collection: deviceTypeCollection
     });

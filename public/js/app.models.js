@@ -34,7 +34,7 @@
     // the server, to tell us about the type of device we
     // are dealing with. Hard coded list for now.
     getTypeName: function(index){
-      return ["Light"][index];
+      return ["Light", "Fan"][index];
     }
 
   });

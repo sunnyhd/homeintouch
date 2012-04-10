@@ -11,8 +11,29 @@
           "id": 0,
           "devices": [
             {
+              "id": 2,
+              "name": "Desk fan",
+              "type": 1,
+              "read_address": "1/0/1",
+              "write_address": "1/0/0"
+            },
+            {
+              "id": 3,
+              "name": "Ceiling fan",
+              "type": 1,
+              "read_address": "1/0/1",
+              "write_address": "1/0/0"
+            },
+            {
               "id": 0,
               "name": "Office lights",
+              "type": 0,
+              "read_address": "1/0/1",
+              "write_address": "1/0/0"
+            },
+            {
+              "id": 1,
+              "name": "Office lamp",
               "type": 0,
               "read_address": "1/0/1",
               "write_address": "1/0/0"
