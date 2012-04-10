@@ -10,7 +10,13 @@
   HIT.Device = Model.extend({});
 
   HIT.DeviceCollection = Collection.extend({
-    model: HIT.Device
+    model: HIT.Device,
+
+    byType: function(){
+      return this.groupBy(function(device){
+        return device.get("type");
+      });
+    }
   });
   
   HIT.Room = Model.extend({

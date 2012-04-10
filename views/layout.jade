@@ -38,15 +38,15 @@ html(lang='en')
           p <%= name %>
 
       .room-devices.row-fluid
-        .room-device.span3
-          .pull-right
-            button +
-          p Device Type
-          ul
-            li Device 1 Name (State)
-            li Device 2 Name (State)
-            li Device 3 Name (State)
-            li Device 4 Name (State)
+
+  script(id="device-list-template", type="text/template")
+    .pull-right
+      button +
+    p <%= name %>
+    ul
+
+  script(id="device-list-item-template", type="text/template")
+    <%= name %>
 
   body(data-spy='scroll')
     .navbar.navbar-fixed-top
