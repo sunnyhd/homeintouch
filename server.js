@@ -39,6 +39,12 @@ io.sockets.on("connection", function (socket) {
 
   socket.on("set", eib.set)
   socket.on("get", eib.get)
+
+  socket.on("save", function(home) {
+    config.saveHome(home, function(err) {
+      if (err) socket.emit("error", err)
+    })
+  })
 })
 
 if (process.argv[2] == "--clientonly") return
