@@ -34,6 +34,13 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
 
   HIT.vent.on("home:selected", function(home) {
     showFloorList(home.floors);
+    var floor = home.floors.at(0);
+    if (floor){
+      var room = floor.rooms.at(0);
+      if (room){
+        HIT.vent.trigger("room:selected", room);
+      }
+    }
   }, this)
 
   // Helper Methods

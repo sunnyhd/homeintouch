@@ -29,6 +29,25 @@ html(lang='en')
     li
       a(href='#') <%= name %>
 
+  script(id="room-layout-template", type="text/template")
+    .container-fluid
+      .room-header.row-fluid
+        .room.span9
+          .pull-right
+            button +
+          p <%= name %>
+
+      .room-devices.row-fluid
+        .room-device.span3
+          .pull-right
+            button +
+          p Device Type
+          ul
+            li Device 1 Name (State)
+            li Device 2 Name (State)
+            li Device 3 Name (State)
+            li Device 4 Name (State)
+
   body(data-spy='scroll')
     .navbar.navbar-fixed-top
       .navbar-inner
@@ -41,12 +60,14 @@ html(lang='en')
           .nav-collapse
             #floor-list
             ul#home-list.nav.pull-right
-    != body
+
+    #main-content!= body
 
     script(src='/js/jquery-1.7.1.min.js')
     script(src='/js/underscore-min.js')
     script(src='/js/backbone-min.js')
     script(src='/js/backbone.marionette.min.js')
+    script(src='/js/backbone.ponzi.js')
     script(src='/js/bootstrap.min.js')
     script(src='/js/socket.io.min.js')
     script(src='/js/app.js')

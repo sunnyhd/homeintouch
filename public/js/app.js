@@ -6,7 +6,8 @@ var HomeInTouch = (function(Backbone, _, $){
 
   HIT.addRegions({
     homeList: "#home-list",
-    floorList: "#floor-list"
+    floorList: "#floor-list",
+    main: "#main-content"
   });
 
   // Application Initializer

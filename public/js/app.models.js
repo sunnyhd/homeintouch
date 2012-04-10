@@ -1,30 +1,31 @@
 (function(HIT, Backbone, _, $){
-  var Model      = Backbone.Model
-    , Collection = Backbone.Collection
-    , View       = Backbone.View
-  ;
+  var Model = Backbone.Model.extend({});
+  _.extend(Model.prototype, Backbone.Ponzi);
+
+  var Collection = Backbone.Collection;
 
   // Models And Collections
   // ----------------------
   
-  HIT.Room = Model.extend({});
+  HIT.Device = Model.extend({});
+
+  HIT.DeviceCollection = Collection.extend({
+    model: HIT.Device
+  });
+  
+  HIT.Room = Model.extend({
+    initialize: function(){
+      this.devices = this.parseChildren("devices", HIT.DeviceCollection);
+    }
+  });
   
   HIT.RoomCollection = Collection.extend({
-    model: HIT.Room
+    model: HIT.Room,
   });
 
   HIT.Floor = Model.extend({
     initialize: function(){
-      this.parseRooms();
-    },
-
-    parseRooms: function(){
-      var roomData = this.get("rooms");
-      var rooms = new HIT.RoomCollection();
-      if (roomData){
-        rooms.reset(roomData);
-      }
-      this.rooms = rooms;
+      this.rooms = this.parseChildren("rooms", HIT.RoomCollection);
     }
   });
 
@@ -34,16 +35,7 @@
 
   HIT.Home = Model.extend({
     initialize: function(){
-      this.parseFloors();
-    },
-
-    parseFloors: function(){
-      var floorData = this.get("floors");
-      var floors = new HIT.FloorCollection();
-      if (floorData){
-        floors.reset(floorData);
-      }
-      this.floors = floors;
+      this.floors = this.parseChildren("floors", HIT.FloorCollection);
     }
   });
 
