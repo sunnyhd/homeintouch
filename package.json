@@ -11,12 +11,14 @@
     "express": "2.5.8",
     "request": "2.9.x",
     "socket.io": "0.9.4",
-    "jade": ">= 0.0.1"
+    "jade": ">= 0.0.1",
+    "forever": "0.8.5"
   },
   "engines": {
     "node": "*"
   },
   "scripts": {
-    "start": "node ./server.js"
+    "start": "./node_modules/forever/bin/forever start -al forever.log -ao out.log -ae err.log server.js",
+    "stop": "./node_modules/forever/bin/forever stop server.js"
   }
 }

@@ -118,4 +118,4 @@ All interaction with the server is performed via Socket.IO.
     socket.on("homes", function(homes){})
     socket.on("address", function(id, value){})
 
-    socket.emit("save", homes)
+    socket.emit("save", home)
