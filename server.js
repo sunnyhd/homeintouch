@@ -31,6 +31,12 @@ app.listen(hosts.web.port, function() {
 
 io.set("log level", 2)
 io.sockets.on("connection", function (socket) {
+  config.loadDeviceTypes(function(err, deviceTypes) {
+    err
+      ? socket.emit("error", err)
+      : socket.emit("deviceTypes", deviceTypes)
+  })
+
   config.loadHomes(function(err, homes) {
     err
       ? socket.emit("error", err)

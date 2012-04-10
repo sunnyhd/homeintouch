@@ -25,13 +25,18 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
 
     socket.on("homes", function(homes) {
       HIT.vent.trigger("homes", homes);
-      // app.homes.add(homes)
-      // app.set("home", app.homes.models[0])
+    })
+
+    socket.on("deviceTypes", function(deviceTypes){
+      HIT.vent.trigger('deviceTypes', deviceTypes);
     })
 
     socket.on("address", function(id, value) {
       HIT.vent.trigger("address", id, value);
-      // app.addresses.set(id, value)
+    })
+
+    socket.on("error", function(err){
+      console.log("ERROR: ", err);
     })
   };
 
