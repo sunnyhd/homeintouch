@@ -11,6 +11,15 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       deviceList: ".room-devices"
     },
 
+    events: {
+      "click button.addDeviceType": "addDeviceTypeClicked"
+    },
+
+    addDeviceTypeClicked: function(e){
+      e.preventDefault();
+      HIT.vent.trigger("room:addDeviceType");
+    },
+
     onRender: function(){
       showRoomDevices(this, this.model);
     }
@@ -36,8 +45,17 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
     itemView: RoomManager.DeviceView,
 
+    events: {
+      "click button.addDevice": "addDeviceClicked"
+    },
+
     initialize: function(){
       this.collection = this.model.devices;
+    },
+
+    addDeviceClicked: function(e){
+      e.preventDefault();
+      HIT.vent.trigger("room:addDevice");
     },
 
     appendHtml: function(cv, iv){

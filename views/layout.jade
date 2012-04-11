@@ -34,14 +34,14 @@ html(lang='en')
         .room-header.row-fluid
           .room.span9
             .pull-right
-              button +
+              button(class="btn").addDeviceType +
             p <%= name %>
 
         .room-devices.row.span9
 
     script(id="device-list-template", type="text/template")
       .pull-right
-        button +
+        button(class="btn").addDevice +
       p <%= name %>
       ul
 
