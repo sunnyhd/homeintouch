@@ -40,6 +40,7 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     });
 
     socket.on("address", function(id, value) {
+      console.log("address: ", id, value);
       HIT.vent.trigger("address", id, value);
     });
 

@@ -5,7 +5,22 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   // -----
 
   DeviceManager.EditDeviceForm = Backbone.Marionette.ItemView.extend({
-    template: "#device-edit-template"
+    template: "#device-edit-template",
+
+    events: {
+      "click .cancel.btn": "cancelClicked",
+      "click .save.btn": "addClicked"
+    },
+
+    addClicked: function(e){
+      e.preventDefault();
+      this.close();
+    },
+
+    cancelClicked: function(e){
+      e.preventDefault();
+      this.close();
+    }
   });
 
   DeviceManager.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
