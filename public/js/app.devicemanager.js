@@ -39,15 +39,15 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  DeviceManager.AddDeviceTypeZeroForm = Backbone.Marionette.ItemView.extend({
-    template: "#device-add-type-zero-template",
-
+  // Base form for adding device types.
+  // Don't use this directly. See the
+  // `AddDeviceTypeZeroForm` for an example
+  // of how to use this.
+  DeviceManager.AddDeviceTypeForm = Backbone.Marionette.ItemView.extend({
     events: {
       "click .cancel.btn": "cancelClicked",
       "click .add.btn": "addClicked"
     },
-
-    formFields: ["name", "read_address", "write_address"],
 
     addClicked: function(e){
       e.preventDefault();
@@ -74,23 +74,14 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  DeviceManager.AddDeviceTypeOneForm = Backbone.Marionette.ItemView.extend({
+  DeviceManager.AddDeviceTypeZeroForm = DeviceManager.AddDeviceTypeForm.extend({
+    template: "#device-add-type-zero-template",
+    formFields: ["name", "read_address", "write_address"]
+  });
+
+  DeviceManager.AddDeviceTypeOneForm = DeviceManager.AddDeviceTypeForm.extend({
     template: "#device-add-type-one-template",
-
-    events: {
-      "click .cancel.btn": "cancelClicked",
-      "click .add.btn": "addClicked"
-    },
-
-    addClicked: function(e){
-      e.preventDefault();
-      this.close();
-    },
-
-    cancelClicked: function(e){
-      e.preventDefault();
-      this.close();
-    }
+    formFields: ["name", "read_state_address", "write_state_address", "read_value_address", "write_value_address"]
   });
 
   // Helper Methods
@@ -111,24 +102,27 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   // Workflow Objects
   // ----------------
 
-  var addDeviceGroupWorkflow = {
-    run: function(room){
+  var addDeviceWorkflows = {
+    addGroupToRoom: function(room){
       var that = this;
       var viewModel = this.getAddGroupViewModel(room);
 
-      // add group to room
       var addGroupForm = this.showAddGroupForm(viewModel);
       addGroupForm.on("close", function(){
         that.addGroupClose(addGroupForm.result, room, function(deviceGroup){
-          
-          // add device to group
-          var addDeviceForm = that.showAddDeviceToGroup(deviceGroup);
-          addDeviceForm.on("close", function(){
-            that.addDeviceFormClosed(addDeviceForm.result, room, deviceGroup);
-          });
-
+          that.addDeviceToGroup(room, deviceGroup);
         });
 
+      });
+    },
+
+    addDeviceToGroup: function(room, deviceGroup){
+      var that = this;
+
+      var addDeviceForm = this.showAddDeviceToGroup(deviceGroup);
+
+      addDeviceForm.on("close", function(){
+        that.addDeviceFormClosed(addDeviceForm.result, room, deviceGroup);
       });
     },
 
@@ -190,12 +184,12 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
   HIT.vent.on("device:selected", showDeviceEditForm);
 
-  HIT.vent.on("room:device:addToGroup", function(deviceGroup){
-    addDeviceGroupWorkflow.showAddDeviceToGroup(deviceGroup);
+  HIT.vent.on("room:device:addToGroup", function(room, deviceGroup){
+    addDeviceWorkflows.addDeviceToGroup(room, deviceGroup);
   });
 
   HIT.vent.on("room:addDeviceGroup", function(room){
-    addDeviceGroupWorkflow.run(room);
+    addDeviceWorkflows.addGroupToRoom(room);
   });
 
   return DeviceManager;
