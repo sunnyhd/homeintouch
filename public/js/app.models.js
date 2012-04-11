@@ -11,6 +11,16 @@
   HIT.DeviceTypeCollection = Collection.extend({
     model: HIT.DeviceType
   });
+
+  // Device Group
+  // ------------
+
+  HIT.DeviceGroup = Model.extend({
+  });
+
+  HIT.DeviceGroupCollection = Collection.extend({
+    model: HIT.DeviceGroup
+  });
   
   // Devices
   // -------
@@ -18,24 +28,28 @@
   HIT.Device = Model.extend({});
 
   HIT.DeviceCollection = Collection.extend({
-    model: HIT.Device,
+    model: HIT.Device
 
-    byType: function(){
-      var that = this;
-      var deviceTypeCollection = new Backbone.Collection();
+  }, {
 
-      var deviceTypeGroups = this.groupBy(function(device){ 
+    byType: function(devices){
+      var deviceGroupCollection = new HIT.DeviceGroupCollection();
+
+      var deviceTypeGroups = devices.groupBy(function(device){ 
         return device.get("type");
       });
 
       _.each(deviceTypeGroups, function(group, typeId){
-        var typeName = HIT.DeviceTypes.getName(typeId);
-        var deviceType = new Backbone.Model({name: typeName});
-        deviceType.devices = new Backbone.Collection(group);
-        deviceTypeCollection.add(deviceType);
+        var deviceType = HIT.DeviceTypes.get(typeId);
+
+        var deviceGroup = new HIT.DeviceGroup({name: deviceType.get("name")});
+        deviceGroup.deviceType = deviceType;
+        deviceGroup.devices = new HIT.DeviceCollection(group);
+        
+        deviceGroupCollection.add(deviceGroup);
       });
 
-      return deviceTypeCollection;
+      return deviceGroupCollection;
     }
   });
 
@@ -44,7 +58,12 @@
   
   HIT.Room = Model.extend({
     initialize: function(){
-      this.devices = this.parseChildren("devices", HIT.DeviceCollection);
+      this.deviceGroups = this.parseDevices();
+    },
+
+    parseDevices: function(){
+      var devices = this.parseChildren("devices", HIT.DeviceCollection);
+      return HIT.DeviceCollection.byType(devices);
     }
   });
   

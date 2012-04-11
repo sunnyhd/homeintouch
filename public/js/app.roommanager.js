@@ -39,7 +39,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  RoomManager.DeviceList = Backbone.Marionette.CompositeView.extend({
+  RoomManager.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-list-template",
     className: "room-device span3",
 
@@ -63,9 +63,9 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  RoomManager.DeviceTypeList = Backbone.Marionette.CollectionView.extend({
+  RoomManager.DeviceGroupList = Backbone.Marionette.CollectionView.extend({
     className: "row",
-    itemView: RoomManager.DeviceList
+    itemView: RoomManager.DeviceGroupView
   });
 
   // Helper Functions
@@ -75,14 +75,12 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     var view = new RoomManager.RoomLayout({
       model: room
     });
-
     HIT.main.show(view);
   };
 
   var showRoomDevices = function(roomLayout, room){
-    var deviceTypeCollection = room.devices.byType();
-    var view = new RoomManager.DeviceTypeList({
-      collection: deviceTypeCollection
+    var view = new RoomManager.DeviceGroupList({
+      collection: room.deviceGroups
     });
     roomLayout.deviceList.show(view);
   };
