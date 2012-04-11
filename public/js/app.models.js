@@ -51,6 +51,22 @@
   HIT.Room = Model.extend({
     initialize: function(){
       this.deviceGroups = this.parseChildren("deviceGroups", HIT.DeviceGroupCollection);
+    },
+
+    findOrCreateGroup: function(deviceTypeId){
+      var deviceGroup;
+
+      deviceGroup = this.deviceGroups.find(function(dg){ 
+        return dg.deviceType.id === deviceTypeId; 
+      });
+
+      if (!deviceGroup){
+        deviceGroup = new HIT.DeviceGroup({
+          type: deviceTypeId
+        });
+      }
+
+      return deviceGroup;
     }
   });
   

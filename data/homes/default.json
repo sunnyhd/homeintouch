@@ -29,30 +29,6 @@
                   "write_address": "1/0/0"
                 }
               ]
-            },
-            {
-              "id": 1,
-              "type": 1,
-              "devices": [
-                {
-                  "id": 2,
-                  "name": "Office Dimmer",
-                  "type": 1,
-                  "read_state_address": "1/0/1",
-                  "write_state_address": "1/0/0",
-                  "read_value_address": "1/0/1",
-                  "write_value_address": "1/0/0"
-                },
-                {
-                  "id": 3,
-                  "name": "Desk Dimmer",
-                  "type": 1,
-                  "read_state_address": "1/0/1",
-                  "write_state_address": "1/0/0",
-                  "read_value_address": "1/0/1",
-                  "write_value_address": "1/0/0"
-                }
-              ]
             }
           ]
         }
