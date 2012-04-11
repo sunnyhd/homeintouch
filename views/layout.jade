@@ -48,6 +48,24 @@ html(lang='en')
     script(id="device-list-item-template", type="text/template")
       a(href="#") <%= name %>
 
+    script(id="device-add-to-group-template", type="text/template")
+      .modal-header
+        h2 <%= name %>
+      .modal-body
+        p The form for adding a device to a group
+      .modal-footer
+        a(href="#", class="btn") Close
+        a(href="#", class="btn btn-primary") Save
+
+    script(id="device-group-add-template", type="text/template")
+      .modal-header
+        h2 <%= name %>
+      .modal-body
+        p The form for adding a device group to a room
+      .modal-footer
+        a(href="#", class="btn") Close
+        a(href="#", class="btn btn-primary") Save
+
     script(id="device-edit-template", type="text/template")
       .modal-header
         h2 <%= name %>
