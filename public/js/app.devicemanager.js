@@ -18,11 +18,23 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     addClicked: function(e){
       e.preventDefault();
+      var typeId = this.$("select").val();
+
+      this.result = {
+        status: "OK",
+        deviceTypeId: typeId
+      }
+
       this.close();
     },
 
     cancelClicked: function(e){
       e.preventDefault();
+
+      this.result = {
+        status: "CANCEL"
+      }
+
       this.close();
     }
   });
@@ -35,13 +47,29 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       "click .add.btn": "addClicked"
     },
 
+    formFields: ["name", "read_address", "write_address"],
+
     addClicked: function(e){
       e.preventDefault();
+
+      var data = Backbone.FormHelpers.getFormData(this);
+      var device = new HIT.Device(data);
+
+      this.result = {
+        status: "OK",
+        device: device
+      }
+
       this.close();
     },
 
     cancelClicked: function(e){
       e.preventDefault();
+
+      this.result = {
+        status: "CANCEL"
+      }
+
       this.close();
     }
   });
@@ -80,33 +108,95 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     HIT.modal.show(form);
   };
 
-  var showAddDevice = function(deviceType){
-    console.log(deviceType);
-    var FormType = deviceTypeAddEditForm[deviceType.id];
-    var form = new FormType({
-      model: deviceType
-    });
-    HIT.modal.show(form);
-  };
+  // Workflow Objects
+  // ----------------
 
-  var showAddDeviceGroup = function(room){
-    var roomData = room.toJSON();
-    roomData.deviceTypes = HIT.DeviceTypes.all().toJSON();
+  var addDeviceGroupWorkflow = {
+    run: function(room){
+      var that = this;
+      var viewModel = this.getAddGroupViewModel(room);
 
-    var addDeviceGroupModel = new Backbone.Model(roomData);
-    var form = new DeviceManager.AddDeviceGroupToRoomForm({
-      model: addDeviceGroupModel
-    });
+      // add group to room
+      var addGroupForm = this.showAddGroupForm(viewModel);
+      addGroupForm.on("close", function(){
+        that.addGroupClose(addGroupForm.result, room, function(deviceGroup){
+          
+          // add device to group
+          var addDeviceForm = that.showAddDeviceToGroup(deviceGroup);
+          addDeviceForm.on("close", function(){
+            that.addDeviceFormClosed(addDeviceForm.result, room, deviceGroup);
+          });
 
-    HIT.modal.show(form);
+        });
+
+      });
+    },
+
+    getAddGroupViewModel: function(room){
+      // create a view model with all our data
+      var roomData = room.toJSON();
+      roomData.deviceTypes = HIT.DeviceTypes.all().toJSON();
+      var addDeviceGroupModel = new Backbone.Model(roomData);
+      return addDeviceGroupModel;
+    },
+
+    addGroupClose: function(result, room, okCallback){
+      if (result.status === "OK"){
+        var deviceTypeId = parseInt(result.deviceTypeId, 10);
+        var deviceType = HIT.DeviceTypes.get(deviceTypeId);
+
+        var deviceGroup = room.deviceGroups.find(function(dg){ 
+          return dg.deviceType.id === deviceTypeId; 
+        });
+
+        okCallback(deviceGroup);
+      }
+    },
+
+    addDeviceFormClosed: function(result, room, deviceGroup){
+      if (result.status === "OK"){
+        deviceGroup.devices.add(result.device);
+        room.deviceGroups.add(deviceGroup);
+      }
+    },
+
+    showAddGroupForm: function(viewModel){
+      // the add form
+      var form = new DeviceManager.AddDeviceGroupToRoomForm({
+        model: viewModel
+      });
+
+      // Show the add group form
+      HIT.modal.show(form);
+
+      return form;
+    },
+
+    showAddDeviceToGroup: function(deviceGroup){
+      var deviceType = deviceGroup.deviceType;
+      var FormType = deviceTypeAddEditForm[deviceType.id];
+
+      var form = new FormType({
+        model: deviceType
+      });
+      HIT.modal.show(form);
+
+      return form;
+    }
   };
 
   // Application Event handlers
   // --------------------------
 
   HIT.vent.on("device:selected", showDeviceEditForm);
-  HIT.vent.on("room:addDeviceGroup", showAddDeviceGroup);
-  HIT.vent.on("room:device:addToGroup", showAddDevice);
+
+  HIT.vent.on("room:device:addToGroup", function(deviceGroup){
+    addDeviceGroupWorkflow.showAddDeviceToGroup(deviceGroup);
+  });
+
+  HIT.vent.on("room:addDeviceGroup", function(room){
+    addDeviceGroupWorkflow.run(room);
+  });
 
   return DeviceManager;
 })(HomeInTouch, Backbone, _, $);

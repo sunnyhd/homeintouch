@@ -14,17 +14,11 @@ var HomeInTouch = (function(Backbone, _, $){
       _.bindAll(this);
       Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);
       this.on("view:show", this.showModal, this);
-    },
-
-    getEl: function(selector){
-      var $el = $(selector);
-      $el.on("hidden", this.close);
-      return $el;
+      this.on("view:closed", this.hideModal, this);
     },
 
     showModal: function(view){
-      view.on("close", this.hideModal, this);
-      this.$el.modal('show');
+      this.$el.modal({keyboard: false});
     },
 
     hideModal: function(){

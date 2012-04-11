@@ -116,7 +116,7 @@ html(lang='en')
           .span3
             select(id="type")
               <% _.each(deviceTypes, function(type){ %>
-              option(value="0") <%= type.name %>
+              |<option value="<%= type.id %>"> <%= type.name %> </option>
               <% }) %>
       .modal-footer
         a(href="#").cancel.btn Cancel
@@ -150,6 +150,7 @@ html(lang='en')
     script(src='/js/underscore-min.js')
     script(src='/js/backbone-min.js')
     script(src='/js/backbone.marionette.min.js')
+    script(src='/js/backbone.formhelpers.js')
     script(src='/js/backbone.ponzi.js')
     script(src='/js/bootstrap.min.js')
     script(src='/js/socket.io.min.js')
