@@ -11,6 +11,7 @@
           "id": 0,
           "deviceGroups": [
             {
+              "id": 0,
               "type": 0,
               "devices": [
                 {
@@ -30,6 +31,7 @@
               ]
             },
             {
+              "id": 1,
               "type": 1,
               "devices": [
                 {

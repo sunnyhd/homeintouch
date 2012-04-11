@@ -27,15 +27,17 @@
   HIT.DeviceGroup = Model.extend({
     initialize: function(){
       this.devices = this.parseChildren("devices", HIT.DeviceCollection);
+      this.setDeviceType();
     },
 
-    parse: function(json){
-      var typeId = json.type;
-      if (typeId){
-        var type = HIT.DeviceTypes.get(typeId);
-        json.type = type;
+    setDeviceType: function(){
+      var typeId = this.get("type");
+      var type = HIT.DeviceTypes.get(typeId);
+
+      if (type){
+        this.type = type;
+        this.set("name", type.get("name"));
       }
-      return json;
     }
   });
 
