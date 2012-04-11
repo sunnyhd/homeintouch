@@ -123,47 +123,47 @@ All interaction with the server is performed via Socket.IO.
 Sample addresses
 ----------------
 
-Lights/Motion/Szenes/Window(open/closed):
+### Lights/Motion/Szenes/Window(open/closed):
 
-Office,1/0/0,write (0/1)
-Office,1/0/1,read
-Bathroom,2/0/0,write
-Bathroom,2/0/1,read
-Kitchen,5/0/0,write
-Kitchen,5/0/1,read
+- Office,1/0/0,write (0/1)
+- Office,1/0/1,read
+- Bathroom,2/0/0,write
+- Bathroom,2/0/1,read
+- Kitchen,5/0/0,write
+- Kitchen,5/0/1,read
 
-Motion_Floor,6/0/2,read (0/1) // no motion/motion detected
+- Motion_Floor,6/0/2,read (0/1) // no motion/motion detected
 
-Szene_TV,0/7/0,write (0/1) //Fire and Forget
+- Szene_TV,0/7/0,write (0/1) //Fire and Forget
 
-Window_Bathroom,0/4/1,read (0/1) // opened/closed
+- Window_Bathroom,0/4/1,read (0/1) // opened/closed
 
-Dimmer:
+### Dimmer:
 
-Couch,3/1/5,write (1/0)
-Couch,3/1/6,read
-Couch,3/1/8,write (0-255)
-Couch,3/1/9,read
-Passage,3/1/0,write
-Passage,3/1/1,read
-Passage,3/1/3,write
-Passage,3/1/4,read
-Dinner,4/1/5,write
-Dinner,4/1/6,read
-Dinner,4/1/8,write
-Dinner,4/1/9,read
+- Couch,3/1/5,write (1/0)
+- Couch,3/1/6,read
+- Couch,3/1/8,write (0-255)
+- Couch,3/1/9,read
+- Passage,3/1/0,write
+- Passage,3/1/1,read
+- Passage,3/1/3,write
+- Passage,3/1/4,read
+- Dinner,4/1/5,write
+- Dinner,4/1/6,read
+- Dinner,4/1/8,write
+- Dinner,4/1/9,read
 
-Thermostat:
+### Thermostat:
 
-Livingroom,3/2/1,write (1/2/3/4) // 1=comfort,2=standby,3=night,4=frost
-Livingroom,3/2/3,read // Temperature Ist
-Livingroom,3/2/4,read // Temperature Soll
-Livingroom,3/2/5,write // Set temperature
-Livingroom,3/2/6,read // Mode
+- Livingroom,3/2/1,write (1/2/3/4) // 1=comfort,2=standby,3=night,4=frost
+- Livingroom,3/2/3,read // Temperature Ist
+- Livingroom,3/2/4,read // Temperature Soll
+- Livingroom,3/2/5,write // Set temperature
+- Livingroom,3/2/6,read // Mode
 
-Shutters:
+### Shutters:
 
-Fireplace,4/3/2,write (0/1) // up/down
-Fireplace,4/3/3,write //stop
-Fireplace,4/3/7,write (0-255) 
-Fireplace,4/3/8,read
+- Fireplace,4/3/2,write (0/1) // up/down
+- Fireplace,4/3/3,write //stop
+- Fireplace,4/3/7,write (0-255) 
+- Fireplace,4/3/8,read
