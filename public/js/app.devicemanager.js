@@ -9,10 +9,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     var form = new DeviceManager.EditForm({
       model: device
     });
-
-    form.render();
-    $("#modal").html(form.el);
-    $("#modal").modal();
+    HIT.modal.show(form);
   };
 
   HIT.vent.on("device:selected", showDeviceEditForm);
