@@ -76,7 +76,12 @@ html(lang='en')
       .modal-header
         h2 Add Devices To <%= name %>
       .modal-body
-        p The form for adding a device group to a room
+        .row
+          .span2
+            label(for="type").pull-right Device Type
+          .span3
+            select(id="type")
+              option(value="0") Light
       .modal-footer
         a(href="#", class="btn") Close
         a(href="#", class="btn btn-primary") Save
