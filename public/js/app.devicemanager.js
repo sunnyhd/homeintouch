@@ -9,11 +9,41 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   });
 
   DeviceManager.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
-    template: "#device-add-group-to-room-template"
+    template: "#device-add-group-to-room-template",
+
+    events: {
+      "click .cancel.btn": "cancelClicked",
+      "click .add.btn": "addClicked"
+    },
+
+    addClicked: function(e){
+      e.preventDefault();
+      this.close();
+    },
+
+    cancelClicked: function(e){
+      e.preventDefault();
+      this.close();
+    }
   });
 
   DeviceManager.AddDeviceToGroupForm = Backbone.Marionette.ItemView.extend({
-    template: "#device-add-to-group-template"
+    template: "#device-add-to-group-template",
+
+    events: {
+      "click .cancel.btn": "cancelClicked",
+      "click .add.btn": "addClicked"
+    },
+
+    addClicked: function(e){
+      e.preventDefault();
+      this.close();
+    },
+
+    cancelClicked: function(e){
+      e.preventDefault();
+      this.close();
+    }
   });
 
   // Helper Methods

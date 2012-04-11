@@ -19,12 +19,16 @@ var HomeInTouch = (function(Backbone, _, $){
     getEl: function(selector){
       var $el = $(selector);
       $el.on("hidden", this.close);
-      $el.modal({show: false});
       return $el;
     },
 
     showModal: function(view){
+      view.on("close", this.hideModal, this);
       this.$el.modal('show');
+    },
+
+    hideModal: function(){
+      this.$el.modal('hide');
     }
   });
 
