@@ -1,7 +1,20 @@
 (function(HIT, Backbone, _, $){
-  var Collection = Backbone.Collection;
-  var Model = Backbone.Model.extend({});
+
+  // Base Model And Collection
+  // -------------------------
+
+  var Model = Backbone.Model.extend({
+    constructor: function(){
+      Backbone.Model.prototype.constructor.apply(this, arguments);
+      if (!this.id){
+        this.set("id", this.cid);
+        this.id = this.cid;
+      }
+    }
+  });
   _.extend(Model.prototype, Backbone.Ponzi);
+
+  var Collection = Backbone.Collection;
 
   // Device Types
   // ------------
