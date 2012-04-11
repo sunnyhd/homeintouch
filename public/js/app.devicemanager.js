@@ -12,6 +12,11 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       "click .save.btn": "addClicked"
     },
 
+    initialize: function(){
+      var readAddr = this.model.get("read_address");
+      HIT.vent.trigger("read:address", readAddr);
+    },
+
     addClicked: function(e){
       e.preventDefault();
       this.close();

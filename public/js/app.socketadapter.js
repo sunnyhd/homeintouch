@@ -1,5 +1,6 @@
 HomeInTouch.SocketAdapter = (function(HIT, io){
   var SocketAdapter = {};
+  var socket;
 
   // Socket.io Adapter
   // ------------------------
@@ -11,7 +12,7 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
   // use of it.
 
   var initialize = function() {
-    var socket = io.connect(HIT.socketUrl);
+    socket = io.connect(HIT.socketUrl);
 
     var homesLoaded = $.Deferred();
     var deviceTypesLoaded = $.Deferred();
@@ -48,6 +49,10 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
       console.log("ERROR: ", err);
     });
   };
+
+  HIT.vent.on("read:address", function(address){
+    socket.emit("get", address);
+  });
 
   // HomeInTouch app initializer for socket.io
   HIT.addInitializer(initialize);

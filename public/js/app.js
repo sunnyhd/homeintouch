@@ -18,6 +18,7 @@ var HomeInTouch = (function(Backbone, _, $){
     },
 
     showModal: function(view){
+      view.close = _.once(view.close);
       view.on("close", this.hideModal, this);
       this.$el.modal({keyboard: false});
     },
