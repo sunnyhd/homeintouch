@@ -8,8 +8,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     template: "#device-edit-template"
   });
 
-  DeviceManager.AddDeviceGroupForm = Backbone.Marionette.ItemView.extend({
-    template: "#device-group-add-template"
+  DeviceManager.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
+    template: "#device-add-group-to-room-template"
   });
 
   DeviceManager.AddDeviceToGroupForm = Backbone.Marionette.ItemView.extend({
@@ -34,7 +34,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   };
 
   var showAddDeviceGroup = function(room){
-    var form = new DeviceManager.AddDeviceGroupForm({
+    var form = new DeviceManager.AddDeviceGroupToRoomForm({
       model: room
     });
     HIT.modal.show(form);

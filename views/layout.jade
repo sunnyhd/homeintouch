@@ -50,16 +50,36 @@ html(lang='en')
 
     script(id="device-add-to-group-template", type="text/template")
       .modal-header
-        h2 <%= name %>
+        h2 Add A New <%= name %>
       .modal-body
-        p The form for adding a device to a group
+        .row
+          .span2
+            label.pull-right Type
+          .span3
+            span Light Switch
+        .row
+          .span2
+            label(for="name").pull-right Name
+          .span3
+            input(id="name", placeHolder="Office Lamp")
+        .row
+          .span2
+            label(for="read_address").pull-right Read Address
+          .span3
+            input(id="read_address", placeHolder="0/1/0")
+        .row
+          .span2
+            label(for="write_address").pull-right Write Address
+          .span3
+            input(id="write_address", placeHolder="0/1/1")
+      
       .modal-footer
         a(href="#", class="btn") Close
         a(href="#", class="btn btn-primary") Save
 
-    script(id="device-group-add-template", type="text/template")
+    script(id="device-add-group-to-room-template", type="text/template")
       .modal-header
-        h2 <%= name %>
+        h2 Add Devices To <%= name %>
       .modal-body
         p The form for adding a device group to a room
       .modal-footer
