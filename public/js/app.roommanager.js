@@ -55,7 +55,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
     addDeviceClicked: function(e){
       e.preventDefault();
-      HIT.vent.trigger("room:device:addToGroup", this.model);
+      HIT.vent.trigger("room:device:addToGroup", this.model.deviceType);
     },
 
     appendHtml: function(cv, iv){

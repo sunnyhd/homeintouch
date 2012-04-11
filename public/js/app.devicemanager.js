@@ -27,8 +27,27 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  DeviceManager.AddDeviceToGroupForm = Backbone.Marionette.ItemView.extend({
-    template: "#device-add-to-group-template",
+  DeviceManager.AddDeviceTypeZeroForm = Backbone.Marionette.ItemView.extend({
+    template: "#device-add-type-zero-template",
+
+    events: {
+      "click .cancel.btn": "cancelClicked",
+      "click .add.btn": "addClicked"
+    },
+
+    addClicked: function(e){
+      e.preventDefault();
+      this.close();
+    },
+
+    cancelClicked: function(e){
+      e.preventDefault();
+      this.close();
+    }
+  });
+
+  DeviceManager.AddDeviceTypeOneForm = Backbone.Marionette.ItemView.extend({
+    template: "#device-add-type-one-template",
 
     events: {
       "click .cancel.btn": "cancelClicked",
@@ -49,6 +68,11 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   // Helper Methods
   // --------------
 
+  var deviceTypeAddEditForm = {
+    0: DeviceManager.AddDeviceTypeZeroForm,
+    1: DeviceManager.AddDeviceTypeOneForm
+  };
+
   var showDeviceEditForm = function(device){
     var form = new DeviceManager.EditDeviceForm({
       model: device
@@ -57,7 +81,9 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   };
 
   var showAddDevice = function(deviceType){
-    var form = new DeviceManager.AddDeviceToGroupForm({
+    console.log(deviceType);
+    var FormType = deviceTypeAddEditForm[deviceType.id];
+    var form = new FormType({
       model: deviceType
     });
     HIT.modal.show(form);

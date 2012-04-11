@@ -48,7 +48,7 @@ html(lang='en')
     script(id="device-list-item-template", type="text/template")
       a(href="#") <%= name %>
 
-    script(id="device-add-to-group-template", type="text/template")
+    script(id="device-add-type-zero-template", type="text/template")
       .modal-header
         h2 Add A New <%= name %>
       .modal-body
@@ -65,6 +65,40 @@ html(lang='en')
         .row
           .span2
             label(for="write_address").pull-right Write Address
+          .span3
+            input(id="write_address", placeHolder="0/1/1")
+      
+      .modal-footer
+        a(href="#").cancel.btn Cancel
+        a(href="#").add.btn.btn-primary Add
+
+    script(id="device-add-type-one-template", type="text/template")
+      .modal-header
+        h2 Add A New <%= name %>
+      .modal-body
+        .row
+          .span2
+            label(for="name").pull-right Name
+          .span3
+            input(id="name", placeHolder="Dining Room Dimmer")
+        .row
+          .span2
+            label(for="read_address").pull-right Read On/Off Address
+          .span3
+            input(id="read_address", placeHolder="0/1/0")
+        .row
+          .span2
+            label(for="write_address").pull-right Write On/Off Address
+          .span3
+            input(id="write_address", placeHolder="0/1/1")
+        .row
+          .span2
+            label(for="read_address").pull-right Read Value Address
+          .span3
+            input(id="read_address", placeHolder="0/1/0")
+        .row
+          .span2
+            label(for="write_address").pull-right Write Value Address
           .span3
             input(id="write_address", placeHolder="0/1/1")
       

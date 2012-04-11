@@ -35,7 +35,7 @@
       var type = HIT.DeviceTypes.get(typeId);
 
       if (type){
-        this.type = type;
+        this.deviceType = type;
         this.set("name", type.get("name"));
       }
     }
