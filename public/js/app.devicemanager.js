@@ -90,9 +90,14 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   };
 
   var showAddDeviceGroup = function(room){
+    var roomData = room.toJSON();
+    roomData.deviceTypes = HIT.DeviceTypes.all().toJSON();
+
+    var addDeviceGroupModel = new Backbone.Model(roomData);
     var form = new DeviceManager.AddDeviceGroupToRoomForm({
-      model: room
+      model: addDeviceGroupModel
     });
+
     HIT.modal.show(form);
   };
 
@@ -100,7 +105,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   // --------------------------
 
   HIT.vent.on("device:selected", showDeviceEditForm);
-  HIT.vent.on("room:deviceGroup:add", showAddDeviceGroup);
+  HIT.vent.on("room:addDeviceGroup", showAddDeviceGroup);
   HIT.vent.on("room:device:addToGroup", showAddDevice);
 
   return DeviceManager;

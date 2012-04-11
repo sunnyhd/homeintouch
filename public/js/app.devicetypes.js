@@ -25,6 +25,10 @@ HomeInTouch.DeviceTypes = (function(HIT, Backbone, _, $){
     return name;
   };
 
+  DeviceTypes.all = function(){
+    return deviceTypeCollection;
+  }
+
   // App event handlers
   // ------------------
 

@@ -115,7 +115,9 @@ html(lang='en')
             label(for="type").pull-right Device Type
           .span3
             select(id="type")
-              option(value="0") Light
+              <% _.each(deviceTypes, function(type){ %>
+              option(value="0") <%= type.name %>
+              <% }) %>
       .modal-footer
         a(href="#").cancel.btn Cancel
         a(href="#").add.btn.btn-primary Next >>
