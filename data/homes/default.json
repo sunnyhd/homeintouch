@@ -9,20 +9,44 @@
         {
           "name": "Office",
           "id": 0,
-          "devices": [
+          "deviceGroups": [
             {
-              "id": 0,
-              "name": "Office lights",
               "type": 0,
-              "read_address": "1/0/1",
-              "write_address": "1/0/0"
+              "devices": [
+                {
+                  "id": 0,
+                  "name": "Office lights",
+                  "type": 0,
+                  "read_address": "1/0/1",
+                  "write_address": "1/0/0"
+                },
+                {
+                  "id": 1,
+                  "name": "Office lamp",
+                  "type": 0,
+                  "read_address": "1/0/1",
+                  "write_address": "1/0/0"
+                }
+              ]
             },
             {
-              "id": 1,
-              "name": "Office lamp",
-              "type": 0,
-              "read_address": "1/0/1",
-              "write_address": "1/0/0"
+              "type": 1,
+              "devices": [
+                {
+                  "id": 2,
+                  "name": "Office Dimmer",
+                  "type": 1,
+                  "read_address": "1/0/1",
+                  "write_address": "1/0/0"
+                },
+                {
+                  "id": 3,
+                  "name": "Desk Dimmer",
+                  "type": 1,
+                  "read_address": "1/0/1",
+                  "write_address": "1/0/0"
+                }
+              ]
             }
           ]
         }
