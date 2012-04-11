@@ -136,7 +136,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     addGroupClose: function(result, room, okCallback){
       if (result.status === "OK"){
-        var deviceTypeId = parseInt(result.deviceTypeId, 10);
+        var deviceTypeId = result.deviceTypeId;
         var deviceGroup = room.findOrCreateGroup(deviceTypeId);
         okCallback(deviceGroup);
       }

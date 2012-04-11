@@ -3,15 +3,7 @@
   // Base Model And Collection
   // -------------------------
 
-  var Model = Backbone.Model.extend({
-    constructor: function(){
-      Backbone.Model.prototype.constructor.apply(this, arguments);
-      if (!this.id){
-        this.set("id", this.cid);
-        this.id = this.cid;
-      }
-    }
-  });
+  var Model = Backbone.Model.extend({});
   _.extend(Model.prototype, Backbone.Ponzi);
 
   var Collection = Backbone.Collection;
@@ -70,7 +62,7 @@
       var deviceGroup;
 
       deviceGroup = this.deviceGroups.find(function(dg){ 
-        return dg.deviceType.id === deviceTypeId; 
+        return dg.deviceType.id == deviceTypeId; 
       });
 
       if (!deviceGroup){
