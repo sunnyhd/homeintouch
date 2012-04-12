@@ -1,6 +1,6 @@
 [
   {
-    "id": "dt0",
+    "id": "dt-sample-0",
     "name": "Light",
     "addresses": [
       "Read address",
@@ -8,7 +8,7 @@
     ]
   },
   {
-    "id": "dt1",
+    "id": "dt-sample-1",
     "name": "Dimmer",
     "addresses": [
       "Read On/Off Address",
