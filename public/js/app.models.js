@@ -53,10 +53,34 @@
     model: HIT.DeviceType
   });
 
+  // Addresses
+  // ---------
+
+  HIT.Address = Model.extend({
+  });
+
+  HIT.AddressCollection = Collection.extend({
+    model: HIT.Address
+  });
+
   // Devices
   // -------
 
   HIT.Device = Model.extend({
+    initialize: function(){
+      this.addresses = this.parseChildren("addresses", HIT.AddressCollection);
+    },
+
+    toJSON: function(){
+      var json = Model.prototype.toJSON.call(this);
+      if (this.addresses){
+        json.addresses = this.addresses.toJSON();
+      }
+      if (this.deviceType){
+        json.deviceType = this.deviceType.toJSON();
+      }
+      return json;
+    }
   });
 
   HIT.DeviceCollection = Collection.extend({
@@ -181,6 +205,31 @@
     select: function(home){
       this.selected = home;
       HIT.vent.trigger("home:selected", home);
+    },
+
+    findDevicesByAddress: function(address){
+      var devices = new HIT.DeviceCollection();
+
+      this.each(function(home){
+        return home.floors.each(function(floor){
+          return floor.rooms.each(function(room){
+            return room.deviceGroups.each(function(deviceGroup){
+              return deviceGroup.devices.each(function(device){
+                return device.addresses.each(function(deviceAddr){
+
+                  var addr = deviceAddr.get("address");
+                  if (addr === address){
+                    devices.add(deviceAddr);
+                  };
+
+                });
+              });
+            });
+          });
+        });
+      });
+
+      return devices;
     }
   });
 

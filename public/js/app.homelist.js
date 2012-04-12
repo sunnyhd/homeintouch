@@ -34,6 +34,11 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
     HIT.homeList.show(view);
   };
 
+  var updateDeviceStatus = function(address, statusValue){
+    var devices = HIT.homes.findDevicesForAddress(address);
+    devices.updateAddress(address, value);
+  }
+
   // Application Event Handlers
   // --------------------------
 
@@ -43,6 +48,8 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
   }, this)
 
   HIT.vent.on("home:selected", showHomeList);
+
+  HIT.vent.on("address", updateDeviceStatus);
 
   // Public API
   // ----------
