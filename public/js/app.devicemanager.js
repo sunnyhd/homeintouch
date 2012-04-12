@@ -4,30 +4,6 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   // Views
   // -----
 
-  DeviceManager.EditDeviceForm = Backbone.Marionette.ItemView.extend({
-    template: "#device-edit-template",
-
-    events: {
-      "click .cancel.btn": "cancelClicked",
-      "click .save.btn": "addClicked"
-    },
-
-    initialize: function(){
-      var readAddr = this.model.get("read_address");
-      HIT.vent.trigger("read:address", readAddr);
-    },
-
-    addClicked: function(e){
-      e.preventDefault();
-      this.close();
-    },
-
-    cancelClicked: function(e){
-      e.preventDefault();
-      this.close();
-    }
-  });
-
   DeviceManager.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
     template: "#device-add-group-to-room-template",
 
@@ -63,7 +39,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   // Don't use this directly. See the
   // `AddDeviceTypeZeroForm` for an example
   // of how to use this.
-  DeviceManager.AddDeviceTypeForm = Backbone.Marionette.ItemView.extend({
+  DeviceManager.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
     events: {
       "click .cancel.btn": "cancelClicked",
       "click .add.btn": "addClicked"
@@ -94,26 +70,43 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  DeviceManager.AddDeviceTypeZeroForm = DeviceManager.AddDeviceTypeForm.extend({
+  DeviceManager.AddDeviceTypeZeroForm = DeviceManager.AddEditDeviceTypeForm.extend({
     template: "#device-add-type-zero-template",
     formFields: ["name", "read_address", "write_address"]
   });
 
-  DeviceManager.AddDeviceTypeOneForm = DeviceManager.AddDeviceTypeForm.extend({
+  DeviceManager.EditDeviceTypeZeroForm = DeviceManager.AddEditDeviceTypeForm.extend({
+    template: "#device-edit-type-zero-template",
+    formFields: ["name", "read_address", "write_address"]
+  });
+
+  DeviceManager.AddDeviceTypeOneForm = DeviceManager.AddEditDeviceTypeForm.extend({
     template: "#device-add-type-one-template",
+    formFields: ["name", "read_state_address", "write_state_address", "read_value_address", "write_value_address"]
+  });
+
+  DeviceManager.EditDeviceTypeOneForm = DeviceManager.AddEditDeviceTypeForm.extend({
+    template: "#device-edit-type-one-template",
     formFields: ["name", "read_state_address", "write_state_address", "read_value_address", "write_value_address"]
   });
 
   // Helper Methods
   // --------------
 
-  var deviceTypeAddEditForm = {
+  var deviceTypeAddForm = {
     0: DeviceManager.AddDeviceTypeZeroForm,
     1: DeviceManager.AddDeviceTypeOneForm
   };
 
+  var deviceTypeEditForm = {
+    0: DeviceManager.EditDeviceTypeZeroForm,
+    1: DeviceManager.EditDeviceTypeOneForm
+  };
+
   var showDeviceEditForm = function(device){
-    var form = new DeviceManager.EditDeviceForm({
+    var deviceTypeId = device.get("type");
+    var FormType = deviceTypeEditForm[deviceTypeId];
+    var form = new FormType({
       model: device
     });
     HIT.modal.show(form);
@@ -183,7 +176,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     showAddDeviceToGroup: function(deviceGroup){
       var deviceType = deviceGroup.deviceType;
-      var FormType = deviceTypeAddEditForm[deviceType.id];
+      var FormType = deviceTypeAddForm[deviceType.id];
 
       var form = new FormType({
         model: deviceType

@@ -67,10 +67,40 @@ html(lang='en')
             label(for="write_address").pull-right Write Address
           .span3
             input(id="write_address", placeHolder="0/1/1")
-      
       .modal-footer
         a(href="#").cancel.btn Cancel
         a(href="#").add.btn.btn-primary Add
+
+    script(id="device-edit-type-zero-template", type="text/template")
+      .modal-header
+        h2 Add A New <%= name %>
+      .modal-body
+        .row
+          .span2
+            label(for="name").pull-right Name
+          .span3
+            input(id="name", placeHolder="Office Lamp") <%= name %>
+        .row
+          .span2
+            label(for="read_address").pull-right Read Address
+          .span3
+            input(id="read_address", placeHolder="0/1/0") <%= read_address %>
+        .row
+          .span2
+            label(for="write_address").pull-right Write Address
+          .span3
+            input(id="write_address", placeHolder="0/1/1") <%= write_address %>
+        .row
+          .span2
+            label(for="write_address").pull-right Status
+          .span3
+            .btn-group(data-toggle="buttons-radio")
+              .btn On
+              .btn Off
+      .modal-footer
+        a(href="#").cancel.btn Cancel
+        a(href="#").add.btn.btn-primary Save
+
 
     script(id="device-add-type-one-template", type="text/template")
       .modal-header
@@ -106,6 +136,15 @@ html(lang='en')
         a(href="#").cancel.btn Cancel
         a(href="#").add.btn.btn-primary Add
 
+    script(id="device-edit-type-one-template", type="text/template")
+      .modal-header
+        h2 <%= name %>
+      .modal-body
+        p The form for editing
+      .modal-footer
+        a(href="#", class="cancel btn") Close
+        a(href="#", class="save btn btn-primary") Save
+
     script(id="device-add-group-to-room-template", type="text/template")
       .modal-header
         h2 Add Devices To <%= name %>
@@ -121,15 +160,6 @@ html(lang='en')
       .modal-footer
         a(href="#").cancel.btn Cancel
         a(href="#").add.btn.btn-primary Next >>
-
-    script(id="device-edit-template", type="text/template")
-      .modal-header
-        h2 <%= name %>
-      .modal-body
-        p The form for editing
-      .modal-footer
-        a(href="#", class="cancel btn") Close
-        a(href="#", class="save btn btn-primary") Save
 
   body(data-spy='scroll')
     .navbar.navbar-fixed-top
