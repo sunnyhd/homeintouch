@@ -61,12 +61,12 @@ html(lang='en')
           .span2
             label(for="read_address").pull-right Read Address
           .span3
-            input(id="read_address", placeHolder="0/1/0")
+            input(id="read_address", placeHolder="#/#/#")
         .row
           .span2
             label(for="write_address").pull-right Write Address
           .span3
-            input(id="write_address", placeHolder="0/1/1")
+            input(id="write_address", placeHolder="#/#/#")
       .modal-footer
         a(href="#").cancel.btn Cancel
         a(href="#").add.btn.btn-primary Add
@@ -79,17 +79,20 @@ html(lang='en')
           .span2
             label(for="name").pull-right Name
           .span3
-            input(id="name", placeHolder="Office Lamp", value!="<%= name %>")
+            //input(id="name", placeHolder="Office Lamp", value!="<%= name %>")
+            |<input id="name" placeHolder="Office Lamp" value="<%= name %>">
         .row
           .span2
             label(for="read_address").pull-right Read Address
           .span3
-            input(id="read_address", placeHolder="0/1/0", value!="<%= read_address %>")
+            //input(id="read_address", placeHolder="0/1/0", value!="<%= read_address %>")
+            |<input id="read_address" placeHolder="#/#/#" value="<%= read_address %>">
         .row
           .span2
             label(for="write_address").pull-right Write Address
           .span3
-            input(id="write_address", placeHolder="0/1/1", value!="<%= write_address %>")
+            //input(id="write_address", placeHolder="0/1/1", value!="<%= write_address %>")
+            |<input id="write_address" placeHolder="#/#/#" value="<%= write_address %>">
         .row
           .span2
             label(for="write_address").pull-right Status
@@ -98,9 +101,8 @@ html(lang='en')
               .btn.on On
               .btn.off Off
       .modal-footer
-        a(href="#").cancel.btn Cancel
+        a(href="#").cancel.btn Close
         a(href="#").add.btn.btn-primary Save
-
 
     script(id="device-add-type-one-template", type="text/template")
       .modal-header
