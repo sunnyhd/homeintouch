@@ -46,7 +46,8 @@
   // Device Types
   // ------------
   
-  HIT.DeviceType = Model.extend({});
+  HIT.DeviceType = Model.extend({
+  });
 
   HIT.DeviceTypeCollection = Collection.extend({
     model: HIT.DeviceType
@@ -55,7 +56,8 @@
   // Devices
   // -------
 
-  HIT.Device = Model.extend({});
+  HIT.Device = Model.extend({
+  });
 
   HIT.DeviceCollection = Collection.extend({
     model: HIT.Device
@@ -78,6 +80,14 @@
         this.deviceType = type;
         this.set("name", type.get("name"));
       }
+    },
+
+    toJSON: function(){
+      var json = Model.prototype.toJSON.call(this);
+      if (this.devices){
+        json.devices = this.devices.toJSON();
+      }
+      return json;
     }
   });
 
@@ -107,6 +117,14 @@
       }
 
       return deviceGroup;
+    },
+
+    toJSON: function(){
+      var json = Model.prototype.toJSON.call(this);
+      if (this.deviceGroups){
+        json.deviceGroups = this.deviceGroups.toJSON();
+      }
+      return json;
     }
   });
   
@@ -120,6 +138,14 @@
   HIT.Floor = Model.extend({
     initialize: function(){
       this.rooms = this.parseChildren("rooms", HIT.RoomCollection);
+    },
+
+    toJSON: function(){
+      var json = Model.prototype.toJSON.call(this);
+      if (this.rooms){
+        json.rooms = this.rooms.toJSON();
+      }
+      return json;
     }
   });
 
@@ -133,6 +159,14 @@
   HIT.Home = Model.extend({
     initialize: function(){
       this.floors = this.parseChildren("floors", HIT.FloorCollection);
+    },
+
+    toJSON: function(){
+      var json = Model.prototype.toJSON.call(this);
+      if (this.floors){
+        json.floors = this.floors.toJSON();
+      }
+      return json;
     }
   });
 

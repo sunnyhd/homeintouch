@@ -1,6 +1,7 @@
 {
   "name": "Default",
   "order": 0,
+  "id": "default",
   "floors": [
     {
       "id": 0,
@@ -13,6 +14,7 @@
             {
               "id": 0,
               "type": 0,
+              "name": "Light",
               "devices": [
                 {
                   "id": 0,
@@ -27,6 +29,13 @@
                   "type": 0,
                   "read_address": "1/0/1",
                   "write_address": "1/0/0"
+                },
+                {
+                  "name": "test",
+                  "read_address": "1/0/1",
+                  "write_address": "1/0/0",
+                  "type": 0,
+                  "id": 3
                 }
               ]
             }
@@ -34,13 +43,11 @@
         }
       ]
     },
-
     {
       "id": 1,
       "name": "Basement",
       "rooms": []
     },
-
     {
       "id": 2,
       "name": "Second floor",

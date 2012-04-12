@@ -62,7 +62,8 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
   });
 
   HIT.vent.on("home:save", function(home){
-    socket.emit("save", home);
+    var json = home.toJSON();
+    socket.emit("save", json);
   });
 
   // HomeInTouch app initializer for socket.io
