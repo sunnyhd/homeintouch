@@ -11,7 +11,7 @@
     "express": "2.5.8",
     "request": "2.9.x",
     "socket.io": "0.9.4",
-    "jade": ">= 0.0.1",
+    "jade": "0.23.0",
     "forever": "0.8.5"
   },
   "engines": {
