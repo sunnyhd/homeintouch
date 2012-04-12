@@ -20,22 +20,39 @@
                   "id": 0,
                   "name": "Office lights",
                   "type": 0,
-                  "read_address": "1/0/1",
-                  "write_address": "1/0/0"
+                  "addresses": [
+                    {
+                      "id": 0,
+                      "name": "read_address",
+                      "address": "1/0/1",
+                      "value": "",
+                    },
+                    {
+                      "id": 0,
+                      "name": "write_address",
+                      "address": "1/0/0",
+                      "value": ""
+                    }
+                  ]
                 },
                 {
                   "id": 1,
                   "name": "Office lamp",
                   "type": 0,
-                  "read_address": "1/0/1",
-                  "write_address": "1/0/0"
-                },
-                {
-                  "name": "test",
-                  "read_address": "1/0/1",
-                  "write_address": "1/0/0",
-                  "type": 0,
-                  "id": 3
+                  "addresses": [
+                    {
+                      "id": 0,
+                      "name": "read_address",
+                      "address": "1/0/1",
+                      "value": "",
+                    },
+                    {
+                      "id": 0,
+                      "name": "write_address",
+                      "address": "1/0/0",
+                      "value": ""
+                    }
+                  ]
                 }
               ]
             }
