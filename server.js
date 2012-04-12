@@ -47,6 +47,7 @@ io.sockets.on("connection", function (socket) {
   socket.on("get", eib.get)
 
   socket.on("save", function(home) {
+    console.log("saving home %s", home.id);
     config.saveHome(home, function(err) {
       if (err) socket.emit("error", err)
     })

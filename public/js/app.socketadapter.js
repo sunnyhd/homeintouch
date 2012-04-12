@@ -54,7 +54,6 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
   // ---------------------------------------------
 
   HIT.vent.on("device:read", function(address){
-    console.log('read');
     socket.emit("get", address);
   });
 

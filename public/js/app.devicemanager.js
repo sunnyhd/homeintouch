@@ -57,8 +57,6 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
       var device = new HIT.Device(data);
 
-      this.save && this.save();
-
       this.result = {
         status: "OK",
         device: device
@@ -69,8 +67,6 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     cancelClicked: function(e){
       e.preventDefault();
-
-      this.save && this.save();
 
       this.result = {
         status: "CANCEL"
@@ -213,6 +209,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       if (result.status === "OK"){
         deviceGroup.devices.add(result.device);
         room.deviceGroups.add(deviceGroup);
+        HIT.HomeList.saveCurrentHome();
       }
     },
 
