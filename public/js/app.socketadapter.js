@@ -50,6 +50,9 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     });
   };
 
+  // App events that trigger Socket communications
+  // ---------------------------------------------
+
   HIT.vent.on("device:read", function(address){
     console.log('read');
     socket.emit("get", address);
@@ -59,7 +62,13 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     socket.emit("set", address, value);
   });
 
+  HIT.vent.on("home:save", function(home){
+    socket.emit("save", home);
+  });
+
   // HomeInTouch app initializer for socket.io
+  // -----------------------------------------
+
   HIT.addInitializer(initialize);
 
 })(HomeInTouch, io);

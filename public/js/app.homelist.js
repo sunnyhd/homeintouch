@@ -44,6 +44,13 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
 
   HIT.vent.on("home:selected", showHomeList);
 
+  // Public API
+  // ----------
+
+  HomeList.saveCurrentHome = function(){
+    HIT.vent.trigger("save:home", HomeList.currentHome);
+  };
+
   // Initializer
   // -----------
 
