@@ -55,6 +55,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       var data = Backbone.FormHelpers.getFormData(this);
       var device = new HIT.Device(data);
 
+      this.save && this.save();
+
       this.result = {
         status: "OK",
         device: device
@@ -65,6 +67,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     cancelClicked: function(e){
       e.preventDefault();
+
+      this.save && this.save();
 
       this.result = {
         status: "CANCEL"

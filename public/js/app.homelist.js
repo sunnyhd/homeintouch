@@ -4,16 +4,16 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
   // Views
   // -----
   
-  HomeItemView = Backbone.Marionette.ItemView.extend({
+  HomeList.HomeItemView = Backbone.Marionette.ItemView.extend({
     tagName: "li",
     template: "#home-item-template"
   });
 
-  HomeSelector = Backbone.Marionette.CompositeView.extend({
+  HomeList.HomeSelector = Backbone.Marionette.CompositeView.extend({
     tagName: "li",
     className: "dropdown",
     template: "#home-list-template",
-    itemView: HomeItemView,
+    itemView: HomeList.HomeItemView,
 
     appendHtml: function(cv, iv){
       cv.$("ul.dropdown-menu").append(iv.el);
@@ -24,7 +24,9 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
   // --------------
 
   var showHomeList = function(selectedHome){
-    var view = new HomeSelector({
+    HomeList.currentHome = selectedHome;
+
+    var view = new HomeList.HomeSelector({
       model: selectedHome,
       collection: HIT.homes
     });
