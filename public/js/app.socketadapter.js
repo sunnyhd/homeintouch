@@ -50,8 +50,13 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     });
   };
 
-  HIT.vent.on("read:address", function(address){
+  HIT.vent.on("device:read", function(address){
+    console.log('read');
     socket.emit("get", address);
+  });
+
+  HIT.vent.on("device:write", function(address, value){
+    socket.emit("set", address, value);
   });
 
   // HomeInTouch app initializer for socket.io

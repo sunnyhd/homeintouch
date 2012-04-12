@@ -40,9 +40,13 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   // `AddDeviceTypeZeroForm` for an example
   // of how to use this.
   DeviceManager.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
-    events: {
-      "click .cancel.btn": "cancelClicked",
-      "click .add.btn": "addClicked"
+    events: function(){
+      var events = {
+        "click .cancel.btn": "cancelClicked",
+        "click .add.btn": "addClicked"
+      }
+      _.extend(events, this.formEvents);
+      return events;
     },
 
     addClicked: function(e){
@@ -77,7 +81,36 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
   DeviceManager.EditDeviceTypeZeroForm = DeviceManager.AddEditDeviceTypeForm.extend({
     template: "#device-edit-type-zero-template",
-    formFields: ["name", "read_address", "write_address"]
+    formFields: ["name", "read_address", "write_address"],
+
+    formEvents: {
+      "click .switch .btn.on": "switchOnClicked",
+      "click .switch .btn.off": "switchOffClicked"
+    },
+
+    initialize: function(){
+      this.writeAddress = this.model.get("write_address");
+      this.readAddress = this.model.get("read_address");
+      this.readSwitch();
+    },
+
+    switchOnClicked: function(){
+      this.model.set({state: 1});
+      this.flipSwitch(1);
+    },
+
+    switchOffClicked: function(){
+      this.model.set({state: 0});
+      this.flipSwitch(0);
+    },
+
+    flipSwitch: function(on){
+      HIT.vent.trigger("device:write", this.writeAddress, on);
+    },
+
+    readSwitch: function(){
+      HIT.vent.trigger("device:read", this.readAddress);
+    }
   });
 
   DeviceManager.AddDeviceTypeOneForm = DeviceManager.AddEditDeviceTypeForm.extend({
