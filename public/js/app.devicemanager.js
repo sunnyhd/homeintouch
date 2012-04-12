@@ -108,8 +108,23 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       HIT.vent.trigger("device:write", this.writeAddress, on);
     },
 
+    selectSwitch: function(){
+      var state = this.model.get("state");
+      var $btnSwitch;
+      if (state){
+        $btnSwitch = this.$(".switch .btn.on");
+      } else {
+        $btnSwitch = this.$(".switch .btn.off");
+      }
+      $btnSwitch.button("toggle");
+    },
+
     readSwitch: function(){
       HIT.vent.trigger("device:read", this.readAddress);
+    },
+
+    onRender: function(){
+      this.selectSwitch();
     }
   });
 
