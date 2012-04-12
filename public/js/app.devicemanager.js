@@ -146,13 +146,13 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   // --------------
 
   var deviceTypeAddForm = {
-    "dt0": DeviceManager.AddDeviceTypeZeroForm,
-    "dt1": DeviceManager.AddDeviceTypeOneForm
+    0: DeviceManager.AddDeviceTypeZeroForm,
+    1: DeviceManager.AddDeviceTypeOneForm
   };
 
   var deviceTypeEditForm = {
-    "dt0": DeviceManager.EditDeviceTypeZeroForm,
-    "dt1": DeviceManager.EditDeviceTypeOneForm
+    0: DeviceManager.EditDeviceTypeZeroForm,
+    1: DeviceManager.EditDeviceTypeOneForm
   };
 
   var showDeviceEditForm = function(device){
@@ -227,7 +227,6 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     },
 
     showAddDeviceToGroup: function(deviceGroup){
-      console.log(deviceGroup);
       var deviceType = deviceGroup.deviceType;
       var FormType = deviceTypeAddForm[deviceType.id];
 

@@ -3,28 +3,28 @@
   "order": 0,
   "floors": [
     {
-      "id": "f-sample-1",
+      "id": 0,
       "name": "Ground floor",
       "rooms": [
         {
           "name": "Office",
-          "id": "r-sample-2",
+          "id": 0,
           "deviceGroups": [
             {
-              "id": "dg-sample-3",
-              "type": "dt-sample-0",
+              "id": 0,
+              "type": 0,
               "devices": [
                 {
-                  "id": "d-sample-4",
+                  "id": 0,
                   "name": "Office lights",
-                  "type": "dt-sample-0",
+                  "type": 0,
                   "read_address": "1/0/1",
                   "write_address": "1/0/0"
                 },
                 {
-                  "id": "d-sample-5",
+                  "id": 1,
                   "name": "Office lamp",
-                  "type": "dt-sample-0",
+                  "type": 0,
                   "read_address": "1/0/1",
                   "write_address": "1/0/0"
                 }
@@ -36,13 +36,13 @@
     },
 
     {
-      "id": "f-sample-6",
+      "id": 1,
       "name": "Basement",
       "rooms": []
     },
 
     {
-      "id": "f-sample-7",
+      "id": 2,
       "name": "Second floor",
       "rooms": []
     }

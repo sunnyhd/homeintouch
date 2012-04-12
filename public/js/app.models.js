@@ -3,24 +3,50 @@
   // Base Model And Collection
   // -------------------------
 
-  var Model = Backbone.Model.extend({
-    constructor: function(data){
-      if (data && !data.id){
-        data.id = _.uniqueId(this.prefix);
+  var Model = (function(){
+    var idSequence = 0;
+
+    var generateId = function(idAttribute, data){
+      var id;
+
+      if (data.hasOwnProperty(idAttribute)){
+
+        id = data.id;
+        if (_.isNumber(id) && id > idSequence){ 
+          idSequence = id; 
+        }
+
+      } else {
+
+        idSequence += 1;
+        id = idSequence;
+
       }
-      Backbone.Model.prototype.constructor.apply(this, arguments);
-    }
-  });
-  _.extend(Model.prototype, Backbone.Ponzi);
+
+      return id;
+    };
+
+    var Model = Backbone.Model.extend({
+      constructor: function(data){
+        if (!data){ data = {}; };
+        data.id = generateId(this.idAttribute, data);
+
+        Backbone.Model.prototype.constructor.apply(this, arguments);
+      },
+
+    });
+
+    _.extend(Model.prototype, Backbone.Ponzi);
+
+    return Model;
+  })();
 
   var Collection = Backbone.Collection;
 
   // Device Types
   // ------------
   
-  HIT.DeviceType = Model.extend({
-    prefix: "dt"
-  });
+  HIT.DeviceType = Model.extend({});
 
   HIT.DeviceTypeCollection = Collection.extend({
     model: HIT.DeviceType
@@ -29,9 +55,7 @@
   // Devices
   // -------
 
-  HIT.Device = Model.extend({
-    prefix: "d"
-  });
+  HIT.Device = Model.extend({});
 
   HIT.DeviceCollection = Collection.extend({
     model: HIT.Device
@@ -41,8 +65,6 @@
   // ------------
 
   HIT.DeviceGroup = Model.extend({
-    prefix: "dg",
-
     initialize: function(){
       this.devices = this.parseChildren("devices", HIT.DeviceCollection);
       this.setDeviceType();
@@ -67,8 +89,6 @@
   // -----
   
   HIT.Room = Model.extend({
-    prefix: "r", 
-
     initialize: function(){
       this.deviceGroups = this.parseChildren("deviceGroups", HIT.DeviceGroupCollection);
     },
@@ -98,8 +118,6 @@
   // ------
 
   HIT.Floor = Model.extend({
-    prefix: "f",
-
     initialize: function(){
       this.rooms = this.parseChildren("rooms", HIT.RoomCollection);
     }
@@ -113,8 +131,6 @@
   // -----
 
   HIT.Home = Model.extend({
-    prefix: "h",
-
     initialize: function(){
       this.floors = this.parseChildren("floors", HIT.FloorCollection);
     }
