@@ -53,6 +53,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       e.preventDefault();
 
       var data = Backbone.FormHelpers.getFormData(this);
+      data.type = this.model.id;
+
       var device = new HIT.Device(data);
 
       this.save && this.save();
