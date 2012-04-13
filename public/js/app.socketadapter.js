@@ -54,12 +54,12 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     });
 
     // Simular address events
-    // setInterval(function(){
-    //   console.log('triggering address');
-    //   var num = Math.random() * 10;
-    //   var value = num >= 5 ? 0: 1;
-    //   HIT.vent.trigger("address", "1/0/1", value);
-    // }, 1000);
+    setInterval(function(){
+      console.log('triggering address');
+      var num = Math.random() * 10;
+      var value = num >= 5 ? 0: 1;
+      HIT.vent.trigger("address", "1/0/1", value);
+    }, 1000);
 
   };
 
