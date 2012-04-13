@@ -111,7 +111,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     },
 
     flipSwitch: function(on){
-      HIT.vent.trigger("device:write", this.writeAddress, on);
+      var address = this.writeAddress.get("address");
+      HIT.vent.trigger("device:write", address, on);
     },
 
     selectSwitch: function(address, value){
