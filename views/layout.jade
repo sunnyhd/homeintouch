@@ -84,12 +84,12 @@ html(lang='en')
           .span2
             label(for="read_address").pull-right Read Address
           .span3
-            input(id="read_address", placeHolder="0/1/0")
+            input(id="read_address", placeHolder="0/1/0", value!="<%= _.find(addresses, function(addr){return addr.type == 'read_address'}).address %>")
         .row
           .span2
             label(for="write_address").pull-right Write Address
           .span3
-            input(id="write_address", placeHolder="0/1/1")
+            input(id="write_address", placeHolder="0/1/1", value!="<%= _.find(addresses, function(addr){return addr.type == 'write_address'}).address %>")
         .row
           .span2
             label(for="write_address").pull-right Status
