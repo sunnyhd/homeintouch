@@ -34,6 +34,12 @@
         Backbone.Model.prototype.constructor.apply(this, arguments);
       },
 
+      destroy: function(options){
+        // overriding the `destroy` function cause we're not
+        // using the standard rest-ful interface of backbone.sync
+        this.trigger('destroy', this, this.collection, options);
+      }
+
     });
 
     _.extend(Model.prototype, Backbone.Ponzi);

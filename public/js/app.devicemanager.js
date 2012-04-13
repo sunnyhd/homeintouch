@@ -111,7 +111,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     formEvents: {
       "click .switch .btn.on": "switchOnClicked",
-      "click .switch .btn.off": "switchOffClicked"
+      "click .switch .btn.off": "switchOffClicked",
+      "click .delete.btn": "deleteClicked"
     },
 
     initialize: function(){
@@ -132,6 +133,13 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     switchOffClicked: function(){
       this.model.set({state: 0});
       this.flipSwitch(0);
+    },
+
+    deleteClicked: function(e){
+      e.preventDefault();
+      this.model.destroy();
+      HIT.HomeList.saveCurrentHome();
+      this.close();
     },
 
     flipSwitch: function(on){
