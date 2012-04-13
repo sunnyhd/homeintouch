@@ -106,9 +106,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  DeviceManager.EditDeviceTypeZeroForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-edit-type-zero-template",
-    formFields: ["name", "read_address", "write_address"],
+  DeviceManager.ViewDeviceTypeZeroForm = DeviceManager.AddEditDeviceTypeForm.extend({
+    template: "#device-view-type-zero-template",
 
     formEvents: {
       "click .switch .btn.on": "switchOnClicked",
@@ -156,27 +155,15 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  DeviceManager.AddDeviceTypeOneForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-add-type-one-template",
-    formFields: ["name", "read_state_address", "write_state_address", "read_value_address", "write_value_address"]
-  });
-
-  DeviceManager.EditDeviceTypeOneForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-edit-type-one-template",
-    formFields: ["name", "read_state_address", "write_state_address", "read_value_address", "write_value_address"]
-  });
-
   // Helper Methods
   // --------------
 
   var deviceTypeAddForm = {
     0: DeviceManager.AddDeviceTypeZeroForm,
-    1: DeviceManager.AddDeviceTypeOneForm
   };
 
   var deviceTypeEditForm = {
-    0: DeviceManager.EditDeviceTypeZeroForm,
-    1: DeviceManager.EditDeviceTypeOneForm
+    0: DeviceManager.ViewDeviceTypeZeroForm,
   };
 
   var showDeviceEditForm = function(device){

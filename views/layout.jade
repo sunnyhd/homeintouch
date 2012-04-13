@@ -46,7 +46,7 @@ html(lang='en')
       ul
 
     script(id="device-list-item-template", type="text/template")
-      a(href="#") <%= name %> ( <%= _.find(addresses, function(addr){return addr.type == "read_address"}).value %> )
+      a(href="#") <%= name %> ( <%= _.find(addresses, function(addr){return addr.type == "read_address"}).value ? "On" : "Off" %> )
 
     script(id="device-add-type-zero-template", type="text/template")
       .modal-header
@@ -71,7 +71,7 @@ html(lang='en')
         a(href="#").cancel.btn Cancel
         a(href="#").add.btn.btn-primary Add
 
-    script(id="device-edit-type-zero-template", type="text/template")
+    script(id="device-view-type-zero-template", type="text/template")
       .modal-header
         h2 <%= name %>
       .modal-body
@@ -79,17 +79,17 @@ html(lang='en')
           .span2
             label(for="name").pull-right Name
           .span3
-            input(id="name", placeHolder="Office Lamp", value!="<%= name %>")
+            <%= name %>
         .row
           .span2
             label(for="read_address").pull-right Read Address
           .span3
-            input(id="read_address", placeHolder="0/1/0", value!="<%= _.find(addresses, function(addr){return addr.type == 'read_address'}).address %>")
+            <%= _.find(addresses, function(addr){return addr.type == 'read_address'}).address %>
         .row
           .span2
             label(for="write_address").pull-right Write Address
           .span3
-            input(id="write_address", placeHolder="0/1/1", value!="<%= _.find(addresses, function(addr){return addr.type == 'write_address'}).address %>")
+            <%= _.find(addresses, function(addr){return addr.type == 'write_address'}).address %>
         .row
           .span2
             label(for="write_address").pull-right Status
@@ -194,8 +194,8 @@ html(lang='en')
     script
       $(document).ready(function() {
         var options = {
-          rootUrl: "http://trendsetterin.selfhost.eu:8081"
-          //rootUrl: "http://localhost:8081"
+          //rootUrl: "http://trendsetterin.selfhost.eu:8081"
+          rootUrl: "http://localhost:8081"
         };
         HomeInTouch.start(options);
       })
