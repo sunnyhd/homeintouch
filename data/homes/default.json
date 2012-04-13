@@ -13,24 +13,24 @@
           "deviceGroups": [
             {
               "id": 0,
-              "type": 0,
+              "type": "switch",
               "name": "Light",
               "devices": [
                 {
                   "id": 0,
                   "name": "Office lights",
-                  "type": 0,
+                  "type": "switch",
                   "addresses": [
                     {
                       "id": 0,
-                      "type": "read_address",
+                      "type": "read_switch",
                       "name": "read",
                       "address": "1/0/1",
                       "value": 0
                     },
                     {
                       "id": 1,
-                      "type": "write_address",
+                      "type": "write_switch",
                       "name": "write",
                       "address": "1/0/0",
                       "value": ""

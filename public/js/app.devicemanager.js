@@ -37,7 +37,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
   // Base form for adding device types.
   // Don't use this directly. See the
-  // `AddDeviceTypeZeroForm` for an example
+  // `AddSwitchDeviceForm` for an example
   // of how to use this.
   DeviceManager.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
     events: function(){
@@ -76,7 +76,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  DeviceManager.AddDeviceTypeZeroForm = DeviceManager.AddEditDeviceTypeForm.extend({
+  DeviceManager.AddSwitchDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
     template: "#device-add-type-zero-template",
     formFields: ["name", "read_address", "write_address"],
 
@@ -106,7 +106,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  DeviceManager.ViewDeviceTypeZeroForm = DeviceManager.AddEditDeviceTypeForm.extend({
+  DeviceManager.ViewSwitchDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
     template: "#device-view-type-zero-template",
 
     formEvents: {
@@ -163,20 +163,29 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  // Helper Methods
-  // --------------
+  // View -> Device Type Registrations
+  // ---------------------------------
 
   var deviceTypeAddForm = {
-    0: DeviceManager.AddDeviceTypeZeroForm,
+    "switch": DeviceManager.AddSwitchDeviceForm,
+    "dimmer": DeviceManager.AddSwitchDeviceForm,
+    "thermostat": DeviceManager.AddSwitchDeviceForm,
+    "shutter": DeviceManager.AddSwitchDeviceForm
   };
 
   var deviceTypeViewForm = {
-    0: DeviceManager.ViewDeviceTypeZeroForm,
+    "switch": DeviceManager.ViewSwitchDeviceForm,
+    "dimmer": DeviceManager.ViewSwitchDeviceForm,
+    "thermostat": DeviceManager.ViewSwitchDeviceForm,
+    "shutter": DeviceManager.ViewSwitchDeviceForm
   };
 
+  // Helper Methods
+  // --------------
+
   var showDeviceViewForm = function(device){
-    var deviceTypeId = device.get("type");
-    var FormType = deviceTypeViewForm[deviceTypeId];
+    var deviceType = device.get("type");
+    var FormType = deviceTypeViewForm[deviceType];
     var form = new FormType({
       model: device
     });
@@ -249,7 +258,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     showAddDeviceToGroup: function(deviceGroup){
       var deviceType = deviceGroup.deviceType;
-      var FormType = deviceTypeAddForm[deviceType.id];
+      var FormType = deviceTypeAddForm[deviceType.get("type")];
 
       var form = new FormType({
         model: deviceType

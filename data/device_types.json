@@ -36,8 +36,8 @@
 
   {
     "id": 3,
-    "type": "shutters",
-    "name": "Shutters",
+    "type": "shutter",
+    "name": "Shutter",
     "addresses": [
       "write_switch",
       "write_stop",
