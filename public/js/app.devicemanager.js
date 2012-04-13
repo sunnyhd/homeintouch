@@ -163,21 +163,45 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     }
   });
 
+  DeviceManager.AddShutterDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
+    template: "#device-add-shutter-template"
+  });
+
+  DeviceManager.ViewShutterDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
+    template: "#device-view-shutter-template"
+  });
+
+  DeviceManager.AddThermostatDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
+    template: "#device-add-thermostat-template"
+  });
+
+  DeviceManager.ViewThermostatDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
+    template: "#device-view-thermostat-template"
+  });
+
+  DeviceManager.AddDimmerDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
+    template: "#device-add-dimmer-template"
+  });
+
+  DeviceManager.ViewDimmerDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
+    template: "#device-view-dimmer-template"
+  });
+
   // View -> Device Type Registrations
   // ---------------------------------
 
   var deviceTypeAddForm = {
     "switch": DeviceManager.AddSwitchDeviceForm,
-    "dimmer": DeviceManager.AddSwitchDeviceForm,
-    "thermostat": DeviceManager.AddSwitchDeviceForm,
-    "shutter": DeviceManager.AddSwitchDeviceForm
+    "dimmer": DeviceManager.AddDimmerDeviceForm,
+    "thermostat": DeviceManager.AddThermostatDeviceForm,
+    "shutter": DeviceManager.AddShutterDeviceForm
   };
 
   var deviceTypeViewForm = {
     "switch": DeviceManager.ViewSwitchDeviceForm,
-    "dimmer": DeviceManager.ViewSwitchDeviceForm,
-    "thermostat": DeviceManager.ViewSwitchDeviceForm,
-    "shutter": DeviceManager.ViewSwitchDeviceForm
+    "dimmer": DeviceManager.ViewDimmerDeviceForm,
+    "thermostat": DeviceManager.ViewThermostatDeviceForm,
+    "shutter": DeviceManager.ViewShutterDeviceForm
   };
 
   // Helper Methods

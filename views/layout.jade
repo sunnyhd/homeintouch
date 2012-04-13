@@ -152,48 +152,59 @@ html(lang='en')
         a(href="#").delete.btn.pull-left Delete
         a(href="#").cancel.btn.btn-primary Close
 
-    script(id="device-add-type-one-template", type="text/template")
+    script(id="device-add-dimmer-template", type="text/template")
       .modal-header
         h2 Add A New <%= name %>
       .modal-body
-        .row
-          .span2
-            label(for="name").pull-right Name
-          .span3
-            input(id="name", placeHolder="Dining Room Dimmer")
-        .row
-          .span2
-            label(for="read_address").pull-right Read On/Off Address
-          .span3
-            input(id="read_address", placeHolder="0/1/0")
-        .row
-          .span2
-            label(for="write_address").pull-right Write On/Off Address
-          .span3
-            input(id="write_address", placeHolder="0/1/1")
-        .row
-          .span2
-            label(for="read_address").pull-right Read Value Address
-          .span3
-            input(id="read_address", placeHolder="0/1/0")
-        .row
-          .span2
-            label(for="write_address").pull-right Write Value Address
-          .span3
-            input(id="write_address", placeHolder="0/1/1")
-      
+        p Form to add a new dimmer switch
       .modal-footer
         a(href="#").cancel.btn Cancel
-        a(href="#").add.btn.btn-primary Add
+        // a(href="#").add.btn.btn-primary Add
 
-    script(id="device-edit-type-one-template", type="text/template")
+    script(id="device-view-dimmer-template", type="text/template")
       .modal-header
         h2 <%= name %>
       .modal-body
-        p The form for editing
+        p Form to view a dimmer switch and control it
       .modal-footer
-        a(href="#", class="cancel btn") Close
-        a(href="#", class="save btn btn-primary") Save
+        a(href="#").delete.btn.pull-left Delete
+        a(href="#").cancel.btn.btn-primary Close
+
+    script(id="device-add-thermostat-template", type="text/template")
+      .modal-header
+        h2 Add A New <%= name %>
+      .modal-body
+        p Form to add a new thermostat switch
+      .modal-footer
+        a(href="#").cancel.btn Cancel
+        // a(href="#").add.btn.btn-primary Add
+
+    script(id="device-view-thermostat-template", type="text/template")
+      .modal-header
+        h2 <%= name %>
+      .modal-body
+        p Form to view a thermostat switch and control it
+      .modal-footer
+        a(href="#").delete.btn.pull-left Delete
+        a(href="#").cancel.btn.btn-primary Close
+
+    script(id="device-add-shutter-template", type="text/template")
+      .modal-header
+        h2 Add A New <%= name %>
+      .modal-body
+        p Form to add a new shutter switch
+      .modal-footer
+        a(href="#").cancel.btn Cancel
+        // a(href="#").add.btn.btn-primary Add
+
+    script(id="device-view-shutter-template", type="text/template")
+      .modal-header
+        h2 <%= name %>
+      .modal-body
+        p Form to view a shutter switch and control it
+      .modal-footer
+        a(href="#").delete.btn.pull-left Delete
+        a(href="#").cancel.btn.btn-primary Close
 
     script(id="device-add-group-to-room-template", type="text/template")
       .modal-header
