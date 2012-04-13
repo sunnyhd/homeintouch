@@ -12,7 +12,11 @@ HomeInTouch.ViewHelpers = (function(HIT, Backbone, _, $){
   var itemViewPrototype = Backbone.Marionette.ItemView.prototype;
   itemViewPrototype.serializeData = _.wrap(itemViewPrototype.serializeData, function(original){
     var data = original.apply(this, arguments);
-    _.extend(data, ViewHelpers);
+
+    if (data) {
+      _.extend(data, ViewHelpers);
+    }
+
     return data;
   });
 
