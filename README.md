@@ -11,11 +11,13 @@ Install
 Run
 ---
 
-Server/client:
+In a shell, make sure that the home server is running, and leave the shell open:
 
+    ssh trendsetterin.selfhost.eu:8081
+    jedtest1219
     node server.js
 
-Standalone client
+In another shell, start the local server:
 
     node server.js --clientonly
 
