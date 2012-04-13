@@ -53,7 +53,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       e.preventDefault();
 
       var data = Backbone.FormHelpers.getFormData(this);
-      data.type = this.model.id;
+      data.type = this.model.get("type");
 
       var device = this.buildDevice(data);
 
@@ -88,7 +88,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
       var read = new HIT.Address({
         type: "read_switch",
-        address: data.read_address,
+        address: data.read_switch,
         name: "read",
         value: ""
       });
@@ -96,7 +96,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
       var write = new HIT.Address({
         type: "write_switch",
-        address: data.write_address,
+        address: data.write_switch,
         name: "write",
         value: ""
       });
