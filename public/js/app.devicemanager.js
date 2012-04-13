@@ -138,7 +138,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     deleteClicked: function(e){
       e.preventDefault();
       this.model.destroy();
-      HIT.HomeList.saveCurrentHome();
+      this.trigger("device:deleted");
       this.close();
     },
 
@@ -170,17 +170,18 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     0: DeviceManager.AddDeviceTypeZeroForm,
   };
 
-  var deviceTypeEditForm = {
+  var deviceTypeViewForm = {
     0: DeviceManager.ViewDeviceTypeZeroForm,
   };
 
-  var showDeviceEditForm = function(device){
+  var showDeviceViewForm = function(device){
     var deviceTypeId = device.get("type");
-    var FormType = deviceTypeEditForm[deviceTypeId];
+    var FormType = deviceTypeViewForm[deviceTypeId];
     var form = new FormType({
       model: device
     });
     HIT.modal.show(form);
+    return form;
   };
 
   // Workflow Objects
@@ -262,7 +263,12 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   // Application Event handlers
   // --------------------------
 
-  HIT.vent.on("device:selected", showDeviceEditForm);
+  HIT.vent.on("device:selected", function(device){
+    var form = showDeviceViewForm(device);
+    form.on("device:deleted", function(){
+      HIT.HomeList.saveCurrentHome();
+    });
+  });
 
   HIT.vent.on("room:device:addToGroup", function(room, deviceGroup){
     addDeviceWorkflows.addDeviceToGroup(room, deviceGroup);

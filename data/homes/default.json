@@ -36,27 +36,6 @@
                       "value": ""
                     }
                   ]
-                },
-                {
-                  "name": "baz",
-                  "type": 0,
-                  "id": 3,
-                  "addresses": [
-                    {
-                      "type": "read_address",
-                      "address": "1/0/1",
-                      "name": "read",
-                      "value": 0,
-                      "id": 4
-                    },
-                    {
-                      "type": "write_address",
-                      "address": "1/0/0",
-                      "name": "write",
-                      "value": "",
-                      "id": 5
-                    }
-                  ]
                 }
               ]
             }
