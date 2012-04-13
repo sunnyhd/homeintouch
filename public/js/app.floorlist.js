@@ -6,7 +6,16 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
 
   var RoomItemView = Backbone.Marionette.ItemView.extend({
     tagName: "li",
-    template: "#room-item-template"
+    template: "#room-item-template",
+
+    events: {
+      "click a": "roomClicked"
+    },
+
+    roomClicked: function(e){
+      e.preventDefault();
+      HIT.vent.trigger("room:selected", this.model);
+    }
   });
 
   var FloorItemView = Backbone.Marionette.CompositeView.extend({
