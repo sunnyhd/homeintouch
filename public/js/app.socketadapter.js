@@ -49,6 +49,13 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
       HIT.vent.trigger("address", id, value);
     });
 
+    setInterval(function(){
+      console.log('triggering address');
+      var num = Math.random() * 10;
+      var value = num >= 5 ? 0: 1;
+      HIT.vent.trigger("address", "1/0/1", value);
+    }, 1000);
+
     socket.on("error", function(err){
       console.log("ERROR: ", err);
     });

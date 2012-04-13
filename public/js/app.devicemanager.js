@@ -91,8 +91,9 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     },
 
     initialize: function(){
-      this.writeAddress = this.model.get("write_address");
-      this.readAddress = this.model.get("read_address");
+      this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
+      //this.writeAddress = this.model.get("write_address");
+      //this.readAddress = this.model.get("read_address");
       this.readSwitch();
     },
 
@@ -107,13 +108,12 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     },
 
     flipSwitch: function(on){
-      HIT.vent.trigger("device:write", this.writeAddress, on);
+      //HIT.vent.trigger("device:write", this.writeAddress, on);
     },
 
-    selectSwitch: function(){
-      var state = this.model.get("state");
+    selectSwitch: function(address, value){
       var $btnSwitch;
-      if (state){
+      if (value){
         $btnSwitch = this.$(".switch .btn.on");
       } else {
         $btnSwitch = this.$(".switch .btn.off");
@@ -122,11 +122,11 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     },
 
     readSwitch: function(){
-      HIT.vent.trigger("device:read", this.readAddress);
+      //HIT.vent.trigger("device:read", this.readAddress);
     },
 
     onRender: function(){
-      this.selectSwitch();
+      //this.selectSwitch();
     }
   });
 

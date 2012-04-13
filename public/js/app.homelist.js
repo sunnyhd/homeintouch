@@ -35,8 +35,8 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
   };
 
   var updateDeviceStatus = function(address, statusValue){
-    var devices = HIT.homes.findDevicesForAddress(address);
-    devices.updateAddress(address, value);
+    var addrs = HIT.homes.findAddresses(address);
+    addrs.updateAddress(address, statusValue);
   }
 
   // Application Event Handlers

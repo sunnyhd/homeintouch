@@ -33,6 +33,10 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       "click a": "deviceClicked"
     },
 
+    initialize: function(){
+      this.bindTo(this.model, "change:address:value", this.render, this);
+    },
+
     deviceClicked: function(e){
       e.preventDefault();
       HIT.vent.trigger("device:selected", this.model);

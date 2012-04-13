@@ -46,7 +46,7 @@ html(lang='en')
       ul
 
     script(id="device-list-item-template", type="text/template")
-      a(href="#") <%= name %>
+      a(href="#") <%= name %> ( <%= _.find(addresses, function(addr){return addr.name == "read_address"}).value %> )
 
     script(id="device-add-type-zero-template", type="text/template")
       .modal-header
@@ -84,12 +84,12 @@ html(lang='en')
           .span2
             label(for="read_address").pull-right Read Address
           .span3
-            input(id="read_address", placeHolder="0/1/0", value!="<%= read_address %>")
+            input(id="read_address", placeHolder="0/1/0")
         .row
           .span2
             label(for="write_address").pull-right Write Address
           .span3
-            input(id="write_address", placeHolder="0/1/1", value!="<%= write_address %>")
+            input(id="write_address", placeHolder="0/1/1")
         .row
           .span2
             label(for="write_address").pull-right Status
