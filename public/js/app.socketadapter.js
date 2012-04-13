@@ -23,24 +23,20 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     });
 
     socket.on("connect", function() {
-      console.log("Connected to socket.io server");
       SocketAdapter.connected = true;
       HIT.vent.trigger("socket:connected");
     });
 
     socket.on("disconnect", function() {
-      console.log("Disconnected from socket.io server");
       SocketAdapter.connected = false;
       HIT.vent.trigger("socket:disconnected");
     });
 
     socket.on("homes", function(homes) {
-      console.log("Received homes from socket.io server", homes);
       homesLoaded.resolve(homes);
     });
 
     socket.on("deviceTypes", function(deviceTypes){
-      console.log("Received device types from socket.io server", deviceTypes);
       deviceTypesLoaded.resolve(deviceTypes);
     });
 
