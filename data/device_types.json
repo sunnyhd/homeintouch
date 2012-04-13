@@ -6,15 +6,5 @@
       "Read address",
       "Write address"
     ]
-  },
-  {
-    "id": 1,
-    "name": "Dimmer",
-    "addresses": [
-      "Read On/Off Address",
-      "Write On/Off Address",
-      "Read Value Address",
-      "Write Value Address"
-    ]
   }
 ]

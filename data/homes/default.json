@@ -36,27 +36,6 @@
                       "value": ""
                     }
                   ]
-                },
-                {
-                  "id": 1,
-                  "name": "Office lamp",
-                  "type": 0,
-                  "addresses": [
-                    {
-                      "id": 2,
-                      "type": "read_address",
-                      "name": "read",
-                      "address": "1/0/1",
-                      "value": ""
-                    },
-                    {
-                      "id": 3,
-                      "type": "write_address",
-                      "name": "write",
-                      "address": "1/0/0",
-                      "value": ""
-                    }
-                  ]
                 }
               ]
             }

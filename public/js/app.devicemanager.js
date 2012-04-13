@@ -55,7 +55,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       var data = Backbone.FormHelpers.getFormData(this);
       data.type = this.model.id;
 
-      var device = new HIT.Device(data);
+      var device = this.buildDevice(data);
 
       this.result = {
         status: "OK",
@@ -78,7 +78,32 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
   DeviceManager.AddDeviceTypeZeroForm = DeviceManager.AddEditDeviceTypeForm.extend({
     template: "#device-add-type-zero-template",
-    formFields: ["name", "read_address", "write_address"]
+    formFields: ["name", "read_address", "write_address"],
+
+    buildDevice: function(data){
+      var device = new HIT.Device({
+        name: data.name,
+        type: data.type
+      });
+
+      var read = new HIT.Address({
+        type: "read_address",
+        address: data.read_address,
+        name: "read",
+        value: ""
+      });
+      device.addresses.add(read);
+
+      var write = new HIT.Address({
+        type: "write_address",
+        address: data.write_address,
+        name: "write",
+        value: ""
+      });
+      device.addresses.add(write);
+
+      return device;
+    }
   });
 
   DeviceManager.EditDeviceTypeZeroForm = DeviceManager.AddEditDeviceTypeForm.extend({
