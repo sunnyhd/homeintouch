@@ -23,13 +23,15 @@
                   "addresses": [
                     {
                       "id": 0,
-                      "name": "read_address",
+                      "type": "read_address",
+                      "name": "read",
                       "address": "1/0/1",
                       "value": ""
                     },
                     {
                       "id": 1,
-                      "name": "write_address",
+                      "type": "write_address",
+                      "name": "write",
                       "address": "1/0/0",
                       "value": ""
                     }
@@ -42,13 +44,15 @@
                   "addresses": [
                     {
                       "id": 2,
-                      "name": "read_address",
+                      "type": "read_address",
+                      "name": "read",
                       "address": "1/0/1",
                       "value": ""
                     },
                     {
                       "id": 3,
-                      "name": "write_address",
+                      "type": "write_address",
+                      "name": "write",
                       "address": "1/0/0",
                       "value": ""
                     }

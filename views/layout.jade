@@ -46,7 +46,7 @@ html(lang='en')
       ul
 
     script(id="device-list-item-template", type="text/template")
-      a(href="#") <%= name %> ( <%= _.find(addresses, function(addr){return addr.name == "read_address"}).value %> )
+      a(href="#") <%= name %> ( <%= _.find(addresses, function(addr){return addr.type == "read_address"}).value %> )
 
     script(id="device-add-type-zero-template", type="text/template")
       .modal-header
