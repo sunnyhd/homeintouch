@@ -65,6 +65,13 @@ html(lang='en')
 
         .room-devices.row.span9
 
+    script(id="no-floors-template", type="text/template")
+      .container-fluid
+        .span9
+          h2 No Floors Or Rooms To Display
+        .span9
+          | Please add a floor and rooms to this home
+
     script(id="device-list-template", type="text/template")
       .pull-right
         button(class="btn").addDevice +
