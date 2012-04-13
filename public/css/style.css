@@ -19,3 +19,7 @@ body {
 .room, .room-device {
   background-color: #eee;
 }
+
+label.pull-right{
+  text-align: right
+}

@@ -219,6 +219,12 @@
       this.floors = this.parseChildren("floors", HIT.FloorCollection);
     },
 
+    addFloor: function(floor){
+      this.floors.add(floor);
+      this.trigger("change:floors", this.floors);
+      this.trigger("change:floor:add", floor);
+    },
+
     toJSON: function(){
       var json = Model.prototype.toJSON.call(this);
       if (this.floors){
