@@ -10,6 +10,12 @@ HomeInTouch.DeviceTypes = (function(HIT, Backbone, _, $){
     return deviceTypeCollection.get(typeId);
   };
 
+  DeviceTypes.getByType = function(type){
+    return deviceTypeCollection.find(function(dg){
+      return dg.get("type") === type;
+    });
+  };
+
   // Get the name of the device type, by id,
   // or "(unknown type)" if it's not found.
   DeviceTypes.getName = function(typeId){

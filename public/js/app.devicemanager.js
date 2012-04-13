@@ -14,11 +14,11 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     addClicked: function(e){
       e.preventDefault();
-      var typeId = this.$("select").val();
+      var type = this.$("select").val();
 
       this.result = {
         status: "OK",
-        deviceTypeId: typeId
+        deviceType: type
       }
 
       this.close();
@@ -231,8 +231,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     addGroupClose: function(result, room, okCallback){
       if (result.status === "OK"){
-        var deviceTypeId = result.deviceTypeId;
-        var deviceGroup = room.findOrCreateGroup(deviceTypeId);
+        var deviceType = result.deviceType;
+        var deviceGroup = room.findOrCreateGroup(deviceType);
         okCallback(deviceGroup);
       }
     },

@@ -205,7 +205,7 @@ html(lang='en')
           .span3
             select(id="type")
               <% _.each(deviceTypes, function(type){ %>
-              option(value!="<%= type.id %>") <%= type.name %>
+              option(value!="<%= type.type %>") <%= type.name %>
               <% }) %>
       .modal-footer
         a(href="#").cancel.btn Cancel

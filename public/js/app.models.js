@@ -131,8 +131,8 @@
     },
 
     setDeviceType: function(){
-      var typeId = this.get("type");
-      var type = HIT.DeviceTypes.get(typeId);
+      var typeName = this.get("type");
+      var type = HIT.DeviceTypes.getByType(typeName);
 
       if (type){
         this.deviceType = type;
@@ -161,16 +161,16 @@
       this.deviceGroups = this.parseChildren("deviceGroups", HIT.DeviceGroupCollection);
     },
 
-    findOrCreateGroup: function(deviceTypeId){
+    findOrCreateGroup: function(deviceType){
       var deviceGroup;
 
       deviceGroup = this.deviceGroups.find(function(dg){ 
-        return dg.deviceType.id == deviceTypeId; 
+        return dg.deviceType.type == deviceType; 
       });
 
       if (!deviceGroup){
         deviceGroup = new HIT.DeviceGroup({
-          type: deviceTypeId
+          type: deviceType
         });
       }
 
