@@ -6,7 +6,16 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
   
   HomeList.HomeItemView = Backbone.Marionette.ItemView.extend({
     tagName: "li",
-    template: "#home-item-template"
+    template: "#home-item-template",
+
+    events: {
+      "click a": "homeClicked"
+    },
+
+    homeClicked: function(e){
+      e.preventDefault();
+      HIT.homes.select(this.model);
+    }
   });
 
   HomeList.HomeSelector = Backbone.Marionette.CompositeView.extend({
