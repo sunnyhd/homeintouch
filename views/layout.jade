@@ -97,9 +97,9 @@ html(lang='en')
       ul
 
     script(id="device-list-item-template", type="text/template")
-      a(href="#") <%= name %> ( <%= _.find(addresses, function(addr){return addr.type == "read_address"}).value ? "On" : "Off" %> )
+      a(href="#") <%= name %> ( <%= getAddress("read_switch").value ? "On" : "Off" %> )
 
-    script(id="device-add-type-zero-template", type="text/template")
+    script(id="device-add-switch-template", type="text/template")
       .modal-header
         h2 Add A New <%= name %>
       .modal-body
@@ -110,19 +110,19 @@ html(lang='en')
             input(id="name", placeHolder="Office Lamp")
         .row
           .span2
-            label(for="read_address").pull-right Read Address
+            label(for="read_switch").pull-right Read Address
           .span3
-            input(id="read_address", placeHolder="#/#/#")
+            input(id="read_switch", placeHolder="#/#/#")
         .row
           .span2
-            label(for="write_address").pull-right Write Address
+            label(for="write_switch").pull-right Write Address
           .span3
-            input(id="write_address", placeHolder="#/#/#")
+            input(id="write_switch", placeHolder="#/#/#")
       .modal-footer
         a(href="#").cancel.btn Cancel
         a(href="#").add.btn.btn-primary Add
 
-    script(id="device-view-type-zero-template", type="text/template")
+    script(id="device-view-switch-template", type="text/template")
       .modal-header
         h2 <%= name %>
       .modal-body
@@ -135,12 +135,12 @@ html(lang='en')
           .span2
             label(for="read_address").pull-right Read Address
           .span3
-            <%= _.find(addresses, function(addr){return addr.type == 'read_address'}).address %>
+            <%= getAddress('read_switch').address %>
         .row
           .span2
             label(for="write_address").pull-right Write Address
           .span3
-            <%= _.find(addresses, function(addr){return addr.type == 'write_address'}).address %>
+            <%= getAddress('write_switch').address %>
         .row
           .span2
             label(for="write_address").pull-right Status
@@ -235,6 +235,7 @@ html(lang='en')
     script(src='/js/bootstrap.min.js')
     script(src='/js/socket.io.min.js')
     script(src='/js/app.js')
+    script(src='/js/app.viewhelpers.js')
     script(src='/js/app.socketadapter.js')
     script(src='/js/app.models.js')
     script(src='/js/app.devicetypes.js')

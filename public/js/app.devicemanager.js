@@ -77,8 +77,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   });
 
   DeviceManager.AddSwitchDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-add-type-zero-template",
-    formFields: ["name", "read_address", "write_address"],
+    template: "#device-add-switch-template",
+    formFields: ["name", "read_switch", "write_switch"],
 
     buildDevice: function(data){
       var device = new HIT.Device({
@@ -87,7 +87,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       });
 
       var read = new HIT.Address({
-        type: "read_address",
+        type: "read_switch",
         address: data.read_address,
         name: "read",
         value: ""
@@ -95,7 +95,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       device.addresses.add(read);
 
       var write = new HIT.Address({
-        type: "write_address",
+        type: "write_switch",
         address: data.write_address,
         name: "write",
         value: ""
@@ -107,7 +107,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   });
 
   DeviceManager.ViewSwitchDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-view-type-zero-template",
+    template: "#device-view-switch-template",
 
     formEvents: {
       "click .switch .btn.on": "switchOnClicked",
@@ -118,10 +118,10 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     initialize: function(){
       this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
       this.readAddress = this.model.addresses.find(function(address){
-        return address.get("type") === "read_address";
+        return address.get("type") === "read_switch";
       });
       this.writeAddress = this.model.addresses.find(function(address){
-        return address.get("type") === "write_address";
+        return address.get("type") === "write_switch";
       });
     },
 
@@ -186,6 +186,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   var showDeviceViewForm = function(device){
     var deviceType = device.get("type");
     var FormType = deviceTypeViewForm[deviceType];
+    console.log(deviceType, FormType);
     var form = new FormType({
       model: device
     });
