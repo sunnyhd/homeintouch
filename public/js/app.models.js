@@ -165,7 +165,7 @@
       var deviceGroup;
 
       deviceGroup = this.deviceGroups.find(function(dg){ 
-        return dg.deviceType.type == deviceType; 
+        return dg.deviceType.get("type") == deviceType; 
       });
 
       if (!deviceGroup){
