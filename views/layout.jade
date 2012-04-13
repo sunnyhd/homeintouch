@@ -24,6 +24,10 @@ html(lang='en')
           | <%= name %>
           b.caret
         ul.dropdown-menu
+          li.divider
+          li
+            .pull-right
+              .add-room.btn.btn-mini +
 
     script(id="floor-list-template", type="text/template")
       .navbar-form.pull-left
@@ -64,6 +68,20 @@ html(lang='en')
             p <%= name %>
 
         .room-devices.row.span9
+
+    script(id="room-add-template", type="text/template")
+      .modal-header
+        h2 Add A New Room To <%= name %>
+      .modal-body
+        .row
+          .span2
+            label(for="name").pull-right 
+              strong Name
+          .span3
+            input(id="name", placeHolder="Kitchen")
+      .modal-footer
+        a(href="#").cancel.btn Cancel
+        a(href="#").save.btn.btn-primary Save
 
     script(id="no-floors-template", type="text/template")
       .container-fluid

@@ -198,6 +198,12 @@
       this.rooms = this.parseChildren("rooms", HIT.RoomCollection);
     },
 
+    addRoom: function(room){
+      this.rooms.add(room);
+      this.trigger("change:rooms", this.rooms);
+      this.trigger("change:room:add", room);
+    },
+
     toJSON: function(){
       var json = Model.prototype.toJSON.call(this);
       if (this.rooms){

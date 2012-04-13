@@ -72,8 +72,43 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     itemView: RoomManager.DeviceGroupView
   });
 
+  RoomManager.AddRoomForm = Backbone.Marionette.ItemView.extend({
+    template: "#room-add-template",
+
+    formFields: ["name"],
+
+    events: {
+      "click .save": "saveClicked",
+      "click .cancel": "cancelClicked"
+    },
+
+    saveClicked: function(e){
+      e.preventDefault();
+
+      var data = Backbone.FormHelpers.getFormData(this);
+      var room = new HIT.Room(data);
+
+      this.trigger("save", room);
+
+      this.close();
+    },
+
+    cancelClicked: function(e){
+      e.preventDefault();
+      this.close();
+    }
+  });
+
   // Helper Functions
   // ----------------
+
+  var showAddRoom = function(floor){
+    var form = new RoomManager.AddRoomForm({
+      model: floor
+    });
+    HIT.modal.show(form);
+    return form;
+  };
 
   var showRoom = function(room){
     RoomManager.currentRoom = room;
@@ -94,6 +129,15 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
   // ------------------
 
   HIT.vent.on("room:selected", showRoom);
+
+  HIT.vent.on("room:add", function(floor){
+    var form = showAddRoom(floor);
+    form.on("save", function(room){
+      floor.addRoom(room);
+      HIT.HomeList.saveCurrentHome();
+      HIT.vent.trigger("room:selected", room);
+    });
+  });
 
   return RoomManager;
 })(HomeInTouch, Backbone, _, $);

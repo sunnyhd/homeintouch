@@ -15,12 +15,22 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
     template: "#floor-item-template",
     itemView: RoomItemView,
 
+    events: {
+      "click .add-room": "addRoomClicked"
+    },
+
     initialize: function(){
       this.collection = this.model.rooms;
     },
 
+    addRoomClicked: function(e){
+      e.preventDefault();
+      HIT.vent.trigger("room:add", this.model);
+    },
+
     appendHtml: function(cv, iv){
-      cv.$("ul.dropdown-menu").append(iv.el);
+      var $splitter = cv.$("ul.dropdown-menu li.divider");
+      $splitter.before(iv.el);
     }
   });
 

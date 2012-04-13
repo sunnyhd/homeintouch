@@ -23,3 +23,8 @@ body {
 label.pull-right{
   text-align: right
 }
+
+.add-room.btn{
+  margin-right: 5px;
+}
+
