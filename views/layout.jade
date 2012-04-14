@@ -96,8 +96,16 @@ html(lang='en')
       p <%= name %>
       ul
 
-    script(id="device-list-item-template", type="text/template")
+    script(id="device-list-switch-item-template", type="text/template")
       a(href="#") <%= name %> ( <%= getAddress("read_switch").value ? "On" : "Off" %> )
+
+    script(id="device-list-dimmer-item-template", type="text/template")
+      a(href="#") 
+        | <%= name %> ( 
+        | <%= getAddress("read_switch").value ? "On" : "Off" %> 
+        | /
+        | <%= getAddress("read_dimmer").value %> 
+        | )
 
     script(id="device-add-switch-template", type="text/template")
       .modal-header

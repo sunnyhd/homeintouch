@@ -27,10 +27,15 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
   RoomManager.DeviceView = Backbone.Marionette.ItemView.extend({
     tagName: "li",
-    template: "#device-list-item-template",
 
     events: {
       "click a": "deviceClicked"
+    },
+
+    template: function(){
+      var type = this.model.get("type");
+      var template = "#device-list-" + type + "-item-template";
+      return template;
     },
 
     initialize: function(){
