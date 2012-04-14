@@ -174,7 +174,42 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   });
 
   DeviceManager.ViewThermostatDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-view-thermostat-template"
+    template: "#device-view-thermostat-template",
+
+    formEvents: {
+      "click .delete.btn": "deleteClicked"
+    },
+
+    initialize: function(){
+      this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
+      this.readMode = this.model.getAddressByType("read_mode");
+      this.writeMode = this.model.getAddressByType("write_mode");
+      this.readSetPoint = this.model.getAddressByType("read_temperature_set");
+      this.writeSetPoint = this.model.getAddressByType("write_temperature_set");
+      this.readTemperature = this.model.getAddressByType("read_temperature_actual");
+    },
+
+    switchOnClicked: function(){
+      this.flipSwitch(true);
+    },
+
+    switchOffClicked: function(){
+      this.flipSwitch(false);
+    },
+
+    deleteClicked: function(e){
+      e.preventDefault();
+      this.model.destroy();
+      this.trigger("device:deleted");
+      this.close();
+    },
+
+    onRender: function(){
+      var mode = this.readMode.get("value");
+      var setPoint = this.readSetPoint.get("value");
+      var temperature = this.readTemperature.get("value");
+      // update the view with this info ...
+    }
   });
 
   DeviceManager.AddDimmerDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
