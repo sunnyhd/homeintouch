@@ -1,0 +1,6 @@
+{"key":"homes/default","val":{"name":"Default","order":0,"id":"default","floors":[{"id":0,"name":"Ground floor","rooms":[{"name":"Office","id":0,"deviceGroups":[{"id":0,"type":"switch","name":"Light","devices":[{"id":0,"name":"Office lights","type":"switch","addresses":[{"id":0,"type":"read_switch","name":"read","address":"1/0/1","value":0},{"id":1,"type":"write_switch","name":"write","address":"1/0/0","value":""}]}]}]}]},{"id":1,"name":"Basement","rooms":[]},{"id":2,"name":"Second floor","rooms":[]}]}}
+{"key":"homes/new","val":{"name":"New","order":1,"id":"new","floors":[]}}
+{"key":"deviceTypes/switch", "val": { "id": 0, "type": "switch", "name": "Light", "addresses": [ "write_switch", "read_switch" ] }
+{"key":"deviceTypes/dimmer", "val": { "id": 1, "type": "dimmer", "name": "Dimmer Switch", "addresses": [ "write_switch", "read_switch", "write_dimmer", "read_dimmer" ] }
+{"key":"deviceTypes/thermostat", "val": { "id": 2, "type": "thermostat", "name": "Thermostat", "addresses": [ "write_mode", "read_mode", "read_temperature_actual", "read_temperature_set", "write_temperature_set" ] }
+{"key":"deviceTypes/shutter", "val": { "id": 3, "type": "shutter", "name": "Shutter", "addresses": [ "write_switch", "write_stop", "write_position", "read_position" ] }
