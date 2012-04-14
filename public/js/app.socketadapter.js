@@ -69,7 +69,7 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
   setInterval(function(){
     console.log('triggering address');
     var num = Math.random() * 10;
-    var value = num >= 5 ? 0: 1;
+    var value = (num >= 5);
     HIT.vent.trigger("address", "1/0/1", value);
   }, 1000);
 

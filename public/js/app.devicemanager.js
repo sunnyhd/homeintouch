@@ -126,13 +126,13 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     },
 
     switchOnClicked: function(){
-      this.model.set({state: 1});
-      this.flipSwitch(1);
+      this.model.set({state: true});
+      this.flipSwitch(true);
     },
 
     switchOffClicked: function(){
-      this.model.set({state: 0});
-      this.flipSwitch(0);
+      this.model.set({state: false});
+      this.flipSwitch(true);
     },
 
     deleteClicked: function(e){
