@@ -97,8 +97,8 @@ The UI should look something like this. A navbar allows the user to select the h
     +--------------------+   +--------------------+
     | Lights             |   | New Light          |
     |                    |   |                    |
-    | Lamp 1 ON          |   | Light name         |
-    | Lamp 2 OFF         |   | ____________       |
+    | Lamp 1 [ON]  OFF   |   | Light name         |
+    | Lamp 2  ON  [OFF]  |   | ____________       |
     |                    |   | Read address       |
     |                    |   | ____________       |
     |                    |   | Write address      |

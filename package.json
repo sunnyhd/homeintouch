@@ -12,7 +12,8 @@
     "request": "2.9.x",
     "socket.io": "0.9.4",
     "jade": "0.24.0",
-    "forever": "0.8.5"
+    "forever": "0.8.5",
+    "dirty": "0.9.6"
   },
   "engines": {
     "node": "*"

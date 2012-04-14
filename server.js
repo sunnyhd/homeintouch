@@ -2,11 +2,13 @@ var fs = require("fs")
 
   , express = require("express")
   , socket = require("socket.io")
+  , dirty = require("dirty")
 
   , config = require("./lib/config")
 
   , app = express.createServer()
   , io = socket.listen(app)
+  , db = dirty("./data/homes.db")
 
   , eib = require("./lib/eib")
   , settings = require("./data/settings")
@@ -14,6 +16,9 @@ var fs = require("fs")
   , credentials = settings.credentials
   , hosts = settings.hosts
 
+process.on("uncaughtException", function(err) {
+  console.log("Caught exception", err)
+})
 
 app.use(express.basicAuth(credentials.username, credentials.password))
 app.use(express.static(__dirname + "/public/"))
@@ -41,6 +46,27 @@ io.sockets.on("connection", function (socket) {
     err
       ? socket.emit("error", err)
       : socket.emit("homes", homes)
+  })
+
+  // send all keys, to eventually replace fs above
+  var keys = {}
+
+  db.forEach(function(key, value) {
+    keys[key] = value
+  })
+
+  socket.emit("keys", keys)
+
+  socket.on("setKey", function(key, value) {
+    db.set(key, value)
+  })
+
+  socket.on("getKey", function(key) {
+    socket.emit("key", key, db.get(key))
+  })
+
+  socket.on("deleteKey", function(key) {
+    db.rm(key)
   })
 
   socket.on("set", eib.set)
