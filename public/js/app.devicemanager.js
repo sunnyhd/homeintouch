@@ -183,7 +183,65 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   });
 
   DeviceManager.ViewDimmerDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-view-dimmer-template"
+    template: "#device-view-dimmer-template",
+
+    formEvents: {
+      "click .switch .btn.on": "switchOnClicked",
+      "click .switch .btn.off": "switchOffClicked",
+      "click .delete.btn": "deleteClicked"
+    },
+
+    initialize: function(){
+      this.readSwitch = this.model.getAddressByType("read_switch");
+      this.writeSwitch = this.model.getAddressByType("write_switch");
+      this.readDimmer = this.model.getAddressByType("read_dimmer");
+      this.writeDimmer = this.model.getAddressByType("write_dimmer");
+
+      this.bindTo(this.readSwitch, "change:value", this.selectSwitch, this);
+      this.bindTo(this.readDimmer, "change:value", this.selectDimmer, this);
+    },
+
+    switchOnClicked: function(){
+      this.model.set({state: true});
+      this.flipSwitch(true);
+    },
+
+    switchOffClicked: function(){
+      this.model.set({state: false});
+      this.flipSwitch(true);
+    },
+
+    deleteClicked: function(e){
+      e.preventDefault();
+      this.model.destroy();
+      this.trigger("device:deleted");
+      this.close();
+    },
+
+    flipSwitch: function(on){
+      var address = this.writeAddress.get("address");
+      HIT.vent.trigger("device:write", address, on);
+    },
+
+    selectSwitch: function(address, value){
+      var $btnSwitch;
+      if (value){
+        $btnSwitch = this.$(".switch .btn.on");
+      } else {
+        $btnSwitch = this.$(".switch .btn.off");
+      }
+      $btnSwitch.button("toggle");
+    },
+
+    selectDimmer: function(address, value){
+      var $dimmer = this.$(".dimmer");
+      $dimmer.val(value);
+    },
+
+    onRender: function(){
+      var value = this.readSwitch.get("value");
+      this.selectSwitch(null, value);
+    }
   });
 
   // View -> Device Type Registrations
