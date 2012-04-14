@@ -86,21 +86,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
         type: data.type
       });
 
-      var read = new HIT.Address({
-        type: "read_switch",
-        address: data.read_switch,
-        name: "read",
-        value: ""
-      });
-      device.addresses.add(read);
-
-      var write = new HIT.Address({
-        type: "write_switch",
-        address: data.write_switch,
-        name: "write",
-        value: ""
-      });
-      device.addresses.add(write);
+      device.addAddress("read_switch", data.read_switch);
+      device.addAddress("write_switch",data.write_switch);
 
       return device;
     }
@@ -117,12 +104,8 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     initialize: function(){
       this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
-      this.readAddress = this.model.addresses.find(function(address){
-        return address.get("type") === "read_switch";
-      });
-      this.writeAddress = this.model.addresses.find(function(address){
-        return address.get("type") === "write_switch";
-      });
+      this.readAddress = this.model.getAddressByType("read_switch");
+      this.writeAddress = this.model.getAddressByType("write_switch");
     },
 
     switchOnClicked: function(){
@@ -180,7 +163,23 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   });
 
   DeviceManager.AddDimmerDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-add-dimmer-template"
+    template: "#device-add-dimmer-template",
+
+    formFields: ["name", "read_switch", "write_switch", "read_dimmer", "write_dimmer"],
+
+    buildDevice: function(data){
+      var device = new HIT.Device({
+        name: data.name,
+        type: data.type
+      });
+
+      device.addAddress("read_switch", data.read_switch);
+      device.addAddress("write_switch",data.write_switch);
+      device.addAddress("read_dimmer", data.read_dimmer);
+      device.addAddress("write_dimmer",data.write_dimmer);
+
+      return device;
+    }
   });
 
   DeviceManager.ViewDimmerDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
