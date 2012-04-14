@@ -55,6 +55,11 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
     addFloorClicked: function(e){
       e.preventDefault();
       FloorList.trigger("floor:add");
+    },
+
+    appendHtml: function(cv, iv){
+      var $addNew = cv.$(".add-new");
+      $addNew.before(iv.el);
     }
   });
 
