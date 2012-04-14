@@ -1,15 +1,11 @@
-var fs = require("fs")
-
-  , express = require("express")
+var express = require("express")
   , socket = require("socket.io")
-  , dirty = require("dirty")
 
   , config = require("./lib/config")
+  , dataStore = require("./lib/dataStore")
 
   , app = express.createServer()
   , io = socket.listen(app)
-  , db = dirty("./data/homes.db")
-
   , eib = require("./lib/eib")
   , settings = require("./data/settings")
 
@@ -34,37 +30,26 @@ app.listen(hosts.web.port, function() {
   console.log("now listening on %s...", hosts.web.port)
 })
 
+// Initialize the datastore
+dataStore.init(settings.database.path);
+
 io.set("log level", 2)
 io.sockets.on("connection", function (socket) {
-  var keys = {}
 
-  db.forEach(function(key, value) {
-    keys[key] = value;
-  })
+  socket.emit("keys", dataStore.getAll());
 
-  socket.emit("keys", keys)
-
-  socket.on("setKey", function(key, value) {
-    db.set(key, value)
-  })
+  socket.on("setKey", dataStore.set)
 
   socket.on("getKey", function(key) {
-    socket.emit("key", key, db.get(key))
+    socket.emit("key", key, dataStore.get(key))
   })
 
   socket.on("deleteKey", function(key) {
-    db.rm(key)
+    dataStore.rm(key)
   })
 
   socket.on("set", eib.set)
   socket.on("get", eib.get)
-
-  socket.on("save", function(home) {
-    console.log("saving home %s", home.id);
-    config.saveHome(home, function(err) {
-      if (err) socket.emit("error", err)
-    })
-  })
 })
 
 if (process.argv[2] == "--clientonly") return

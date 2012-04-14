@@ -4,6 +4,10 @@
     "password": "admin"
   },
 
+  "database": {
+    "path": "./data/homes.db"
+  },
+
   "hosts": {
     "knx_read": {
       "hostname": "192.168.2.41",
