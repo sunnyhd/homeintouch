@@ -20,22 +20,7 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     });
 
     socket.on("keys", function(dbKeys){
-      var data = {};
-      var segments;
-      var value;
-      var type;
-
-      for(var key in dbKeys){
-        if (dbKeys.hasOwnProperty(key)){
-          segments = key.split("/");
-          type = segments[0];
-          value = dbKeys[key];
-
-          if (!data[type]){ data[type] = [] };
-          data[type].push(value);
-        }
-      }
-
+      var data = parseRawData(dbKeys);
       triggerAppStart(data["homes"], data["deviceTypes"]);
     });
 
@@ -62,6 +47,27 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     HIT.vent.trigger('deviceTypes', deviceTypes);
     HIT.vent.trigger("homes", homes);
   };
+
+  var parseRawData = function(rawData){
+    var data = {};
+    var segments;
+    var value;
+    var type;
+
+
+    for(var key in rawData){
+      if (rawData.hasOwnProperty(key)){
+        segments = key.split("/");
+        type = segments[0];
+        value = rawData[key];
+
+        if (!data[type]){ data[type] = [] };
+        data[type].push(value);
+      }
+    }
+
+    return data;
+  }
 
   // Simulate address events
   // ----------------------
