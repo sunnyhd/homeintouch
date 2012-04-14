@@ -275,7 +275,6 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   var showDeviceViewForm = function(device){
     var deviceType = device.get("type");
     var FormType = deviceTypeViewForm[deviceType];
-    console.log(deviceType, FormType);
     var form = new FormType({
       model: device
     });
