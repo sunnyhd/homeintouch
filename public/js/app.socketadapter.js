@@ -72,7 +72,7 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
   // Simulate address events
   // ----------------------
 
-  setInterval(function(){
+  var addressSimulator = function(){
     console.log('triggering address');
     var switchValue = !!((Math.random() * 10) >= 5);
     var dimmerValue = parseInt(Math.random() * 255, 10);
@@ -83,7 +83,9 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     // dimmer switch and value
     HIT.vent.trigger("address", "3/1/6", switchValue);
     HIT.vent.trigger("address", "3/1/9", dimmerValue);
-  }, 1000);
+  };
+
+  setInterval(addressSimulator, 1000);
 
   // App events that trigger Socket communications
   // ---------------------------------------------

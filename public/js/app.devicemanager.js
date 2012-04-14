@@ -109,13 +109,11 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     },
 
     switchOnClicked: function(){
-      this.model.set({state: true});
       this.flipSwitch(true);
     },
 
     switchOffClicked: function(){
-      this.model.set({state: false});
-      this.flipSwitch(true);
+      this.flipSwitch(false);
     },
 
     deleteClicked: function(e){
@@ -188,6 +186,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     formEvents: {
       "click .switch .btn.on": "switchOnClicked",
       "click .switch .btn.off": "switchOffClicked",
+      "change .dimmer": "dimmerChanged",
       "click .delete.btn": "deleteClicked"
     },
 
@@ -197,18 +196,27 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       this.readDimmer = this.model.getAddressByType("read_dimmer");
       this.writeDimmer = this.model.getAddressByType("write_dimmer");
 
-      this.bindTo(this.readSwitch, "change:value", this.selectSwitch, this);
+      // debounce the dimmer changed, so that we only write a
+      // change half a second after it was last changed
+      this.dimmerChanged = _.debounce(this.dimmerChanged, 500);
+
       this.bindTo(this.readDimmer, "change:value", this.selectDimmer, this);
+      this.bindTo(this.readSwitch, "change:value", this.selectSwitch, this);
     },
 
     switchOnClicked: function(){
-      this.model.set({state: true});
       this.flipSwitch(true);
     },
 
     switchOffClicked: function(){
-      this.model.set({state: false});
-      this.flipSwitch(true);
+      this.flipSwitch(false);
+    },
+
+    dimmerChanged: function(e){
+      var $dimmer = $(e.currentTarget);
+      var value = parseInt($dimmer.val());
+      var address = this.writeDimmer.get("address");
+      HIT.vent.trigger("device:write", address, value);
     },
 
     deleteClicked: function(e){
@@ -219,7 +227,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     },
 
     flipSwitch: function(on){
-      var address = this.writeAddress.get("address");
+      var address = this.writeSwitch.get("address");
       HIT.vent.trigger("device:write", address, on);
     },
 
