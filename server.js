@@ -36,23 +36,10 @@ app.listen(hosts.web.port, function() {
 
 io.set("log level", 2)
 io.sockets.on("connection", function (socket) {
-  config.loadDeviceTypes(function(err, deviceTypes) {
-    err
-      ? socket.emit("error", err)
-      : socket.emit("deviceTypes", deviceTypes)
-  })
-
-  config.loadHomes(function(err, homes) {
-    err
-      ? socket.emit("error", err)
-      : socket.emit("homes", homes)
-  })
-
-  // send all keys, to eventually replace fs above
   var keys = {}
 
   db.forEach(function(key, value) {
-    keys[key] = value
+    keys[key] = value;
   })
 
   socket.emit("keys", keys)

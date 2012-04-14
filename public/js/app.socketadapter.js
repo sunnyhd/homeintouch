@@ -14,30 +14,34 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
   var initialize = function() {
     socket = io.connect(HIT.socketUrl);
 
-    var homesLoaded = $.Deferred();
-    var deviceTypesLoaded = $.Deferred();
-
-    $.when(homesLoaded, deviceTypesLoaded).then(function(homes, deviceTypes){
-      HIT.vent.trigger('deviceTypes', deviceTypes);
-      HIT.vent.trigger("homes", homes);
-    });
-
     socket.on("connect", function() {
       SocketAdapter.connected = true;
       HIT.vent.trigger("socket:connected");
     });
 
+    socket.on("keys", function(dbKeys){
+      var data = {};
+      var segments;
+      var value;
+      var type;
+
+      for(var key in dbKeys){
+        if (dbKeys.hasOwnProperty(key)){
+          segments = key.split("/");
+          type = segments[0];
+          value = dbKeys[key];
+
+          if (!data[type]){ data[type] = [] };
+          data[type].push(value);
+        }
+      }
+
+      triggerAppStart(data["homes"], data["deviceTypes"]);
+    });
+
     socket.on("disconnect", function() {
       SocketAdapter.connected = false;
       HIT.vent.trigger("socket:disconnected");
-    });
-
-    socket.on("homes", function(homes) {
-      homesLoaded.resolve(homes);
-    });
-
-    socket.on("deviceTypes", function(deviceTypes){
-      deviceTypesLoaded.resolve(deviceTypes);
     });
 
     socket.on("address", function(id, value) {
@@ -49,15 +53,25 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
       console.log("ERROR: ", err);
     });
 
-    // Simular address events
-    setInterval(function(){
-      console.log('triggering address');
-      var num = Math.random() * 10;
-      var value = num >= 5 ? 0: 1;
-      HIT.vent.trigger("address", "1/0/1", value);
-    }, 1000);
-
   };
+
+  // Helper Methods
+  // --------------
+  
+  var triggerAppStart = function(homes, deviceTypes){
+    HIT.vent.trigger('deviceTypes', deviceTypes);
+    HIT.vent.trigger("homes", homes);
+  };
+
+  // Simulate address events
+  // ----------------------
+
+  setInterval(function(){
+    console.log('triggering address');
+    var num = Math.random() * 10;
+    var value = num >= 5 ? 0: 1;
+    HIT.vent.trigger("address", "1/0/1", value);
+  }, 1000);
 
   // App events that trigger Socket communications
   // ---------------------------------------------
@@ -72,7 +86,8 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
 
   HIT.vent.on("home:save", function(home){
     var json = home.toJSON();
-    socket.emit("save", json);
+    var key = "homes/" + home.id;
+    socket.emit("setKey", key, json);
   });
 
   // HomeInTouch app initializer for socket.io
