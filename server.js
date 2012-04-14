@@ -14,6 +14,9 @@ var fs = require("fs")
   , credentials = settings.credentials
   , hosts = settings.hosts
 
+process.on("uncaughtException", function(err) {
+  console.log("Caught exception", err)
+})
 
 app.use(express.basicAuth(credentials.username, credentials.password))
 app.use(express.static(__dirname + "/public/"))
