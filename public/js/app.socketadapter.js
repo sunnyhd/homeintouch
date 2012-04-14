@@ -85,7 +85,7 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     HIT.vent.trigger("address", "3/1/9", dimmerValue);
   };
 
-  //setInterval(addressSimulator, 1000);
+  setInterval(addressSimulator, 1000);
 
   // App events that trigger Socket communications
   // ---------------------------------------------
