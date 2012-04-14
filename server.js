@@ -1,7 +1,6 @@
 var express = require("express")
   , socket = require("socket.io")
 
-  , config = require("./lib/config")
   , dataStore = require("./lib/dataStore")
 
   , app = express.createServer()
@@ -16,6 +15,9 @@ process.on("uncaughtException", function(err) {
   console.log("Caught exception", err)
 })
 
+// Initialize the datastore
+dataStore.init(settings.database.path);
+
 app.use(express.basicAuth(credentials.username, credentials.password))
 app.use(express.static(__dirname + "/public/"))
 
@@ -29,9 +31,6 @@ app.get('/', function(req, res){
 app.listen(hosts.web.port, function() {
   console.log("now listening on %s...", hosts.web.port)
 })
-
-// Initialize the datastore
-dataStore.init(settings.database.path);
 
 io.set("log level", 2)
 io.sockets.on("connection", function (socket) {
