@@ -107,6 +107,9 @@ html(lang='en')
         | <%= getAddress("read_dimmer").value %> 
         | )
 
+    script(id="device-list-thermostat-item-template", type="text/template")
+      a(href="#") <%= name %> 
+
     script(id="device-add-switch-template", type="text/template")
       .modal-header
         h2 Add A New <%= name %>
@@ -242,16 +245,74 @@ html(lang='en')
       .modal-header
         h2 Add A New <%= name %>
       .modal-body
-        p Form to add a new thermostat switch
+        .row
+          .span3
+            label(for="name").pull-right Name
+          .span3
+            input(id="name", placeHolder="Living Room")
+        .row
+          .span3
+            label(for="write_mode").pull-right Write Mode Address
+          .span3
+            input(id="write_mode", placeHolder="#/#/#")
+        .row
+          .span3
+            label(for="read_mode").pull-right Read Mode Address
+          .span3
+            input(id="read_mode", placeHolder="#/#/#")
+        .row
+          .span3
+            label(for="read_temperature_actual").pull-right Read Temp Address
+          .span3
+            input(id="read_temperature_actual", placeHolder="#/#/#")
+        .row
+          .span3
+            label(for="read_temperature_set").pull-right Read Temp Setpoint Address
+          .span3
+            input(id="read_temperature_set", placeHolder="#/#/#")
+        .row
+          .span3
+            label(for="write_temperature_set").pull-right Write Temp Setpont Address
+          .span3
+            input(id="write_temperature_set", placeHolder="#/#/#")
       .modal-footer
         a(href="#").cancel.btn Cancel
-        // a(href="#").add.btn.btn-primary Add
+        a(href="#").add.btn.btn-primary Add
 
     script(id="device-view-thermostat-template", type="text/template")
       .modal-header
         h2 <%= name %>
       .modal-body
-        p Form to view a thermostat switch and control it
+        .row
+          .span3
+            label(for="name").pull-right Name
+          .span3
+            <%= name %>
+        .row
+          .span3
+            label(for="write_mode").pull-right Write Mode Address
+          .span3
+            <%= getAddress('write_mode').address %>
+        .row
+          .span3
+            label(for="read_mode").pull-right Read Mode Address
+          .span3
+            <%= getAddress('read_mode').address %>
+        .row
+          .span3
+            label(for="read_temperature_actual").pull-right Read Temp Address
+          .span3
+            <%= getAddress('read_temperature_actual').address %>
+        .row
+          .span3
+            label(for="read_temperature_set").pull-right Read Temp Setpoint Address
+          .span3
+            <%= getAddress('read_temperature_set').address %>
+        .row
+          .span3
+            label(for="write_temperature_set").pull-right Write Temp Setpont Address
+          .span3
+            <%= getAddress('write_temperature_set').address %>
       .modal-footer
         a(href="#").delete.btn.pull-left Delete
         a(href="#").cancel.btn.btn-primary Close

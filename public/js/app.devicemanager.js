@@ -153,7 +153,24 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   });
 
   DeviceManager.AddThermostatDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-add-thermostat-template"
+    template: "#device-add-thermostat-template",
+
+    formFields: ["name", "read_mode", "write_mode", "read_temperature_set", "write_temperature_set", "read_temperature_actual"],
+
+    buildDevice: function(data){
+      var device = new HIT.Device({
+        name: data.name,
+        type: data.type
+      });
+
+      device.addAddress("read_mode", data.read_mode);
+      device.addAddress("write_mode", data.write_mode);
+      device.addAddress("read_temperature_set", data.read_temperature_set);
+      device.addAddress("write_temperature_set", data.write_temperature_set);
+      device.addAddress("read_temperature_actual", data.read_temperature_actual);
+
+      return device;
+    }
   });
 
   DeviceManager.ViewThermostatDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
