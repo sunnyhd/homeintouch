@@ -313,6 +313,23 @@ html(lang='en')
             label(for="write_temperature_set").pull-right Write Temp Setpont Address
           .span3
             <%= getAddress('write_temperature_set').address %>
+        .row
+          .span3
+            label.pull-right Mode
+          .span3
+            .mode.btn-group(data-toggle="buttons-radio")
+              .btn.btn-mini.standby Standby
+              .btn.btn-mini.comfort Comfort
+              .btn.btn-mini.night Night
+              .btn.btn-mini.frost.active Frost
+        .row
+          .span3
+            label.pull-right Current Temperature
+          .span3.actual
+        .row
+          .span3
+            label.pull-right Thermostat Set To
+          .span3.setPoint
       .modal-footer
         a(href="#").delete.btn.pull-left Delete
         a(href="#").cancel.btn.btn-primary Close

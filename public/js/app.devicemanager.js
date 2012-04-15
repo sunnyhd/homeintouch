@@ -180,21 +180,24 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       "click .delete.btn": "deleteClicked"
     },
 
+    modes: {
+      1: "comfort",
+      2: "standby",
+      3: "night",
+      4: "frost"
+    },
+
     initialize: function(){
-      this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
-      this.readMode = this.model.getAddressByType("read_mode");
       this.writeMode = this.model.getAddressByType("write_mode");
-      this.readSetPoint = this.model.getAddressByType("read_temperature_set");
       this.writeSetPoint = this.model.getAddressByType("write_temperature_set");
+
+      this.readMode = this.model.getAddressByType("read_mode");
+      this.readSetPoint = this.model.getAddressByType("read_temperature_set");
       this.readTemperature = this.model.getAddressByType("read_temperature_actual");
-    },
 
-    switchOnClicked: function(){
-      this.flipSwitch(true);
-    },
-
-    switchOffClicked: function(){
-      this.flipSwitch(false);
+      this.bindTo(this.readMode, "change:value", this.setMode, this);
+      this.bindTo(this.readSetPoint, "change:value", this.setSetPoint, this);
+      this.bindTo(this.readTemperature, "change:value", this.setTemperature, this);
     },
 
     deleteClicked: function(e){
@@ -204,11 +207,32 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       this.close();
     },
 
+    showMode: function(address, mode){
+      mode = this.modes[mode];
+      console.log('show mode', mode);
+      $(".mode .btn").removeClass("active");
+      $(".btn." + mode).addClass("active");
+    },
+
+    showSetPoint: function(address, setPoint){
+      console.log('show set point', setPoint);
+      $(".setPoint").text(setPoint);
+    },
+
+    showTemperature: function(address, temperature){
+      console.log('show temp', temperature);
+      $(".actual").text(temperature);
+    },
+
     onRender: function(){
       var mode = this.readMode.get("value");
+      this.showMode(null, mode);
+
       var setPoint = this.readSetPoint.get("value");
+      this.showSetPoint(null, setPoint);
+
       var temperature = this.readTemperature.get("value");
-      // update the view with this info ...
+      this.showTemperature(null, temperature);
     }
   });
 

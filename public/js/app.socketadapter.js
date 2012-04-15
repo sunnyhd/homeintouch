@@ -76,6 +76,9 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     console.log('triggering address');
     var switchValue = !!((Math.random() * 10) >= 5);
     var dimmerValue = parseInt(Math.random() * 255, 10);
+    var temperature = parseInt(50 + (Math.random() * 50));
+    var setPoint = parseInt(50 + (Math.random() * 50));
+    var mode = parseInt(Math.random() * 10) % 4;
 
     // light switch
     HIT.vent.trigger("address", "1/0/1", switchValue);
@@ -83,6 +86,11 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     // dimmer switch and value
     HIT.vent.trigger("address", "3/1/6", switchValue);
     HIT.vent.trigger("address", "3/1/9", dimmerValue);
+
+    // thermostat
+    HIT.vent.trigger("address", "3/2/3", temperature);
+    HIT.vent.trigger("address", "3/2/4", setPoint);
+    HIT.vent.trigger("address", "3/2/6", mode);
   };
 
   setInterval(addressSimulator, 1000);
