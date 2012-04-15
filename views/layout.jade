@@ -318,18 +318,19 @@ html(lang='en')
             label.pull-right Mode
           .span3
             .mode.btn-group(data-toggle="buttons-radio")
-              .btn.btn-mini.standby Standby
-              .btn.btn-mini.comfort Comfort
-              .btn.btn-mini.night Night
-              .btn.btn-mini.frost Frost
+              .btn.btn-mini.standby(data-mode="2") Standby
+              .btn.btn-mini.comfort(data-mode="1") Comfort
+              .btn.btn-mini.night(data-mode="3") Night
+              .btn.btn-mini.frost(data-mode="4") Frost
+        .row
+          .span3
+            label.pull-right Thermostat Set To
+          .span3.setpoint
+            input.span1(type="number", min="0", max="100", value!="<%= getAddress('read_temperature_set').value %>")
         .row
           .span3
             label.pull-right Current Temperature
           .span3.actual
-        .row
-          .span3
-            label.pull-right Thermostat Set To
-          .span3.setPoint
       .modal-footer
         a(href="#").delete.btn.pull-left Delete
         a(href="#").cancel.btn.btn-primary Close

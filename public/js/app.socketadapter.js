@@ -93,7 +93,7 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     HIT.vent.trigger("address", "3/2/6", mode);
   };
 
-  setInterval(addressSimulator, 1000);
+  //setInterval(addressSimulator, 1000);
 
   // App events that trigger Socket communications
   // ---------------------------------------------

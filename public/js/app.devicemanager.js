@@ -177,7 +177,9 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     template: "#device-view-thermostat-template",
 
     formEvents: {
-      "click .delete.btn": "deleteClicked"
+      "click .delete.btn": "deleteClicked",
+      "click .mode .btn": "modeClicked",
+      "change .setpoint input": "setpointChanged"
     },
 
     modes: {
@@ -200,6 +202,19 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       this.bindTo(this.readTemperature, "change:value", this.showTemperature, this);
     },
 
+    modeClicked: function(e){
+      e.preventDefault();
+      var mode = $(e.currentTarget).data("mode");
+      var address = this.writeMode.get("address");
+      HIT.vent.trigger("device:write", address, mode);
+    },
+
+    setpointChanged: function(e){
+      var setpoint = $(e.currentTarget).val();
+      var address = this.writeSetPoint.get("address");
+      HIT.vent.trigger("device:write", address, setpoint);
+    },
+
     deleteClicked: function(e){
       e.preventDefault();
       this.model.destroy();
@@ -214,7 +229,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
     },
 
     showSetPoint: function(address, setPoint){
-      this.$(".setPoint").text(setPoint);
+      this.$(".setpoint input").val(setPoint);
     },
 
     showTemperature: function(address, temperature){
