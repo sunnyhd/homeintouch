@@ -160,6 +160,25 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     }
   });
 
+  RoomManager.ShutterDeviceView = RoomManager.DeviceView.extend({
+    template: "#device-list-shutter-item-template",
+
+    formEvents: {
+    },
+
+    initialize: function(){
+      this.readPosition = this.model.getAddressByType("read_position");
+      this.writePosition = this.model.getAddressByType("write_position");
+      this.writeSwitch = this.model.getAddressByType("write_switch");
+      this.writeStop = this.model.getAddressByType("write_stop");
+
+      this.bindTo(this.readPosition, "change:value", this.showPosition, this);
+    },
+
+    onRender: function(){
+    }
+  });
+
   RoomManager.ThermostatDeviceView = RoomManager.DeviceView.extend({
     template: "#device-list-thermostat-item-template",
 
@@ -229,7 +248,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
   RoomManager.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-list-template",
-    className: "room-device span4",
+    className: "room-device span3",
 
     events: {
       "click button.addDevice": "addDeviceClicked"
@@ -239,6 +258,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       "switch": RoomManager.SwitchDeviceView,
       "dimmer": RoomManager.DimmerDeviceView,
       "thermostat": RoomManager.ThermostatDeviceView,
+      "shutter": RoomManager.ShutterDeviceView
     },
 
     initialize: function(){

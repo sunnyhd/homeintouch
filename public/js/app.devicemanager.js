@@ -106,7 +106,23 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   });
 
   DeviceManager.AddShutterDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-add-shutter-template"
+    template: "#device-add-shutter-template",
+
+    formFields: ["name", "read_position", "write_stop", "write_position", "write_switch"],
+
+    buildDevice: function(data){
+      var device = new HIT.Device({
+        name: data.name,
+        type: data.type
+      });
+
+      device.addAddress("read_position", data.read_position);
+      device.addAddress("write_stop", data.write_stop);
+      device.addAddress("write_position", data.write_position);
+      device.addAddress("write_switch", data.write_switch);
+
+      return device;
+    }
   });
 
   DeviceManager.ViewShutterDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
