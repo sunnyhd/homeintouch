@@ -143,9 +143,9 @@ html(lang='en')
           a(href="#") <%= name %>
         .span2
           .switch.pull-right.btn-group()
-            .btn.btn-mini.up Up
-            .btn.btn-mini.stop Stop
             .btn.btn-mini.down Down
+            .btn.btn-mini.stop Stop
+            .btn.btn-mini.up Up
       .row
         .span3
           input.position.pull-left(type="range", min="0", max="255", width="50", value!="<%= getAddress('read_position').value %>")
