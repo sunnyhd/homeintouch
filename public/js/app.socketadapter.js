@@ -91,6 +91,9 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     HIT.vent.trigger("address", "3/2/3", temperature);
     HIT.vent.trigger("address", "3/2/4", setPoint);
     HIT.vent.trigger("address", "3/2/6", mode);
+
+    // shutter
+    HIT.vent.trigger("address", "4/3/8", dimmerValue);
   };
 
   setInterval(addressSimulator, 1000);

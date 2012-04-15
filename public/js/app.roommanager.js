@@ -164,6 +164,9 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     template: "#device-list-shutter-item-template",
 
     formEvents: {
+      "click .up": "upClicked",
+      "click .down": "downClicked",
+      "click .stop": "stopClicked"
     },
 
     initialize: function(){
@@ -175,7 +178,34 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       this.bindTo(this.readPosition, "change:value", this.showPosition, this);
     },
 
+    upClicked: function(e){
+      e.preventDefault();
+      this.switchUpDown(false);
+    },
+
+    downClicked: function(e){
+      e.preventDefault();
+      this.switchUpDown(true);
+    },
+
+    stopClicked: function(e){
+      e.preventDefault();
+      var address = this.writeStop.get("address");
+      HIT.vent.trigger("device:write", address, true);
+    },
+
+    switchUpDown: function(moveDown){
+      var address = this.writeSwitch.get("address");
+      HIT.vent.trigger("device:write", address, moveDown);
+    },
+
+    showPosition: function(address, value){
+      this.$("input.position").val(value);
+    },
+
     onRender: function(){
+      var position = this.readPosition.get("value");
+      this.showPosition(null, position);
     }
   });
 
