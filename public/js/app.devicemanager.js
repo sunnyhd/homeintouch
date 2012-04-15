@@ -195,9 +195,9 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
       this.readSetPoint = this.model.getAddressByType("read_temperature_set");
       this.readTemperature = this.model.getAddressByType("read_temperature_actual");
 
-      this.bindTo(this.readMode, "change:value", this.setMode, this);
-      this.bindTo(this.readSetPoint, "change:value", this.setSetPoint, this);
-      this.bindTo(this.readTemperature, "change:value", this.setTemperature, this);
+      this.bindTo(this.readMode, "change:value", this.showMode, this);
+      this.bindTo(this.readSetPoint, "change:value", this.showSetPoint, this);
+      this.bindTo(this.readTemperature, "change:value", this.showTemperature, this);
     },
 
     deleteClicked: function(e){
@@ -209,19 +209,16 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
 
     showMode: function(address, mode){
       mode = this.modes[mode];
-      console.log('show mode', mode);
-      $(".mode .btn").removeClass("active");
-      $(".btn." + mode).addClass("active");
+      this.$(".mode .btn").removeClass("active");
+      this.$(".btn." + mode).addClass("active");
     },
 
     showSetPoint: function(address, setPoint){
-      console.log('show set point', setPoint);
-      $(".setPoint").text(setPoint);
+      this.$(".setPoint").text(setPoint);
     },
 
     showTemperature: function(address, temperature){
-      console.log('show temp', temperature);
-      $(".actual").text(temperature);
+      this.$(".actual").text(temperature);
     },
 
     onRender: function(){

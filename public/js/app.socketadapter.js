@@ -78,7 +78,7 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     var dimmerValue = parseInt(Math.random() * 255, 10);
     var temperature = parseInt(50 + (Math.random() * 50));
     var setPoint = parseInt(50 + (Math.random() * 50));
-    var mode = parseInt(Math.random() * 10) % 4;
+    var mode = (parseInt(Math.random() * 10) % 4) + 1;
 
     // light switch
     HIT.vent.trigger("address", "1/0/1", switchValue);
