@@ -64,11 +64,6 @@
 
   HIT.Address = Model.extend({
     initialize: function(){
-      var type = this.get("type");
-      if ( /read.*/.test(type)){
-        var address = this.get("address");
-        HIT.vent.trigger("device:read", address);
-      }
     }
   });
 

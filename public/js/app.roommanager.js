@@ -36,8 +36,15 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       return _.extend(events, this.formEvents);
     },
 
-    initialize: function(){
-      this.bindTo(this.model, "change:address:value", this.render, this);
+    constructor: function(){
+      Backbone.Marionette.ItemView.prototype.constructor.apply(this, arguments);
+      this.model.addresses.each(function(address){
+        var type = address.get("type");
+        var address = address.get("address");
+        if (/read.*/.test(type)){
+          HIT.vent.trigger("device:read", address);
+        }
+      });
     },
 
     deviceClicked: function(e){
