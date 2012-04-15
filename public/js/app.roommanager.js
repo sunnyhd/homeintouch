@@ -51,8 +51,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
     formEvents: {
       "click .switch .btn.on": "switchOnClicked",
-      "click .switch .btn.off": "switchOffClicked",
-      "click .delete.btn": "deleteClicked"
+      "click .switch .btn.off": "switchOffClicked"
     },
 
     initialize: function(){
@@ -67,13 +66,6 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
     switchOffClicked: function(){
       this.flipSwitch(false);
-    },
-
-    deleteClicked: function(e){
-      e.preventDefault();
-      this.model.destroy();
-      this.trigger("device:deleted");
-      this.close();
     },
 
     flipSwitch: function(on){
@@ -95,15 +87,137 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       var value = this.readAddress.get("value");
       this.selectSwitch(null, value);
     }
-
   });
 
   RoomManager.DimmerDeviceView = RoomManager.DeviceView.extend({
-    template: "#device-list-dimmer-item-template"
+    template: "#device-list-dimmer-item-template",
+
+    formEvents: {
+      "click .switch .btn.on": "switchOnClicked",
+      "click .switch .btn.off": "switchOffClicked",
+      "change .dimmer": "dimmerChanged",
+    },
+
+    initialize: function(){
+      this.readSwitch = this.model.getAddressByType("read_switch");
+      this.writeSwitch = this.model.getAddressByType("write_switch");
+      this.readDimmer = this.model.getAddressByType("read_dimmer");
+      this.writeDimmer = this.model.getAddressByType("write_dimmer");
+
+      // debounce the dimmer changed, so that we only write a
+      // change half a second after it was last changed
+      this.dimmerChanged = _.debounce(this.dimmerChanged, 500);
+
+      this.bindTo(this.readDimmer, "change:value", this.selectDimmer, this);
+      this.bindTo(this.readSwitch, "change:value", this.selectSwitch, this);
+    },
+
+    switchOnClicked: function(){
+      this.flipSwitch(true);
+    },
+
+    switchOffClicked: function(){
+      this.flipSwitch(false);
+    },
+
+    dimmerChanged: function(e){
+      var $dimmer = $(e.currentTarget);
+      var value = parseInt($dimmer.val());
+      var address = this.writeDimmer.get("address");
+      HIT.vent.trigger("device:write", address, value);
+    },
+
+    flipSwitch: function(on){
+      var address = this.writeSwitch.get("address");
+      HIT.vent.trigger("device:write", address, on);
+    },
+
+    selectSwitch: function(address, value){
+      var $btnSwitch;
+      if (value){
+        $btnSwitch = this.$(".switch .btn.on");
+      } else {
+        $btnSwitch = this.$(".switch .btn.off");
+      }
+      $btnSwitch.button("toggle");
+    },
+
+    selectDimmer: function(address, value){
+      var $dimmer = this.$(".dimmer");
+      $dimmer.val(value);
+    },
+
+    onRender: function(){
+      var value = this.readSwitch.get("value");
+      this.selectSwitch(null, value);
+    }
   });
 
   RoomManager.ThermostatDeviceView = RoomManager.DeviceView.extend({
-    template: "#device-list-thermostat-item-template"
+    template: "#device-list-thermostat-item-template",
+
+    formEvents: {
+      "click .mode .btn": "modeClicked",
+      "change .setpoint input": "setpointChanged"
+    },
+
+    modes: {
+      1: "comfort",
+      2: "standby",
+      3: "night",
+      4: "frost"
+    },
+
+    initialize: function(){
+      this.writeMode = this.model.getAddressByType("write_mode");
+      this.writeSetPoint = this.model.getAddressByType("write_temperature_set");
+
+      this.readMode = this.model.getAddressByType("read_mode");
+      this.readSetPoint = this.model.getAddressByType("read_temperature_set");
+      this.readTemperature = this.model.getAddressByType("read_temperature_actual");
+
+      this.bindTo(this.readMode, "change:value", this.showMode, this);
+      this.bindTo(this.readSetPoint, "change:value", this.showSetPoint, this);
+      this.bindTo(this.readTemperature, "change:value", this.showTemperature, this);
+    },
+
+    modeClicked: function(e){
+      e.preventDefault();
+      var mode = $(e.currentTarget).data("mode");
+      var address = this.writeMode.get("address");
+      HIT.vent.trigger("device:write", address, mode);
+    },
+
+    setpointChanged: function(e){
+      var setpoint = $(e.currentTarget).val();
+      var address = this.writeSetPoint.get("address");
+      HIT.vent.trigger("device:write", address, setpoint);
+    },
+
+    showMode: function(address, mode){
+      mode = this.modes[mode];
+      this.$(".mode .btn").removeClass("active");
+      this.$(".btn." + mode).addClass("active");
+    },
+
+    showSetPoint: function(address, setPoint){
+      this.$(".setpoint input").val(setPoint);
+    },
+
+    showTemperature: function(address, temperature){
+      this.$(".actual").text(temperature);
+    },
+
+    onRender: function(){
+      var mode = this.readMode.get("value");
+      this.showMode(null, mode);
+
+      var setPoint = this.readSetPoint.get("value");
+      this.showSetPoint(null, setPoint);
+
+      var temperature = this.readTemperature.get("value");
+      this.showTemperature(null, temperature);
+    }
   });
 
   RoomManager.DeviceGroupView = Backbone.Marionette.CompositeView.extend({

@@ -98,23 +98,44 @@ html(lang='en')
 
     script(id="device-list-switch-item-template", type="text/template")
       .row
-        .span1
+        .span2
           a(href="#") <%= name %> 
-        .span3
+        .span1
           .switch.btn-group(data-toggle="buttons-radio")
-            .btn.on On
-            .btn.off Off
+            .btn.btn-mini.on On
+            .btn.btn-mini.off Off
 
     script(id="device-list-dimmer-item-template", type="text/template")
-      a(href="#") 
-        | <%= name %> ( 
-        | <%= getAddress("read_switch").value ? "On" : "Off" %> 
-        | /
-        | <%= getAddress("read_dimmer").value %> 
-        | )
+      .row
+        .span2
+          a(href="#") <%= name %>
+        .span1
+          .switch.btn-group(data-toggle="buttons-radio")
+            .btn.btn-mini.on On
+            .btn.btn-mini.off Off
+      .row
+        .span3
+          input.dimmer.pull-left(type="range", min="0", max="255", width="50", value!="<%= getAddress('read_dimmer').value %>")
 
     script(id="device-list-thermostat-item-template", type="text/template")
-      a(href="#") <%= name %> 
+      .row
+        .span2
+          a(href="#") <%= name %> 
+      .row
+        .span3
+          .mode.btn-group(data-toggle="buttons-radio")
+            .btn.btn-mini.standby(data-mode="2") Standby
+            .btn.btn-mini.comfort(data-mode="1") Comfort
+            .btn.btn-mini.night(data-mode="3") Night
+            .btn.btn-mini.frost(data-mode="4") Frost
+      .row
+        .span3.setpoint
+          label.span1 Set
+          input.span1(type="number", min="0", max="100", value!="<%= getAddress('read_temperature_set').value %>")
+      .row
+        .span3
+          label.span1 Temp
+          .actual.span1
 
     script(id="device-add-switch-template", type="text/template")
       .modal-header
@@ -224,18 +245,6 @@ html(lang='en')
             label(for="write_address").pull-right Write Dimmer Value Address
           .span3
             <%= getAddress('write_dimmer').address %>
-        .row
-          .span3
-            label.pull-right Switch Status
-          .span3
-            .switch.btn-group(data-toggle="buttons-radio")
-              .btn.on On
-              .btn.off Off
-        .row
-          .span3
-            label.pull-right Dimmer Status
-          .span3
-            input.dimmer.pull-left(type="range", min="0", max="255", width="50", value!="<%= getAddress('read_dimmer').value %>")
       .modal-footer
         a(href="#").delete.btn.pull-left Delete
         a(href="#").cancel.btn.btn-primary Close
@@ -312,24 +321,6 @@ html(lang='en')
             label(for="write_temperature_set").pull-right Write Temp Setpont Address
           .span3
             <%= getAddress('write_temperature_set').address %>
-        .row
-          .span3
-            label.pull-right Mode
-          .span3
-            .mode.btn-group(data-toggle="buttons-radio")
-              .btn.btn-mini.standby(data-mode="2") Standby
-              .btn.btn-mini.comfort(data-mode="1") Comfort
-              .btn.btn-mini.night(data-mode="3") Night
-              .btn.btn-mini.frost(data-mode="4") Frost
-        .row
-          .span3
-            label.pull-right Thermostat Set To
-          .span3.setpoint
-            input.span1(type="number", min="0", max="100", value!="<%= getAddress('read_temperature_set').value %>")
-        .row
-          .span3
-            label.pull-right Current Temperature
-          .span3.actual
       .modal-footer
         a(href="#").delete.btn.pull-left Delete
         a(href="#").cancel.btn.btn-primary Close
