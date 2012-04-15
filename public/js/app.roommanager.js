@@ -166,7 +166,8 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     formEvents: {
       "click .up": "upClicked",
       "click .down": "downClicked",
-      "click .stop": "stopClicked"
+      "click .stop": "stopClicked",
+      "change .position": "positionChanged"
     },
 
     initialize: function(){
@@ -174,6 +175,8 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       this.writePosition = this.model.getAddressByType("write_position");
       this.writeSwitch = this.model.getAddressByType("write_switch");
       this.writeStop = this.model.getAddressByType("write_stop");
+
+      this.positionChanged = _.debounce(this.positionChanged, 500);
 
       this.bindTo(this.readPosition, "change:value", this.showPosition, this);
     },
@@ -191,7 +194,14 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     stopClicked: function(e){
       e.preventDefault();
       var address = this.writeStop.get("address");
-      HIT.vent.trigger("device:write", address, true);
+      HIT.vent.trigger("device:write", address);
+    },
+
+    positionChanged: function(e){
+      var $position = $(e.currentTarget);
+      var value = parseInt($position.val());
+      var address = this.writePosition.get("address");
+      HIT.vent.trigger("device:write", address, value);
     },
 
     switchUpDown: function(moveDown){
