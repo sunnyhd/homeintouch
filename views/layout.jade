@@ -94,10 +94,16 @@ html(lang='en')
       .pull-right
         button(class="btn").addDevice +
       h3 <%= name %>
-      ul
+      ul.device-list
 
     script(id="device-list-switch-item-template", type="text/template")
-      a(href="#") <%= name %> ( <%= getAddress("read_switch").value ? "On" : "Off" %> )
+      .row
+        .span1
+          a(href="#") <%= name %> 
+        .span3
+          .switch.btn-group(data-toggle="buttons-radio")
+            .btn.on On
+            .btn.off Off
 
     script(id="device-list-dimmer-item-template", type="text/template")
       a(href="#") 
@@ -152,13 +158,6 @@ html(lang='en')
             label(for="write_address").pull-right Write Address
           .span3
             <%= getAddress('write_switch').address %>
-        .row
-          .span2
-            label(for="write_address").pull-right Status
-          .span3
-            .switch.btn-group(data-toggle="buttons-radio")
-              .btn.on On
-              .btn.off Off
       .modal-footer
         a(href="#").delete.btn.pull-left Delete
         a(href="#").cancel.btn.btn-primary Close

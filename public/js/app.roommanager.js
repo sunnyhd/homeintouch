@@ -25,17 +25,15 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     }
   });
 
+  // Base view for device items in the list
   RoomManager.DeviceView = Backbone.Marionette.ItemView.extend({
     tagName: "li",
 
-    events: {
-      "click a": "deviceClicked"
-    },
-
-    template: function(){
-      var type = this.model.get("type");
-      var template = "#device-list-" + type + "-item-template";
-      return template;
+    events: function(){
+      var events = {
+        "click a": "deviceClicked"
+      };
+      return _.extend(events, this.formEvents);
     },
 
     initialize: function(){
@@ -48,18 +46,85 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     }
   });
 
+  RoomManager.SwitchDeviceView = RoomManager.DeviceView.extend({
+    template: "#device-list-switch-item-template",
+
+    formEvents: {
+      "click .switch .btn.on": "switchOnClicked",
+      "click .switch .btn.off": "switchOffClicked",
+      "click .delete.btn": "deleteClicked"
+    },
+
+    initialize: function(){
+      this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
+      this.readAddress = this.model.getAddressByType("read_switch");
+      this.writeAddress = this.model.getAddressByType("write_switch");
+    },
+
+    switchOnClicked: function(){
+      this.flipSwitch(true);
+    },
+
+    switchOffClicked: function(){
+      this.flipSwitch(false);
+    },
+
+    deleteClicked: function(e){
+      e.preventDefault();
+      this.model.destroy();
+      this.trigger("device:deleted");
+      this.close();
+    },
+
+    flipSwitch: function(on){
+      var address = this.writeAddress.get("address");
+      HIT.vent.trigger("device:write", address, on);
+    },
+
+    selectSwitch: function(address, value){
+      var $btnSwitch;
+      if (value){
+        $btnSwitch = this.$(".switch .btn.on");
+      } else {
+        $btnSwitch = this.$(".switch .btn.off");
+      }
+      $btnSwitch.button("toggle");
+    },
+
+    onRender: function(){
+      var value = this.readAddress.get("value");
+      this.selectSwitch(null, value);
+    }
+
+  });
+
+  RoomManager.DimmerDeviceView = RoomManager.DeviceView.extend({
+    template: "#device-list-dimmer-item-template"
+  });
+
+  RoomManager.ThermostatDeviceView = RoomManager.DeviceView.extend({
+    template: "#device-list-thermostat-item-template"
+  });
+
   RoomManager.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-list-template",
-    className: "room-device span3",
-
-    itemView: RoomManager.DeviceView,
+    className: "room-device span4",
 
     events: {
       "click button.addDevice": "addDeviceClicked"
     },
 
+    itemViewTypes: {
+      "switch": RoomManager.SwitchDeviceView,
+      "dimmer": RoomManager.DimmerDeviceView,
+      "thermostat": RoomManager.ThermostatDeviceView,
+    },
+
     initialize: function(){
       this.collection = this.model.devices;
+
+      var type = this.model.get("type");
+      this.itemView = this.itemViewTypes[type];
     },
 
     addDeviceClicked: function(e){

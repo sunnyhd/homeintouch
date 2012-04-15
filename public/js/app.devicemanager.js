@@ -94,54 +94,7 @@ HomeInTouch.DeviceManager = (function(HIT, Backbone, _, $){
   });
 
   DeviceManager.ViewSwitchDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({
-    template: "#device-view-switch-template",
-
-    formEvents: {
-      "click .switch .btn.on": "switchOnClicked",
-      "click .switch .btn.off": "switchOffClicked",
-      "click .delete.btn": "deleteClicked"
-    },
-
-    initialize: function(){
-      this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
-      this.readAddress = this.model.getAddressByType("read_switch");
-      this.writeAddress = this.model.getAddressByType("write_switch");
-    },
-
-    switchOnClicked: function(){
-      this.flipSwitch(true);
-    },
-
-    switchOffClicked: function(){
-      this.flipSwitch(false);
-    },
-
-    deleteClicked: function(e){
-      e.preventDefault();
-      this.model.destroy();
-      this.trigger("device:deleted");
-      this.close();
-    },
-
-    flipSwitch: function(on){
-      var address = this.writeAddress.get("address");
-      HIT.vent.trigger("device:write", address, on);
-    },
-
-    selectSwitch: function(address, value){
-      var $btnSwitch;
-      if (value){
-        $btnSwitch = this.$(".switch .btn.on");
-      } else {
-        $btnSwitch = this.$(".switch .btn.off");
-      }
-      $btnSwitch.button("toggle");
-    },
-
-    onRender: function(){
-      var value = this.readAddress.get("value");
-      this.selectSwitch(null, value);
-    }
+    template: "#device-view-switch-template"
   });
 
   DeviceManager.AddShutterDeviceForm = DeviceManager.AddEditDeviceTypeForm.extend({

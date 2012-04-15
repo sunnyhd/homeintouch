@@ -28,3 +28,13 @@ label.pull-right{
   margin-right: 5px;
 }
 
+ul.device-list {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+ul.device-list li {
+  padding: 0px;
+  margin: 0px;
+}
