@@ -113,7 +113,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
       // debounce the dimmer changed, so that we only write a
       // change half a second after it was last changed
-      this.dimmerChanged = _.debounce(this.dimmerChanged, 500);
+      this.dimmerChanged = _.throttle(this.dimmerChanged, 50);
 
       this.bindTo(this.readDimmer, "change:value", this.selectDimmer, this);
       this.bindTo(this.readSwitch, "change:value", this.selectSwitch, this);
