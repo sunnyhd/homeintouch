@@ -1,15 +1,18 @@
 script(id="device-list-dimmer-item-template", type="text/template")
-  .row-fluid
-    .span4.device-name
-      a(href="#") <%= name %>
-    .span8
-      .switch.btn-group(data-toggle="buttons-radio")
-        .btn.btn-mini.on On
-        .btn.btn-mini.off Off
-  .row-fluid
-    .span4.control-name Position
-    .span8
-      input.slider.dimmer(type="range", min="0", max="255", width="50", value!="<%= getAddress('read_dimmer').value %>")
+  .row-fluid.device
+    .span12
+      .device-name
+        a(href="#") <%= name %> 
+      .row-fluid.device-control
+        .span4.control-name Switch
+        .span8
+          .switch.btn-group(data-toggle="buttons-radio")
+            .btn.btn-mini.on On
+            .btn.btn-mini.off Off
+      .row-fluid.device-control
+        .span4.control-name Dimmer
+        .span8
+          input.slider.dimmer(type="range", min="0", max="255", width="50", value!="<%= getAddress('read_dimmer').value %>")
 
 script(id="device-add-dimmer-template", type="text/template")
   .modal-header

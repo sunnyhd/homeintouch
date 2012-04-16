@@ -213,6 +213,7 @@
   HIT.Floor = Model.extend({
     initialize: function(){
       this.rooms = this.parseChildren("rooms", HIT.RoomCollection);
+      this.rooms.parentFloor = this;
     },
 
     addRoom: function(room){
@@ -240,6 +241,7 @@
   HIT.Home = Model.extend({
     initialize: function(){
       this.floors = this.parseChildren("floors", HIT.FloorCollection);
+      this.floors.parentHome = this;
     },
 
     addFloor: function(floor){

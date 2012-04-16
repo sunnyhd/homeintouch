@@ -15,6 +15,17 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       "click button.addDeviceType": "addDeviceTypeClicked"
     },
 
+    serializeData: function(){
+      var data = Backbone.Marionette.Layout.prototype.serializeData.apply(this, arguments);
+      var floor = this.model.collection.parentFloor;
+      var home = floor.collection.parentHome;
+
+      data.floor = floor.get("name");
+      data.home = home.get("name");
+
+      return data;
+    },
+
     addDeviceTypeClicked: function(e){
       e.preventDefault();
       HIT.vent.trigger("room:addDeviceGroup", this.model);
@@ -286,8 +297,8 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
   });
 
   RoomManager.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
-    template: "#device-list-template",
-    className: "room-device span4",
+    template: "#device-group-template",
+    className: "room-device-group span4",
 
     events: {
       "click button.addDevice": "addDeviceClicked"
@@ -318,7 +329,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
   });
 
   RoomManager.DeviceGroupList = Backbone.Marionette.CollectionView.extend({
-    className: "row",
+    className: "span12",
     itemView: RoomManager.DeviceGroupView
   });
 

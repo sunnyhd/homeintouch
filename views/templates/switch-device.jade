@@ -1,11 +1,14 @@
 script(id="device-list-switch-item-template", type="text/template")
-  .row-fluid
-    .span4.device-name
-      a(href="#") <%= name %> 
-    .span8
-      .switch.btn-group(data-toggle="buttons-radio")
-        .btn.btn-mini.on On
-        .btn.btn-mini.off Off
+  .row-fluid.device
+    .span12
+      .device-name
+        a(href="#") <%= name %> 
+      .row-fluid.device-control
+        .span4.control-name Switch
+        .span8
+          .switch.btn-group(data-toggle="buttons-radio")
+            .btn.btn-mini.on On
+            .btn.btn-mini.off Off
 
 script(id="device-add-switch-template", type="text/template")
   .modal-header

@@ -2,16 +2,16 @@ script(id="room-layout-template", type="text/template")
   .container-fluid
     .room-header.row-fluid
       .room.span12
-        .pull-right
-          button(class="btn").addDeviceType +
-        h2 <%= name %>
+        .addDeviceType.btn.btn-inverse.pull-right +
+        h3 <%= floor %> :: <%= name %>
 
-    .room-devices.row-fluid.span12
+    .room-devices.row-fluid
 
-script(id="device-list-template", type="text/template")
-  .pull-right
-    button(class="btn").addDevice +
-  h3 <%= name %>
+script(id="device-group-template", type="text/template")
+  .device-group-name
+    .pull-right
+      button(class="btn btn-inverse").addDevice +
+    h3 <%= name %>
   ul.device-list
 
 script(id="device-add-group-to-room-template", type="text/template")

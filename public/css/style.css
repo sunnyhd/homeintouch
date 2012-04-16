@@ -1,7 +1,9 @@
 body {
+  background: #000;
   padding-top: 60px;
   padding-bottom: 40px;
 }
+
 .sidebar-nav {
   padding: 9px 0;
 }
@@ -12,20 +14,87 @@ body {
   }
 }
 
+a, a:hover, a:active, a:visited {
+  color: #006CB8
+}
+
 .modal {
   display: none;
 }
 
-.room, .room-device {
-  background-color: #eee;
+.room {
+  background-color: #222;
+  color: #ddd;
+  padding: 5px;
+  border-top: 1px solid #555;
+  border-left: 1px solid #555;
+  border-right: 1px solid #111;
+  border-bottom: 1px solid #111;
 }
 
-.room-device .slider {
-  width: 90%;
+h3 {
+  font-weight: normal
 }
 
-.room-device .device-name, .room-device .control-name {
-  text-align: right
+.room-device-group {
+  height: 200px;
+  margin: 5px 5px 0px 0px;
+  padding: 0px;
+  background-color: #333;
+  border-top: 1px solid #555;
+  border-left: 1px solid #555;
+  border-right: 1px solid #222;
+  border-bottom: 1px solid #222;
+}
+
+.room-devices {
+}
+
+.device-group-name {
+  background-color: #222;
+  border-bottom: 1px solid #555;
+  color: #ddd;
+  padding: 5px;
+}
+
+ul.device-list {
+  list-style: none;
+  padding: 5px;
+  margin: 0px;
+}
+
+ul.device-list li {
+  padding: 0px;
+  margin: 0px;
+}
+
+.device {
+  border-bottom: 1px solid #555;
+  padding-bottom: 5px;
+}
+
+.device .slider {
+  width: 80%;
+  margin-bottom: 0px;
+  height: 10px;
+}
+
+.device .device-name {
+  font-size: 12pt;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.device-control {
+  margin: 0px 0px 0px 10px;
+}
+
+.device-control .btn-mini {
+  margin-bottom: 10px;
+}
+
+.control-name {
+  color: #ddd;
 }
 
 label.pull-right{
@@ -36,13 +105,3 @@ label.pull-right{
   margin-right: 5px;
 }
 
-ul.device-list {
-  list-style: none;
-  padding: 0px;
-  margin: 0px;
-}
-
-ul.device-list li {
-  padding: 0px;
-  margin: 0px;
-}
