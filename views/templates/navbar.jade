@@ -1,0 +1,65 @@
+script(id="home-list-template", type="text/template")
+  a.dropdown-toggle(href='#', data-toggle='dropdown')
+    | <%= name %>
+    b.caret
+  ul.dropdown-menu
+
+script(id="home-item-template", type="text/template")
+  a(href='#') <%= name %>
+
+script(id="floor-item-template", type="text/template")
+  li.dropdown
+    a.dropdown-toggle(href='#', data-toggle='dropdown')
+      | <%= name %>
+      b.caret
+    ul.dropdown-menu
+      li.divider
+      li.add-room
+        a(href="#") New Room ...
+
+script(id="floor-list-template", type="text/template")
+  ul.nav.add-new
+    li
+      a(href="").add-floor New Floor ...
+
+script(id="floor-add-template", type="text/template")
+  .modal-header
+    h2 Add A New Floor To <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right 
+          strong Name
+      .span3
+        input(id="name", placeHolder="2nd floor")
+    .row
+      .span2
+        label(for="rooms").pull-right
+          strong Rooms
+          br
+          | (comma separated)
+      .span3
+        textarea(id="rooms", placeHolder="Room 1, Room 2, Room 3")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").save.btn.btn-primary Save
+
+script(id="room-item-template", type="text/template")
+  li
+    a(href='#') <%= name %>
+
+
+script(id="room-add-template", type="text/template")
+  .modal-header
+    h2 Add A New Room To <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right 
+          strong Name
+      .span3
+        input(id="name", placeHolder="Kitchen")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").save.btn.btn-primary Save
+

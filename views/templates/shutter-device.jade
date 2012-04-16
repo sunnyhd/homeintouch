@@ -1,0 +1,80 @@
+script(id="device-list-shutter-item-template", type="text/template")
+  .row-fluid
+    .span4.device-name
+      a(href="#") <%= name %>
+    .span8
+      .switch.btn-group
+        .btn.btn-mini.down Down
+        .btn.btn-mini.stop Stop
+        .btn.btn-mini.up Up
+  .row-fluid
+    .span4.control-name
+      label Position
+    .span8
+      input.slider.position(type="range", min="0", max="255", width="50", value!="<%= getAddress('read_position').value %>")
+
+script(id="device-add-shutter-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        input(id="name", placeHolder="Fireplace")
+    .row
+      .span2
+        label(for="read_position").pull-right Read Position Address
+      .span3
+        input(id="read_position", placeHolder="#/#/#")
+    .row
+      .span2
+        label(for="write_stop").pull-right Write Stop Address
+      .span3
+        input(id="write_stop", placeHolder="#/#/#")
+    .row
+      .span2
+        label(for="write_switch").pull-right Write Switch Address
+      .span3
+        input(id="write_switch", placeHolder="#/#/#")
+    .row
+      .span2
+        label(for="write_position").pull-right Write Position Address
+      .span3
+        input(id="write_position", placeHolder="#/#/#")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-shutter-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span3
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span3
+        label(for="read_position").pull-right Read Position Address
+      .span3
+        <%= getAddress('read_position').address %>
+    .row
+      .span3
+        label(for="write_stop").pull-right Write Stop Address
+      .span3
+        <%= getAddress('write_stop').address %>
+    .row
+      .span3
+        label(for="write_switch").pull-right Write Switch Address
+      .span3
+        <%= getAddress('write_switch').address %>
+    .row
+      .span3
+        label(for="write_position").pull-right Write Position Address
+      .span3
+        <%= getAddress('write_position').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close

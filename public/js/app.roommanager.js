@@ -111,8 +111,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       this.readDimmer = this.model.getAddressByType("read_dimmer");
       this.writeDimmer = this.model.getAddressByType("write_dimmer");
 
-      // debounce the dimmer changed, so that we only write a
-      // change half a second after it was last changed
+      // Throttle the changes a bit, so we don't flood the server
       this.dimmerChanged = _.throttle(this.dimmerChanged, 50);
 
       this.bindTo(this.readDimmer, "change:value", this.selectDimmer, this);
@@ -267,11 +266,11 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     },
 
     showSetPoint: function(address, setPoint){
-      this.$(".setpoint input").val(setPoint);
+      this.$("input.setpoint").val(setPoint);
     },
 
     showTemperature: function(address, temperature){
-      this.$(".actual").text(temperature);
+      this.$("input.actual").val(temperature);
     },
 
     onRender: function(){
@@ -288,7 +287,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
   RoomManager.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-list-template",
-    className: "room-device span3",
+    className: "room-device span4",
 
     events: {
       "click button.addDevice": "addDeviceClicked"

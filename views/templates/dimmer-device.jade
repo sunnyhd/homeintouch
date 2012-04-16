@@ -1,0 +1,78 @@
+script(id="device-list-dimmer-item-template", type="text/template")
+  .row-fluid
+    .span4.device-name
+      a(href="#") <%= name %>
+    .span8
+      .switch.btn-group(data-toggle="buttons-radio")
+        .btn.btn-mini.on On
+        .btn.btn-mini.off Off
+  .row-fluid
+    .span4.control-name Position
+    .span8
+      input.slider.dimmer(type="range", min="0", max="255", width="50", value!="<%= getAddress('read_dimmer').value %>")
+
+script(id="device-add-dimmer-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        input(id="name", placeHolder="Ceiling Fan")
+    .row
+      .span2
+        label(for="read_switch").pull-right Read Switch Address
+      .span3
+        input(id="read_switch", placeHolder="#/#/#")
+    .row
+      .span2
+        label(for="write_switch").pull-right Write Switch Address
+      .span3
+        input(id="write_switch", placeHolder="#/#/#")
+    .row
+      .span2
+        label(for="read_dimmer").pull-right Read Dimmer Address
+      .span3
+        input(id="read_dimmer", placeHolder="#/#/#")
+    .row
+      .span2
+        label(for="write_dimmer").pull-right Write Dimmer Address
+      .span3
+        input(id="write_dimmer", placeHolder="#/#/#")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-dimmer-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span3
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span3
+        label(for="read_address").pull-right Read Switch Address
+      .span3
+        <%= getAddress('read_switch').address %>
+    .row
+      .span3
+        label(for="write_address").pull-right Write Switch Address
+      .span3
+        <%= getAddress('write_switch').address %>
+    .row
+      .span3
+        label(for="read_address").pull-right Read Dimmer Value Address
+      .span3
+        <%= getAddress('read_dimmer').address %>
+    .row
+      .span3
+        label(for="write_address").pull-right Write Dimmer Value Address
+      .span3
+        <%= getAddress('write_dimmer').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close

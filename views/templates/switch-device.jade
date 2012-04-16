@@ -1,0 +1,54 @@
+script(id="device-list-switch-item-template", type="text/template")
+  .row-fluid
+    .span4.device-name
+      a(href="#") <%= name %> 
+    .span8
+      .switch.btn-group(data-toggle="buttons-radio")
+        .btn.btn-mini.on On
+        .btn.btn-mini.off Off
+
+script(id="device-add-switch-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        input(id="name", placeHolder="Office Lamp")
+    .row
+      .span2
+        label(for="read_switch").pull-right Read Address
+      .span3
+        input(id="read_switch", placeHolder="#/#/#")
+    .row
+      .span2
+        label(for="write_switch").pull-right Write Address
+      .span3
+        input(id="write_switch", placeHolder="#/#/#")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-switch-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span2
+        label(for="read_address").pull-right Read Address
+      .span3
+        <%= getAddress('read_switch').address %>
+    .row
+      .span2
+        label(for="write_address").pull-right Write Address
+      .span3
+        <%= getAddress('write_switch').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close

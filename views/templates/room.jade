@@ -1,0 +1,37 @@
+script(id="room-layout-template", type="text/template")
+  .container-fluid
+    .room-header.row-fluid
+      .room.span12
+        .pull-right
+          button(class="btn").addDeviceType +
+        h2 <%= name %>
+
+    .room-devices.row-fluid.span12
+
+script(id="device-list-template", type="text/template")
+  .pull-right
+    button(class="btn").addDevice +
+  h3 <%= name %>
+  ul.device-list
+
+script(id="device-add-group-to-room-template", type="text/template")
+  .modal-header
+    h2 Add Devices To <%= name %>
+  .modal-body
+      .span2
+        label(for="type").pull-right Device Type
+      .span3
+        select(id="type")
+          <% _.each(deviceTypes, function(type){ %>
+          option(value!="<%= type.type %>") <%= type.name %>
+          <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Next >>
+
+script(id="no-floors-template", type="text/template")
+  .container-fluid
+    .span9
+      h2 No Floors Or Rooms To Display
+    .span9
+      | Please add a floor and rooms to this home

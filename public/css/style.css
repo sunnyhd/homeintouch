@@ -20,6 +20,14 @@ body {
   background-color: #eee;
 }
 
+.room-device .slider {
+  width: 90%;
+}
+
+.room-device .device-name, .room-device .control-name {
+  text-align: right
+}
+
 label.pull-right{
   text-align: right
 }
