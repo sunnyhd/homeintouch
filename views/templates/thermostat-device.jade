@@ -14,11 +14,11 @@ script(id="device-list-thermostat-item-template", type="text/template")
       .row-fluid.device-control
         .span4.control-name Set
         .span8
-          input.setpoint.span1(type="number", min="0", max="100", value!="<%= getAddress('read_temperature_set').value %>")
+          input.setpoint(type="number", min="0", max="100", value!="<%= getAddress('read_temperature_set').value %>")
       .row-fluid.device-control
         .span4.control-name Room Temp
         .span8
-          input.actual.uneditable-input.input-mini
+          input.actual.uneditable-input.input-mini(disabled="disabled")
 
 script(id="device-add-thermostat-template", type="text/template")
   .modal-header

@@ -14,10 +14,6 @@ body {
   }
 }
 
-a, a:hover, a:active, a:visited {
-  color: #006CB8
-}
-
 .modal {
   display: none;
 }
@@ -37,9 +33,10 @@ h3 {
 }
 
 .room-device-group {
-  height: 200px;
+  height: 300px;
   margin: 5px 5px 0px 0px;
   padding: 0px;
+  overflow: scroll;
   background-color: #333;
   border-top: 1px solid #555;
   border-left: 1px solid #555;
@@ -71,6 +68,7 @@ ul.device-list li {
 .device {
   border-bottom: 1px solid #555;
   padding-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .device .slider {
@@ -85,12 +83,20 @@ ul.device-list li {
   padding-bottom: 10px;
 }
 
+.device-name a, .device-name a:hover, .device-name a:active, .device-name a:visited {
+  color: #008CD8
+}
+
 .device-control {
   margin: 0px 0px 0px 10px;
 }
 
 .device-control .btn-mini {
   margin-bottom: 10px;
+}
+
+.device-control input {
+  width: 50px;
 }
 
 .control-name {
@@ -105,3 +111,6 @@ label.pull-right{
   margin-right: 5px;
 }
 
+.uneditable-input {
+  cursor: default;
+}
