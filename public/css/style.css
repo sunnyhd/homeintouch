@@ -28,6 +28,10 @@ body {
   border-bottom: 1px solid #111;
 }
 
+.no-rooms {
+  color: #ddd;
+}
+
 h3 {
   font-weight: normal
 }
