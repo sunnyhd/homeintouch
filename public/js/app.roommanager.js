@@ -204,7 +204,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     stopClicked: function(e){
       e.preventDefault();
       var address = this.writeStop.get("address");
-      HIT.vent.trigger("device:write", address);
+      HIT.vent.trigger("device:write", address, 1);
     },
 
     positionChanged: function(e){
