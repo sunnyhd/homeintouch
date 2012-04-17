@@ -127,9 +127,6 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       this.readDimmer = this.model.getAddressByType("read_dimmer");
       this.writeDimmer = this.model.getAddressByType("write_dimmer");
 
-      // Throttle the changes a bit, so we don't flood the server
-      this.dimmerChanged = _.throttle(this.dimmerChanged, 50);
-
       this.bindTo(this.readDimmer, "change:value", this.selectDimmer, this);
       this.bindTo(this.readSwitch, "change:value", this.selectSwitch, this);
     },
