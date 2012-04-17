@@ -193,12 +193,12 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
     upClicked: function(e){
       e.preventDefault();
-      this.switchUpDown(true);
+      this.switchUpDown(false);
     },
 
     downClicked: function(e){
       e.preventDefault();
-      this.switchUpDown(false);
+      this.switchUpDown(true);
     },
 
     stopClicked: function(e){
@@ -214,9 +214,9 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       HIT.vent.trigger("device:write", address, value);
     },
 
-    switchUpDown: function(moveUp){
+    switchUpDown: function(moveDown){
       var address = this.writeSwitch.get("address");
-      HIT.vent.trigger("device:write", address, moveUp);
+      HIT.vent.trigger("device:write", address, moveDown);
     },
 
     showPosition: function(address, value){
