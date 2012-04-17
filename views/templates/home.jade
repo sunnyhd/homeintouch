@@ -1,0 +1,27 @@
+script(id="add-home-template", type="text/template")
+  .modal-header
+    h2 Add New Home
+  .modal-body
+    .row
+      .span2
+        label(for="home-name").pull-right Name
+      .span3
+        input(id="home-name", placeHolder="Vacation")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="view-home-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="home-name").pull-right 
+          strong Name
+      .span3
+        <%= name %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close
+

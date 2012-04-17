@@ -3,6 +3,9 @@ script(id="home-list-template", type="text/template")
     | <%= name %>
     b.caret
   ul.dropdown-menu
+    li.divider
+    li.add-home
+      a(href="#") New Home ...
 
 script(id="home-item-template", type="text/template")
   a(href='#') <%= name %>

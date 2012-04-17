@@ -12,7 +12,12 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     },
 
     events: {
-      "click button.addDeviceType": "addDeviceTypeClicked"
+      "click button.addDeviceType": "addDeviceTypeClicked",
+      "click a.view-home": "viewClicked"
+    },
+
+    viewClicked: function(e){
+      HIT.vent.trigger("home:view", this.model);
     },
 
     serializeData: function(){

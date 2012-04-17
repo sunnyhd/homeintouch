@@ -3,6 +3,18 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
 
   // Views
   // -----
+  
+  var NoFloorsView = Backbone.Marionette.ItemView.extend({
+    template: "#no-floors-template",
+
+    events: {
+      "click a.view-home": "viewClicked"
+    },
+
+    viewClicked: function(e){
+      HIT.vent.trigger("home:view", this.model);
+    }
+  });
 
   var RoomItemView = Backbone.Marionette.ItemView.extend({
     tagName: "li",
@@ -140,9 +152,9 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
     // clear the main display area if no floor / room
     // was found for display in the selected home
     if (clear){
-      var view = new Backbone.Marionette.ItemView({
-        template: "#no-floors-template"
-      });
+      var view = new NoFloorsView({
+        model: home
+      }); 
       HIT.main.show(view);
     }
 

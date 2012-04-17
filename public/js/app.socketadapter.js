@@ -115,6 +115,12 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     socket.emit("setKey", key, json);
   });
 
+  HIT.vent.on("home:destroy", function(home){
+    var json = home.toJSON();
+    var key = "homes/" + home.id;
+    socket.emit("deleteKey", key);
+  });
+
   // HomeInTouch app initializer for socket.io
   // -----------------------------------------
 

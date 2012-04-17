@@ -3,7 +3,9 @@ script(id="room-layout-template", type="text/template")
     .room-header.row-fluid
       .room.span12
         button.addDeviceType.btn.btn-inverse.pull-right +
-        h3 <%= floor %> :: <%= name %>
+        a.view-home.pull-left(href="#")
+          h3 <%= home %>
+        h3 &nbsp; :: <%= floor %> :: <%= name %>
 
     .room-devices.row-fluid
 
@@ -31,7 +33,12 @@ script(id="device-add-group-to-room-template", type="text/template")
 
 script(id="no-floors-template", type="text/template")
   .no-rooms.container-fluid
-    .span9
-      h2 No Floors Or Rooms To Display
-    .span9
-      | Please add a floor and rooms to this home
+    .room-header.row-fluid
+      .room.span12
+        a.view-home(href="#")
+          h3 <%= name %>
+    .row-fluid
+      .span9
+        h2 No Floors Or Rooms To Display
+      .span9
+        | Please add a floor and rooms to this home
