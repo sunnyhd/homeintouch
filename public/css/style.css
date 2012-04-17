@@ -14,6 +14,19 @@ body {
   }
 }
 
+@media (max-width: 480px) {
+  .container-fluid {
+    padding-left: 0px;
+    margin-left: 0px;
+  }
+  body {
+    padding-left: 0px;
+  }
+  .navbar {
+    padding-left: 20px;
+  }
+}
+
 .modal {
   display: none;
 }
