@@ -245,14 +245,20 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     },
 
     showSetPoint: function(address, setPoint){
-      //console.log("Setpoint", setPoint);
       var decimal = HIT.eibdToDecimal(setPoint);
+
+      console.log("setpoint eibd value: ", setPoint);
+      console.log("setpoint decimal value: ", decimal);
+
       this.$("input.setpoint").val(decimal);
     },
 
     showTemperature: function(address, temperature){
-      //console.log("temp", temperature);
       var decimal = HIT.eibdToDecimal(temperature);
+
+      console.log("temperature eibd value: ", temperature);
+      console.log("temperature decimal value: ", decimal);
+
       this.$("input.actual").val(decimal);
     },
 
