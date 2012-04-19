@@ -4,43 +4,6 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
   // Views
   // -----
 
-  RoomManager.RoomLayout = Backbone.Marionette.Layout.extend({
-    template: "#room-layout-template",
-
-    regions: {
-      deviceList: ".room-devices"
-    },
-
-    events: {
-      "click button.addDeviceType": "addDeviceTypeClicked",
-      "click a.view-home": "viewClicked"
-    },
-
-    viewClicked: function(e){
-      HIT.vent.trigger("home:view", this.model);
-    },
-
-    serializeData: function(){
-      var data = Backbone.Marionette.Layout.prototype.serializeData.apply(this, arguments);
-      var floor = this.model.collection.parentFloor;
-      var home = floor.collection.parentHome;
-
-      data.floor = floor.get("name");
-      data.home = home.get("name");
-
-      return data;
-    },
-
-    addDeviceTypeClicked: function(e){
-      e.preventDefault();
-      HIT.vent.trigger("room:addDeviceGroup", this.model);
-    },
-
-    onRender: function(){
-      showRoomDevices(this, this.model);
-    }
-  });
-
   // Base view for device items in the list
   RoomManager.DeviceView = Backbone.Marionette.ItemView.extend({
     tagName: "li",
@@ -337,9 +300,39 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     }
   });
 
-  RoomManager.DeviceGroupList = Backbone.Marionette.CollectionView.extend({
-    className: "span12",
-    itemView: RoomManager.DeviceGroupView
+  RoomManager.RoomLayout = Backbone.Marionette.CompositeView.extend({
+    template: "#room-layout-template",
+    itemView: RoomManager.DeviceGroupView,
+
+    events: {
+      "click button.addDeviceType": "addDeviceTypeClicked",
+      "click a.view-home": "viewClicked"
+    },
+
+    viewClicked: function(e){
+      HIT.vent.trigger("home:view", this.model);
+    },
+
+    serializeData: function(){
+      var data = Backbone.Marionette.CompositeView.prototype.serializeData.apply(this, arguments);
+      var floor = this.model.collection.parentFloor;
+      var home = floor.collection.parentHome;
+
+      data.floor = floor.get("name");
+      data.home = home.get("name");
+
+      return data;
+    },
+
+    addDeviceTypeClicked: function(e){
+      e.preventDefault();
+      HIT.vent.trigger("room:addDeviceGroup", this.model);
+    },
+
+    appendHtml: function(cv, iv){
+      var $devices = cv.$(".room-devices>div");
+      $devices.append(iv.el);
+    }
   });
 
   RoomManager.AddRoomForm = Backbone.Marionette.ItemView.extend({
@@ -383,16 +376,10 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
   var showRoom = function(room){
     RoomManager.currentRoom = room;
     var view = new RoomManager.RoomLayout({
-      model: room
-    });
-    HIT.main.show(view);
-  };
-
-  var showRoomDevices = function(roomLayout, room){
-    var view = new RoomManager.DeviceGroupList({
+      model: room,
       collection: room.deviceGroups
     });
-    roomLayout.deviceList.show(view);
+    HIT.main.show(view);
   };
 
   // App Event Handlers

@@ -176,6 +176,7 @@
   HIT.Room = Model.extend({
     initialize: function(){
       this.deviceGroups = this.parseChildren("deviceGroups", HIT.DeviceGroupCollection);
+      this.deviceGroups.parentRoom = this;
     },
 
     findOrCreateGroup: function(deviceType){
