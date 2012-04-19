@@ -236,7 +236,7 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
 
     formEvents: {
       "click .mode .btn": "modeClicked",
-      "change .setpoint input": "setpointChanged"
+      "change .setpoint": "setpointChanged"
     },
 
     modes: {
@@ -267,23 +267,30 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     },
 
     setpointChanged: function(e){
-      var setpoint = $(e.currentTarget).val();
       var address = this.writeSetPoint.get("address");
+
+      var setpoint = $(e.currentTarget).val();
+      setpoint = parseFloat(setpoint);
+      setpoint = HIT.decimalToEibd(setpoint);
+
       HIT.vent.trigger("device:write", address, setpoint);
     },
 
     showMode: function(address, mode){
-      console.log("mode", mode);
       this.$(".mode .btn").removeClass("active");
       this.$(".mode .btn[data-mode='" + mode + "']").addClass("active");
     },
 
     showSetPoint: function(address, setPoint){
-      this.$("input.setpoint").val(setPoint);
+      //console.log("Setpoint", setPoint);
+      var decimal = HIT.eibdToDecimal(setPoint);
+      this.$("input.setpoint").val(decimal);
     },
 
     showTemperature: function(address, temperature){
-      this.$("input.actual").val(temperature);
+      //console.log("temp", temperature);
+      var decimal = HIT.eibdToDecimal(temperature);
+      this.$("input.actual").val(decimal);
     },
 
     onRender: function(){

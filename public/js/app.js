@@ -4,6 +4,10 @@ var HomeInTouch = (function(Backbone, _, $){
   // -----------------------
   var HIT = new Backbone.Marionette.Application();
 
+  // EIBD <-> Decimal conversion
+  HIT.eibdToDecimal = function (n){return (n - 0x800) / 0x32 };
+  HIT.decimalToEibd = function (n){return n * 0x32 + 0x800 };
+
   // Display regions
   // ---------------
 
