@@ -273,9 +273,9 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     },
 
     showMode: function(address, mode){
-      mode = this.modes[mode];
+      console.log("mode", mode);
       this.$(".mode .btn").removeClass("active");
-      this.$(".btn." + mode).addClass("active");
+      this.$(".mode .btn[data-mode='" + mode + "']").addClass("active");
     },
 
     showSetPoint: function(address, setPoint){
