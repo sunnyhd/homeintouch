@@ -8,7 +8,7 @@
     "url": "git://github.com/jed/homeintouch.git"
   },
   "dependencies": {
-    "express": "2.5.8",
+    "express": "2.5.9",
     "request": "2.9.x",
     "socket.io": "0.9.4",
     "jade": "0.24.0",
