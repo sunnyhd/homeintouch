@@ -18,7 +18,6 @@
     "node": "*"
   },
   "scripts": {
-    "start": "./node_modules/forever/bin/forever start -al forever.log -ao out.log -ae err.log server.js",
-    "stop": "./node_modules/forever/bin/forever stop server.js"
+    "start": "node server.js"
   }
 }
