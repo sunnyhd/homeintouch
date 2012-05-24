@@ -12,7 +12,7 @@ var express = require("express")
   , hosts = settings.hosts
 
 process.on("uncaughtException", function(err) {
-  console.log("Caught exception", err)
+  console.log("Caught exception", err, err.stack)
 })
 
 // Initialize the datastore
@@ -50,8 +50,6 @@ io.sockets.on("connection", function (socket) {
   socket.on("set", eib.set)
   socket.on("get", eib.get)
 })
-
-if (process.argv[2] == "--clientonly") return
 
 eib.connect()
 
