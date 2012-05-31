@@ -6,6 +6,8 @@ var express = require("express")
   , app = express.createServer()
   , io = socket.listen(app)
   , eib = require("./lib/eib")
+  , xbmc = require("./lib/xbmc")
+  , media = require('./lib/media')
   , settings = require("./data/settings")
 
   , credentials = settings.credentials
@@ -19,6 +21,7 @@ process.on("uncaughtException", function(err) {
 dataStore.init(settings.database.path);
 
 app.use(express.basicAuth(credentials.username, credentials.password))
+app.use(express.bodyParser())
 app.use(express.static(__dirname + "/public/"))
 
 app.set('views', __dirname + '/views');
@@ -27,6 +30,11 @@ app.set('view engine', 'jade');
 app.get('/', function(req, res){
   res.render('index');
 });
+
+app.get('/api/movies', media.movies.index);
+app.get('/api/playlists', media.playlists.index);
+app.get('/api/playlists/:playlist/items', media.playlistitems.index);
+app.post('/api/playlists/:playlist/items', media.playlistitems.create);
 
 app.listen(hosts.web.port, function() {
   console.log("now listening on %s...", hosts.web.port)
@@ -52,6 +60,7 @@ io.sockets.on("connection", function (socket) {
 })
 
 eib.connect()
+xbmc.connect()
 
 eib.on("address", function(id, value) {
   console.log("%s is now %s", id, value)
