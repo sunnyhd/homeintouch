@@ -42,12 +42,5 @@ var HomeInTouch = (function(Backbone, _, $){
     modal: ModalManager
   });
 
-  // Application Initializer
-  // -----------------------
-
-  HIT.addInitializer(function(options){
-    HIT.socketUrl = options.rootUrl;
-  });
-
   return HIT;
 })(Backbone, _, $);

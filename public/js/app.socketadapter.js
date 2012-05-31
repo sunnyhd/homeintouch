@@ -12,7 +12,7 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
   // use of it.
 
   var initialize = function() {
-    socket = io.connect(HIT.socketUrl);
+    socket = io.connect();
 
     socket.on("connect", function() {
       SocketAdapter.connected = true;
