@@ -1,33 +1,37 @@
-var express = require("express")
-  , socket = require("socket.io")
+var express = require('express');
+var socket = require('socket.io');
+var settings = require('./data/settings');
+var dataStore = require('./lib/datastore');
+var eib = require('./lib/eib');
+var media = require('./lib/media')
+var xbmc = require('./lib/xbmc');
 
-  , dataStore = require("./lib/dataStore")
+var credentials = settings.credentials;
+var hosts = settings.hosts;
 
-  , app = express.createServer()
-  , io = socket.listen(app)
-  , eib = require("./lib/eib")
-  , xbmc = require("./lib/xbmc")
-  , media = require('./lib/media')
-  , settings = require("./data/settings")
+var app = express.createServer();
+var io = socket.listen(app);
 
-  , credentials = settings.credentials
-  , hosts = settings.hosts
+// Config
+// ---------------
 
-process.on("uncaughtException", function(err) {
-  console.log("Caught exception", err, err.stack)
-})
+app.configure(function() {
+  app.use(express.basicAuth(credentials.username, credentials.password));
+  app.use(express.bodyParser());
+  app.use(express.static(__dirname + "/public/"));
 
-// Initialize the datastore
-dataStore.init(settings.database.path);
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
 
-app.use(express.basicAuth(credentials.username, credentials.password))
-app.use(express.bodyParser())
-app.use(express.static(__dirname + "/public/"))
+io.set("log level", 2);
 
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+// Routes
+// ---------------
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.render('index');
 });
 
@@ -36,33 +40,39 @@ app.get('/api/playlists', media.playlists.index);
 app.get('/api/playlists/:playlist/items', media.playlistitems.index);
 app.post('/api/playlists/:playlist/items', media.playlistitems.create);
 
-app.listen(hosts.web.port, function() {
-  console.log("now listening on %s...", hosts.web.port)
-})
+// Notifications
+// ---------------
 
-io.set("log level", 2)
 io.sockets.on("connection", function (socket) {
 
   socket.emit("keys", dataStore.getAll());
 
-  socket.on("setKey", dataStore.set)
+  socket.on("setKey", dataStore.set);
 
   socket.on("getKey", function(key) {
-    socket.emit("key", key, dataStore.get(key))
-  })
+    socket.emit("key", key, dataStore.get(key));
+  });
 
   socket.on("deleteKey", function(key) {
-    dataStore.rm(key)
-  })
+    dataStore.rm(key);
+  });
 
-  socket.on("set", eib.set)
-  socket.on("get", eib.get)
-})
+  socket.on("set", eib.set);
+  socket.on("get", eib.get);
+});
 
+eib.on("address", function(id, value) {
+  console.log("%s is now %s", id, value);
+  io.sockets.emit("address", id, value);
+});
+
+// Bootstrap
+// ---------------
+
+dataStore.init(settings.database.path);
 eib.connect()
 xbmc.connect()
 
-eib.on("address", function(id, value) {
-  console.log("%s is now %s", id, value)
-  io.sockets.emit("address", id, value)
-})
+app.listen(hosts.web.port, function() {
+  console.log("now listening on %s...", hosts.web.port);
+});
