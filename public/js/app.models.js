@@ -240,6 +240,8 @@
   // -----
 
   HIT.Home = Model.extend({
+    urlRoot: '/api/homes',
+    
     initialize: function(){
       this.floors = this.parseChildren("floors", HIT.FloorCollection);
       this.floors.parentHome = this;

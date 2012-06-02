@@ -61,9 +61,13 @@ html(lang='en')
     script(src='/js/app.floorlist.js')
     script(src='/js/app.roommanager.js')
     script(src='/js/app.devicemanager.js')
+    script(src='/js/app.router.js')
     script
       $(document).ready(function() {
-        HomeInTouch.start();
+        HomeInTouch.start({
+          homes: !{JSON.stringify(data.homes)},
+          deviceTypes: !{JSON.stringify(data.deviceTypes)}
+        });
       })
 
     #modal.modal

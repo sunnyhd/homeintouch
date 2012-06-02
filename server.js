@@ -32,7 +32,17 @@ io.set("log level", 2);
 // ---------------
 
 app.get('/', function(req, res) {
-  res.render('index');
+  res.render('index', { data: dataStore.getAll() });
+});
+
+app.put('/api/homes/:home', function(req, res) {
+  dataStore.set('homes/' + req.params.home, req.body);
+  res.json(req.body);
+});
+
+app.del('/api/homes/:home', function(req, res) {
+  dataStore.rm('homes/' + req.params.home);
+  res.send(204);
 });
 
 app.get('/api/movies', media.movies.index);
@@ -44,19 +54,6 @@ app.post('/api/playlists/:playlist/items', media.playlistitems.create);
 // ---------------
 
 io.sockets.on("connection", function (socket) {
-
-  socket.emit("keys", dataStore.getAll());
-
-  socket.on("setKey", dataStore.set);
-
-  socket.on("getKey", function(key) {
-    socket.emit("key", key, dataStore.get(key));
-  });
-
-  socket.on("deleteKey", function(key) {
-    dataStore.rm(key);
-  });
-
   socket.on("set", eib.set);
   socket.on("get", eib.get);
 });

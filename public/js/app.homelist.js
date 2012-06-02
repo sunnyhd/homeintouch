@@ -117,11 +117,6 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
   // Application Event Handlers
   // --------------------------
 
-  HIT.vent.on("homes", function(homeData) {
-    HIT.homes.reset(homeData);
-    HIT.homes.selectDefault();
-  }, this)
-
   HIT.vent.on("home:selected", showHomeList);
 
   HIT.vent.on("address", updateDeviceStatus);
@@ -149,18 +144,20 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
   };
 
   HomeList.save = function(home){
-    HIT.vent.trigger("home:save", home);
+    home.save();
   };
 
   HomeList.destroy = function(home){
-    HIT.vent.trigger("home:destroy", home);
+    home.destroy();
   };
 
   // Initializer
   // -----------
-
-  HIT.addInitializer(function(options){
-    HIT.homes = new HIT.HomeCollection();
+  
+  HIT.homes = new HIT.HomeCollection();
+  
+  HIT.addInitializer(function(options) {
+    HIT.homes.reset(options.homes);
   });
 
   return HomeList;

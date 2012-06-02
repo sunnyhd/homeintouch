@@ -35,11 +35,11 @@ HomeInTouch.DeviceTypes = (function(HIT, Backbone, _, $){
     return deviceTypeCollection;
   }
 
-  // App event handlers
-  // ------------------
-
-  HIT.vent.on("deviceTypes", function(data){
-    deviceTypeCollection.reset(data);
+  // Initializer
+  // -----------
+  
+  HIT.addInitializer(function(options) {
+    deviceTypeCollection.reset(options.deviceTypes);
   });
 
   return DeviceTypes;

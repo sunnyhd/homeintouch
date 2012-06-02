@@ -19,11 +19,6 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
       HIT.vent.trigger("socket:connected");
     });
 
-    socket.on("keys", function(dbKeys){
-      var data = parseRawData(dbKeys);
-      triggerAppStart(data["homes"], data["deviceTypes"]);
-    });
-
     socket.on("disconnect", function() {
       SocketAdapter.connected = false;
       HIT.vent.trigger("socket:disconnected");
@@ -39,35 +34,6 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
     });
 
   };
-
-  // Helper Methods
-  // --------------
-  
-  var triggerAppStart = function(homes, deviceTypes){
-    HIT.vent.trigger('deviceTypes', deviceTypes);
-    HIT.vent.trigger("homes", homes);
-  };
-
-  var parseRawData = function(rawData){
-    var data = {};
-    var segments;
-    var value;
-    var type;
-
-
-    for(var key in rawData){
-      if (rawData.hasOwnProperty(key)){
-        segments = key.split("/");
-        type = segments[0];
-        value = rawData[key];
-
-        if (!data[type]){ data[type] = [] };
-        data[type].push(value);
-      }
-    }
-
-    return data;
-  }
 
   // Simulate address events
   // ----------------------
@@ -107,18 +73,6 @@ HomeInTouch.SocketAdapter = (function(HIT, io){
 
   HIT.vent.on("device:write", function(address, value){
     socket.emit("set", address, value);
-  });
-
-  HIT.vent.on("home:save", function(home){
-    var json = home.toJSON();
-    var key = "homes/" + home.id;
-    socket.emit("setKey", key, json);
-  });
-
-  HIT.vent.on("home:destroy", function(home){
-    var json = home.toJSON();
-    var key = "homes/" + home.id;
-    socket.emit("deleteKey", key);
   });
 
   // HomeInTouch app initializer for socket.io
