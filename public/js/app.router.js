@@ -1,4 +1,4 @@
-(function(HIT, Backbone, _, $){
+(function(HIT, Backbone, _, $) {
 
   HIT.Router = Backbone.Router.extend({
     
@@ -8,10 +8,14 @@
     },
     
     home: function() {
-      HIT.homes.selectDefault();
+      var home = HIT.HomeList.showCurrent();
+      var floor = HIT.FloorList.showFloors(home);
     }
     
   });
+  
+  // Initialize
+  // ---------------
   
   HIT.addInitializer(function() {
     HIT.router = new HIT.Router();

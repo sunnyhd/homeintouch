@@ -121,9 +121,8 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
   // --------------------------
 
   HIT.vent.on("home:selected", function(home) {
-    showFloorList(home.floors);
-    showFirstRoom(home);
-  }, this);
+    FloorList.showFloors(home);
+  });
 
   FloorList.on("floor:add", function(){
     var home = HIT.HomeList.currentHome;
@@ -144,7 +143,7 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
     if (floor){
       var room = floor.rooms.at(0);
       if (room){
-        HIT.vent.trigger("room:selected", room);
+        HIT.RoomManager.showRoom(room);
         clear = false;
       }
     }
@@ -174,7 +173,15 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
     });
     HIT.modal.show(view);
     return view;
-  }
+  };
+  
+  // Public API
+  // ---------------
+  
+  FloorList.showFloors = function(home) {
+    showFloorList(home.floors);
+    showFirstRoom(home);
+  };
 
   return FloorList;
 })(HomeInTouch, Backbone, _, $);

@@ -264,14 +264,12 @@
 
   HIT.HomeCollection = Collection.extend({
     model: HIT.Home,
-
-    selectDefault: function(){
-      var home = this.at(0);
-      this.select(home);
+    
+    defaultHome: function() {
+      return this.at(0);
     },
 
     select: function(home){
-      this.selected = home;
       HIT.vent.trigger("home:selected", home);
     },
 

@@ -379,19 +379,12 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
     return form;
   };
 
-  var showRoom = function(room){
-    RoomManager.currentRoom = room;
-    var view = new RoomManager.RoomLayout({
-      model: room,
-      collection: room.deviceGroups
-    });
-    HIT.main.show(view);
-  };
-
   // App Event Handlers
   // ------------------
 
-  HIT.vent.on("room:selected", showRoom);
+  HIT.vent.on("room:selected", function(room) {
+    RoomManager.showRoom(room);
+  });
 
   HIT.vent.on("room:add", function(floor){
     var form = showAddRoom(floor);
@@ -401,6 +394,25 @@ HomeInTouch.RoomManager = (function(HIT, Backbone, _, $){
       HIT.vent.trigger("room:selected", room);
     });
   });
+  
+  // Public API
+  // ----------
+  
+  RoomManager.showCurrent = function() {
+    return RoomManager.showRoom(RoomManager.currentRoom);
+  };
+  
+  RoomManager.showRoom = function(room) {
+    RoomManager.currentRoom = room;
+    
+    var view = new RoomManager.RoomLayout({
+      model: room,
+      collection: room.deviceGroups
+    });
+    
+    HIT.main.show(view);
+    return room;
+  };
 
   return RoomManager;
 })(HomeInTouch, Backbone, _, $);

@@ -98,28 +98,17 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
     HIT.modal.show(form);
   };
 
-  var showHomeList = function(selectedHome){
-    HomeList.currentHome = selectedHome;
-
-    var view = new HomeList.HomeSelector({
-      model: selectedHome,
-      collection: HIT.homes
-    });
-
-    HIT.homeList.show(view);
-  };
-
-  var updateDeviceStatus = function(address, statusValue){
-    var addrs = HIT.homes.findAddresses(address);
-    addrs.updateAddress(address, statusValue);
-  }
-
   // Application Event Handlers
   // --------------------------
 
-  HIT.vent.on("home:selected", showHomeList);
+  HIT.vent.on("home:selected", function(home){
+    HomeList.showHome(home);
+  });
 
-  HIT.vent.on("address", updateDeviceStatus);
+  HIT.vent.on("address", function(address, statusValue){
+    var addrs = HIT.homes.findAddresses(address);
+    addrs.updateAddress(address, statusValue);
+  });
 
   HIT.vent.on("home:view", function(home){
     var form = new HomeList.ViewHomeForm({
@@ -138,6 +127,24 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
 
   // Public API
   // ----------
+  
+  HomeList.showCurrent = function() {
+    var home = HomeList.currentHome || HIT.homes.defaultHome();
+    return HomeList.showHome(home);
+  };
+  
+  HomeList.showHome = function(home) {
+    HomeList.currentHome = home;
+
+    var view = new HomeList.HomeSelector({
+      model: home,
+      collection: HIT.homes
+    });
+
+    HIT.homeList.show(view);
+    
+    return home;
+  };
 
   HomeList.saveCurrentHome = function(){
     HomeList.save(HomeList.currentHome);
@@ -151,8 +158,8 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
     home.destroy();
   };
 
-  // Initializer
-  // -----------
+  // Initialize
+  // ----------
   
   HIT.homes = new HIT.HomeCollection();
   
