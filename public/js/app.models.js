@@ -298,5 +298,22 @@
       return addrs;
     }
   });
+  
+  // Movies
+  // ------
+  
+  HIT.Movie = Backbone.Model.extend({
+    
+    idAttribute: 'movieid'
+    
+  });
+  
+  HIT.MovieCollection = Backbone.Collection.extend({
+    
+    model: HIT.Movie,
+    
+    url: '/api/movies'
+    
+  });
 
 })(HomeInTouch, Backbone, _, $);

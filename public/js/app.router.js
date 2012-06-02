@@ -4,12 +4,18 @@
     
     routes: {
       '': 'home',
-      'home': 'home'
+      'home': 'home',
+      'movies': 'movies'
     },
     
     home: function() {
       var home = HIT.HomeList.showCurrent();
       var floor = HIT.FloorList.showFloors(home);
+    },
+    
+    movies: function() {
+      HIT.MovieManager.showMovieList();
+      HIT.movies.fetch();
     }
     
   });
