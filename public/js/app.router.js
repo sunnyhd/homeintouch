@@ -4,8 +4,7 @@
     
     routes: {
       '': 'home',
-      'home': 'home',
-      'media': 'media'
+      'home': 'home'
     },
     
     home: function() {

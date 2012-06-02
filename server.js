@@ -54,13 +54,13 @@ app.post('/api/playlists/:playlist/items', media.playlistitems.create);
 // ---------------
 
 io.sockets.on("connection", function (socket) {
-  socket.on("set", eib.set);
-  socket.on("get", eib.get);
+  socket.on("eib:set", eib.set);
+  socket.on("eib:get", eib.get);
 });
 
 eib.on("address", function(id, value) {
   console.log("%s is now %s", id, value);
-  io.sockets.emit("address", id, value);
+  io.sockets.emit("eib:address", id, value);
 });
 
 // Bootstrap
