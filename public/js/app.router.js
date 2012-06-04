@@ -14,7 +14,8 @@
     },
     
     movies: function() {
-      HIT.MovieManager.showMovieList();
+      HIT.MediaManager.showMediaMenu();
+      HIT.MediaManager.showMovieList();
       HIT.movies.fetch();
     }
     
