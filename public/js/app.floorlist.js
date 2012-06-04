@@ -164,7 +164,7 @@ HomeInTouch.FloorList = (function(HIT, Backbone, _, $){
       collection: floors
     });
 
-    HIT.floorList.show(view);
+    HIT.navList.show(view);
   };
 
   var showAddFloorForm = function(home){

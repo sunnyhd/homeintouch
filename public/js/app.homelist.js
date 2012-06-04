@@ -141,7 +141,7 @@ HomeInTouch.HomeList = (function(HIT, Backbone, _, $){
       collection: HIT.homes
     });
 
-    HIT.homeList.show(view);
+    HIT.dropdownList.show(view);
     
     return home;
   };

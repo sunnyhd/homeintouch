@@ -36,8 +36,8 @@ var HomeInTouch = (function(Backbone, _, $){
   });
 
   HIT.addRegions({
-    homeList: "#home-list",
-    floorList: "#floor-list",
+    dropdownList: "#dropdown-list",
+    navList: "#nav-list",
     main: "#main-content",
     modal: ModalManager
   });
