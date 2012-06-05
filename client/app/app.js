@@ -9,7 +9,7 @@ app.eibdToDecimal = function (n){return (n - 0x800) / 0x32 };
 app.decimalToEibd = function (n){return n * 0x32 + 0x800 };
 
 app.addRegions({
-    dropdown: "#dropdown-list",
+    dropdown: "#dropdown",
     subnav: "#subnav",
     main: "#main-content",
     modal: ModalManager
