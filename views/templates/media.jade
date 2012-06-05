@@ -29,4 +29,20 @@ script(id="movie-layout-template", type="text/template")
       .span12
 
 script(id="movie-item-template", type="text/template")
-  a(href='#') <%= label %>
+  <%= label %>
+  a.add-to-playlist(href="#") Add To Playlist
+
+script(id="add-to-playlist-template", type="text/template")
+  .modal-header
+    h2 Add To Playlist
+  .modal-body
+      .span2
+        label(for="type").pull-right Playlist
+      .span3
+        select(id="playlist")
+          <% _.each(playlists, function(playlist) { %>
+          option(value!="<%= playlist.playlistid %>") <%= playlist.title %>
+          <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
