@@ -1,8 +1,23 @@
-script(id="media-menu-template", type="text/template")
-  li
-    a(href="#movies") Movies
-  li
-    a(href="#music") Music
+script(id="playlists-layout-template", type="text/template")
+  .container-fluid
+    .row-fluid
+      .span12
+        h3 Playlists
+
+    .row-fluid
+      .span12
+        ul.playlists.nav.nav-tabs
+
+script(id="playlists-item-template", type="text/template")
+  a(href='#') <%= title %>
+
+script(id="playlist-layout-template", type="text/template")
+  .container-fluid
+    .items.row-fluid
+      .span12
+
+script(id="playlist-item-template", type="text/template")
+  a(href='#') <%= label %>
 
 script(id="movie-layout-template", type="text/template")
   .container-fluid
