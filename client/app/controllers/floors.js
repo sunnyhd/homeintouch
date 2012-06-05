@@ -56,7 +56,7 @@ var showFloorList = function(floors){
         collection: floors
     });
 
-    app.navList.show(view);
+    app.subnav.show(view);
 };
 
 var showAddFloorForm = function(home){

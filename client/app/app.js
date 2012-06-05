@@ -9,11 +9,18 @@ app.eibdToDecimal = function (n){return (n - 0x800) / 0x32 };
 app.decimalToEibd = function (n){return n * 0x32 + 0x800 };
 
 app.addRegions({
-    dropdownList: "#dropdown-list",
-    navList: "#nav-list",
+    dropdown: "#dropdown-list",
+    subnav: "#subnav",
     main: "#main-content",
     modal: ModalManager
 });
+
+app.closeRegions = function() {
+    app.dropdown.close();
+    app.subnav.close();
+    app.main.close();
+    app.modal.close();
+};
 
 app.vent.on("device:read", function(address){
     socket.emit("eib:get", address);

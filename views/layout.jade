@@ -30,7 +30,7 @@ html(lang='en')
     
     include templates/media
 
-  body(data-spy='scroll')
+  body
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
@@ -40,9 +40,22 @@ html(lang='en')
             span.icon-bar
           a.brand(href='#') HOME in touch
           .nav-collapse
-            #nav-list
-            ul#dropdown-list.nav.pull-right
+            .nav-collapse
+              ul.nav
+                li
+                  a(href="#home") Home
+              ul.nav
+                li.dropdown
+                  a.dropdown-toggle(href="#", data-toggle="dropdown")
+                    | Media
+                    b.caret
+                  ul.dropdown-menu
+                    li
+                      a(href="#movies") Movies
+            ul#dropdown.nav.pull-right
             .divider-vertical.pull-right
+
+    #subnav
 
     #main-content!= body
 

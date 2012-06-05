@@ -36,9 +36,9 @@ exports.RoomItemView = Backbone.Marionette.ItemView.extend({
 
 exports.FloorItemView = Backbone.Marionette.CompositeView.extend({
 
-    tagName: "ul",
+    className: "dropdown",
 
-    className: "nav",
+    tagName: "li",
 
     template: "#floor-item-template",
 
@@ -66,7 +66,9 @@ exports.FloorItemView = Backbone.Marionette.CompositeView.extend({
 
 exports.FloorSelectorListView = Backbone.Marionette.CompositeView.extend({
 
-    className: "nav-collapse",
+    className: 'nav nav-pills',
+
+    tagName: 'ul',
 
     template: "#floor-list-template",
 

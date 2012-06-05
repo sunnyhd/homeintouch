@@ -18,7 +18,7 @@ exports.showHome = function(home) {
         collection: exports.homes
     });
 
-    app.dropdownList.show(view);
+    app.dropdown.show(view);
     
     return home;
 };
