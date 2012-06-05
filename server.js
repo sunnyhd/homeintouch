@@ -1,6 +1,7 @@
 var express = require('express');
 var socket = require('socket.io');
 var settings = require('./data/settings');
+var client = require('./lib/client');
 var dataStore = require('./lib/datastore');
 var eib = require('./lib/eib');
 var media = require('./lib/media')
@@ -18,6 +19,8 @@ var io = socket.listen(app);
 app.configure(function() {
   app.use(express.basicAuth(credentials.username, credentials.password));
   app.use(express.bodyParser());
+
+  app.get('/application.js', client.assets.createServer());
   app.use(express.static(__dirname + "/public/"));
 
   app.set('views', __dirname + '/views');

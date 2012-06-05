@@ -13,7 +13,8 @@
     "request": "2.9.x",
     "socket.io": "0.9.4",
     "jade": "0.24.0",
-    "dirty": "0.9.6"
+    "dirty": "0.9.6",
+    "stitch": "0.3.3"
   },
   "engines": {
     "node": "*"

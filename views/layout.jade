@@ -12,7 +12,7 @@ html(lang='en')
     link(href='/css/bootstrap.min.css', rel='stylesheet')
     link(href='/css/style.css', rel='stylesheet')
     //if lt IE 9
-      script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
+    script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
 
     include templates/navbar
 
@@ -46,31 +46,14 @@ html(lang='en')
 
     #main-content!= body
 
-    script(src='/js/jquery-1.7.1.min.js')
-    script(src='/js/underscore-min.js')
-    script(src='/js/backbone-min.js')
-    script(src='/js/backbone.marionette.min.js')
-    script(src='/js/backbone.formhelpers.js')
-    script(src='/js/backbone.ponzi.js')
-    script(src='/js/bootstrap.min.js')
-    script(src='/js/socket.io.min.js')
-    script(src='/js/app.js')
-    script(src='/js/app.viewhelpers.js')
-    script(src='/js/app.socketadapter.js')
-    script(src='/js/app.models.js')
-    script(src='/js/app.devicetypes.js')
-    script(src='/js/app.homelist.js')
-    script(src='/js/app.floorlist.js')
-    script(src='/js/app.roommanager.js')
-    script(src='/js/app.devicemanager.js')
-    script(src='/js/app.mediamanager.js')
-    script(src='/js/app.router.js')
+    script(src='/application.js')
     script
-      $(document).ready(function() {
-        HomeInTouch.start({
+      $(function() {
+        var app = require('app');
+        app.start({
           homes: !{JSON.stringify(data.homes)},
           deviceTypes: !{JSON.stringify(data.deviceTypes)}
         });
-      })
+      });
 
     #modal.modal
