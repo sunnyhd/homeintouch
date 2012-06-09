@@ -55,6 +55,7 @@ app.post('/api/playlists/:playlist/items', media.playlistitems.create);
 app.del('/api/playlists/:playlist/items/:index', media.playlistitems.destroy);
 app.post('/api/player', media.player.create);
 app.get('/api/players', media.players.index);
+app.get('/api/players/:player', media.players.show);
 
 // Notifications
 // ---------------
