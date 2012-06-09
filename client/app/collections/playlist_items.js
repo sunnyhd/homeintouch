@@ -17,7 +17,7 @@ module.exports = Backbone.Collection.extend({
     removeItem: function(item) {
         var index = this.indexOf(item);
         
-        item.url = this.url + '/' + index;
+        item.url = this.url + '/' + (index + 1);
         item.destroy();
     }
 
