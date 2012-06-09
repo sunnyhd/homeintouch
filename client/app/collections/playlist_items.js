@@ -4,6 +4,10 @@ module.exports = Backbone.Collection.extend({
 
     model: PlaylistItem,
 
+    parse: function(res) {
+        return res.items;
+    },
+
     getActiveItem: function() {
         var position = this.playlist.get('position');
         
