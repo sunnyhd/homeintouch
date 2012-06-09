@@ -87,9 +87,24 @@ exports.MovieLayout = Backbone.Marionette.CompositeView.extend({
     template: '#movie-layout-template',
     
     itemView: exports.MovieItemView,
+
+    events: {
+        'click .prev': 'prevPage',
+        'click .next': 'nextPage'
+    },
     
     appendHtml: function(cv, iv) {
         this.$('.movies').append(iv.el);
+    },
+
+    prevPage: function(e) {
+        e.preventDefault();
+        this.collection.prevPage();
+    },
+
+    nextPage: function(e) {
+        e.preventDefault();
+        this.collection.nextPage();
     }
     
 });
