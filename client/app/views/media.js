@@ -89,12 +89,18 @@ exports.MovieItemView = Backbone.Marionette.ItemView.extend({
     template: '#movie-item-template',
 
     events: {
-        'click a.add-to-playlist': 'addToPlaylist'
+        'click a.add-to-playlist': 'addToPlaylist',
+        'click a.play': 'play'
     },
 
     addToPlaylist: function(e) {
         e.preventDefault();
         moviesController.addToPlaylist(this.model);
+    },
+
+    play: function(e) {
+        e.preventDefault();
+        this.model.play();
     }
     
 });

@@ -53,6 +53,7 @@ app.get('/api/playlists', media.playlists.index);
 app.get('/api/playlists/:playlist/items', media.playlistitems.index);
 app.post('/api/playlists/:playlist/items', media.playlistitems.create);
 app.del('/api/playlists/:playlist/items/:index', media.playlistitems.destroy);
+app.post('/api/player', media.player.create);
 app.get('/api/players', media.players.index);
 
 // Notifications

@@ -13,7 +13,6 @@ module.exports = Backbone.Collection.extend({
 
     parse: function(res) {
         this.paging.total = res.limits.total;
-
         return res.movies;
     },
 
