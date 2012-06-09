@@ -4,8 +4,13 @@ module.exports = Backbone.Model.extend({
 
     idAttribute: 'playlistid',
 
+    defaults: {
+        position: -1,
+    },
+
     initialize: function() {
         this.items = new PlaylistItems();
+        this.items.playlist = this;
         this.items.url = '/api/playlists/' + this.id + '/items';
     },
 

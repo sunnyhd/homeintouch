@@ -17,7 +17,8 @@ script(id="playlist-layout-template", type="text/template")
       .span12
 
 script(id="playlist-item-template", type="text/template")
-  a(href='#') <%= label %>
+  <%= label %>
+  a.remove(href="#") Remove
 
 script(id="movie-layout-template", type="text/template")
   .container-fluid

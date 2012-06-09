@@ -51,7 +51,24 @@ exports.PlaylistsLayout = Backbone.Marionette.CompositeView.extend({
 
 exports.PlaylistItemView = Backbone.Marionette.ItemView.extend({
 
-    template: '#playlist-item-template'
+    className: 'playlist-item',
+
+    template: '#playlist-item-template',
+
+    events: {
+        'click .remove': 'removeFromPlaylist'
+    },
+
+    onRender: function() {
+        if (this.model.isActive()) {
+            this.$el.addClass('active');
+        }
+    },
+
+    removeFromPlaylist: function(e) {
+        e.preventDefault();
+        this.model.removeFromList();
+    }
 
 });
 

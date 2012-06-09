@@ -30,6 +30,6 @@ exports.playlists.on('select', function(playlist) {
 // ---------------
 
 var showPlaylist = function(playlist) {
-    var view = new mediaViews.PlaylistLayout({ collection: playlist.items });
+    var view = new mediaViews.PlaylistLayout({ model: playlist, collection: playlist.items });
     app.main.show(view);
 };
