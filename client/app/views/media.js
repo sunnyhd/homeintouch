@@ -133,6 +133,7 @@ exports.PlaylistItemView = Backbone.Marionette.ItemView.extend({
     template: '#playlist-item-template',
 
     events: {
+        'click .play': 'play',
         'click .remove': 'removeFromPlaylist'
     },
 
@@ -142,9 +143,14 @@ exports.PlaylistItemView = Backbone.Marionette.ItemView.extend({
         }
     },
 
+    play: function(e) {
+        e.preventDefault();
+        this.model.play();
+    },
+
     removeFromPlaylist: function(e) {
         e.preventDefault();
-        this.model.removeFromList();
+        this.model.removeFromPlaylist();
     }
 
 });

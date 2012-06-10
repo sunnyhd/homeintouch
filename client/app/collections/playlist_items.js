@@ -18,11 +18,11 @@ module.exports = Backbone.Collection.extend({
         }
     },
 
-    removeItem: function(item) {
-        var index = this.indexOf(item);
-        
-        item.url = this.url + '/' + (index + 1);
-        item.destroy();
+    destroyAt: function(index) {
+        var item = this.at(index);
+
+        item.url = this.url + '/' + index;
+        return item.destroy();
     }
 
 });
