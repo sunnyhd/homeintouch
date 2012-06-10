@@ -69,7 +69,7 @@ exports.PlayerView = Backbone.Marionette.ItemView.extend({
 
     stopPlayer: function(e) {
         e.preventDefault();
-        this.model.destroy();
+        playersController.stopPlayer(this.model);
         this.remove();
     }
 

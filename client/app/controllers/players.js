@@ -20,22 +20,29 @@ exports.selectPlayer = function(player) {
     players.select(player);
 };
 
+exports.stopPlayer = function(player) {
+    player.destroy();
+    exports.selectPlayer(null);
+};
+
 // Events
 // ---------------
 
 exports.players.on('select', function(player) {
-    showPlayer(player);
-    player.fetch();
+    if (player) {
+        var view = new mediaViews.PlayerView({ model: player });
+        app.main.show(view);
+
+        player.fetch();
+    } else {
+        app.main.close();
+    }
+
     //poll(player);
 });
 
 // Helpers
 // ---------------
-
-var showPlayer = function(player) {
-    var view = new mediaViews.PlayerView({ model: player });
-    app.main.show(view);
-};
 
 var timeout;
 var poll = function(player) {
