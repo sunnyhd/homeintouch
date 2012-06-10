@@ -48,6 +48,9 @@ app.addInitializer(function() {
     app.controller('floors');
     app.controller('homes');
     app.controller('rooms');
+    app.controller('players');
+    app.controller('playlists');
+    app.controller('movies');
 });
 
 app.addInitializer(function(options) {

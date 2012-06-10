@@ -3,6 +3,7 @@ module.exports = Backbone.Router.extend({
     routes: {
         '': 'home',
         'home': 'home',
+        'players': 'players',
         'playlists': 'playlists',
         'movies': 'movies'
     },
@@ -15,6 +16,11 @@ module.exports = Backbone.Router.extend({
         this.app.closeRegions();
         var home = this.app.controller('homes').showCurrent();
         var floor = this.app.controller('floors').showFloors(home);
+    },
+
+    players: function() {
+        this.app.closeRegions();
+        this.app.controller('players').showPlayers();
     },
 
     playlists: function() {

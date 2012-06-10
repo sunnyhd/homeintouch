@@ -56,6 +56,7 @@ app.del('/api/playlists/:playlist/items/:index', media.playlistitems.destroy);
 app.post('/api/player', media.player.create);
 app.get('/api/players', media.players.index);
 app.get('/api/players/:player', media.players.show);
+app.del('/api/players/:player', media.players.destroy);
 
 // Notifications
 // ---------------
@@ -68,6 +69,10 @@ io.sockets.on("connection", function (socket) {
 eib.on("address", function(id, value) {
   console.log("%s is now %s", id, value);
   io.sockets.emit("eib:address", id, value);
+});
+
+xbmc.on('notification', function(data) {
+  console.log(data);
 });
 
 // Bootstrap

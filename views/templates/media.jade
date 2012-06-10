@@ -1,3 +1,23 @@
+script(id="players-layout-template", type="text/template")
+  .container-fluid
+    .row-fluid
+      .span12
+        h3 Players
+
+    .row-fluid
+      .span12
+        ul.players.nav.nav-tabs
+
+script(id="players-item-template", type="text/template")
+  a(href='#') <%= title %>
+
+script(id="player-template", type="text/template")
+  <%= item.label %>
+  br
+  <%= currentTime %> / <%= totalTime %>
+  br
+  a.stop(href="#") Stop
+
 script(id="playlists-layout-template", type="text/template")
   .container-fluid
     .row-fluid
@@ -39,7 +59,9 @@ script(id="movie-item-template", type="text/template")
   | <img src="<%= thumbnail %>">
   br
   <%= label %>
+  br
   a.add-to-playlist(href="#") Add To Playlist
+  br
   a.play(href="#") Play
 
 script(id="add-to-playlist-template", type="text/template")

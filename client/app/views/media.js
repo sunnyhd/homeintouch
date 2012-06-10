@@ -1,5 +1,82 @@
 var moviesController = require('controllers/movies');
+var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
+
+// Players
+// ---------------
+
+exports.PlayersItemView = Backbone.Marionette.ItemView.extend({
+
+    tagName: 'li',
+
+    template: '#players-item-template',
+
+    events: {
+        'click a': 'playerClicked'
+    },
+
+    onRender: function() {
+        this.$el.attr('data-type', this.model.get('type'));
+    },
+
+    playerClicked: function(e) {
+        e.preventDefault();
+        playersController.selectPlayer(this.model);
+    }
+
+});
+
+exports.PlayersLayout = Backbone.Marionette.CompositeView.extend({
+
+    template: '#players-layout-template',
+
+    itemView: exports.PlayersItemView,
+
+    initialize: function(){
+        this.bindTo(this.collection, 'select', this.render, this);
+    },
+
+    appendHtml: function(cv, iv) {
+        this.$('.players').append(iv.el);
+    },
+
+    onRender: function() {
+        var selected = this.collection.getSelected();
+
+        if (selected) {
+            var type = selected.get('type');
+
+            this.$('.players li').removeClass('active');
+            this.$('.players li[data-type=' + type + ']').addClass('active');
+        }
+    }
+
+});
+
+exports.PlayerView = Backbone.Marionette.ItemView.extend({
+
+    className: 'player',
+
+    template: '#player-template',
+
+    events: {
+        'click .stop': 'stopPlayer'
+    },
+
+    initialize: function() {
+        this.bindTo(this.model, 'change', this.render, this);
+    },
+
+    stopPlayer: function(e) {
+        e.preventDefault();
+        this.model.destroy();
+        this.remove();
+    }
+
+});
+
+// Playlists
+// ---------------
 
 exports.PlaylistsItemView = Backbone.Marionette.ItemView.extend({
 
