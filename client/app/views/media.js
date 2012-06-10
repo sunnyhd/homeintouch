@@ -84,7 +84,14 @@ exports.PlaylistLayout = Backbone.Marionette.CompositeView.extend({
 
 });
 
+// Movies
+// ---------------
+
 exports.MovieItemView = Backbone.Marionette.ItemView.extend({
+
+    tagName: 'li',
+
+    className: 'movie',
     
     template: '#movie-item-template',
 

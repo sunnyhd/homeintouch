@@ -132,3 +132,11 @@ label.pull-right{
 .uneditable-input {
   cursor: default;
 }
+
+.movie {
+  min-height: 320px;
+}
+
+.movie img {
+  width: 200px;
+}
