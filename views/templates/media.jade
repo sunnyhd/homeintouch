@@ -33,6 +33,8 @@ script(id="movie-layout-template", type="text/template")
     a.next(href="#") Next
 
 script(id="movie-item-template", type="text/template")
+  | <img src="<%= thumbnail %>" width="200px">
+  br
   <%= label %>
   a.add-to-playlist(href="#") Add To Playlist
   a.play(href="#") Play
