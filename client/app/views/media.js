@@ -49,6 +49,10 @@ exports.PlayersLayout = Backbone.Marionette.CompositeView.extend({
             this.$('.players li').removeClass('active');
             this.$('.players li[data-type=' + type + ']').addClass('active');
         }
+    },
+
+    onClose: function() {
+        playersController.shutdown();
     }
 
 });

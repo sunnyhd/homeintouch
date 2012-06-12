@@ -16,13 +16,23 @@ exports.showPlayers = function() {
     });
 };
 
-exports.selectPlayer = function(player) {
-    players.select(player);
+exports.selectPlayer = function(player, options) {
+    var current = players.getSelected();
+
+    if (current) {
+        current.shutdown();
+    }
+
+    players.select(player, options);
 };
 
 exports.stopPlayer = function(player) {
     player.destroy();
     exports.selectPlayer(null);
+};
+
+exports.shutdown = function() {
+    exports.selectPlayer(null, { silent: true });
 };
 
 // Events
@@ -34,23 +44,8 @@ exports.players.on('select', function(player) {
         app.main.show(view);
 
         player.fetch();
+        player.run();
     } else {
         app.main.close();
     }
-
-    //poll(player);
 });
-
-// Helpers
-// ---------------
-
-var timeout;
-var poll = function(player) {
-    var run = function() {
-        player.fetch();
-        timeout = setTimeout(run, 1000);
-    };
-
-    clearTimeout(timeout);
-    run();
-};

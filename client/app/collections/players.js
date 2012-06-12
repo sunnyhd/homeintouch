@@ -10,9 +10,13 @@ module.exports = Backbone.Collection.extend({
         return this.at(0);
     },
 
-    select: function(player) {
+    select: function(player, options) {
+        options || (options = {});
         this.selected = player;
-        this.trigger('select', player);
+
+        if (!options.silent) {
+            this.trigger('select', player);
+        }
     },
 
     getSelected: function() {

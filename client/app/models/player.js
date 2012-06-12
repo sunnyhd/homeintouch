@@ -2,6 +2,8 @@ module.exports = Backbone.Model.extend({
     
     idAttribute: 'playerid',
 
+    rootUrl: '/api/players',
+
     defaults: {
         item: {
             label: ''
@@ -29,12 +31,69 @@ module.exports = Backbone.Model.extend({
         data.totalTime = this.totalTime();
 
         return data;
+    },
+
+    startTimer: function() {
+        var self = this;
+        var interval = 1000; // 1 second
+
+        this.timer = setInterval(function() {
+            var time = _.clone(self.get('time'));
+            if (!time) return;
+
+            time.seconds++;
+            self.set('time', normalizeTime(time));
+            console.log('Player position:', self.currentTime());
+        }, interval);
+    },
+
+    stopTimer: function() {
+        clearInterval(this.timer);
+        this.timer = undefined;
+    },
+
+    startPolling: function() {
+        var self = this;
+        var interval = 10000; // 10 minutes
+
+        this.polling = setInterval(function() {
+            self.fetch();
+        }, interval);
+    },
+
+    stopPolling: function() {
+        clearInterval(this.polling);
+        this.polling = undefined;
+    },
+
+    run: function() {
+        this.startTimer();
+        this.startPolling();
+    },
+
+    shutdown: function() {
+        this.stopTimer();
+        this.stopPolling();
     }
 
 });
 
 // Helpers
 // ---------------
+
+function normalizeTime(time) {
+    if (time.seconds >= 60) {
+        time.minutes += Math.floor(time.seconds / 60);
+        time.seconds = time.seconds % 60;
+    }
+
+    if (time.minutes >= 60) {
+        time.hours += Math.floor(time.minutes / 60);
+        time.minutes = time.minutes % 60;
+    }
+
+    return time;
+}
 
 function formatTime(time) {
     if (!time) return '';
