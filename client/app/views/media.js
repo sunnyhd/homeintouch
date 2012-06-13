@@ -64,7 +64,8 @@ exports.PlayerView = Backbone.Marionette.ItemView.extend({
     template: '#player-template',
 
     events: {
-        'click .stop': 'stopPlayer'
+        'click .stop': 'stopPlayer',
+        'click .pause': 'pausePlayer'
     },
 
     initialize: function() {
@@ -75,6 +76,11 @@ exports.PlayerView = Backbone.Marionette.ItemView.extend({
         e.preventDefault();
         playersController.stopPlayer(this.model);
         this.remove();
+    },
+
+    pausePlayer: function(e) {
+        e.preventDefault();
+        playersController.pausePlayer(this.model);
     }
 
 });

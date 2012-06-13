@@ -1,3 +1,5 @@
+var XbmcCommand = require('models/xbmc_command');
+
 module.exports = Backbone.Model.extend({
     
     idAttribute: 'playerid',
@@ -74,6 +76,13 @@ module.exports = Backbone.Model.extend({
     shutdown: function() {
         this.stopTimer();
         this.stopPolling();
+    },
+
+    playPauseCommand: function() {
+        return new XbmcCommand({
+            method: 'Player.PlayPause',
+            params: { playerid: this.id }
+        });
     }
 
 });

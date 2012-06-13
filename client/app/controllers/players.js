@@ -31,6 +31,11 @@ exports.stopPlayer = function(player) {
     exports.selectPlayer(null);
 };
 
+exports.pausePlayer = function(player) {
+    var command = player.playPauseCommand();
+    command.send();
+};
+
 exports.shutdown = function() {
     exports.selectPlayer(null, { silent: true });
 };
