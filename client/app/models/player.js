@@ -29,6 +29,10 @@ module.exports = Backbone.Model.extend({
         return this.get('speed') === 1;
     },
 
+    togglePlaying: function() {
+        this.set('speed', this.isPlaying() ? 0 : 1);
+    },
+
     title: function() {
         var type = this.get('type');
         return type.charAt(0).toUpperCase() + type.slice(1);
@@ -42,6 +46,13 @@ module.exports = Backbone.Model.extend({
         return formatTime(this.get('totaltime'));
     },
 
+    thumbnail: function() {
+        var thumbnail = this.get('item').thumbnail;
+        if (thumbnail) {
+            return 'http://localhost:8080/vfs/' + thumbnail;
+        }
+    },
+
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         
@@ -49,6 +60,7 @@ module.exports = Backbone.Model.extend({
         data.currentTime = this.currentTime();
         data.totalTime = this.totalTime();
         data.playing = this.isPlaying();
+        data.thumbnail = this.thumbnail();
 
         return data;
     },

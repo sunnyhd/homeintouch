@@ -17,10 +17,16 @@ script(id="player-template", type="text/template")
   <%= currentTime %> / <%= totalTime %>
   br
   a.stop(href="#") Stop
+  
   <% if (playing) { %>
   a.pause(href="#") Pause
   <% } else { %>
   a.pause(href="#") Play
+  <% } %>
+  br
+
+  <% if (thumbnail) { %>
+  | <img src="<%= thumbnail %>">
   <% } %>
 
 script(id="playlists-layout-template", type="text/template")

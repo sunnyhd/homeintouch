@@ -32,15 +32,9 @@ exports.stopPlayer = function(player) {
 };
 
 exports.pausePlayer = function(player) {
-    var command = player.playPauseCommand();
+    player.togglePlaying();
 
-    if (player.isPlaying()) {
-        player.set('speed', 0);
-    } else {
-        player.set('speed', 1);
-    }
-
-    command.send().then(function() {
+    player.playPauseCommand().send().then(function() {
         player.set('speed', command.get('speed'));
     });
 };
