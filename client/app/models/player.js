@@ -12,6 +12,23 @@ module.exports = Backbone.Model.extend({
         }
     },
 
+    initialize: function() {
+        this.on('change:speed', this.checkTimer, this);
+        this.checkTimer();
+    },
+
+    checkTimer: function() {
+        if (this.isPlaying()) {
+            this.startTimer();
+        } else {
+            this.stopTimer();
+        }
+    },
+
+    isPlaying: function() {
+        return this.get('speed') === 1;
+    },
+
     title: function() {
         var type = this.get('type');
         return type.charAt(0).toUpperCase() + type.slice(1);
@@ -31,6 +48,7 @@ module.exports = Backbone.Model.extend({
         data.title = this.title();
         data.currentTime = this.currentTime();
         data.totalTime = this.totalTime();
+        data.playing = this.isPlaying();
 
         return data;
     },
@@ -45,7 +63,6 @@ module.exports = Backbone.Model.extend({
 
             time.seconds++;
             self.set('time', normalizeTime(time));
-            console.log('Player position:', self.currentTime());
         }, interval);
     },
 
@@ -69,12 +86,12 @@ module.exports = Backbone.Model.extend({
     },
 
     run: function() {
-        this.startTimer();
+        //this.startTimer();
         this.startPolling();
     },
 
     shutdown: function() {
-        this.stopTimer();
+        //this.stopTimer();
         this.stopPolling();
     },
 
