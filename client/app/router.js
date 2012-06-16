@@ -6,7 +6,8 @@ module.exports = Backbone.Router.extend({
         'players': 'players',
         'playlists': 'playlists',
         'movies': 'movies',
-        'artists': 'artists'
+        'artists': 'artists',
+        'artists/:artistid': 'artistAlbums'
     },
 
     initialize: function(options) {
@@ -37,8 +38,12 @@ module.exports = Backbone.Router.extend({
 
     artists: function() {
         this.app.closeRegions();
-        this.app.controller('music').showArtistList();
-        this.app.controller('music').artists.fetch();
+        this.app.controller('music').showArtistList().fetch();
+    },
+
+    artistAlbums: function(artistid) {
+        this.app.closeRegions();
+        this.app.controller('music').showArtistAlbums(artistid).fetch();
     }
     
 });
