@@ -90,3 +90,31 @@ script(id="add-to-playlist-template", type="text/template")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add
+
+script(id="artist-layout-template", type="text/template")
+  .container-fluid
+    .row-fluid
+        .span12
+          ul.nav.nav-tabs
+            li.active
+              a(href="#artists") Artists
+            li
+              a(href="#albums") Albums
+            li
+              a(href="#songs") Songs
+
+    .row-fluid
+      .span12
+        h3 Artists
+        a.prev(href="#") Prev
+        a.next(href="#") Next
+
+    .row-fluid
+      .span12
+        ul.artists
+
+    a.prev(href="#") Prev
+    a.next(href="#") Next
+
+script(id="artist-item-template", type="text/template")
+  | <a href="#artists/<%= artistid %>"><%= label %></a>

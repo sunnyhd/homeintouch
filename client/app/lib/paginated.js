@@ -6,13 +6,16 @@ module.exports = function(options) {
     };
 
     this.parse = function(res) {
-        this.paging.total = res.limits.total;
+        // Note: XBMC is returning 1 more than the real total for some reason
+        this.paging.total = res.limits.total - 1;
+        this.paging.pages = Math.ceil(this.paging.total / this.paging.count);
+
         return res[this.paging.key];
     };
 
     this.fetch = function(options) {
         var start = (this.paging.page - 1) * this.paging.count + 1;
-        var end = start + this.paging.count - 1;
+        var end = start + this.paging.count;
 
         options || (options = {});
         options.data || (options.data = {});
@@ -31,9 +34,7 @@ module.exports = function(options) {
     };
 
     this.nextPage = function() {
-        var pages = Math.ceil(this.paging.total / this.paging.count);
-
-        if (this.paging.page < pages) {
+        if (this.paging.page < this.paging.pages) {
             this.paging.page += 1;
         }
         return this.fetch();

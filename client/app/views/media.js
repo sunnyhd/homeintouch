@@ -232,6 +232,49 @@ exports.MovieLayout = Backbone.Marionette.CompositeView.extend({
     
 });
 
+// Music
+// ---------------
+
+exports.ArtistItemView = Backbone.Marionette.ItemView.extend({
+
+    tagName: 'li',
+
+    className: 'artist',
+    
+    template: '#artist-item-template'
+    
+});
+
+exports.ArtistLayout = Backbone.Marionette.CompositeView.extend({
+    
+    template: '#artist-layout-template',
+    
+    itemView: exports.ArtistItemView,
+
+    events: {
+        'click .prev': 'prevPage',
+        'click .next': 'nextPage'
+    },
+    
+    appendHtml: function(cv, iv) {
+        this.$('.artists').append(iv.el);
+    },
+
+    prevPage: function(e) {
+        e.preventDefault();
+        this.collection.prevPage();
+    },
+
+    nextPage: function(e) {
+        e.preventDefault();
+        this.collection.nextPage();
+    }
+    
+});
+
+// Modals
+// ---------------
+
 exports.AddToPlaylistForm = Backbone.Marionette.ItemView.extend({
 
     template: "#add-to-playlist-template",
