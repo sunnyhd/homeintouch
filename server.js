@@ -50,6 +50,7 @@ app.del('/api/homes/:home', function(req, res) {
 
 app.post('/api/commands', media.commands.create);
 app.get('/api/movies', media.movies.index);
+app.get('/api/artists', media.artists.index);
 app.get('/api/playlists', media.playlists.index);
 app.get('/api/playlists/:playlist/items', media.playlistitems.index);
 app.post('/api/playlists/:playlist/items', media.playlistitems.create);
@@ -73,7 +74,7 @@ eib.on("address", function(id, value) {
 });
 
 xbmc.on('notification', function(data) {
-  console.log(data);
+  console.log('xbmc:', data);
 });
 
 // Bootstrap
