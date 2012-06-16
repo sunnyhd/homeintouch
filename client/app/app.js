@@ -90,6 +90,29 @@ app.addInitializer(function() {
 // Extensions
 // ---------------
 
+Backbone.Marionette.View.prototype.getTemplateSelector = function() {
+    var template;
+
+    if (this.options && this.options.template){
+        template = this.options.template;
+    } else {
+        template = this.template;
+    }
+
+    return template;
+};
+
+var origRender = Backbone.Marionette.Renderer.render;
+Backbone.Marionette.Renderer.render = function(template, data){
+    if (typeof template === 'string') {
+        return origRender.apply(Backbone.Marionette.Renderer, arguments);
+    } else {
+        var render = $.Deferred();
+        render.resolve(template(data));
+        return render.promise();
+    }
+};
+
 var viewHelpers = {
     getAddress: function(addressType){
         var address = _.find(this.addresses, function(addr){
