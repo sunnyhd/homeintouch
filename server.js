@@ -52,6 +52,7 @@ app.post('/api/commands', media.commands.create);
 app.get('/api/movies', media.movies.index);
 app.get('/api/artists', media.artists.index);
 app.get('/api/artists/:artist', media.artists.show);
+app.get('/api/albums/:album', media.albums.show);
 app.get('/api/playlists', media.playlists.index);
 app.get('/api/playlists/:playlist/items', media.playlistitems.index);
 app.post('/api/playlists/:playlist/items', media.playlistitems.create);
