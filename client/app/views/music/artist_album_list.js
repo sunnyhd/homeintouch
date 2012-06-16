@@ -6,23 +6,13 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     
     itemView: AlbumItemView,
 
-    events: {
-        'click .prev': 'prevPage',
-        'click .next': 'nextPage'
+    initialize: function() {
+        this.collection = this.model.albums;
+        this.bindTo(this.model, 'change', this.render, this);
     },
     
     appendHtml: function(cv, iv) {
         this.$('.albums').append(iv.el);
-    },
-
-    prevPage: function(e) {
-        e.preventDefault();
-        this.collection.prevPage();
-    },
-
-    nextPage: function(e) {
-        e.preventDefault();
-        this.collection.nextPage();
     }
     
 });

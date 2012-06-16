@@ -4,9 +4,17 @@ module.exports = Backbone.Model.extend({
     
     idAttribute: 'artistid',
 
+    urlRoot: '/api/artists',
+
     initialize: function() {
         this.albums = new Albums();
-        this.albums.url = '/api/artists/' + this.id + '/albums';
+    },
+
+    parse: function(res) {
+        this.albums || (this.albums = new Albums());
+        this.albums.reset(res.albums);
+        delete res.albums;
+        return res;
     }
 
 });

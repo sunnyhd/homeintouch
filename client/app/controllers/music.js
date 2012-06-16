@@ -11,9 +11,9 @@ exports.showArtistList = function() {
     return artists;
 };
 
-exports.showArtistAlbums = function(artistid) {
+exports.showArtistAlbumList = function(artistid) {
     var artist = new Artist({ artistid: artistid });
-    var view = new ArtistAlbumListView({ collection: artist.albums });
+    var view = new ArtistAlbumListView({ model: artist });
     app.main.show(view);
-    return artist.albums;
+    return artist;
 };
