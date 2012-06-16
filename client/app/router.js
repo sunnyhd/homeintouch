@@ -10,40 +10,53 @@ module.exports = Backbone.Router.extend({
         'artists/:artistid': 'artistAlbums'
     },
 
+    handlers: {
+        home: function() {
+            var home = this.app.controller('homes').showCurrent();
+            var floor = this.app.controller('floors').showFloors(home);
+        },
+
+        players: function() {
+            this.app.controller('players').showPlayers();
+        },
+
+        playlists: function() {
+            this.app.controller('playlists').showPlaylists();
+        },
+        
+        movies: function() {
+            this.app.controller('movies').showMovieList();
+            this.app.controller('movies').movies.fetch();
+        },
+
+        artists: function() {
+            this.app.controller('music').showArtistList().fetch();
+        },
+
+        artistAlbums: function(artistid) {
+            this.app.controller('music').showArtistAlbums(artistid).fetch();
+        }
+    },
+
+    constructor: function() {
+        var self = this;
+
+        _.each(this.handlers, function(handler, method) {
+            self[method] = function() {
+                self.beforeFilter();
+                return handler.apply(self, arguments);
+            };
+        });
+
+        Backbone.Router.prototype.constructor.apply(this, arguments);
+    },
+
     initialize: function(options) {
         this.app = options.app;
     },
-    
-    home: function() {
-        this.app.closeRegions();
-        var home = this.app.controller('homes').showCurrent();
-        var floor = this.app.controller('floors').showFloors(home);
-    },
 
-    players: function() {
+    beforeFilter: function() {
         this.app.closeRegions();
-        this.app.controller('players').showPlayers();
-    },
-
-    playlists: function() {
-        this.app.closeRegions();
-        this.app.controller('playlists').showPlaylists();
-    },
-    
-    movies: function() {
-        this.app.closeRegions();
-        this.app.controller('movies').showMovieList();
-        this.app.controller('movies').movies.fetch();
-    },
-
-    artists: function() {
-        this.app.closeRegions();
-        this.app.controller('music').showArtistList().fetch();
-    },
-
-    artistAlbums: function(artistid) {
-        this.app.closeRegions();
-        this.app.controller('music').showArtistAlbums(artistid).fetch();
     }
     
 });
