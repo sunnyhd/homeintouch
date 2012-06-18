@@ -1,13 +1,14 @@
 var app = require('app');
 var Players = require('collections/players');
-var mediaViews = require('views/media');
+var PlayerTabsListView = require('views/music/player_tabs_list');
+var PlayerView = require('views/music/player');
 
 var players = exports.players = new Players();
 
 exports.showPlayers = function() {
     app.main.close();
 
-    var view = new mediaViews.PlayersLayout({ collection: players });
+    var view = new PlayerTabsListView({ collection: players });
     app.subnav.show(view);
 
     players.fetch().then(function() {
@@ -48,7 +49,7 @@ exports.shutdown = function() {
 
 exports.players.on('select', function(player) {
     if (player) {
-        var view = new mediaViews.PlayerView({ model: player });
+        var view = new PlayerView({ model: player });
         app.main.show(view);
 
         player.fetch();

@@ -1,0 +1,16 @@
+{{ item.label }}
+<br>
+{{ currentTime }} / {{ totalTime }}
+<br>
+
+<a class="stop" href="#">Stop</a>
+{{#if playing}}
+    <a class="pause" href="#">Pause</a>
+{{else}}
+    <a class="play" href="#">Play</a>
+{{/if}}
+<br>
+
+{{#if thumbnail}}
+  <img src="{{ thumbnail }}">
+{{/if}}
