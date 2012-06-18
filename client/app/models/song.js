@@ -2,7 +2,7 @@ var Playable = require('models/playable');
 
 module.exports = Backbone.Model.extend({
 
-    idAttribtue: 'songid',
+    idAttribute: 'songid',
 
     play: function() {
         var playable = new Playable({ item: { file: this.get('file') }});
