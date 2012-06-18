@@ -1,0 +1,3 @@
+{{ label }}
+<a class="play" href="#">Play</a>
+<a class="remove" href="#">Remove</a>
