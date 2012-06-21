@@ -21,7 +21,7 @@ app.configure(function() {
   app.use(express.bodyParser());
 
   app.get('/application.js', client.assets.createServer());
-  app.use(express.static(__dirname + "/public/"));
+  app.use(express.static(__dirname + '/public/'));
 
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
@@ -29,7 +29,7 @@ app.configure(function() {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
-io.set("log level", 2);
+io.set('log level', 2);
 
 // Routes
 // ---------------
@@ -67,18 +67,18 @@ app.del('/api/players/:player', media.players.destroy);
 // Notifications
 // ---------------
 
-io.sockets.on("connection", function (socket) {
-  socket.on("eib:set", eib.set);
-  socket.on("eib:get", eib.get);
+io.sockets.on('connection', function (socket) {
+  socket.on('eib:set', eib.set);
+  socket.on('eib:get', eib.get);
 });
 
-eib.on("address", function(id, value) {
-  console.log("%s is now %s", id, value);
-  io.sockets.emit("eib:address", id, value);
+eib.on('address', function(id, value) {
+  console.log('eib:address', id, value);
+  io.sockets.emit('eib:address', id, value);
 });
 
 xbmc.on('notification', function(data) {
-  console.log('xbmc:', data);
+  console.log('xbmc:notification', JSON.stringify(data));
   io.sockets.emit('xbmc:notification', data);
 });
 
@@ -90,5 +90,5 @@ eib.connect()
 xbmc.connect()
 
 app.listen(hosts.web.port, function() {
-  console.log("now listening on %s...", hosts.web.port);
+  console.log('now listening on %s...', hosts.web.port);
 });
