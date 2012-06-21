@@ -1,5 +1,6 @@
 var app = require('app');
 var Players = require('collections/players');
+var Player = require('models/player');
 var PlayerTabsListView = require('views/players/player_tabs_list');
 var PlayerView = require('views/players/player');
 
@@ -29,7 +30,12 @@ exports.selectPlayer = function(player, options) {
 
 exports.stopPlayer = function(player) {
     player.destroy();
-    exports.selectPlayer(null);
+
+    var selected = players.getSelected();
+
+    if (selected && selected.id === player.id) {
+        exports.selectPlayer(null);
+    }
 };
 
 exports.pausePlayer = function(player) {
@@ -58,5 +64,33 @@ exports.players.on('select', function(player) {
         player.run();
     } else {
         app.main.close();
+    }
+});
+
+app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
+    var player = players.get(data.player.playerid);
+
+    if (player) {
+        // Set player speed
+        player.set('speed', data.player.speed);
+    } else {
+        // Fetch player
+        var player = new Player({ playerid: data.player.playerid });
+
+        player.fetch().then(function() {
+            players.add(player);
+        });
+    }
+});
+
+app.vent.on('xbmc:player:onstop', function(data) {
+    // TODO: Can there be more than 1 player?
+    // Why doesn't the data include a playerid
+
+    var player = players.getSelected();
+
+    if (player) {
+        players.remove(player);
+        players.select(null);
     }
 });

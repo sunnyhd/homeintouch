@@ -4,7 +4,7 @@ module.exports = Backbone.Model.extend({
     
     idAttribute: 'playerid',
 
-    rootUrl: '/api/players',
+    urlRoot: '/api/players',
 
     defaults: {
         item: {

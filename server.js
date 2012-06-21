@@ -79,6 +79,7 @@ eib.on("address", function(id, value) {
 
 xbmc.on('notification', function(data) {
   console.log('xbmc:', data);
+  io.sockets.emit('xbmc:notification', data);
 });
 
 // Bootstrap

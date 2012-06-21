@@ -9,9 +9,9 @@ app.eibdToDecimal = function (n){return (n - 0x800) / 0x32 };
 app.decimalToEibd = function (n){return n * 0x32 + 0x800 };
 
 app.addRegions({
-    dropdown: "#dropdown",
-    subnav: "#subnav",
-    main: "#main-content",
+    dropdown: '#dropdown',
+    subnav: '#subnav',
+    main: '#main-content',
     modal: ModalManager
 });
 
@@ -22,12 +22,12 @@ app.closeRegions = function() {
     app.modal.close();
 };
 
-app.vent.on("device:read", function(address){
-    socket.emit("eib:get", address);
+app.vent.on('device:read', function(address){
+    socket.emit('eib:get', address);
 });
 
-app.vent.on("device:write", function(address, value){
-    socket.emit("eib:set", address, value);
+app.vent.on('device:write', function(address, value){
+    socket.emit('eib:set', address, value);
 });
 
 var controllers = {};
@@ -63,21 +63,27 @@ app.addInitializer(function() {
     // Bind socket events
     socket = io.connect();
 
-    socket.on("connect", function() {
-        app.vent.trigger("socket:connected");
+    socket.on('connect', function() {
+        app.vent.trigger('socket:connected');
     });
 
-    socket.on("disconnect", function() {
-        app.vent.trigger("socket:disconnected");
+    socket.on('disconnect', function() {
+        app.vent.trigger('socket:disconnected');
     });
 
-    socket.on("eib:address", function(id, value) {
-        console.log("address: ", id, value);
-        app.vent.trigger("address", id, value);
+    socket.on('error', function(err){
+        console.log('socket error:', err);
     });
 
-    socket.on("error", function(err){
-        console.log("ERROR: ", err);
+    socket.on('eib:address', function(id, value) {
+        console.log('address: ', id, value);
+        app.vent.trigger('address', id, value);
+    });
+
+    socket.on('xbmc:notification', function(data) {
+        var method = data.method.split('.');
+        var e = ['xbmc', method[0].toLowerCase(), method[1].toLowerCase()].join(':');
+        app.vent.trigger(e, data.params.data);
     });
 });
 
