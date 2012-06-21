@@ -7,14 +7,14 @@ module.exports = function(options) {
 
     this.parse = function(res) {
         // Note: XBMC is returning 1 more than the real total for some reason
-        this.paging.total = res.limits.total - 1;
+        this.paging.total = res.limits.total;
         this.paging.pages = Math.ceil(this.paging.total / this.paging.count);
 
         return res[this.paging.key];
     };
 
     this.fetch = function(options) {
-        var start = (this.paging.page - 1) * this.paging.count + 1;
+        var start = (this.paging.page - 1) * this.paging.count;
         var end = start + this.paging.count;
 
         options || (options = {});
