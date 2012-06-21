@@ -1,7 +1,7 @@
 var app = require('app');
 var Players = require('collections/players');
-var PlayerTabsListView = require('views/music/player_tabs_list');
-var PlayerView = require('views/music/player');
+var PlayerTabsListView = require('views/players/player_tabs_list');
+var PlayerView = require('views/players/player');
 
 var players = exports.players = new Players();
 
@@ -35,7 +35,9 @@ exports.stopPlayer = function(player) {
 exports.pausePlayer = function(player) {
     player.togglePlaying();
 
-    player.playPauseCommand().send().then(function() {
+    var command = player.playPauseCommand();
+
+    command.send().then(function() {
         player.set('speed', command.get('speed'));
     });
 };

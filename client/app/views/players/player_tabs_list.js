@@ -1,9 +1,9 @@
 var playersController = require('controllers/players');
-var PlayerTabsItemView = require('views/music/player_tabs_item');
+var PlayerTabsItemView = require('views/players/player_tabs_item');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
 
-    template: require('templates/music/player_tabs_list'),
+    template: require('templates/players/player_tabs_list'),
 
     itemView: PlayerTabsItemView,
 

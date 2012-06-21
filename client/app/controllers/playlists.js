@@ -1,11 +1,12 @@
 var app = require('app');
 var Playlists = require('collections/playlists');
-var mediaViews = require('views/media');
+var PlaylistListView = require('views/playlists/playlist_list');
+var PlaylistTabsListView = require('views/playlists/playlist_tabs_list');
 
 var playlists = exports.playlists = new Playlists();
 
 exports.showPlaylists = function() {
-    var view = new mediaViews.PlaylistsLayout({ collection: playlists });
+    var view = new PlaylistTabsListView({ collection: playlists });
     app.subnav.show(view);
 
     playlists.fetch().then(function() {
@@ -30,6 +31,6 @@ exports.playlists.on('select', function(playlist) {
 // ---------------
 
 var showPlaylist = function(playlist) {
-    var view = new mediaViews.PlaylistLayout({ model: playlist, collection: playlist.items });
+    var view = new PlaylistListView({ model: playlist, collection: playlist.items });
     app.main.show(view);
 };

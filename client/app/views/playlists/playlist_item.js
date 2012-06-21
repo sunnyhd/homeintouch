@@ -4,7 +4,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     className: 'playlist-item',
 
-    template: require('templates/music/playlist_item'),
+    template: require('templates/playlists/playlist_item'),
 
     events: {
         'click .play': 'play',

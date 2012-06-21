@@ -4,9 +4,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     tagName: 'li',
 
-    template: require('templates/music/player_tabs_item'),
+    template: require('templates/players/player_tabs_item'),
 
-    events: {
+    events: {   
         'click a': 'playerClicked'
     },
 

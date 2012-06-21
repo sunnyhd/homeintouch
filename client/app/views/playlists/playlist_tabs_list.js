@@ -1,8 +1,8 @@
-var PlaylistTabsItemView = require('views/music/playlist_tabs_item');
+var PlaylistTabsItemView = require('views/playlists/playlist_tabs_item');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
 
-    template: require('templates/music/playlist_tabs_list'),
+    template: require('templates/playlists/playlist_tabs_list'),
 
     itemView: PlaylistTabsItemView,
 
