@@ -8,25 +8,24 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     itemView: PlayerTabsItemView,
 
     initialize: function() {
-        this.bindTo(this.collection, 'activate deactivate', this.render, this);
+        this.bindTo(this.collection, 'activate', this.activated, this);
+        this.bindTo(this.collection, 'deactivate', this.deactivated, this);
     },
 
     appendHtml: function(cv, iv) {
         this.$('.players').append(iv.el);
     },
 
-    onRender: function() {
-        this.$('.players li').removeClass('active');
-
-        var active = this.collection.getActive();
-
-        if (active) {
-            this.$('.players li[data-playerid=' + active.id + ']').addClass('active');
-        }
-    },
-
     onClose: function() {
         playersController.close();
+    },
+
+    activated: function(player) {
+        this.$('.players li[data-playerid=' + player.id + ']').addClass('active');
+    },
+
+    deactivated: function(player) {
+        this.$('.players li[data-playerid=' + player.id + ']').removeClass('active');
     }
 
 });

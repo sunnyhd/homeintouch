@@ -12,7 +12,9 @@ exports.showPlayers = function() {
     app.subnav.show(view);
     showing = true;
 
-    players.fetch();
+    players.fetch().then(function() {
+        players.activate();
+    });
 };
 
 exports.showPlayer = function(player) {
@@ -42,6 +44,18 @@ exports.pausePlayer = function(player) {
     });
 };
 
+exports.addPlayer = function(player) {
+    players.add(player);
+    promote(player);
+};
+
+exports.removePlayer = function(player) {
+    players.remove(player);
+    player.trigger('destroy');
+    players.deactivate(player);
+    promote(players.getDefault());
+};
+
 exports.close = function() {
     var player = players.getActive();
 
@@ -54,19 +68,6 @@ exports.close = function() {
 
 // Events
 // ---------------
-
-players.on('add', function(player) {
-    promote(player);
-});
-
-players.on('remove', function(player) {
-    players.deactivate(player);
-    promote(players.getDefault());
-});
-
-players.on('reset', function() {
-    players.activate();
-});
 
 players.on('activate', function(player) {
     player.run();
@@ -93,7 +94,7 @@ app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
         var player = new Player({ playerid: data.player.playerid });
 
         player.fetch().then(function() {
-            players.add(player);
+            exports.addPlayer(player);
         });
     }
 });
@@ -105,8 +106,7 @@ app.vent.on('xbmc:player:onstop', function(data) {
     var player = players.getActive();
 
     if (player) {
-        players.remove(player);
-        player.trigger('destroy');
+        exports.removePlayer(player);
     }
 });
 
