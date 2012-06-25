@@ -13,12 +13,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
         this.bindTo(this.model, 'change', this.render, this);
+        this.bindTo(this.model, 'destroy', this.close, this);
     },
 
     stopPlayer: function(e) {
         e.preventDefault();
         playersController.stopPlayer(this.model);
-        this.remove();
+        this.close();
     },
 
     pausePlayer: function(e) {

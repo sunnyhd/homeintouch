@@ -5,37 +5,31 @@ var PlayerTabsListView = require('views/players/player_tabs_list');
 var PlayerView = require('views/players/player');
 
 var players = exports.players = new Players();
+var showing = false;
 
 exports.showPlayers = function() {
-    app.main.close();
-
     var view = new PlayerTabsListView({ collection: players });
     app.subnav.show(view);
+    showing = true;
 
-    players.fetch().then(function() {
-        var player = players.getSelected() || players.getDefault();
-        exports.selectPlayer(player);
-    });
+    players.fetch();
 };
 
-exports.selectPlayer = function(player, options) {
-    var current = players.getSelected();
+exports.showPlayer = function(player) {
+    var view = new PlayerView({ model: player });
+    app.main.show(view);
 
-    if (current) {
-        current.shutdown();
-    }
+    player.fetch();
+};
 
-    players.select(player, options);
+exports.activatePlayer = function(player) {
+    players.activate(player);
 };
 
 exports.stopPlayer = function(player) {
+    players.deactivate(player);
     player.destroy();
-
-    var selected = players.getSelected();
-
-    if (selected && selected.id === player.id) {
-        exports.selectPlayer(null);
-    }
+    players.activate();
 };
 
 exports.pausePlayer = function(player) {
@@ -48,33 +42,54 @@ exports.pausePlayer = function(player) {
     });
 };
 
-exports.shutdown = function() {
-    exports.selectPlayer(null, { silent: true });
+exports.close = function() {
+    var player = players.getActive();
+
+    if (player) {
+        players.deactivate(player);
+    }
+
+    showing = false;
 };
 
 // Events
 // ---------------
 
-exports.players.on('select', function(player) {
-    if (player) {
-        var view = new PlayerView({ model: player });
-        app.main.show(view);
+players.on('add', function(player) {
+    promote(player);
+});
 
-        player.fetch();
-        player.run();
-    } else {
-        app.main.close();
+players.on('remove', function(player) {
+    players.deactivate(player);
+    promote(players.getDefault());
+});
+
+players.on('reset', function() {
+    players.activate();
+});
+
+players.on('activate', function(player) {
+    player.run();
+
+    if (showing) {
+        exports.showPlayer(player);
     }
 });
+
+players.on('deactivate', function(player) {
+    player.shutdown();
+});
+
+// Notifications
 
 app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
     var player = players.get(data.player.playerid);
 
     if (player) {
-        // Set player speed
+        // Existing player, set speed
         player.set('speed', data.player.speed);
     } else {
-        // Fetch player
+        // Fetch new player, add to collection
         var player = new Player({ playerid: data.player.playerid });
 
         player.fetch().then(function() {
@@ -87,10 +102,23 @@ app.vent.on('xbmc:player:onstop', function(data) {
     // TODO: Can there be more than 1 player?
     // Why doesn't the data include a playerid
 
-    var player = players.getSelected();
+    var player = players.getActive();
 
     if (player) {
         players.remove(player);
-        players.select(null);
+        player.trigger('destroy');
     }
 });
+
+// Helpers
+// ---------------
+
+// Activate the given player only if there
+// is not already an active player.
+function promote(player) {
+    var active = players.getActive();
+
+    if (!active) {
+        players.activate(player);
+    }
+}

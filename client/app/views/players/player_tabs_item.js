@@ -11,12 +11,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     onRender: function() {
-        this.$el.attr('data-type', this.model.get('type'));
+        this.$el.attr('data-playerid', this.model.id);
     },
 
     playerClicked: function(e) {
         e.preventDefault();
-        playersController.selectPlayer(this.model);
+        playersController.activatePlayer(this.model);
     }
 
 });

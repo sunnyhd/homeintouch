@@ -10,17 +10,34 @@ module.exports = Backbone.Collection.extend({
         return this.at(0);
     },
 
-    select: function(player, options) {
-        options || (options = {});
-        this.selected = player;
-
-        if (!options.silent) {
-            this.trigger('select', player);
-        }
+    getActive: function() {
+        return this.active;
     },
 
-    getSelected: function() {
-        return this.selected;
+    activate: function(player) {
+        if (!player) {
+            player = this.getDefault();
+        }
+
+        if (this.active) {
+            this.deactivate(this.active);
+        }
+
+        if (player) {
+            this.active = player;
+            this.trigger('activate', player);
+        }
+
+        return player;
+    },
+
+    deactivate: function(player) {
+        var active = this.getActive();
+
+        if (active && active.id === player.id) {
+            this.active = null;
+            this.trigger('deactivate', player);
+        }
     }
 
 });

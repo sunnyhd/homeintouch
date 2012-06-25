@@ -7,8 +7,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     itemView: PlayerTabsItemView,
 
-    initialize: function(){
-        this.bindTo(this.collection, 'select', this.render, this);
+    initialize: function() {
+        this.bindTo(this.collection, 'activate deactivate', this.render, this);
     },
 
     appendHtml: function(cv, iv) {
@@ -16,18 +16,17 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     },
 
     onRender: function() {
-        var selected = this.collection.getSelected();
+        this.$('.players li').removeClass('active');
 
-        if (selected) {
-            var type = selected.get('type');
+        var active = this.collection.getActive();
 
-            this.$('.players li').removeClass('active');
-            this.$('.players li[data-type=' + type + ']').addClass('active');
+        if (active) {
+            this.$('.players li[data-playerid=' + active.id + ']').addClass('active');
         }
     },
 
     onClose: function() {
-        playersController.shutdown();
+        playersController.close();
     }
 
 });
