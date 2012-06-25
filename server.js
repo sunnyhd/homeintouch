@@ -49,6 +49,7 @@ app.del('/api/homes/:home', function(req, res) {
 });
 
 app.post('/api/commands', media.commands.create);
+app.get('/api/volume', media.volume.show);
 app.get('/api/movies', media.movies.index);
 app.get('/api/artists', media.artists.index);
 app.get('/api/artists/:artist', media.artists.show);
