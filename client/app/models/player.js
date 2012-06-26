@@ -112,6 +112,15 @@ module.exports = Backbone.Model.extend({
             method: 'Player.PlayPause',
             params: { playerid: this.id }
         });
+    },
+
+    seekCommand: function(value) {
+        value = Math.round(value * 100);
+
+        return new XbmcCommand({
+            method: 'Player.Seek',
+            params: { playerid: this.id, value: value }
+        });
     }
 
 });

@@ -51,12 +51,14 @@ app.addInitializer(function() {
     app.controller('players');
     app.controller('playlists');
     app.controller('movies');
+    app.controller('music');
 });
 
 app.addInitializer(function(options) {
     // Load bootstrapped data
     app.controller('device_types').deviceTypes.reset(options.deviceTypes);
     app.controller('homes').homes.reset(options.homes);
+    app.controller('players').ids = options.players;
 });
 
 app.addInitializer(function() {
@@ -88,6 +90,12 @@ app.addInitializer(function() {
 });
 
 app.addInitializer(function() {
+    $('a').live('click', function(e) {
+        if ($(this).attr('href') === '#') {
+            e.preventDefault();
+        }
+    });
+
     // Start router
     app.router = new Router({ app: app });
     Backbone.history.start();

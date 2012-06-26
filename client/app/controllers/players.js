@@ -7,6 +7,12 @@ var PlayerView = require('views/players/player');
 var players = exports.players = new Players();
 var showing = false;
 
+exports.ids = {};
+
+exports.getPlayerId = function(type) {
+    return exports.ids[type];
+};
+
 exports.showPlayers = function() {
     var view = new PlayerTabsListView({ collection: players });
     app.subnav.show(view);
@@ -84,6 +90,8 @@ players.on('deactivate', function(player) {
 // Notifications
 
 app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
+    if (!showing) return;
+
     var player = players.get(data.player.playerid);
 
     if (player) {
@@ -100,6 +108,8 @@ app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
 });
 
 app.vent.on('xbmc:player:onstop', function(data) {
+    if (!showing) return;
+    
     // TODO: Can there be more than 1 player?
     // Why doesn't the data include a playerid
 

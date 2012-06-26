@@ -8,6 +8,7 @@
     "url": "git://github.com/jed/homeintouch.git"
   },
   "dependencies": {
+    "async": "0.1.22",
     "carrier": "0.1.7",
     "express": "2.5.9",
     "request": "2.9.x",

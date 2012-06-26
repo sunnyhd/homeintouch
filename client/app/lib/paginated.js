@@ -1,7 +1,7 @@
 module.exports = function(options) {
     this.paging = {
         page: 1,
-        count: 20,
+        count: 5,
         key: options.key
     };
 

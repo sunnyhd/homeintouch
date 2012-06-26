@@ -1,4 +1,6 @@
+var app = require('app');
 var moviesController = require('controllers/movies');
+var MovieDetailView = require('views/movies/movie_detail');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -9,18 +11,14 @@ module.exports = Backbone.Marionette.ItemView.extend({
     template: require('templates/movies/movie_item'),
 
     events: {
-        'click a.add-to-playlist': 'addToPlaylist',
-        'click a.play': 'play'
+        'click a.show': 'show'
     },
 
-    addToPlaylist: function(e) {
+    show: function(e) {
         e.preventDefault();
-        moviesController.addToPlaylist(this.model);
-    },
 
-    play: function(e) {
-        e.preventDefault();
-        this.model.play();
+        var view = new MovieDetailView({ model: this.model });
+        app.modal.show(view);
     }
     
 });

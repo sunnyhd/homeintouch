@@ -1,3 +1,4 @@
+var async = require('async');
 var express = require('express');
 var socket = require('socket.io');
 var settings = require('./data/settings');
@@ -35,7 +36,27 @@ io.set('log level', 2);
 // ---------------
 
 app.get('/', function(req, res) {
-  res.render('index', { data: dataStore.getAll() });
+  var funcs = {};
+
+  funcs.players = function(callback) {
+    xbmc.rpc('Playlist.GetPlaylists', function(err, results) {
+      if (err) return callback(err);
+      var players = {};
+
+      results.forEach(function(playlist) {
+        players[playlist.type] = playlist.playlistid;
+      });
+
+      callback(null, players);
+    });
+  };
+
+  async.parallel(funcs, function(err, results) {
+    res.render('index', {
+      data: dataStore.getAll(),
+      players: results.players
+    });
+  });
 });
 
 app.put('/api/homes/:home', function(req, res) {

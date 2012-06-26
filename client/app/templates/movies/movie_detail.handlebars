@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <a class="close" href="#">x</a>
+    <h2>{{ label }}</h2>
+</div>
+
+<div class="modal-body">
+    <img src="{{ thumbnail }}" width="100px">
+</div>
+
+<div class="modal-footer">
+    <a class="playlist btn" href="#">Add to Playlist</a>
+    <a class="play btn" href="#">Play</a>
+
+    {{#if resume}}
+        <a class="resume btn">Resume</a>
+    {{/if}}
+</div>

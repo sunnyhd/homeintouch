@@ -73,7 +73,8 @@ html(lang='en')
         var app = require('app');
         app.start({
           homes: !{JSON.stringify(data.homes)},
-          deviceTypes: !{JSON.stringify(data.deviceTypes)}
+          deviceTypes: !{JSON.stringify(data.deviceTypes)},
+          players: !{JSON.stringify(players)}
         });
       });
 
