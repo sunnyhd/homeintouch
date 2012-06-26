@@ -1,10 +1,8 @@
 var app = require('app');
 var Movies = require('collections/movies');
-var Playlists = require('collections/playlists');
 var Player = require('models/player');
 var MovieListView = require('views/movies/movie_list');
-var PlaylistsAddModalView = require('views/playlists/playlist_add_modal');
-var playersController = require('controllers/players');
+var playlistsController = require('controllers/playlists');
 
 exports.movies = new Movies();
 
@@ -29,19 +27,5 @@ exports.resume = function(movie) {
 };
 
 exports.addToPlaylist = function(movie) {
-    var playlists = new Playlists();
-    playlists.fetch();
-
-    var form = new PlaylistsAddModalView({ collection: playlists });
-    form.on("save", function(playlistid) {
-        var playlist = playlists.get(playlistid);
-
-        if (playlist) {
-            playlist.items.create({ movieid: movie.id });
-        } else {
-            alert('Invalid playlist');
-        }
-    });
-
-    app.modal.show(form);
+    playlistsController.addToPlaylist('video', { movieid: movie.id });
 };

@@ -18,6 +18,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     playlist: function() {
         moviesController.addToPlaylist(this.model);
+        this.close();
     },
 
     resume: function() {

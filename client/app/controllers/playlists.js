@@ -1,7 +1,9 @@
 var app = require('app');
 var Playlists = require('collections/playlists');
+var Playlist = require('models/playlist');
 var PlaylistListView = require('views/playlists/playlist_list');
 var PlaylistTabsListView = require('views/playlists/playlist_tabs_list');
+var playersController = require('controllers/players');
 
 var playlists = exports.playlists = new Playlists();
 
@@ -17,6 +19,12 @@ exports.showPlaylists = function() {
 
 exports.selectPlaylist = function(playlist) {
     playlists.select(playlist);
+};
+
+exports.addToPlaylist = function(type, options) {
+    var playlistid = playersController.getPlayerId(type);
+    var playlist = new Playlist({ playlistid: playlistid });
+    return playlist.items.create(options);
 };
 
 // Events

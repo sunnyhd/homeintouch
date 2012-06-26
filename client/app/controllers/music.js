@@ -1,7 +1,6 @@
 var app = require('app');
 var Albums = require('collections/albums');
 var Artists = require('collections/artists');
-var Playlists = require('collections/playlists');
 var Songs = require('collections/songs');
 var Album = require('models/album');
 var Artist = require('models/artist');
@@ -10,7 +9,7 @@ var AlbumListView = require('views/music/album_list');
 var SongListView = require('views/music/song_list');
 var AlbumSongListView = require('views/music/album_song_list');
 var ArtistAlbumListView = require('views/music/artist_album_list');
-var PlaylistsAddModalView = require('views/playlists/playlist_add_modal');
+var playlistsController = require('controllers/playlists');
 
 exports.showArtistList = function() {
     var artists = new Artists();
@@ -48,19 +47,5 @@ exports.showAlbumSongList = function(albumid) {
 };
 
 exports.addSongToPlaylist = function(song) {
-    var playlists = new Playlists();
-    playlists.fetch();
-
-    var form = new PlaylistsAddModalView({ collection: playlists });
-    form.on("save", function(playlistid) {
-        var playlist = playlists.get(playlistid);
-
-        if (playlist) {
-            playlist.items.create({ songid: song.id });
-        } else {
-            alert('Invalid playlist');
-        }
-    });
-
-    app.modal.show(form);
+    playlistsController.addToPlaylist('audio', { songid: song.id });
 };
