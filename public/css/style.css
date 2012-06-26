@@ -140,3 +140,8 @@ label.pull-right{
 .movie img {
   width: 200px;
 }
+
+.modal .cover {
+  margin: 0 20px 20px 0;
+  width: 150px;
+}

@@ -101,6 +101,14 @@ app.addInitializer(function() {
     Backbone.history.start();
 });
 
+// Handlebars
+// ---------------
+
+Handlebars.registerHelper('toFixed', function(value, n) {
+    n || (n = 0);
+    return value.toFixed(n);
+});
+
 // Extensions
 // ---------------
 

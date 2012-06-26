@@ -4,14 +4,26 @@
 </div>
 
 <div class="modal-body">
-    <img src="{{ thumbnail }}" width="100px">
+    <img src="{{ thumbnail }}" class="cover pull-left">
+    <ul>
+        <li><strong>Year</strong>: {{ year }}</li>
+        <li><strong>Genre</strong>: {{ genre }}</li>
+        <li><strong>Duration</strong>: {{ runtime }} minutes</li>
+        <li><strong>Director</strong>: {{ director }}</li>
+        <li><strong>Studio</strong>: {{ studio }}</li>
+        <li><strong>Rating</strong>: {{ toFixed rating 2 }}</li>
+        <li><strong>Parental Rating</strong>: {{ mpaa }}</li>
+        <li><strong>Plot</strong>: {{ plot }}</li>
+    </ul>
 </div>
 
 <div class="modal-footer">
     <a class="playlist btn" href="#">Add to Playlist</a>
-    <a class="play btn" href="#">Play</a>
+    <a class="play btn" href="#">Play Movie</a>
 
     {{#if resume}}
         <a class="resume btn">Resume</a>
     {{/if}}
+
+    <a class="btn" href="http://www.imdb.com/title/{{ imdbnumber }}" target="_blank">IMDB</a>
 </div>
