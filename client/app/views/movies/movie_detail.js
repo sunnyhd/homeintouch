@@ -8,7 +8,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
         'click .close': 'close',
         'click .play': 'play',
         'click .playlist': 'playlist',
-        'click .resume': 'resume'
+        'click .resume': 'resume',
+        'click .trailer': 'trailer'
     },
 
     play: function() {
@@ -23,6 +24,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     resume: function() {
         moviesController.resume(this.model);
+        this.close();
+    },
+
+    trailer: function() {
+        this.model.playTrailer();
         this.close();
     }
 

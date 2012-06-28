@@ -10,6 +10,11 @@ module.exports = Backbone.Model.extend({
         return playable.save();
     },
 
+    playTrailer: function() {
+        var playable = new Playable({ item: { file: this.get('trailer') }});
+        return playable.save();
+    },
+
     thumbnail: function() {
         return 'http://localhost:8080/vfs/' + this.get('thumbnail');
     },
