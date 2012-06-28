@@ -1,3 +1,4 @@
+var helpers = require('lib/helpers');
 var XbmcCommand = require('models/xbmc_command');
 
 module.exports = Backbone.Model.extend({
@@ -39,11 +40,11 @@ module.exports = Backbone.Model.extend({
     },
 
     currentTime: function() {
-        return formatTime(this.get('time'));
+        return helpers.formatTime(this.get('time'));
     },
 
     totalTime: function() {
-        return formatTime(this.get('totaltime'));
+        return helpers.formatTime(this.get('totaltime'));
     },
 
     thumbnail: function() {
@@ -74,7 +75,7 @@ module.exports = Backbone.Model.extend({
             if (!time) return;
 
             time.seconds++;
-            self.set('time', normalizeTime(time));
+            self.set('time', helpers.normalizeTime(time));
         }, interval);
     },
 
@@ -124,37 +125,3 @@ module.exports = Backbone.Model.extend({
     }
 
 });
-
-// Helpers
-// ---------------
-
-function normalizeTime(time) {
-    if (time.seconds >= 60) {
-        time.minutes += Math.floor(time.seconds / 60);
-        time.seconds = time.seconds % 60;
-    }
-
-    if (time.minutes >= 60) {
-        time.hours += Math.floor(time.minutes / 60);
-        time.minutes = time.minutes % 60;
-    }
-
-    return time;
-}
-
-function formatTime(time) {
-    if (!time) return '';
-
-    var components = [
-        zeroPad(time.hours, 2),
-        zeroPad(time.minutes, 2),
-        zeroPad(time.seconds, 2)
-    ];
-
-    return components.join(':');
-}
-
-function zeroPad(num, places) {
-    var zero = places - num.toString().length + 1;
-    return Array(+(zero > 0 && zero)).join('0') + num;
-}

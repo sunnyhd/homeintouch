@@ -20,9 +20,8 @@ exports.resume = function(movie) {
     movie.play().then(function() {
         var playerid = playersController.getPlayerId('video');
         var player = new Player({ playerid: playerid });
-        var resume = movie.get('resume');
 
-        var command = player.seekCommand(resume.position / resume.total);
+        var command = player.seekCommand(movie.getResumePercentage());
         command.send();
     });
 };
