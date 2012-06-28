@@ -2,6 +2,7 @@ var app = require('app');
 var Movies = require('collections/movies');
 var Player = require('models/player');
 var MovieListView = require('views/movies/movie_list');
+var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 
 exports.movies = new Movies();
