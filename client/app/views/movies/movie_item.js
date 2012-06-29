@@ -14,9 +14,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
         'click a.show': 'show'
     },
 
-    show: function(e) {
-        e.preventDefault();
-
+    show: function() {
         var view = new MovieDetailView({ model: this.model });
         app.modal.show(view);
     }

@@ -109,6 +109,10 @@ Handlebars.registerHelper('toFixed', function(value, n) {
     return value.toFixed(n);
 });
 
+Handlebars.registerHelper('image', function(url) {
+    return 'http://localhost:8080/vfs/' + url;
+});
+
 // Extensions
 // ---------------
 
