@@ -1,6 +1,10 @@
 <a href="#albums/{{ albumid }}">{{ label }}</a>
-&mdash;
-<a href="#artists/{{ artistid }}">{{ artist }}</a>
+
+{{#if artist}}
+    &mdash;
+    <a href="#artists/{{ artistid }}">{{ artist }}</a>
+{{/if}}
+
 <br>
 <a class="add-to-playlist" href="#">Add to Playlist</a>
 &mdash;
