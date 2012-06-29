@@ -1,10 +1,10 @@
-var SongItemView = require('views/music/song_item');
+var AlbumSongItemView = require('views/music/album_song_item');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
     
     template: require('templates/music/album_song_list'),
     
-    itemView: SongItemView,
+    itemView: AlbumSongItemView,
 
     initialize: function() {
         this.collection = this.model.songs;
