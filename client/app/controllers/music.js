@@ -46,6 +46,22 @@ exports.showAlbumSongList = function(albumid) {
     return album;
 };
 
-exports.addSongToPlaylist = function(song) {
-    playlistsController.addToPlaylist('audio', { songid: song.id });
+exports.addSongToPlaylist = function(song, position) {
+    var options = { item: { songid: song.id }};
+
+    if (position !== undefined) {
+        options.position = position;
+    }
+
+    playlistsController.addToPlaylist('audio', options);
+};
+
+exports.addAlbumToPlaylist = function(album, position) {
+    var options = { item: { albumid: album.id }};
+
+    if (position !== undefined) {
+        options.position = position;
+    }
+
+    playlistsController.addToPlaylist('audio', options);
 };
