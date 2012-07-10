@@ -27,5 +27,5 @@ exports.resume = function(movie) {
 };
 
 exports.addToPlaylist = function(movie) {
-    playlistsController.addToPlaylist('video', { movieid: movie.id });
+    playlistsController.addToPlaylist('video', { item: { movieid: movie.id }});
 };
