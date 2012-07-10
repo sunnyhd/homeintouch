@@ -1,12 +1,13 @@
-var paginated = require('lib/paginated');
 var Movie = require('models/movie');
 
 var Movies = module.exports = Backbone.Collection.extend({
 
     model: Movie,
 
-    url: '/api/movies'
+    url: '/api/movies',
+
+    comparator: function(movie) {
+        return movie.get('label');
+    }
 
 });
-
-paginated.call(Movies.prototype, { key: 'movies' });

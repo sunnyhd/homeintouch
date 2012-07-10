@@ -5,7 +5,8 @@
   },
 
   "database": {
-    "path": "./data/homes.db"
+    "path": "./data/homes.db",
+    "mongodb": "mongodb://localhost:27017/hit"
   },
 
   "hosts": {

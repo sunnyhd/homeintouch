@@ -16,7 +16,8 @@
     "jade": "0.24.0",
     "jsonsp": "git://github.com/EqualMedia/node-jsonsp.git#yajl-node-0.6",
     "dirty": "0.9.6",
-    "stitch": "0.3.3"
+    "stitch": "0.3.3",
+    "mongoose": "2.7.1"
   },
   "engines": {
     "node": "*"

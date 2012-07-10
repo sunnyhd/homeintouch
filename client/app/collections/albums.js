@@ -1,12 +1,13 @@
-var paginated = require('lib/paginated');
 var Album = require('models/album');
 
 var Albums = module.exports = Backbone.Collection.extend({
 
     model: Album,
 
-    url: '/api/albums'
+    url: '/api/albums',
+
+    comparator: function(album) {
+        return album.get('label');
+    }
 
 });
-
-paginated.call(Albums.prototype, { key: 'albums' });

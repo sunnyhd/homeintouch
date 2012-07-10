@@ -1,10 +1,12 @@
 var async = require('async');
 var express = require('express');
+var mongoose = require('mongoose');
 var socket = require('socket.io');
 var settings = require('./data/settings');
 var client = require('./lib/client');
 var dataStore = require('./lib/dataStore');
 var eib = require('./lib/eib');
+var importer = require('./lib/importer');
 var media = require('./lib/media')
 var xbmc = require('./lib/xbmc');
 
@@ -35,23 +37,25 @@ io.set('log level', 2);
 // Routes
 // ---------------
 
-app.get('/', function(req, res) {
-  var funcs = {};
+app.get('/', function(req, res, next) {
+  var funcs = {
+    players: function(callback) {
+      xbmc.rpc('Playlist.GetPlaylists', function(err, results) {
+        if (err) return callback(err);
+        var players = {};
 
-  funcs.players = function(callback) {
-    xbmc.rpc('Playlist.GetPlaylists', function(err, results) {
-      if (err) return callback(err);
-      var players = {};
+        results.forEach(function(playlist) {
+          players[playlist.type] = playlist.playlistid;
+        });
 
-      results.forEach(function(playlist) {
-        players[playlist.type] = playlist.playlistid;
+        callback(null, players);
       });
-
-      callback(null, players);
-    });
+    }
   };
 
   async.parallel(funcs, function(err, results) {
+    if (err) return next(err);
+
     res.render('index', {
       data: dataStore.getAll(),
       players: results.players
@@ -85,6 +89,7 @@ app.post('/api/player', media.player.create);
 app.get('/api/players', media.players.index);
 app.get('/api/players/:player', media.players.show);
 app.del('/api/players/:player', media.players.destroy);
+app.post('/api/imports', media.importer);
 
 // Notifications
 // ---------------
@@ -108,8 +113,9 @@ xbmc.on('notification', function(data) {
 // ---------------
 
 dataStore.init(settings.database.path);
-eib.connect()
-xbmc.connect()
+mongoose.connect(settings.database.mongodb);
+eib.connect();
+xbmc.connect();
 
 app.listen(hosts.web.port, function() {
   console.log('now listening on %s...', hosts.web.port);

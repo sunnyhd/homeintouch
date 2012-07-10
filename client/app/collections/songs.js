@@ -1,4 +1,3 @@
-var paginated = require('lib/paginated');
 var Song = require('models/song');
 
 var Songs = module.exports = Backbone.Collection.extend({
@@ -8,5 +7,3 @@ var Songs = module.exports = Backbone.Collection.extend({
     url: '/api/songs'
 
 });
-
-paginated.call(Songs.prototype, { key: 'songs' });

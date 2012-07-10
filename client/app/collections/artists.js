@@ -1,12 +1,13 @@
-var paginated = require('lib/paginated');
 var Artist = require('models/artist');
 
 var Artists = module.exports = Backbone.Collection.extend({
 
     model: Artist,
 
-    url: '/api/artists'
+    url: '/api/artists',
+
+    comparator: function(artist) {
+        return artist.get('label');
+    }
 
 });
-
-paginated.call(Artists.prototype, { key: 'artists' });
