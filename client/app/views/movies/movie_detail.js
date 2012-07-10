@@ -12,6 +12,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
         'click .trailer': 'trailer'
     },
 
+    initialize: function() {
+        this.bindTo(this.model, 'change', this.render, this);
+    },
+
     play: function() {
         moviesController.play(this.model);
         this.close();

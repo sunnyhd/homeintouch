@@ -22,7 +22,12 @@ module.exports = Backbone.Model.extend({
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         data.thumbnail = this.thumbnail();
-        data.resume.time = this.getResumeTime();
+        data.resume = !!data.resume && data.resume.position > 0;
+
+        if (data.resume) {
+            data.resume = this.getResumeTime();
+        }
+
         return data;
     },
 
