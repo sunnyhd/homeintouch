@@ -90,7 +90,7 @@ app.post('/api/player', media.player.create);
 app.get('/api/players', media.players.index);
 app.get('/api/players/:player', media.players.show);
 app.del('/api/players/:player', media.players.destroy);
-app.post('/api/imports', media.importer);
+app.post('/api/imports', media.imports.create);
 
 // Notifications
 // ---------------
@@ -108,6 +108,16 @@ eib.on('address', function(id, value) {
 xbmc.on('notification', function(data) {
   console.log('xbmc:notification', JSON.stringify(data));
   io.sockets.emit('xbmc:notification', data);
+});
+
+importer.on('done', function() {
+  console.log('importer:done');
+  io.sockets.emit('importer:done');
+});
+
+importer.on('error', function(err) {
+  console.log('imporer:error', err);
+  io.sockets.emit('importer:error', err.message);
 });
 
 // Bootstrap
