@@ -9,6 +9,10 @@
     "mongodb": "mongodb://localhost:27017/hit"
   },
 
+  "images": {
+    "url": "http://localhost:8080/vfs/"
+  },
+
   "hosts": {
     "knx_read": {
       "hostname": "192.168.2.41",

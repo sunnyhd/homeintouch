@@ -17,7 +17,9 @@
     "jsonsp": "git://github.com/EqualMedia/node-jsonsp.git#yajl-node-0.6",
     "dirty": "0.9.6",
     "stitch": "0.3.3",
-    "mongoose": "2.7.1"
+    "mongoose": "2.7.1",
+    "nettle": "0.0.4",
+    "request": "2.9.203"
   },
   "engines": {
     "node": "*"

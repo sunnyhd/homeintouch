@@ -1,6 +1,7 @@
 var async = require('async');
 var express = require('express');
 var mongoose = require('mongoose');
+var nettle = require('nettle');
 var socket = require('socket.io');
 var settings = require('./data/settings');
 var client = require('./lib/client');
@@ -110,9 +111,9 @@ xbmc.on('notification', function(data) {
   io.sockets.emit('xbmc:notification', data);
 });
 
-importer.on('done', function() {
-  console.log('importer:done');
-  io.sockets.emit('importer:done');
+importer.on('done', function(time) {
+  console.log('importer:done', time);
+  io.sockets.emit('importer:done', time);
 });
 
 importer.on('error', function(err) {
