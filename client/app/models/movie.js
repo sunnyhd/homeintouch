@@ -16,7 +16,11 @@ module.exports = Backbone.Model.extend({
     },
 
     thumbnail: function() {
-        return 'http://localhost:8080/vfs/' + this.get('thumbnail');
+        var id = this.get('thumbnailid');
+
+        if (id) {
+            return '/api/images/' + this.get('thumbnailid');
+        }
     },
 
     toJSON: function() {

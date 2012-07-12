@@ -1,5 +1,9 @@
 <a class="show" href="#">
-    <img src="{{ thumbnail }}">
+    {{#if thumbnail}}
+        <img src="{{ thumbnail }}">
+    {{/if}}
+
     <br>
+    
     {{ label }}
 </a>

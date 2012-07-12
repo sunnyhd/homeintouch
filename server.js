@@ -92,6 +92,7 @@ app.get('/api/players', media.players.index);
 app.get('/api/players/:player', media.players.show);
 app.del('/api/players/:player', media.players.destroy);
 app.post('/api/imports', media.imports.create);
+app.get('/api/images/:image', media.images.show);
 
 // Notifications
 // ---------------
@@ -117,7 +118,7 @@ importer.on('done', function(time) {
 });
 
 importer.on('error', function(err) {
-  console.log('imporer:error', err);
+  console.log('importer:error', err);
   io.sockets.emit('importer:error', err.message);
 });
 
