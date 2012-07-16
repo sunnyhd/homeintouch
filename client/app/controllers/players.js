@@ -51,6 +51,30 @@ exports.pausePlayer = function(player) {
 };
 
 exports.addPlayer = function(player) {
+    var type = player.get('type');
+    var remove = [];
+
+    if (type === 'video') {
+        // Remove all other players
+        remove = players.toArray();
+    } else if (type === 'audio') {
+        // Remove audio and video players
+        remove = players.filter(function(player) {
+            var type = player.get('type');
+            return type === 'audio' || type === 'video';
+        });
+    } else if (type === 'picture') {
+        // Remove picture and video players
+        remove = players.filter(function(player) {
+            var type = player.get('type');
+            return type === 'picture' || type === 'video';
+        });
+    }
+
+    _.each(remove, function(player) {
+        exports.removePlayer(player);
+    });
+
     players.add(player);
     promote(player);
 };
