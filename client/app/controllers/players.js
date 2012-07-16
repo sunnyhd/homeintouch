@@ -133,15 +133,14 @@ app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
 
 app.vent.on('xbmc:player:onstop', function(data) {
     if (!showing) return;
-    
-    // TODO: Can there be more than 1 player?
-    // Why doesn't the data include a playerid
 
-    var player = players.getActive();
+    var remove = players.filter(function(player) {
+        return player.get('item').type === data.item.type;
+    });
 
-    if (player) {
+    _.each(remove, function(player) {
         exports.removePlayer(player);
-    }
+    });
 });
 
 // Helpers
