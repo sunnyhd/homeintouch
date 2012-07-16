@@ -91,6 +91,7 @@ app.post('/api/player', media.player.create);
 app.get('/api/players', media.players.index);
 app.get('/api/players/:player', media.players.show);
 app.del('/api/players/:player', media.players.destroy);
+app.get('/api/imports', media.imports.show);
 app.post('/api/imports', media.imports.create);
 app.get('/api/images/:image', media.images.show);
 
@@ -114,12 +115,10 @@ xbmc.on('notification', function(data) {
 
 importer.on('done', function(time) {
   console.log('importer:done', time);
-  io.sockets.emit('importer:done', time);
 });
 
 importer.on('error', function(err) {
   console.log('importer:error', err);
-  io.sockets.emit('importer:error', err.message);
 });
 
 // Bootstrap

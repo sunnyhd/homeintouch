@@ -10,7 +10,8 @@ module.exports = Backbone.Router.extend({
         'albums': 'albums',
         'songs': 'songs',
         'artists/:artistid': 'artistAlbums',
-        'albums/:albumid': 'albumSongs'
+        'albums/:albumid': 'albumSongs',
+        'import': 'import'
     },
 
     handlers: {
@@ -50,6 +51,10 @@ module.exports = Backbone.Router.extend({
 
         albumSongs: function(albumid) {
             this.app.controller('music').showAlbumSongList(albumid).fetch();
+        },
+
+        import: function() {
+            this.app.controller('settings').showImport().fetch();
         }
     },
 
