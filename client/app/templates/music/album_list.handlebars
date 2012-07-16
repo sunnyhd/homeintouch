@@ -11,7 +11,14 @@
 
     <div class="row-fluid">
         <div class="span12">
-            <h3>Albums</h3>
+            <h3>All Albums</h3>
+            <p>
+                Search:
+                <input type="text" name="search" value="{{ term }}">
+                {{#if term}}
+                    <a class="btn clear" href="#">Clear</a>
+                {{/if}}
+            </p>
         </div>
     </div>
 

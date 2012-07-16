@@ -1,6 +1,7 @@
 var SongItemView = require('views/music/song_item');
+var FilteredListView = require('views/filtered_list');
 
-module.exports = Backbone.Marionette.CompositeView.extend({
+module.exports = FilteredListView.extend({
     
     template: require('templates/music/song_list'),
     
@@ -8,6 +9,14 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     
     appendHtml: function(cv, iv) {
         this.$('.songs').append(iv.el);
+    },
+
+    matchers: function(song) {
+        return [
+            song.get('label'),
+            song.get('album'),
+            song.get('artist')
+        ];
     }
     
 });
