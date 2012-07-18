@@ -1,7 +1,5 @@
 module.exports = Backbone.Marionette.Region.extend({
 
-    el: "#modal",
-
     constructor: function(){
         _.bindAll(this);
         Backbone.Marionette.Region.prototype.constructor.apply(this, arguments);

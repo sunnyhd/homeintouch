@@ -8,11 +8,15 @@ var socket;
 app.eibdToDecimal = function (n){return (n - 0x800) / 0x32 };
 app.decimalToEibd = function (n){return n * 0x32 + 0x800 };
 
+var Modal = ModalManager.extend({ el: "#modal" });
+var Iframe = ModalManager.extend({ el: "#iframe" });
+
 app.addRegions({
     dropdown: '#dropdown',
     subnav: '#subnav',
     main: '#main-content',
-    modal: ModalManager
+    modal: Modal,
+    iframe: Iframe
 });
 
 app.closeRegions = function() {

@@ -1,4 +1,6 @@
+var app = require('app');
 var moviesController = require('controllers/movies');
+var IframeModalView = require('views/movies/iframe_modal');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -9,7 +11,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
         'click .play': 'play',
         'click .playlist': 'playlist',
         'click .resume': 'resume',
-        'click .trailer': 'trailer'
+        'click .play-trailer': 'playTrailer',
+        'click .watch-trailer': 'watchTrailer',
+        'click .imdb': 'imdb'
     },
 
     initialize: function() {
@@ -31,9 +35,31 @@ module.exports = Backbone.Marionette.ItemView.extend({
         this.close();
     },
 
-    trailer: function() {
+    playTrailer: function() {
         this.model.playTrailer();
         this.close();
+    },
+
+    watchTrailer: function() {
+        this.close();
+
+        var view = new IframeModalView({
+            label: this.model.get('label'),
+            src: this.model.get('trailer')
+        });
+
+        app.iframe.show(view);
+    },
+
+    imdb: function() {
+        this.close();
+
+        var view = new IframeModalView({
+            label: 'IMDB',
+            src: 'http://www.imdb.com/title/' + this.model.get('imdbnumber')
+        });
+
+        app.iframe.show(view);
     }
 
 });
