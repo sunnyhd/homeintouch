@@ -7,12 +7,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     initialize: function(options) {
-        this.label = options.label;
-        this.src = options.src;
+        this.options = options;
     },
 
     serializeData: function() {
-        return { label: this.label, src: this.src };
+        return this.options;
     }
 
 });

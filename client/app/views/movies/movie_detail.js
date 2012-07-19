@@ -45,7 +45,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         var view = new IframeModalView({
             label: this.model.get('label'),
-            src: this.model.get('trailer')
+            src: this.model.get('trailer'),
+            video: true
         });
 
         app.iframe.show(view);
