@@ -111,6 +111,7 @@ eib.on('address', function(id, value) {
 xbmc.on('notification', function(data) {
   console.log('xbmc:notification', JSON.stringify(data));
   io.sockets.emit('xbmc:notification', data);
+  importer.notification(data);
 });
 
 importer.on('done', function(time) {
