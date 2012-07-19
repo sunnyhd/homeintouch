@@ -152,6 +152,7 @@ label.pull-right{
   top: 10%;
   width: 90%;
   height: 90%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal#iframe .modal-body {
