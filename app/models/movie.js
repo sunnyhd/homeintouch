@@ -29,7 +29,12 @@ var Movie = new mongoose.Schema({
     thumbnailid: ObjectId,
     trailer: String,
     votes: String,
-    year: Number
+    year: Number,
+    playcount: Number,
+    resume: {
+        position: Number,
+        total: Number
+    }
 });
 
 Movie.pre('remove', function(next) {

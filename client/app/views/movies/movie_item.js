@@ -17,7 +17,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     show: function() {
         var view = new MovieDetailView({ model: this.model });
         app.modal.show(view);
-        this.model.fetch();
     }
     
 });
