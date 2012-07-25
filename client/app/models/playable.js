@@ -1,5 +1,5 @@
 module.exports = Backbone.Model.extend({
 
-    url: '/api/player'
+    url: '/api/players'
 
 });

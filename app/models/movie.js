@@ -1,7 +1,7 @@
 var async = require('async');
 var mongoose = require('mongoose');
 var request = require('request');
-var images = require('../images');
+var images = require('../../lib/images');
 var settings = require('../../data/settings');
 var ObjectId = mongoose.Schema.ObjectId;
 
