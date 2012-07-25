@@ -1,3 +1,4 @@
+var Album = require('../models/album');
 var Artist = require('../models/artist');
 
 exports.index = function(req, res, next) {
