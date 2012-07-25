@@ -35,7 +35,8 @@
     
     "hit": {
       "hostname": "localhost",
-      "port": 8090
+      "port": 8090,
+      "timeout": 3000
     }
   }
 }
