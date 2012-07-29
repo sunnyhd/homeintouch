@@ -36,4 +36,6 @@ module.exports = function(app) {
     app.post('/api/imports', controllers.imports.create);
 
     app.get('/api/images/:image', controllers.images.show);
+
+    app.get('/api/files', controllers.files.index);
 };
