@@ -25,6 +25,8 @@ module.exports = Backbone.Collection.extend({
     },
 
     parent: function() {
+        if (!this.directory) return null;
+
         var parts = _.filter(this.directory.split('/'), function(part) {
             return part !== '';
         });
