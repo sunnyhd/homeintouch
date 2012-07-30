@@ -11,7 +11,9 @@ module.exports = Backbone.Router.extend({
         'songs': 'songs',
         'artists/:artistid': 'artistAlbums',
         'albums/:albumid': 'albumSongs',
-        'import': 'import'
+        'import': 'import',
+        'pictures': 'pictures',
+        'pictures/*path': 'pictures'
     },
 
     handlers: {
@@ -55,6 +57,10 @@ module.exports = Backbone.Router.extend({
 
         import: function() {
             this.app.controller('settings').showImport().fetch();
+        },
+
+        pictures: function(path) {
+            this.app.controller('pictures').showPictures(path).fetch();
         }
     },
 

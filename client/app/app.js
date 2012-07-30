@@ -56,6 +56,7 @@ app.addInitializer(function() {
     app.controller('playlists');
     app.controller('movies');
     app.controller('music');
+    app.controller('pictures');
 });
 
 app.addInitializer(function(options) {
