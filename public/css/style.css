@@ -160,3 +160,7 @@ label.pull-right{
   min-height: 100%;
   padding: 0;
 }
+
+.modal img.picture {
+  width: 530px;
+}
