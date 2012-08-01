@@ -1,7 +1,9 @@
 {{ item.label }}
 <br>
-{{ currentTime }} / {{ totalTime }}
-<br>
+{{#if hasSpan}}
+    {{ currentTime }} / {{ totalTime }}
+    <br>
+{{/if}}
 
 <a class="stop" href="#">Stop</a>
 {{#if playing}}

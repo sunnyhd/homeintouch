@@ -3,4 +3,9 @@
 {{else}}
     <a href="#" class="show">{{ label }}</a>
 {{/if}}
-<p>{{ file }}</p>
+<p>
+    {{ file }}
+    {{#unless directory}}
+        <a href="#" class="play">Play</a>
+    {{/unless}}
+</p>

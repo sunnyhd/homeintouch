@@ -34,6 +34,13 @@ module.exports = Backbone.Model.extend({
         this.set('speed', this.isPlaying() ? 0 : 1);
     },
 
+    hasSpan: function() {
+        var tt = this.get('totaltime');
+
+        if (!tt) return false;
+        return !(tt.hours === 0 && tt.minutes === 0 && tt.seconds === 0 && tt.milliseconds === 0);
+    },
+
     title: function() {
         var type = this.get('type');
         return type.charAt(0).toUpperCase() + type.slice(1);
@@ -62,11 +69,14 @@ module.exports = Backbone.Model.extend({
         data.totalTime = this.totalTime();
         data.playing = this.isPlaying();
         data.thumbnail = this.thumbnail();
+        data.hasSpan = this.hasSpan();
 
         return data;
     },
 
     startTimer: function() {
+        if (!this.hasSpan()) return;
+        
         var self = this;
         var interval = 1000; // 1 second
 
