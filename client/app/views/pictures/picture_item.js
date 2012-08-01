@@ -1,6 +1,7 @@
 var app = require('app');
 var Playable = require('models/playable');
 var PictureDetailView = require('views/pictures/picture_detail');
+var picturesController = require('controllers/pictures');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -23,7 +24,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     play: function() {
-        var playable = new Playable({ item: { file: this.model.get('file') }});
+        var playable = new Playable({ item: { path: this.model.get('file') }});
         playable.save();
     }
     
