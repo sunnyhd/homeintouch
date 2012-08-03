@@ -2,35 +2,28 @@ var mongoose = require('mongoose');
 var helpers = require('./helpers');
 var ObjectId = mongoose.Schema.ObjectId;
 
-var Movie = new mongoose.Schema({
-    movieid: { type: Number, index: true, unique: true },
-    director: String,
+var TVShow = new mongoose.Schema({
+    tvshowid: { type: Number, index: true, unique: true },
     fanart: String,
     fanartid: ObjectId,
-    file: String,
     genre: String,
-    imdbnumber: String,
     label: String,
     mpaa: String,
     plot: String,
     rating: Number,
-    runtime: String,
     studio: String,
     thumbnail: String,
     thumbnailid: ObjectId,
-    trailer: String,
     votes: String,
     year: Number,
     playcount: Number,
-    resume: {
-        position: Number,
-        total: Number
-    }
+    premiered: String,
+    cast: [{ name: String, role: String, thumbnail: String }]
 });
 
-helpers.cacheImages(Movie, [
+helpers.cacheImages(TVShow, [
     { src: 'thumbnail', dest: 'thumbnailid' },
     { src: 'fanart', dest: 'fanartid' }
 ]);
 
-module.exports = mongoose.model('Movie', Movie);
+module.exports = mongoose.model('TVShow', TVShow);
