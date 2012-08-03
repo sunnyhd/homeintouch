@@ -7,6 +7,8 @@ module.exports = Backbone.Model.extend({
 
     urlRoot: '/api/players',
 
+    pollingInterval: 1000,
+
     defaults: {
         item: {
             label: ''
@@ -78,7 +80,6 @@ module.exports = Backbone.Model.extend({
         if (!this.hasSpan()) return;
         
         var self = this;
-        var interval = 1000; // 1 second
 
         this.timer = setInterval(function() {
             var time = _.clone(self.get('time'));
@@ -86,7 +87,7 @@ module.exports = Backbone.Model.extend({
 
             time.seconds++;
             self.set('time', helpers.normalizeTime(time));
-        }, interval);
+        }, 1000);
     },
 
     stopTimer: function() {
@@ -96,11 +97,10 @@ module.exports = Backbone.Model.extend({
 
     startPolling: function() {
         var self = this;
-        var interval = 10000; // 10 minutes
 
         this.polling = setInterval(function() {
             self.fetch();
-        }, interval);
+        }, this.pollingInterval);
     },
 
     stopPolling: function() {
