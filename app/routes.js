@@ -14,6 +14,7 @@ module.exports = function(app) {
     app.get('/api/movies', controllers.movies.index);
 
     app.get('/api/tvshows', controllers.tvshows.index);
+    app.get('/api/tvshows/:tvshow', controllers.tvshows.show);
 
     app.get('/api/artists', controllers.artists.index);
     app.get('/api/artists/:artist', controllers.artists.show);
