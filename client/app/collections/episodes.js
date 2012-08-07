@@ -4,6 +4,10 @@ module.exports = Backbone.Collection.extend({
 
     model: Episode,
 
-    url: '/api/episodes'
+    url: '/api/episodes',
+
+    comparator: function(episode) {
+        return episode.get('label');
+    }
 
 });
