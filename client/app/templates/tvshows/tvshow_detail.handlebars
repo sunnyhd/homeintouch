@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <a class="close" href="#">x</a>
+    <h2>{{ label }}</h2>
+</div>
+
+<div class="modal-body">
+    <img src="{{ thumbnail }}" class="picture">
+    <br>
+    <ul>
+        <li><strong>Year</strong>: {{ year }}</li>
+        <li><strong>Genre</strong>: {{ genre }}</li>
+        <li><strong>Duration</strong>: {{ runtime }} minutes</li>
+        <li><strong>Studio</strong>: {{ studio }}</li>
+        <li><strong>Rating</strong>: {{ toFixed rating 2 }}</li>
+        <li><strong>Parental Rating</strong>: {{ mpaa }}</li>
+        <li><strong>Plot</strong>: {{ plot }}</li>
+    </ul>
+</div>
+
+<div class="modal-footer">
+    <a href="#" class="btn episodes">Episodes</a>
+</div>

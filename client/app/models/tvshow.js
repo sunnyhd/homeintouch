@@ -15,6 +15,20 @@ module.exports = Backbone.Model.extend({
         this.episodes.reset(res.episodes);
         delete res.episodes;
         return res;
-    }
+    },
+
+    thumbnail: function() {
+        var id = this.get('thumbnailid');
+
+        if (id) {
+            return '/api/images/' + this.get('thumbnailid');
+        }
+    },
+
+    toJSON: function() {
+        var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
+        data.thumbnail = this.thumbnail();
+        return data;
+    },
 
 });
