@@ -13,7 +13,8 @@ module.exports = Backbone.Router.extend({
         'albums/:albumid': 'albumSongs',
         'import': 'import',
         'pictures': 'pictures',
-        'pictures/*path': 'pictures'
+        'pictures/*path': 'pictures',
+        'tvshows': 'tvshows'
     },
 
     handlers: {
@@ -61,6 +62,10 @@ module.exports = Backbone.Router.extend({
 
         pictures: function(path) {
             this.app.controller('pictures').showPictures(path).fetch();
+        },
+
+        tvshows: function() {
+            this.app.controller('tvshows').showTvShows().fetch();
         }
     },
 
