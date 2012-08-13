@@ -15,7 +15,8 @@ module.exports = Backbone.Router.extend({
         'pictures': 'pictures',
         'pictures/*path': 'pictures',
         'tvshows': 'tvshows',
-        'tvshows/:tvshowid': 'tvshowEpisodes'
+        'tvshows/:tvshowid': 'tvshowEpisodes',
+        'episodes': 'episodes'
     },
 
     handlers: {
@@ -71,6 +72,10 @@ module.exports = Backbone.Router.extend({
 
         tvshowEpisodes: function(episodeid) {
             this.app.controller('tvshows').showTVShowEpisodeList(episodeid).fetch();
+        },
+
+        episodes: function() {
+            this.app.controller('tvshows').showEpisodeList().fetch();
         }
     },
 

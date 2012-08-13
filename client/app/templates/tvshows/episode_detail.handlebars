@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <a class="close" href="#">x</a>
+    <h2>{{ label }}</h2>
+</div>
+
+<div class="modal-body">
+    <ul>
+        <li><strong>Show</strong>: {{ showtitle }}</li>
+        <li><strong>Season</strong>: {{ season }}</li>
+        <li><strong>Plays</strong>: {{ playcount }}</li>
+    </ul>
+</div>
+
+<div class="modal-footer">
+    <a class="playlist btn" href="#">Add to Playlist</a>
+    <a class="play btn" href="#">Play Episode</a>
+
+    {{#if resume}}
+        <a class="resume btn">Resume ({{ resumeTime }})</a>
+    {{/if}}
+</div>

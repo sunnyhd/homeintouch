@@ -1,4 +1,3 @@
-var app = require('app');
 var TVShowItemView = require('views/tvshows/tvshow_item');
 
 module.exports = Backbone.Marionette.CompositeView.extend({

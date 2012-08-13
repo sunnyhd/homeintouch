@@ -8,6 +8,7 @@ var TVShow = new mongoose.Schema({
     fanartid: ObjectId,
     genre: String,
     label: String,
+    showtitle: String,
     mpaa: String,
     plot: String,
     rating: Number,

@@ -7,7 +7,11 @@ module.exports = Backbone.Collection.extend({
     url: '/api/episodes',
 
     comparator: function(episode) {
-        return episode.get('label');
+        return [
+            episode.get('showtitle'),
+            episode.get('season'),
+            episode.get('episode')
+        ].join(' - ');
     }
 
 });
