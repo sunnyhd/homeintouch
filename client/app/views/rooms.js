@@ -114,7 +114,6 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         }
 
         this.dimmerTimeout = setTimeout(function() {
-            console.log('dimmer');
             var $dimmer = $(e.currentTarget);
             var value = parseInt($dimmer.val());
             var address = self.writeDimmer.get("address");
