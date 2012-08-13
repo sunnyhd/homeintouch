@@ -106,10 +106,21 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     dimmerChanged: function(e){
-        var $dimmer = $(e.currentTarget);
-        var value = parseInt($dimmer.val());
-        var address = this.writeDimmer.get("address");
-        app.vent.trigger("device:write", address, value);
+        var self = this;
+
+        if (this.dimmerTimeout) {
+            clearTimeout(this.dimmerTimeout);
+            this.dimmerTimeout = null;
+        }
+
+        this.dimmerTimeout = setTimeout(function() {
+            console.log('dimmer');
+            var $dimmer = $(e.currentTarget);
+            var value = parseInt($dimmer.val());
+            var address = self.writeDimmer.get("address");
+            app.vent.trigger("device:write", address, value);
+            self.dimmerTimeout = null;
+        }, 200);
     },
 
     flipSwitch: function(on){
