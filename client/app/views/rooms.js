@@ -84,7 +84,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     formEvents: {
         "click .switch .btn.on": "switchOnClicked",
         "click .switch .btn.off": "switchOffClicked",
-        "change .dimmer": "dimmerChanged",
+        "change .dimmer": "dimmerChanged"
     },
 
     initialize: function(){
@@ -106,20 +106,20 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     dimmerChanged: function(e){
+        var $dimmer = $(e.currentTarget);
+        var value = parseInt($dimmer.val());
+        var address = this.writeDimmer.get("address");
+        app.vent.trigger("device:write", address, value);
+
         var self = this;
 
         if (this.dimmerTimeout) {
             clearTimeout(this.dimmerTimeout);
-            this.dimmerTimeout = null;
         }
 
         this.dimmerTimeout = setTimeout(function() {
-            var $dimmer = $(e.currentTarget);
-            var value = parseInt($dimmer.val());
-            var address = self.writeDimmer.get("address");
-            app.vent.trigger("device:write", address, value);
             self.dimmerTimeout = null;
-        }, 200);
+        }, 500);
     },
 
     flipSwitch: function(on){
@@ -138,6 +138,8 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     selectDimmer: function(address, value){
+        if (this.dimmerTimeout) return;
+
         var $dimmer = this.$(".dimmer");
         $dimmer.val(value);
     },
