@@ -32,7 +32,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
             var regex = new RegExp(strip(term).toLowerCase());
 
             return _.any(matchers, function(matcher) {
-                return strip(matcher).toLowerCase().match(regex);
+                if (matcher) return strip(matcher).toLowerCase().match(regex);
             });
         }
 
