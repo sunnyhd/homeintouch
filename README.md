@@ -4,22 +4,35 @@ Home In Touch
 Install
 -------
 
-    git clone https://jed@github.com/jed/homeintouch.git
+    git clone git@github.com:scttnlsn/homeintouch.git
     cd homeintouch
     npm install
 
 Run
 ---
 
-In a shell, make sure that the home server is running, and leave the shell open:
+The Node application connects to a "HIT" server from which it syncs home automation and media data.  Since this server is not exposed directly to the internet you'll need to forward some of your local ports through an SSH tunnel.
 
-    ssh trendsetterin.selfhost.eu:8081
-    jedtest1219
+The Node app connects to the following local ports (the values can be changed in `data/settings.json`):
+
+* 8090 - used to communicate with the HIT server via a text-based socket protocol
+* 8080 - used to transfer image assets from the HIT server
+
+To forward these ports to the HIT server run the following command and leave the shell open:
+
+    ssh -N -L 8080:localhost:8080 -L 8090:localhost:8090 user@marisamigliazzi.selfhost.eu
+    
+The Node app caches media data in a local MongoDB database (you can set the database to which the server connects in `data/settings.json`).  With MongoDB running we can start the Node server (listens on port 8081).
+    
+In another shell, run:
+
     node server.js
+    
+There will not be any media data initially so you'll need to trigger an import.  This can either be done via the web UI or by running:
 
-In another shell, start the local server:
-
-    node server.js --clientonly
+    curl -X POST http://admin:admin@localhost:8081/api/imports
+    
+The import process runs in the background.
 
 Flow
 ----
