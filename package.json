@@ -14,6 +14,7 @@
     "request": "2.9.x",
     "socket.io": "0.9.4",
     "jade": "0.24.0",
+    "jsonsp": "http://github.com/scttnlsn/node-jsonsp/tarball/master",
     "dirty": "0.9.6",
     "stitch": "0.3.3",
     "mongoose": "2.7.1",
