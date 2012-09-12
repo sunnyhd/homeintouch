@@ -28,7 +28,7 @@ In another shell, run:
 
     node server.js
     
-There will not be any media data initially so you'll need to trigger an import.  This can either be done via the web UI or by running:
+There will not be any media data initially so you'll need to trigger an import.  This can either be done via the web UI (login is admin/admin) or by running:
 
     curl -X POST http://admin:admin@localhost:8081/api/imports
     
