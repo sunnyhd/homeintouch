@@ -51,15 +51,14 @@ h3 {
 }
 
 .room-device-group {
-  height: 300px;
   margin: 5px 5px 0px 0px;
   padding: 0px;
-  overflow: scroll;
   background-color: #333;
   border-top: 1px solid #555;
   border-left: 1px solid #555;
   border-right: 1px solid #222;
   border-bottom: 1px solid #222;
+  overflow-y: scroll;
 }
 
 .room-devices {
@@ -87,6 +86,10 @@ ul.device-list li {
   border-bottom: 1px solid #555;
   padding-bottom: 5px;
   margin-bottom: 10px;
+}
+
+ul.device-list li:last-child .device {
+  border-bottom: none;
 }
 
 .device .slider {

@@ -15,6 +15,11 @@ exports.showRoom = function(room) {
     });
     
     app.main.show(view);
+
+    // After the elements are added to the DOM
+    // start the Gridster.js library to allow drag & drop of device groups
+    view.initializeGridster();   
+
     return room;
 };
 

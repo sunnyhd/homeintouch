@@ -297,6 +297,10 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-group-template",
 
     className: "room-device-group span4",
+    
+    tagName: 'li',
+
+    attributes: {"data-row":"1", "data-col":"1", "data-sizex":"1", "data-sizey":"1"},
 
     events: {
         "click button.addDevice": "addDeviceClicked"
@@ -314,6 +318,9 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
         var type = this.model.get("type");
         this.itemView = this.itemViewTypes[type];
+
+        // Bind event when the devices are removed to check if there devices in the collection
+        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);
     },
 
     addDeviceClicked: function(e){
@@ -323,8 +330,13 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     appendHtml: function(cv, iv){
         cv.$("ul").append(iv.el);
-    }
+    },
 
+    checkEmptyCollection: function() {
+        if (this.collection.length == 0) {
+            this.trigger('room:device-group:empty', this);
+        }
+    }
 });
 
 exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
@@ -359,10 +371,44 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
     },
 
     appendHtml: function(cv, iv){
-        var $devices = cv.$(".room-devices>div");
-        $devices.append(iv.el);
-    }
+        if (_.isUndefined(this.gridster)) {
+            var $devices = cv.$(".room-devices>ul");
+            $devices.append(iv.el);
+        } else {
+            this.gridster.add_widget(iv.el, 1, 1);
+        }
+    },
 
+    onRender: function() {
+
+        this.bindTo(this, "item:added", this.bindItemViewEvents, this);
+
+        var that = this;
+        // Bind event to remove device-group when there no devices of a type
+        _.each(this.children, function(view, cid){
+            that.bindItemViewEvents(view);
+        });
+    },
+
+    bindItemViewEvents: function(itemView) {
+        this.bindTo(itemView, 'room:device-group:empty', this.removeDeviceGroup, this);
+    },
+
+    removeDeviceGroup: function(deviceGroupView) {
+        this.gridster.remove_widget(deviceGroupView.$el);
+        deviceGroupView.model.destroy();
+        deviceGroupView.close();
+    },
+
+    initializeGridster: function() {
+
+        this.gridster = $('.room-devices>ul').gridster({
+            widget_base_dimensions: [300, 300],
+            widget_margins: [5, 5],
+            min_cols: 6,
+            min_rows: 1
+        }).data('gridster');
+    }
 });
 
 exports.AddRoomForm = Backbone.Marionette.ItemView.extend({
