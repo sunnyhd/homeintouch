@@ -320,7 +320,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         this.itemView = this.itemViewTypes[type];
 
         // Bind event when the devices are removed to check if there devices in the collection
-        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);
+        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);        
     },
 
     addDeviceClicked: function(e){
@@ -330,12 +330,26 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     appendHtml: function(cv, iv){
         cv.$("ul").append(iv.el);
+        // If the scroll bar component is created, update it
+        if (this.scrollBar) {
+            this.updateScrollBar();
+        }
     },
 
     checkEmptyCollection: function() {
         if (this.collection.length == 0) {
             this.trigger('room:device-group:empty', this);
+        } else {
+            this.updateScrollBar();
         }
+    },
+
+    initializeScrollBar: function() {
+        this.scrollBar = $('.scroll-panel', this.$el).tinyscrollbar();
+    },
+
+    updateScrollBar: function() {
+        $('.scroll-panel', this.$el).tinyscrollbar_update();
     }
 });
 
@@ -377,6 +391,8 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         } else {
             this.gridster.add_widget(iv.el, 1, 1);
         }
+        // Initializes the scroll bar on the added device group
+        iv.initializeScrollBar();
     },
 
     onRender: function() {
@@ -400,14 +416,21 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         deviceGroupView.close();
     },
 
-    initializeGridster: function() {
+    initializeUIEffects: function() {
 
         this.gridster = $('.room-devices>ul').gridster({
-            widget_base_dimensions: [300, 300],
+            widget_base_dimensions: [320, 300],
             widget_margins: [5, 5],
             min_cols: 6,
             min_rows: 1
         }).data('gridster');
+
+        // Initialize the scroll bar component for the device groups
+        _.each(this.children, function(view, cid){
+            view.initializeScrollBar();
+        });
+
+        
     }
 });
 

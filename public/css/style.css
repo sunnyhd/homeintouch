@@ -58,7 +58,44 @@ h3 {
   border-left: 1px solid #555;
   border-right: 1px solid #222;
   border-bottom: 1px solid #222;
-  overflow-y: scroll;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.room-device-group .scroll-panel {
+  width: 320px;  
+}
+
+.room-device-group .scroll-panel .scrollbar {  
+  opacity: 0;
+  transition: opacity 2s;
+  -moz-transition: opacity 2s;
+  -webkit-transition: opacity 2s;
+  -o-transition: opacity 2s;
+}
+
+.scrollbar .thumb {
+  -webkit-background-clip: content-box;
+  background-color: #008CD8;
+  -webkit-border-radius: 7px;
+  position: absolute;
+  right: 0;
+  opacity: 0.4;
+  transition: width 250ms;
+  -webkit-transition: width 250ms;
+  width: 5px;
+}
+
+.scrollbar .thumb:hover {
+  width: 10px;
+}
+
+.room-device-group .scroll-panel:hover .scrollbar {
+  opacity: 0.8;
+}
+
+.room-device-group .scroll-panel .viewport{
+  height: 262px;
 }
 
 .room-devices {
@@ -75,6 +112,7 @@ ul.device-list {
   list-style: none;
   padding: 5px;
   margin: 0px;
+  width: 300px;
 }
 
 ul.device-list li {

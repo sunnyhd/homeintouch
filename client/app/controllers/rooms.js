@@ -16,9 +16,10 @@ exports.showRoom = function(room) {
     
     app.main.show(view);
 
-    // After the elements are added to the DOM
+    // After the elements are added to the DOM:
     // start the Gridster.js library to allow drag & drop of device groups
-    view.initializeGridster();   
+    // start the tinyscroll.js to insert scroll bars to the device groups
+    view.initializeUIEffects();   
 
     return room;
 };
