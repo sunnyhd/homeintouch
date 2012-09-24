@@ -3,9 +3,21 @@ var Rooms = require('collections/rooms');
 
 module.exports = BaseModel.extend({
 
+    defaults: {
+        "addNew": "Add Floor...",
+    },
+
     initialize: function(){
         this.rooms = this.parseChildren("rooms", Rooms);
         this.rooms.parentFloor = this;
+    },
+
+    defaultRoom: function() { 
+        return this.rooms.at(0);
+    },
+
+    getRoomById: function(id) {
+        return this.rooms.get(id);
     },
 
     addRoom: function(room){

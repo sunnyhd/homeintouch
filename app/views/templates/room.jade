@@ -1,12 +1,5 @@
 script(id="room-layout-template", type="text/template")
   .container-fluid
-    .room-header.row-fluid
-      .room.span12
-        button.addDeviceType.btn.btn-inverse.pull-right +
-        a.view-home.pull-left(href="#")
-          h3 <%= home %>
-        h3 &nbsp; :: <%= floor %> :: <%= name %>
-
     .room-devices.row-fluid
       .span12
 
@@ -34,12 +27,31 @@ script(id="device-add-group-to-room-template", type="text/template")
 
 script(id="no-floors-template", type="text/template")
   .no-rooms.container-fluid
-    .room-header.row-fluid
-      .room.span12
-        a.view-home(href="#")
-          h3 <%= name %>
     .row-fluid
       .span9
         h2 No Floors Or Rooms To Display
       .span9
         | Please add a floor and rooms to this home
+
+script(id="no-rooms-template", type="text/template")
+  .no-rooms.container-fluid
+    .row-fluid
+      .span9
+        h2 No Rooms To Display
+      .span9
+        | Please add a room to this floor
+
+script(id="no-device-group-template", type="text/template")
+  .no-rooms.container-fluid
+    .row-fluid
+      .span9
+        h2 No Devices To Display
+      .span9
+        | Please add a device to this room
+
+script(id="room-more-options-template", type="text/template")
+  a.dropdown-toggle.clearfix(href='#', data-toggle='dropdown')
+    i.icon-plus.icon-white
+  ul.dropdown-menu
+    li
+      a.add-device-group(href="#") Add device

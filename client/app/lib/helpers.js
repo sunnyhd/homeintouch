@@ -34,3 +34,26 @@ exports.zeroPad = function(num, places) {
     var zero = places - num.toString().length + 1;
     return Array(+(zero > 0 && zero)).join('0') + num;
 };
+
+/**
+ * Returns or creates (if not exists) a DOM element.
+ * */
+exports.getOrCreateEl = function(id, opts) {
+
+    (opts) || (opts = {});
+    (opts.container) || (opts.container = 'body');
+    (opts.type) || (opts.type = 'div');
+
+    var $container = $(opts.container);
+    var $el = $('#' + id, $container);
+
+    if (!$el.length) {
+        $container.append('<' + opts.type + ' id="' + id + '">');
+        $el = $('#' + id, $container);
+    }
+    return $el;
+};
+
+exports.elExists = function(selector) {
+    return ($(selector).length);
+};

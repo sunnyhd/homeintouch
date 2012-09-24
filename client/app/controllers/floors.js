@@ -1,18 +1,37 @@
 var app = require('app');
+var helpers = require('lib/helpers');
+
 var homesController = require('controllers/homes');
 var roomsController = require('controllers/rooms');
 var floorViews = require('views/floors');
 
+exports.floors = null;
+
 exports.showFloors = function(home) {
-    showFloorList(home.floors);
-    showFirstRoom(home);
+    return showFloorList(home, home.defaultFloor());
 };
 
 // Events
 // ---------------
 
-app.vent.on("home:selected", function(home) {
-    exports.showFloors(home);
+/*app.vent.on("home:selected", function(home) {
+    if (home.floors.length) {
+        app.vent.trigger("floor:selected", home.floors.defaultFloor());
+    } else {
+        app.vent.trigger("floor:empty");
+    }
+});*/
+
+app.vent.on("floor:selected", function(floor){
+    
+    app.vent.trigger("room:remove-dropdown");
+    showFloorList(homesController.currentHome, floor);
+
+    /*if (floor.rooms.length) {
+        app.vent.trigger("room:selected", floor.rooms.defaultRoom());
+    } else {
+        app.vent.trigger("room:empty");
+    }*/
 });
 
 app.vent.on("floor:add", function(){
@@ -25,38 +44,41 @@ app.vent.on("floor:add", function(){
     });
 });
 
+app.vent.on("floor:empty", function() {
+    getFloorNavContainer();
+
+    var noFloorsView = new floorViews.NoFloorsView();
+    app.main.show(noFloorsView);
+});
+
+app.vent.on("floor:remove-dropdown", function() {
+    getFloorNavContainer();
+});
+
 // Helper Methods
 // --------------
 
-var showFirstRoom = function(home){
-    var floor = home.floors.at(0);
-    var clear = true;
+function getFloorNavContainer() {
+    $('#home-nav-ul #floor-li').remove();
+    return helpers.getOrCreateEl('home-nav-ul', {type: 'ul', container: '#nav-container'});
+}
 
-    if (floor){
-        var room = floor.rooms.at(0);
-        if (room){
-            roomsController.showRoom(room);
-            clear = false;
-        }
-    }
+var showFloorList = function(home, floor) {
+    exports.floors = home.floors;
+    exports.currentFloor = floor;
 
-    // clear the main display area if no floor / room
-    // was found for display in the selected home
-    if (clear){
-        var view = new floorViews.NoFloorsView({
-            model: home
-        }); 
-        app.main.show(view);
-    }
-
-};
-
-var showFloorList = function(floors){
-    var view = new floorViews.FloorSelectorListView({
-        collection: floors
+    var view = new floorViews.FloorSelector ({
+        model: floor,
+        collection: exports.floors
     });
 
-    app.subnav.show(view);
+    view.render().done(function(){
+      getFloorNavContainer().append(view.$el);
+    });
+
+    exports.showDashboard(floor);
+
+    return floor;
 };
 
 var showAddFloorForm = function(home){
@@ -66,3 +88,15 @@ var showAddFloorForm = function(home){
     app.modal.show(view);
     return view;
 };
+
+/**
+ * Shows the dashboard of an specified floor.
+ * */
+ exports.showDashboard = function(floor) {
+
+    var view = new floorViews.FloorDashboardView ({
+        model: floor
+    });
+
+    app.main.show(view);
+ };

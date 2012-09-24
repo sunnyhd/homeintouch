@@ -1,11 +1,34 @@
 var app = require('app');
+var floorsController = require('controllers/floors');
 var Floor = require('models/floor');
 
 // Views
 // -----
 
-exports.NoFloorsView = Backbone.Marionette.ItemView.extend({
+/** 
+ * Floor dashboard view.
+ * */
+exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
+    template: "#dashboard-floor",
 
+    events: {
+        "click .floor-item-list": "roomClicked",
+        "click a.add-room": "addRoomHandler"
+    },
+
+    roomClicked: function(e){
+        e.preventDefault();
+        var roomId = ($(e.currentTarget).data('room-id'));
+        app.vent.trigger("room:selected", this.model.getRoomById(roomId));
+    },
+
+    addRoomHandler: function(e) {
+        e.preventDefault();
+        app.vent.trigger("room:add");
+    }
+});
+
+exports.NoFloorsView = Backbone.Marionette.ItemView.extend({
     template: "#no-floors-template",
 
     events: {
@@ -15,67 +38,37 @@ exports.NoFloorsView = Backbone.Marionette.ItemView.extend({
     viewClicked: function(e){
         app.vent.trigger("home:view", this.model);
     }
-
 });
 
-exports.RoomItemView = Backbone.Marionette.ItemView.extend({
-
+/**
+ * Floor Navigator Dropdown Item.
+ * */
+exports.FloorItemView = Backbone.Marionette.ItemView.extend({
     tagName: "li",
-
-    template: "#room-item-template",
+    template: "#home-auto-nav-item",
 
     events: {
-        "click a": "roomClicked"
+        "click a": "floorClicked"
     },
 
-    roomClicked: function(e){
+    floorClicked: function(e){
         e.preventDefault();
-        app.vent.trigger("room:selected", this.model);
+        floorsController.floors.select(this.model);
     }
 });
 
-exports.FloorItemView = Backbone.Marionette.CompositeView.extend({
-
-    className: "dropdown",
-
+/**
+ * Floor Navigator Dropdown: Creates a dropdown with the floors and an option to create a new one.
+ * */
+exports.FloorSelector = Backbone.Marionette.CompositeView.extend({
     tagName: "li",
-
-    template: "#floor-item-template",
-
-    itemView: exports.RoomItemView,
-
-    events: {
-        "click .add-room": "addRoomClicked"
-    },
-
-    initialize: function(){
-        this.collection = this.model.rooms;
-    },
-
-    addRoomClicked: function(e){
-        e.preventDefault();
-        app.vent.trigger("room:add", this.model);
-    },
-
-    appendHtml: function(cv, iv){
-        var $splitter = cv.$("ul.dropdown-menu li.divider");
-        $splitter.before(iv.el);
-    }
-
-});
-
-exports.FloorSelectorListView = Backbone.Marionette.CompositeView.extend({
-
-    className: 'nav nav-pills',
-
-    tagName: 'ul',
-
-    template: "#floor-list-template",
-
+    id: "floor-li",
+    className: "hit-nav dropdown",
+    template: "#home-auto-nav-composite-item",
     itemView: exports.FloorItemView,
 
     events: {
-        "click .add-floor": "addFloorClicked"
+        "click .add-item": "addFloorClicked"
     },
 
     addFloorClicked: function(e){
@@ -83,9 +76,12 @@ exports.FloorSelectorListView = Backbone.Marionette.CompositeView.extend({
         app.vent.trigger("floor:add");
     },
 
-    appendHtml: function(cv, iv){
+    /*appendHtml: function(cv, iv){
         var $addNew = cv.$(".add-new");
         $addNew.before(iv.el);
+    }*/
+    appendHtml: function(cv, iv){ // cv: CollectionView, it: ItemView
+        cv.$("ul.dropdown-menu").prepend(iv.el);
     }
 });
 

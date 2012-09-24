@@ -2,11 +2,35 @@ var app = require('app');
 var homesController = require('controllers/homes');
 var Home = require('models/home');
 
+/** 
+ * Home dashboard view.
+ * */
+exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
+    template: "#dashboard-home",
+
+    events: {
+        "click .floor-item-list": "floorClicked",
+        "click a.add-floor": "addFloorHandler"
+    },
+
+    floorClicked: function(e){
+        e.preventDefault();
+        var floorId = ($(e.currentTarget).data('floor-id'));
+        app.vent.trigger("floor:selected", this.model.getFloorById(floorId));
+    },
+
+    addFloorHandler: function(e) {
+        e.preventDefault();
+        app.vent.trigger("floor:add");
+    }
+});
+
+/**
+ * Home Navigator Dropdown Item.
+ * */
 exports.HomeItemView = Backbone.Marionette.ItemView.extend({
-
     tagName: "li",
-
-    template: "#home-item-template",
+    template: "#home-auto-nav-item",
 
     events: {
         "click a": "homeClicked"
@@ -16,21 +40,21 @@ exports.HomeItemView = Backbone.Marionette.ItemView.extend({
         e.preventDefault();
         homesController.homes.select(this.model);
     }
-
 });
 
-exports.HomeSelector = Backbone.Marionette.CompositeView.extend({
-
+/**
+ * Home Navigator Dropdown: Creates a dropdown with the homes and an option to create a new one.
+ * */
+exports.HomeSelector = Backbone.Marionette.CompositeView.extend ({
     tagName: "li",
-
-    className: "dropdown",
-
-    template: "#home-list-template",
+    id: "home-li",
+    className: "hit-nav dropdown",
+    template: "#home-auto-nav-composite-item",
 
     itemView: exports.HomeItemView,
 
     events: {
-        "click .add-home a": "addHomeClicked"
+        "click .add-item a": "addHomeClicked"
     },
 
     addHomeClicked: function(e){
@@ -38,12 +62,11 @@ exports.HomeSelector = Backbone.Marionette.CompositeView.extend({
         addNewHome();
     },
 
-    appendHtml: function(cv, iv){
+    appendHtml: function(cv, iv){ // cv: CollectionView, it: ItemView
         cv.$("ul.dropdown-menu").prepend(iv.el);
     }
-
 });
-
+    
 exports.AddHomeForm = Backbone.Marionette.ItemView.extend({
 
     template: "#add-home-template",

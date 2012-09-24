@@ -25,3 +25,30 @@ script(id="view-home-template", type="text/template")
     a(href="#").delete.btn.pull-left Delete
     a(href="#").cancel.btn.btn-primary Close
 
+script(id="dashboard-home", type="text/template")
+  .container-fluid.dashboard-home
+      .row-fluid
+        .span6.dashboard-container.clearfix
+          .dashboard-container-title
+            h3 Media Center
+          .clearfix
+            .dashboard-icon-container
+              img(src="img/media/audio_off.png")
+            .dashboard-icon-container
+              img(src="img/media/homevideo_off.png")
+            .dashboard-icon-container
+              img(src="img/media/picture_off.png")
+        .span6.dashboard-container.clearfix
+          .dashboard-container-title
+            h3 Floor List
+          <% if ( floors.length > 0 ) { %>
+          .clearfix
+            <% _.each(floors, function(floor){ %>
+            .floor-item-list(data-floor-id!="<%= floor.id %>") <%= floor.name %>
+            <% }) %>
+          <% } else { %>
+          .clearfix.empty-collection
+            | There are no floors in this home. Click 
+            a.add-floor(href="#") here 
+            | to add a new one.
+          <% } %>

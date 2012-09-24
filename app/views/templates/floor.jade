@@ -1,0 +1,33 @@
+script(id="dashboard-floor", type="text/template")
+  .container-fluid.dashboard-home
+      .row-fluid
+        .span6.dashboard-container.clearfix
+          .dashboard-container-title
+            h3 Scenes
+          .clearfix
+            .dashboard-icon-container.large
+              img(src="img/scenes/scene_dinner_off.png")
+            .dashboard-icon-container.large
+              img(src="img/scenes/scene_holiday_off.png")
+            .dashboard-icon-container.large
+              img(src="img/scenes/scene_movie_off.png")
+            .dashboard-icon-container.large
+              img(src="img/scenes/scene_party_kids_off.png")
+            .dashboard-icon-container.large
+              img(src="img/scenes/scene_party_off.png")
+            .dashboard-icon-container.large
+              img(src="img/scenes/scene_romantic_off.png")
+        .span6.dashboard-container.clearfix
+          .dashboard-container-title
+            h3 Room List
+          <% if ( rooms.length > 0 ) { %>
+          .clearfix
+            <% _.each(rooms, function(room){ %>
+            .floor-item-list(data-room-id!="<%= room.id %>") <%= room.name %>
+            <% }) %>
+          <% } else { %>
+          .clearfix.empty-collection
+            | There are no rooms in this floor. Click 
+            a.add-room(href="#") here 
+            | to add a new one.
+          <% } %>

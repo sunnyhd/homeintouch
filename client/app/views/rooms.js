@@ -2,6 +2,71 @@ var app = require('app');
 var roomsController = require('controllers/rooms');
 var Room = require('models/room');
 
+exports.RoomMoreOptionsView = Backbone.Marionette.ItemView.extend({
+    tagName: "li",
+    id: "room-more-opts",
+    className: "hit-nav dropdown pull-right",
+    template: "#room-more-options-template",
+
+    events: {
+        "click a.add-device-group": "addDeviceTypeClicked"
+    },
+
+    addDeviceTypeClicked: function(e){
+        e.preventDefault();
+        app.vent.trigger("room:addDeviceGroup", this.model);
+    }
+});
+
+exports.NoRoomsView = Backbone.Marionette.ItemView.extend({
+    template: "#no-rooms-template"
+});
+
+/**
+ * Room Navigator Dropdown Item.
+ * */
+exports.RoomItemView = Backbone.Marionette.ItemView.extend({
+    tagName: "li",
+    template: "#home-auto-nav-item",
+
+    events: {
+        "click a": "roomClicked"
+    },
+
+    roomClicked: function(e){
+        e.preventDefault();
+        app.vent.trigger("room:selected", this.model);
+    }
+});
+
+/**
+ * Room Navigator Dropdown: Creates a dropdown with the rooms and an option to create a new one.
+ * */
+exports.RoomSelector = Backbone.Marionette.CompositeView.extend({
+    tagName: "li",
+    id: "room-li",
+    className: "hit-nav dropdown",
+    template: "#home-auto-nav-composite-item",
+    itemView: exports.RoomItemView,
+
+    events: {
+        "click .add-item a": "addRoomClicked"
+    },
+
+    addRoomClicked: function(e){
+        e.preventDefault();
+        app.vent.trigger("room:add");
+    },
+
+    appendHtml: function(cv, iv){ // cv: CollectionView, it: ItemView
+        cv.$("ul.dropdown-menu").prepend(iv.el);
+    }
+});
+
+exports.NoDeviceGroupView = Backbone.Marionette.ItemView.extend({
+    template: "#no-device-group-template",
+});
+
 // Base view for device items in the list
 exports.DeviceView = Backbone.Marionette.ItemView.extend({
 
@@ -334,7 +399,6 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
     itemView: exports.DeviceGroupView,
 
     events: {
-        "click button.addDeviceType": "addDeviceTypeClicked",
         "click a.view-home": "viewClicked"
     },
 
@@ -353,11 +417,6 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         return data;
     },
 
-    addDeviceTypeClicked: function(e){
-        e.preventDefault();
-        app.vent.trigger("room:addDeviceGroup", this.model);
-    },
-
     appendHtml: function(cv, iv){
         var $devices = cv.$(".room-devices>div");
         $devices.append(iv.el);
@@ -366,9 +425,7 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
 });
 
 exports.AddRoomForm = Backbone.Marionette.ItemView.extend({
-
     template: "#room-add-template",
-
     formFields: ["name"],
 
     events: {
@@ -390,6 +447,5 @@ exports.AddRoomForm = Backbone.Marionette.ItemView.extend({
     cancelClicked: function(e){
         e.preventDefault();
         this.close();
-    }
-    
+    } 
 });

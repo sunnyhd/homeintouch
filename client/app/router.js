@@ -22,7 +22,9 @@ module.exports = Backbone.Router.extend({
     handlers: {
         home: function() {
             var home = this.app.controller('homes').showCurrent();
-            var floor = this.app.controller('floors').showFloors(home);
+            //this.app.controller('homes').showDashboard(home);
+            // var floor = this.app.controller('floors').showFloors(home);
+            // var room = this.app.controller('rooms').showRooms(floor);
         },
 
         players: function() {

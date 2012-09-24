@@ -4,6 +4,10 @@ var DeviceGroup = require('models/device_group');
 
 module.exports = BaseModel.extend({
 
+    defaults: {
+        "addNew": "Add Room...",
+    },
+
     initialize: function(){
         this.deviceGroups = this.parseChildren("deviceGroups", DeviceGroups);
         this.deviceGroups.parentRoom = this;
