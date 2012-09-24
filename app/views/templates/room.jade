@@ -1,6 +1,6 @@
 script(id="room-layout-template", type="text/template")
   .container-fluid
-    .room-devices.row-fluid.gridster
+    .room-devices.row-fluid
       ul.span12.unstyled
 
 script(id="device-group-template", type="text/template")
@@ -14,7 +14,7 @@ script(id="device-group-template", type="text/template")
         .thumb
           .end
     .viewport
-      ul.device-list.overview
+      ul.device-list.overview.span4
 
 script(id="device-add-group-to-room-template", type="text/template")
   .modal-header

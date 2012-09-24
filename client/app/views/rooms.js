@@ -365,8 +365,6 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     
     tagName: 'li',
 
-    attributes: {"data-row":"1", "data-col":"1", "data-sizex":"1", "data-sizey":"1"},
-
     events: {
         "click button.addDevice": "addDeviceClicked"
     },
@@ -447,8 +445,6 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         if (_.isUndefined(this.gridster)) {
             var $devices = cv.$(".room-devices>ul");
             $devices.append(iv.el);
-        } else {
-            this.gridster.add_widget(iv.el, 1, 1);
         }
         // Initializes the scroll bar on the added device group
         iv.initializeScrollBar();
@@ -470,26 +466,16 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
     },
 
     removeDeviceGroup: function(deviceGroupView) {
-        this.gridster.remove_widget(deviceGroupView.$el);
         deviceGroupView.model.destroy();
         deviceGroupView.close();
     },
 
     initializeUIEffects: function() {
 
-        this.gridster = $('.room-devices>ul').gridster({
-            widget_base_dimensions: [320, 300],
-            widget_margins: [5, 5],
-            min_cols: 6,
-            min_rows: 1
-        }).data('gridster');
-
         // Initialize the scroll bar component for the device groups
         _.each(this.children, function(view, cid){
             view.initializeScrollBar();
         });
-
-        
     }
 });
 

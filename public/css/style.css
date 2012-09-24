@@ -259,16 +259,12 @@ h3 {
   overflow-x: hidden;
 }
 
-.room-device-group .scroll-panel {
-  width: 320px;  
-}
-
 .room-device-group .scroll-panel .scrollbar {  
   opacity: 0;
-  transition: opacity 2s;
-  -moz-transition: opacity 2s;
-  -webkit-transition: opacity 2s;
-  -o-transition: opacity 2s;
+  transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  -webkit-transition: opacity 1s;
+  -o-transition: opacity 1s;
 }
 
 .scrollbar .thumb {
@@ -309,7 +305,6 @@ ul.device-list {
   list-style: none;
   padding: 5px;
   margin: 0px;
-  width: 300px;
 }
 
 ul.device-list li {
