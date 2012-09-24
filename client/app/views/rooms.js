@@ -418,10 +418,14 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
 
     initializeUIEffects: function() {
 
+        document.documentElement.clientWidth
         this.gridster = $('.room-devices>ul').gridster({
             widget_base_dimensions: [320, 300],
+            widget_custom_dimensions: {480 : [450, 300], 
+            768 : [350, 300], 1024 : [315, 300]
+            , 320 : [295, 300]},
             widget_margins: [5, 5],
-            min_cols: 6,
+            min_cols: 1,
             min_rows: 1
         }).data('gridster');
 

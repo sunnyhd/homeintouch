@@ -694,6 +694,7 @@
         widget_selector: '> li',
         widget_margins: [10, 10],
         widget_base_dimensions: [400, 225],
+        widget_custom_dimensions : {},
         extra_rows: 0,
         extra_cols: 0,
         min_cols: 1,
@@ -732,6 +733,10 @@
     *    @param {Array} [options.widget_base_dimensions] Base widget dimensions
     *     in pixels. The first index for the width and the second for the
     *     height.
+    *    @param {Object} [options.widget_custom_dimensions] Custom widget dimensions
+    *     in pixels. The key is the width of the screen (media query max-width), 
+    *     the value is an array like widget_base_dimensions, 
+    *     where the first index for the width and the second for the height.
     *    @param {Number} [options.extra_cols] Add more columns in addition to
     *     those that have been calculated.
     *    @param {Number} [options.extra_rows] Add more rows in addition to
@@ -787,11 +792,115 @@
         this.set_dom_grid_height();
         this.$wrapper.addClass('ready');
         this.draggable();
+        this.register_media_events();
 
-        $(window).bind(
-            'resize', throttle($.proxy(this.recalculate_faux_grid, this), 200));
+        //$(window).bind(
+        //    'resize', throttle($.proxy(this.recalculate_faux_grid, this), 200));
     };
 
+    fn.update_gridster = function (mq) {
+
+        var aw = this.$wrapper.width();
+        var ah = this.$wrapper.height();
+
+        var cols = Math.floor(aw / this.get_min_widget_width()) +
+                   this.options.extra_cols;
+
+        var actual_cols = this.$widgets.map(function() {
+            return $(this).attr('data-col');
+        });
+        actual_cols = Array.prototype.slice.call(actual_cols, 0);
+        //needed to pass tests with phantomjs
+        actual_cols.length || (actual_cols = [0]);
+
+        var min_cols = Math.max.apply(Math, actual_cols);
+
+        // get all rows that could be occupied by the current widgets
+        var max_rows = this.options.extra_rows;
+        this.$widgets.each(function(i, w){
+            max_rows += (+$(w).attr('data-sizey'));
+        });
+
+        this.cols = Math.max(cols, this.options.min_cols);
+        this.rows = Math.max(max_rows, this.options.min_rows);
+
+        this.baseX = ($(window).width() - aw) / 2;
+        this.baseY = this.$wrapper.offset().top;
+
+        var removed_widgets = [];
+        var that = this;
+
+        this.recalculate_faux_grid();
+/*
+        this.$widgets.each(function() {
+
+            var wgd = $(this).data('coords').grid;
+
+            if (!that.can_move_to(wgd, 1, 1)) {
+                var new_wgd = that.next_position(wgd.size_x, wgd.size_y);
+                new_wgd.el = $(this);
+                $(this).attr({
+                    'data-col': new_wgd.col,
+                    'data-row': new_wgd.row,
+                    'data-sizex': new_wgd.size_x,
+                    'data-sizey': new_wgd.size_y
+                });
+
+                that.remove_from_gridmap(wgd);
+
+                $(this).data('coords').grid = new_wgd;
+
+                that.add_to_gridmap(new_wgd, $(this));
+            }
+
+/*
+            !that.can_move_to(wgd, wgd.col, wgd.row)
+
+            if ($(this).attr('data-col') > that.cols) {
+                
+                var new_col = 1;
+                var new_row = parseInt($(this).attr('data-row'), 10) + 1;
+
+                while (!that.can_move_to(wgd, new_col, new_row)) {
+                    if (new_col > that.cols) {
+                        new_col = 1;
+                        new_row = new_row + 1;
+                    } else {
+                        new_col += 1;
+                    }
+                }
+
+
+                wgd.col = new_col;
+                wgd.row = new_row;
+
+                that.add_to_gridmap(wgd, $(this));
+
+                $(this).attr('data-col', new_col);
+                $(this).attr('data-row', new_row);
+            }
+        });*/
+    };
+
+    fn.register_media_events = function() {
+
+        if (window.matchMedia) {
+
+            var update_function = throttle($.proxy(this.update_gridster, this), 200);
+
+            var custom_dimensions = this.options.widget_custom_dimensions;
+
+            for (var key in custom_dimensions) {
+                var custom_width = custom_dimensions[key][0];
+                var media_query = 'screen and (max-width: ' + key + 'px)';
+                // Establishing media check
+                var widthCheck = window.matchMedia(media_query);
+               
+                // Add listeners for detecting changes
+                widthCheck.addListener(update_function);
+            }
+        }
+    };
 
     /**
     * Disables dragging.
@@ -3089,6 +3198,8 @@
         opts.namespace || (opts.namespace = '');
         opts.widget_base_dimensions ||
             (opts.widget_base_dimensions = this.options.widget_base_dimensions);
+        opts.widget_custom_dimensions ||
+            (opts.widget_custom_dimensions = this.options.widget_custom_dimensions);
         opts.widget_margins ||
             (opts.widget_margins = this.options.widget_margins);
         opts.min_widget_width = (opts.widget_margins[0] * 2) +
@@ -3130,6 +3241,29 @@
             styles += (opts.namespace + ' [data-sizex="' + x + '"] { width:' +
                 (x * opts.widget_base_dimensions[0] +
                 (x - 1) * (opts.widget_margins[0] * 2)) + 'px;}');
+        }
+
+        /* generate custom CSS style for cols */
+        var custom_dimensions = opts.widget_custom_dimensions;
+
+        for (var key in custom_dimensions) {
+            var custom_width = custom_dimensions[key][0];
+            /* generate CSS style for col width */
+            styles += opts.namespace + ' @media screen and (max-width: ' + key + 'px) {';
+            for (var x = 1; x <= max_size_x; x++) {
+                styles += (opts.namespace + ' [data-sizex="' + x + '"] { width:' +
+                           custom_width + 'px;}');
+            }
+
+            /* generate CSS style for col position */
+            for (i = opts.cols; i >= 0; i--) {
+                styles += (opts.namespace + ' [data-col="' + (i + 1) + '"] { left:' +
+                    ((i * custom_width) +
+                    (i * opts.widget_margins[0]) +
+                    ((i + 1) * opts.widget_margins[0])) + 'px;}');
+            }
+
+            styles += ' }';
         }
 
         return this.add_style_tag(styles);
@@ -3251,7 +3385,7 @@
 
         $.each(this.faux_grid, $.proxy(function(i, coords) {
             this.faux_grid[i] = coords.update({
-                left: this.baseX + (coords.data.col -1) * this.min_widget_width,
+                left: this.baseX + (coords.data.col -1) * this.get_min_widget_width(),
                 top: this.baseY + (coords.data.row -1) * this.min_widget_height
             });
 
@@ -3274,6 +3408,39 @@
         return this;
     };
 
+    /**
+    * Get minimum widget width according to the width of the screen.
+    *
+    * @method get_min_widget_width
+    * @return {Number} Returns the min width o a widget.
+    */
+    fn.get_min_widget_width = function() {
+        var client_width = document.documentElement.clientWidth;
+        var custom_widget_width;
+        var min_max_height;
+
+        var custom_dimensions = this.options.widget_custom_dimensions;
+
+        for (var key in custom_dimensions) {
+            if (client_width < key) {
+                if (min_max_height == null) {
+                    min_max_height = key;
+                    custom_widget_width = custom_dimensions[key];
+                } else {
+                    if (key < min_max_height) {
+                        min_max_height = key;
+                        custom_widget_width = custom_dimensions[key];
+                    }
+                }
+            }
+        }
+
+        if (custom_widget_width != null) {
+            return custom_widget_width[0];
+        } else {
+            return this.min_widget_width;
+        }
+    };
 
     /**
     * Calculate columns and rows to be set based on the configuration
@@ -3286,7 +3453,7 @@
         var aw = this.$wrapper.width();
         var ah = this.$wrapper.height();
 
-        var cols = Math.floor(aw / this.min_widget_width) +
+        var cols = Math.floor(aw / this.get_min_widget_width()) +
                    this.options.extra_cols;
 
         var actual_cols = this.$widgets.map(function() {
