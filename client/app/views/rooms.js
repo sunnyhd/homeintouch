@@ -362,6 +362,10 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-group-template",
 
     className: "room-device-group span4",
+    
+    tagName: 'li',
+
+    attributes: {"data-row":"1", "data-col":"1", "data-sizex":"1", "data-sizey":"1"},
 
     events: {
         "click button.addDevice": "addDeviceClicked"
@@ -379,6 +383,9 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
         var type = this.model.get("type");
         this.itemView = this.itemViewTypes[type];
+
+        // Bind event when the devices are removed to check if there devices in the collection
+        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);        
     },
 
     addDeviceClicked: function(e){
@@ -388,8 +395,27 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     appendHtml: function(cv, iv){
         cv.$("ul").append(iv.el);
-    }
+        // If the scroll bar component is created, update it
+        if (this.scrollBar) {
+            this.updateScrollBar();
+        }
+    },
 
+    checkEmptyCollection: function() {
+        if (this.collection.length == 0) {
+            this.trigger('room:device-group:empty', this);
+        } else {
+            this.updateScrollBar();
+        }
+    },
+
+    initializeScrollBar: function() {
+        this.scrollBar = $('.scroll-panel', this.$el).tinyscrollbar();
+    },
+
+    updateScrollBar: function() {
+        $('.scroll-panel', this.$el).tinyscrollbar_update();
+    }
 });
 
 exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
@@ -418,10 +444,53 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
     },
 
     appendHtml: function(cv, iv){
-        var $devices = cv.$(".room-devices>div");
-        $devices.append(iv.el);
-    }
+        if (_.isUndefined(this.gridster)) {
+            var $devices = cv.$(".room-devices>ul");
+            $devices.append(iv.el);
+        } else {
+            this.gridster.add_widget(iv.el, 1, 1);
+        }
+        // Initializes the scroll bar on the added device group
+        iv.initializeScrollBar();
+    },
 
+    onRender: function() {
+
+        this.bindTo(this, "item:added", this.bindItemViewEvents, this);
+
+        var that = this;
+        // Bind event to remove device-group when there no devices of a type
+        _.each(this.children, function(view, cid){
+            that.bindItemViewEvents(view);
+        });
+    },
+
+    bindItemViewEvents: function(itemView) {
+        this.bindTo(itemView, 'room:device-group:empty', this.removeDeviceGroup, this);
+    },
+
+    removeDeviceGroup: function(deviceGroupView) {
+        this.gridster.remove_widget(deviceGroupView.$el);
+        deviceGroupView.model.destroy();
+        deviceGroupView.close();
+    },
+
+    initializeUIEffects: function() {
+
+        this.gridster = $('.room-devices>ul').gridster({
+            widget_base_dimensions: [320, 300],
+            widget_margins: [5, 5],
+            min_cols: 6,
+            min_rows: 1
+        }).data('gridster');
+
+        // Initialize the scroll bar component for the device groups
+        _.each(this.children, function(view, cid){
+            view.initializeScrollBar();
+        });
+
+        
+    }
 });
 
 exports.AddRoomForm = Backbone.Marionette.ItemView.extend({

@@ -1,14 +1,20 @@
 script(id="room-layout-template", type="text/template")
   .container-fluid
-    .room-devices.row-fluid
-      .span12
+    .room-devices.row-fluid.gridster
+      ul.span12.unstyled
 
 script(id="device-group-template", type="text/template")
   .device-group-name
     .pull-right
       button(class="btn btn-inverse").addDevice +
     h3 <%= name %>
-  ul.device-list
+  .scroll-panel
+    .scrollbar
+      .track
+        .thumb
+          .end
+    .viewport
+      ul.device-list.overview
 
 script(id="device-add-group-to-room-template", type="text/template")
   .modal-header
