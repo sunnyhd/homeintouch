@@ -50,6 +50,21 @@ var addDeviceWorkflows = {
         });
     },
 
+    editGroupOfRoom: function(deviceGroup){
+        var that = this;
+        var viewModel = deviceGroup.model;
+
+        var editGroupForm = this.showEditGroupForm(viewModel);
+
+        editGroupForm.on("close", function(){
+            if (editGroupForm.result.status === "OK"){
+                viewModel.change();
+                homesController.saveCurrentHome();
+                deviceGroup.applyStyles();
+            }
+        });
+    },
+
     addDeviceToGroup: function(room, deviceGroup){
         var that = this;
 
@@ -96,6 +111,18 @@ var addDeviceWorkflows = {
         return form;
     },
 
+    showEditGroupForm: function(viewModel){
+        // the add form
+        var form = new deviceViews.EditDeviceGroupOfRoomForm({
+            model: viewModel
+        });
+
+        // Show the add group form
+        app.modal.show(form);
+
+        return form;
+    },
+
     showAddDeviceToGroup: function(deviceGroup){
         var deviceType = deviceGroup.deviceType;
         var FormType = deviceTypeAddForm[deviceType.get("type")];
@@ -125,6 +152,10 @@ exports.addGroupToRoom = function(room) {
     addDeviceWorkflows.addGroupToRoom(room);
 };
 
+exports.editGroupOfRoom = function(deviceGroup) {
+    addDeviceWorkflows.editGroupOfRoom(deviceGroup);
+};
+
 // Application Event handlers
 // --------------------------
 
@@ -141,4 +172,8 @@ app.vent.on("room:device:addToGroup", function(room, deviceGroup){
 
 app.vent.on("room:addDeviceGroup", function(room){
     addDeviceWorkflows.addGroupToRoom(room);
+});
+
+app.vent.on("room:editDeviceGroup", function(deviceGroup){
+    addDeviceWorkflows.editGroupOfRoom(deviceGroup);
 });
