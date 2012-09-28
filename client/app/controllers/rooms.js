@@ -50,16 +50,14 @@ exports.showRoom = function(floor, room) {
         }
     });
 
-
-    // Touch navigation
-    $('#home-touch-title').html('&nbsp;' + room.get('name'));
-    var $touchNav = $('#touch-top-nav');
-    $('a span', $touchNav).html('&nbsp;' + floor.get('name'));
-    $('a', $touchNav).off('click').on('click', function(e) {
-        e.preventDefault();
-        app.vent.trigger("floor:selected", floor);
+    app.updateTouchNav({
+        name: room.get('name'), 
+        previous: floor.get('name'),
+        handler: function(e) {
+            e.preventDefault();
+            app.vent.trigger("floor:selected", floor);
+        }
     });
-    $touchNav.show();
     
     return room;
 };

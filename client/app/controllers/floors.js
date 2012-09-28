@@ -79,15 +79,14 @@ var showFloorList = function(home, floor) {
         }
     });
 
-    // Touch navigation
-    $('#home-touch-title').html('&nbsp;' + floor.get('name'));
-    var $touchNav = $('#touch-top-nav');
-    $('a span', $touchNav).html('&nbsp;' + home.get('name'));
-    $('a', $touchNav).off('click').on('click', function(e) {
-        e.preventDefault();
-        app.vent.trigger("home:selected", home);
+    app.updateTouchNav({
+        name: floor.get('name'), 
+        previous: home.get('name'),
+        handler: function(e) {
+            e.preventDefault();
+            app.vent.trigger("home:selected", home);
+        }
     });
-    $touchNav.show();
 
     return floor;
 };
