@@ -1,4 +1,5 @@
 var Device = require('models/device');
+var Configuration = require('models/configuration');
 
 exports.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
 
@@ -16,6 +17,72 @@ exports.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
         this.result = {
             status: "OK",
             deviceType: type
+        }
+
+        this.close();
+    },
+
+    cancelClicked: function(e){
+        e.preventDefault();
+
+        this.result = {
+            status: "CANCEL"
+        }
+
+        this.close();
+    }
+
+});
+
+exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
+
+    template: "#edit-group-of-room-template",
+
+    events: {
+        "click .cancel.btn": "cancelClicked",
+        "click .edit.btn": "editClicked"
+    },
+
+    editClicked: function(e){
+        e.preventDefault();
+
+        var formFields = _.values(this.model.get("titleFields"));
+
+        var data = Backbone.FormHelpers.getFormData(this, formFields);
+
+        var styleKeys = _.keys(data);
+        var titleStyleNames = _.filter(styleKeys, function(styleName) {
+            return styleName.indexOf(this.model.titlePrefix) == 0;
+        }, this);
+
+        var bodyStyleNames = _.filter(styleKeys, function(styleName) {
+            return styleName.indexOf(this.model.bodyPrefix) == 0;
+        }, this);
+
+        var titleData = _.pick(data, titleStyleNames);
+        var newTitleData = {};
+        _.each(titleData, function(value, key){
+            newTitleData[key.substr(this.model.titlePrefix.length)] = value;
+        }, this);
+
+        newTitleData['selector'] = this.model.titleSelector;
+
+        var bodyData = _.pick(data, bodyStyleNames);
+        var newBodyData = {};
+        _.each(bodyData, function(value, key){
+            newBodyData[key.substr(this.model.bodyPrefix.length)] = value;
+        }, this);
+
+        newBodyData['selector'] = this.model.bodySelector;
+
+        var titleConfiguration = new Configuration(newTitleData);
+        var bodyConfiguration = new Configuration(newBodyData);
+
+        this.model.set("bodyConfiguration", bodyConfiguration);
+        this.model.set("titleConfiguration", titleConfiguration);
+
+        this.result = {
+            status: "OK"
         }
 
         this.close();

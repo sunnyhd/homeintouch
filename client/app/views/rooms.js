@@ -366,7 +366,8 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     tagName: 'li',
 
     events: {
-        "click button.addDevice": "addDeviceClicked"
+        "click button.addDevice": "addDeviceClicked",
+        "click button.editDeviceGroup": "editDeviceGroupClicked"
     },
 
     itemViewTypes: {
@@ -391,6 +392,11 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         app.vent.trigger("room:device:addToGroup", roomsController.currentRoom, this.model);
     },
 
+    editDeviceGroupClicked: function(e){
+        e.preventDefault();
+        app.vent.trigger("room:editDeviceGroup", this);
+    },
+
     appendHtml: function(cv, iv){
         cv.$("ul").append(iv.el);
         // If the scroll bar component is created, update it
@@ -407,8 +413,17 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         }
     },
 
+    applyStyles: function() {
+        if (this.model.has('titleConfiguration')) {
+            var titleConfiguration = this.model.get('titleConfiguration');
+            $(titleConfiguration.get('selector'), this.$el).css(titleConfiguration.getStyleAttributes());
+        }
+    },
+
     initializeScrollBar: function() {
         this.scrollBar = $('.scroll-panel', this.$el).tinyscrollbar();
+
+        this.applyStyles();
     },
 
     updateScrollBar: function() {
