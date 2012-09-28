@@ -1,0 +1,118 @@
+.room-device-group {
+  margin: 5px 5px 0px 0px;
+  padding: 0px;
+  background-color: #333;
+  border-top: 1px solid #555;
+  border-left: 1px solid #555;
+  border-right: 1px solid #222;
+  border-bottom: 1px solid #222;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.room-device-group .scroll-panel .scrollbar {  
+  opacity: 0;
+  transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  -webkit-transition: opacity 1s;
+  -o-transition: opacity 1s;
+}
+
+.scrollbar .thumb {
+  -webkit-background-clip: content-box;
+  background-color: #008CD8;
+  -webkit-border-radius: 7px;
+  position: absolute;
+  right: 0;
+  opacity: 0.4;
+  transition: width 250ms;
+  -webkit-transition: width 250ms;
+  width: 5px;
+}
+
+.scrollbar .thumb:hover {
+  width: 10px;
+}
+
+.room-device-group .scroll-panel:hover .scrollbar {
+  opacity: 0.8;
+}
+
+.room-device-group .scroll-panel .viewport{
+  height: 262px;
+}
+
+.room-devices {
+}
+
+.device-group-name {
+  background-color: #222;
+  border-bottom: 1px solid #555;
+  color: #ddd;
+  padding: 5px;
+}
+
+ul.device-list {
+  list-style: none;
+  padding: 5px;
+  margin: 0px;
+}
+
+ul.device-list li {
+  padding: 0px;
+  margin: 0px;
+}
+
+.device {
+  border-bottom: 1px solid #555;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+ul.device-list li:last-child .device {
+  border-bottom: none;
+}
+
+.device .slider {
+  width: 80%;
+  margin-bottom: 0px;
+  height: 10px;
+}
+
+.device .device-name {
+  font-size: 12pt;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+.device-name a, .device-name a:hover, .device-name a:active, .device-name a:visited {
+  color: #008CD8
+}
+
+.device-control {
+  margin: 0px 0px 0px 10px;
+}
+
+.device-control .btn-mini {
+  margin-bottom: 10px;
+}
+
+.device-control input {
+  width: 50px;
+}
+
+.control-name {
+  color: #ddd;
+}
+
+label.pull-right{
+  text-align: right
+}
+
+.add-room.btn{
+  margin-right: 5px;
+}
+
+.uneditable-input {
+  cursor: default;
+}

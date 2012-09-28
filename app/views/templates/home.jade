@@ -26,29 +26,45 @@ script(id="view-home-template", type="text/template")
     a(href="#").cancel.btn.btn-primary Close
 
 script(id="dashboard-home", type="text/template")
-  .container-fluid.dashboard-home
-      .row-fluid
-        .span6.dashboard-container.clearfix
-          .dashboard-container-title
-            h3 Media Center
-          .clearfix
-            .dashboard-icon-container
-              img(src="img/media/audio_off.png")
-            .dashboard-icon-container
-              img(src="img/media/homevideo_off.png")
-            .dashboard-icon-container
-              img(src="img/media/picture_off.png")
-        .span6.dashboard-container.clearfix
-          .dashboard-container-title
-            h3 Floor List
-          <% if ( floors.length > 0 ) { %>
-          .clearfix
-            <% _.each(floors, function(floor){ %>
-            .floor-item-list(data-floor-id!="<%= floor.id %>") <%= floor.name %>
-            <% }) %>
-          <% } else { %>
-          .clearfix.empty-collection
-            | There are no floors in this home. Click 
-            a.add-floor(href="#") here 
-            | to add a new one.
-          <% } %>
+  .row-fluid
+    .span6.clearfix
+      .hit-widget.clearfix
+        .hit-title My House
+        <% _.each(floors, function(floor){ %>
+        .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", style="background-image: url(img/floors/go-home-8.ico);")
+          span <%= floor.name %>
+        <% }) %>
+    .span6.clearfix
+      .hit-widget.clearfix
+        .hit-title My Library
+        .hit-icon(data-hit-icon-href="#movies", style="background-image: url(img/media/folder-video.ico);")
+          span Movies
+        .hit-icon(data-hit-icon-href="#artists", style="background-image: url(img/media/folder-sound.ico);")
+          span Music
+        .hit-icon(data-hit-icon-href="#pictures", style="background-image: url(img/media/folder-image.ico);")
+          span Photos
+        .hit-icon(data-hit-icon-href="#files", style="background-image: url(img/media/folder-documents.ico);")
+          span Files
+  .row-fluid
+    .span6.clearfix
+      .hit-widget.clearfix
+        .hit-title Plugins
+        .hit-icon(style="background-image: url(img/plugins/youtube.png);")
+          span YouTube
+        .hit-icon(style="background-image: url(img/plugins/news-subscribe.ico);")
+          span News
+        .hit-icon(style="background-image: url(img/plugins/games-2.ico);")
+          span Games
+    .span6.clearfix
+
+script(id="switch-selected-home-template", type="text/template")
+  .modal-header
+    h2 Switch Home
+  .modal-body
+    select(id="selectedHome")
+      <% _.each(homes, function(home) { %>
+      option(value!="<%= home.id %>") <%= home.name %>
+      <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").switch.btn.btn-primary Switch

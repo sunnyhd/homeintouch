@@ -1,7 +1,7 @@
 !!! 5
 html(lang='en')
-  head
 
+  head
     meta(charset='utf-8')
     meta(name="apple-mobile-web-app-capable", content="yes")
     meta(name="apple-mobile-web-app-status-bar-style", content="black-translucent")
@@ -9,10 +9,18 @@ html(lang='en')
 
     title HOME in touch
 
+    // Libraries
     link(href='/css/bootstrap.min.css', rel='stylesheet')
     link(href='/css/bootstrap-responsive.min.css', rel='stylesheet')
     link(href='/css/scrollbar.css', rel='stylesheet')
-    link(href='/css/style.css', rel='stylesheet')    
+
+    // Custom css
+    link(href='/css/hit-general.css', rel='stylesheet')
+    link(href='/css/hit-navbar.css', rel='stylesheet')
+    link(href='/css/hit-widget.css', rel='stylesheet')
+    link(href='/css/hit-devices.css', rel='stylesheet')
+    link(href='/css/hit-media.css', rel='stylesheet')
+
     //if lt IE 9
     script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
 
@@ -33,56 +41,80 @@ html(lang='en')
     include templates/shutter-device
 
   body
-    .navbar.navbar-fixed-top
+    .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner
         .container
-          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.brand(href='#') HOME in touch
-          .nav-collapse
-            .nav-collapse
-              ul.nav
-                li
-                  a(href="#home") Home
-              ul.nav
-                li.dropdown
-                  a.dropdown-toggle(href="#", data-toggle="dropdown")
-                    | Media
-                    b.caret
-                  ul.dropdown-menu
-                    li
-                      a(href="#players") Players
-                    li
-                      a(href="#playlists") Playlists
-                    li
-                      a(href="#movies") Movies
-                    li
-                      a(href="#tvshows") TV Shows
-                    li
-                      a(href="#artists") Artists
-                    li
-                      a(href="#albums") Albums
-                    li
-                      a(href="#songs") Songs
-                    li
-                      a(href="#pictures") Pictures
-              ul.nav
-                li.dropdown
-                  a.dropdown-toggle(href="#", data-toggle="dropdown")
-                    | Settings
-                    b.caret
-                  ul.dropdown-menu
-                    li
-                      a(href="#import") Import
-            ul#dropdown.nav.pull-right
-            .divider-vertical.pull-right
 
-    #subnav.container-fluid
+          // Phones and Tables Top Title 
+          .nav-title-container.hidden-desktop
+            .nav-title#home-touch-title
 
-    #main-content!= body
+          .navbar-top
 
+            // Desktop Top Navigation 
+            ul#desktop-breadcrumb-nav.nav.visible-desktop
+              li.hit-home
+                a(href="#")
+                  i.icon-home.icon-white
+                  span
+              li.hit-floor
+                a(href="#")
+                  span
+              li.hit-room
+                a(href="#")
+                  span
+            ul.nav.pull-right.visible-desktop
+              li#dektop-top-config
+                a.pull-right(href="#")
+                  i.icon-cog.icon-white
+                  span &nbsp;Settings
+              li#dektop-top-opts
+                a.pull-right(href="#")
+                  i.icon-plus.icon-white
+                  span &nbsp;Options
+              li.divider-vertical
+              li
+                a.pull-right#dektop-top-switch(href="#")
+                  i.icon-refresh.icon-white
+                  span &nbsp;Switch Home
+
+            // Phones and Tables Top Navigation 
+            ul.nav.hidden-desktop
+              li#touch-top-nav
+                a(href="#")
+                  i.icon-chevron-left.icon-white
+                  span
+            ul.nav.pull-right.hidden-desktop
+              li#touch-top-opts
+                a.pull-right(href="#")
+                  i.icon-plus.icon-white
+              li.divider-vertical
+              li
+                a.pull-right#touch-top-switch(href="#")
+                  i.icon-refresh.icon-white
+
+    #modal.modal.hide.fade
+    #iframe.modal.hide.fade
+
+    // Main Content 
+    #main-content.container-fluid
+
+    // Phones and Tables Bottom Navigation 
+    .navbar.navbar-inverse.navbar-fixed-bottom.hidden-desktop
+      .navbar-inner
+        .container
+
+          #navbar-bottom
+            ul.nav
+              li.active
+                a(href="#")
+                  i.icon-home.icon-white
+            ul.nav.pull-right
+              li#touch-bottom-config
+                a.pull-right(href="#")
+                  i.icon-cog.icon-white
+
+    // App Initialization
     script(src='/application.js')
     script
       $(function() {
@@ -93,6 +125,3 @@ html(lang='en')
           players: !{JSON.stringify(players)}
         });
       });
-
-    #modal.modal
-    #iframe.modal

@@ -18,23 +18,12 @@ exports.showCurrent = function() {
 exports.showRoom = function(floor, room) {
     var rooms = floor.rooms;
     exports.currentRoom = room;
-    
-    var view = new roomViews.RoomSelector({
-        model: room,
-        collection: rooms
-    });
 
     var moreOptView = new roomViews.RoomMoreOptionsView({
         model: room
     });
     moreOptView.render();
     
-    $container = getRoomNavContainer();
-    view.render().done(function(){
-      $container.append(view.$el);
-      $container.append(moreOptView.$el);
-    });
-
     if (room.deviceGroups.length > 0) {
         var roomLayoutView = new roomViews.RoomLayout({
             model: room,
@@ -52,6 +41,26 @@ exports.showRoom = function(floor, room) {
         app.main.show(noDeviceGroupsView);
     }
 
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'room',
+        name: room.get('name'), 
+        handler: function(e) {
+            e.preventDefault();
+            app.vent.trigger("room:selected", room);
+        }
+    });
+
+
+    // Touch navigation
+    $('#home-touch-title').html('&nbsp;' + room.get('name'));
+    var $touchNav = $('#touch-top-nav');
+    $('a span', $touchNav).html('&nbsp;' + floor.get('name'));
+    $('a', $touchNav).off('click').on('click', function(e) {
+        e.preventDefault();
+        app.vent.trigger("floor:selected", floor);
+    });
+    $touchNav.show();
+    
     return room;
 };
 

@@ -12,18 +12,89 @@ var Modal = ModalManager.extend({ el: "#modal" });
 var Iframe = ModalManager.extend({ el: "#iframe" });
 
 app.addRegions({
-    dropdown: '#dropdown',
-    subnav: '#subnav',
+
+    // Desktop regions
+    desktopTopConfig: '#dektop-top-config',
+    desktopTopOpts: '#dektop-top-opts',
+    desktopTopSwitch: '#dektop-top-switch',
+
+    // Touch device (tablets & phones) regions
+    touchBottomConfig: '#touch-bottom-config',
+    touchTopOpts: '#touch-top-opts',
+    touchTopSwitch: '#touch-top-switch',
+
+    // Main & Modal regions
+    subnav: '#subnav', // FIXME delete this
     main: '#main-content',
     modal: Modal,
     iframe: Iframe
 });
 
 app.closeRegions = function() {
-    app.dropdown.close();
-    app.subnav.close();
+    app.desktopTopConfig.close();
+    app.desktopTopOpts.close();
+    app.desktopTopSwitch.close();
+    app.touchBottomConfig.close();
+    app.touchTopOpts.close();
+    app.touchTopSwitch.close();
+    app.subnav.close(); // FIXME delete this
     app.main.close();
     app.modal.close();
+};
+
+/**
+ * Updates the desktop top navigation.
+ * opts: {itemType, name, handler}
+ * */
+app.updateDesktopBreadcrumbNav = function (opts) {
+
+    // Param validations
+    (opts) || (opts = {});
+    (opts.itemType) || (opts.itemType = 'home');
+    (opts.name) || (opts.name = '');
+    (opts.handler) || (opts.handler = function(e) {
+        e.preventDefault();
+    });
+
+    var $breadcrumb = $('#desktop-breadcrumb-nav'); // Breadcrumb container
+    $('li', $breadcrumb).removeClass('active'); // Removes the active element
+
+    var $li = $('li.hit-' + opts.itemType, $breadcrumb).addClass('active'); // Actives the selected button
+    $('a span', $li).html('&nbsp;' + opts.name); // Sets the link text
+    $('a', $li).off('click').on('click', opts.handler); // Removes previous and sets the new click handler
+};
+
+/**
+ * Updates the touch devices top navigation.
+ * opts: {itemType, name, handler}
+ * */
+app.updateTouchNav = function (opts) {
+
+    // Param validations
+    (opts) || (opts = {});
+    (opts.name) || (opts.name = '');
+    (opts.previous) || (opts.previous = '');
+    (opts.handler) || (opts.handler = function(e) {
+        e.preventDefault();
+    });
+
+    $('#home-touch-title').html('&nbsp;' + opts.name);
+    var $touchNav = $('#touch-top-nav');
+    $('a span', $touchNav).html('&nbsp;' + opts.previous);
+    $('a', $touchNav).off('click').on('click', opts.handler);
+    $touchNav.show();
+};
+
+app.hitIcons = function($el) {
+    if ($el.length) {
+        $('.hit-icon', $el).click(function(e) {
+            var $icon = $(e.currentTarget);
+            var url = $icon.data('hit-icon-href');
+            if (url) {
+              window.location.href = url;
+            }
+        });
+    }
 };
 
 app.vent.on('device:read', function(address){

@@ -12,13 +12,13 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
     template: "#dashboard-floor",
 
     events: {
-        "click .floor-item-list": "roomClicked",
+        "click .room-item-list": "roomClicked",
         "click a.add-room": "addRoomHandler"
     },
 
     roomClicked: function(e){
         e.preventDefault();
-        var roomId = ($(e.currentTarget).data('room-id'));
+        var roomId = ($(e.currentTarget).data('item-id'));
         app.vent.trigger("room:selected", this.model.getRoomById(roomId));
     },
 

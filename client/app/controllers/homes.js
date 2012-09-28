@@ -12,24 +12,23 @@ exports.showCurrent = function() {
     return exports.showHome(home);
 };
 
-/**
- * 
- * */
 exports.showHome = function(home) {
     exports.currentHome = home;
-
-    // Creates the home navigation bar
-    var view = new homeViews.HomeSelector({
-        model: home,
-        collection: exports.homes
-    });
-    
-    view.render().done(function(){
-        getHomeNavContainer().append(view.$el);
-    });
-
     exports.showDashboard(home);
-    
+
+    $('#desktop-breadcrumb-nav').find('li span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( {
+        clear: true,
+        name: home.get('name'), 
+        handler: function(e) {
+            e.preventDefault();
+            app.vent.trigger("home:selected", home);
+        }
+    });
+
+    // Touch navigation
+    $('#home-touch-title').html('&nbsp;' + home.get('name'));
+    $('#touch-top-nav').hide();
     return home;
 };
 
@@ -53,8 +52,16 @@ exports.destroy = function(home){
     var view = new homeViews.HomeDashboardView({
         model: home
     });
-
     app.main.show(view);
+
+    var openSwitchHandler = function(e) {
+        e.preventDefault();
+        app.vent.trigger("home:switch", home);
+    };
+
+    $('#dektop-top-switch, #touch-top-switch').off('click').on('click', openSwitchHandler);
+
+    app.hitIcons(view.$el);
  };
 
 // Helper Methods
@@ -95,4 +102,14 @@ app.vent.on("home:view", function(home){
     });
 
     app.modal.show(form);
+});
+
+app.vent.on("home:switch", function(home) {
+
+    var switchView = new homeViews.SwitchSelectedHomeView({
+        model: home,
+        homes: exports.homes
+    });
+
+    app.modal.show(switchView);
 });

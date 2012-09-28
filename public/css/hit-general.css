@@ -1,0 +1,12 @@
+/* It apply only to desktop devices */
+@media (min-width: 979px) {
+	#main-content {
+		margin-top: 60px;
+	}
+}
+
+.device-group {
+	background-color: #666;
+	color: white;
+	height: 200px;
+}

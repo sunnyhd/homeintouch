@@ -2,6 +2,41 @@ var app = require('app');
 var homesController = require('controllers/homes');
 var Home = require('models/home');
 
+exports.SwitchSelectedHomeView = Backbone.Marionette.ItemView.extend({
+    template: "#switch-selected-home-template",
+
+    events: {
+        "click .cancel": "closeClicked",
+        "click .switch": "switchClicked"
+    },
+
+    /** Overrides original implementation */
+    serializeData: function(){
+        var data = {};
+
+        if (this.model) { 
+            data = this.model.toJSON();
+        }
+        if (this.options.homes) { 
+            data.homes = this.options.homes.toJSON();
+        }
+        return data;
+    },
+
+    closeClicked: function(e){
+        e.preventDefault();
+        this.close();
+    },
+
+    switchClicked: function(e){
+        e.preventDefault();
+        var homeId = $('#selectedHome option:selected').val();
+        var home = homesController.homes.get(homeId);
+        app.vent.trigger("home:selected", home);
+        this.close();
+    }
+});
+
 /** 
  * Home dashboard view.
  * */
@@ -15,7 +50,7 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
     floorClicked: function(e){
         e.preventDefault();
-        var floorId = ($(e.currentTarget).data('floor-id'));
+        var floorId = ($(e.currentTarget).data('item-id'));
         app.vent.trigger("floor:selected", this.model.getFloorById(floorId));
     },
 

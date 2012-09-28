@@ -1,0 +1,7 @@
+.movie {
+  min-height: 320px;
+}
+
+.movie img {
+  width: 200px;
+}

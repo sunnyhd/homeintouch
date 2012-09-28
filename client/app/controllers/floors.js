@@ -67,16 +67,27 @@ var showFloorList = function(home, floor) {
     exports.floors = home.floors;
     exports.currentFloor = floor;
 
-    var view = new floorViews.FloorSelector ({
-        model: floor,
-        collection: exports.floors
-    });
-
-    view.render().done(function(){
-      getFloorNavContainer().append(view.$el);
-    });
-
     exports.showDashboard(floor);
+
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor',
+        name: floor.get('name'), 
+        handler: function(e) {
+            e.preventDefault();
+            app.vent.trigger("floor:selected", floor);
+        }
+    });
+
+    // Touch navigation
+    $('#home-touch-title').html('&nbsp;' + floor.get('name'));
+    var $touchNav = $('#touch-top-nav');
+    $('a span', $touchNav).html('&nbsp;' + home.get('name'));
+    $('a', $touchNav).off('click').on('click', function(e) {
+        e.preventDefault();
+        app.vent.trigger("home:selected", home);
+    });
+    $touchNav.show();
 
     return floor;
 };

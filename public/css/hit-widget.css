@@ -1,0 +1,31 @@
+/* Widget Container */
+.hit-widget {
+	width: 100%;
+}
+
+/* Widget Title Container */
+.hit-widget .hit-title {
+	color: white;
+	background-color: black;
+	border-radius: 10px;
+	text-align: left;
+	padding: 5px 10px;
+}
+
+/* Touchable (shortcut) Icon */
+.hit-icon {
+	float: left;
+	width: 80px; 
+	height: 80px;
+	margin: 10px;
+	background: black;
+	background-position: center;
+	background-repeat: no-repeat;
+	border-radius: 10px;
+	cursor: pointer;
+
+	/* Text */
+	color: white;
+	text-align: center;
+	font-size: 0.8em;
+}

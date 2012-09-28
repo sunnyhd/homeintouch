@@ -1,0 +1,13 @@
+/* Navbar title container */
+.navbar .nav-title-container {
+	position: relative;
+}
+
+/* Navbar title */
+.navbar .nav-title-container .nav-title {
+	position: absolute;
+    text-align: center;
+    width: 100%;
+    padding: 10px 0px;
+    color: white;
+}
