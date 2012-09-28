@@ -5,11 +5,15 @@
 
 /* Widget Title Container */
 .hit-widget .hit-title {
-	color: white;
-	background-color: black;
-	border-radius: 10px;
 	text-align: left;
 	padding: 5px 10px;
+	background-color: #333;
+	border-top: 1px solid #555;
+	border-left: 1px solid #555;
+	border-right: 1px solid #222;
+	border-bottom: 1px solid #222;
+  	border-radius: 10px;
+  	color: white;
 }
 
 /* Touchable (shortcut) Icon */
@@ -18,7 +22,12 @@
 	width: 80px; 
 	height: 80px;
 	margin: 10px;
-	background: black;
+
+	background-color: #333;
+	border-top: 1px solid #555;
+	border-left: 1px solid #555;
+	border-right: 1px solid #222;
+	border-bottom: 1px solid #222;
 	background-position: center;
 	background-repeat: no-repeat;
 	border-radius: 10px;

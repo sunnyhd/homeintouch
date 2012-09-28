@@ -1,24 +1,23 @@
 script(id="device-list-thermostat-item-template", type="text/template")
-  .row-fluid.device
-    .span12
-      .device-name
-        a(href="#") <%= name %> 
-      .row-fluid.device-control
-        .span4.control-name Mode
-        .span8
-          .mode.btn-group(data-toggle="buttons-radio")
-            .btn.btn-mini.standby(data-mode="2") Standby
-            .btn.btn-mini.comfort(data-mode="1") Comfort
-            .btn.btn-mini.night(data-mode="3") Night
-            .btn.btn-mini.frost(data-mode="4") Frost
-      .row-fluid.device-control
-        .span4.control-name Set
-        .span8
-          input.setpoint(type="number", min="-100", max="100", step="0.1", value!="<%= getAddress('read_temperature_set').value %>")
-      .row-fluid.device-control
-        .span4.control-name Room Temp
-        .span8
-          input.actual.uneditable-input.input-mini(disabled="disabled")
+  .span12
+    .device-name
+      a(href="#") <%= name %> 
+    .row-fluid.device-control
+      .span4.control-name Mode
+      .span8
+        .mode.btn-group(data-toggle="buttons-radio")
+          .btn.btn-mini.standby(data-mode="2") Standby
+          .btn.btn-mini.comfort(data-mode="1") Comfort
+          .btn.btn-mini.night(data-mode="3") Night
+          .btn.btn-mini.frost(data-mode="4") Frost
+    .row-fluid.device-control
+      .span4.control-name Set
+      .span8
+        input.setpoint(type="number", min="-100", max="100", step="0.1", value!="<%= getAddress('read_temperature_set').value %>")
+    .row-fluid.device-control
+      .span4.control-name Room Temp
+      .span8
+        input.actual.uneditable-input.input-mini(disabled="disabled")
 
 script(id="device-add-thermostat-template", type="text/template")
   .modal-header

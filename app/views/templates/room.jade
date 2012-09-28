@@ -5,19 +5,21 @@ script(id="room-layout-template", type="text/template")
 
 script(id="device-group-template", type="text/template")
   .device-group-name
-    .pull-right
-      button(class="btn btn-inverse").addDevice
-        i.icon-plus.icon-white
-      button(class="btn btn-inverse").editDeviceGroup
-        i.icon-edit.icon-white
-    h3 <%= name %>
+    ul.nav.hit-nav-right
+      li.addDevice
+        a.hit-btn(href="#")
+          i.icon-plus.icon-white
+      li.editDeviceGroup
+        a.hit-btn(href="#")
+          i.icon-edit.icon-white
+    h4 <%= name %>
   .scroll-panel
     .scrollbar
       .track
         .thumb
           .end
     .viewport
-      ul.device-list.overview.span4
+      .device-list.overview
 
 script(id="device-add-group-to-room-template", type="text/template")
   .modal-header

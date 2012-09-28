@@ -70,8 +70,6 @@ exports.NoDeviceGroupView = Backbone.Marionette.ItemView.extend({
 // Base view for device items in the list
 exports.DeviceView = Backbone.Marionette.ItemView.extend({
 
-    tagName: "li",
-
     events: function(){
         var events = {
             "click a": "deviceClicked"
@@ -100,6 +98,7 @@ exports.DeviceView = Backbone.Marionette.ItemView.extend({
 exports.SwitchDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-switch-item-template",
+    className: "row-fluid device",
 
     formEvents: {
         "click .switch .btn.on": "switchOnClicked",
@@ -145,6 +144,7 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
 exports.DimmerDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-dimmer-item-template",
+    className: "row-fluid device",
 
     formEvents: {
         "click .switch .btn.on": "switchOnClicked",
@@ -218,6 +218,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 exports.ShutterDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-shutter-item-template",
+    className: "row-fluid device",
 
     formEvents: {
         "click .up": "upClicked",
@@ -279,6 +280,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 exports.ThermostatDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-thermostat-item-template",
+    className: "row-fluid device",
 
     formEvents: {
         "click .mode .btn": "modeClicked",
@@ -363,11 +365,11 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     className: "room-device-group span4",
     
-    tagName: 'li',
+    //tagName: 'li',
 
     events: {
-        "click button.addDevice": "addDeviceClicked",
-        "click button.editDeviceGroup": "editDeviceGroupClicked"
+        "click .addDevice": "addDeviceClicked",
+        "click .editDeviceGroup": "editDeviceGroupClicked"
     },
 
     itemViewTypes: {
@@ -398,7 +400,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     },
 
     appendHtml: function(cv, iv){
-        cv.$("ul").append(iv.el);
+        cv.$(".device-list").append(iv.el);
         // If the scroll bar component is created, update it
         if (this.scrollBar) {
             this.updateScrollBar();

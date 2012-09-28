@@ -45,23 +45,31 @@
 .room-devices {
 }
 
+/* Device group TITLE */
 .device-group-name {
   background-color: #222;
   border-bottom: 1px solid #555;
   color: #ddd;
   padding: 5px;
 }
+.device-group-name > ul {
+  margin-top: 4px;
+}
 
-ul.device-list {
-  list-style: none;
+/* Device list container */
+.device-list {
   padding: 5px;
   margin: 0px;
 }
 
-ul.device-list li {
+.device-list.overview { /* FIXME: Verify */
+  position: relative;
+}
+
+/*ul.device-list li {
   padding: 0px;
   margin: 0px;
-}
+}*/
 
 .device {
   border-bottom: 1px solid #555;
@@ -69,9 +77,9 @@ ul.device-list li {
   margin-bottom: 10px;
 }
 
-ul.device-list li:last-child .device {
+/*ul.device-list li:last-child .device {
   border-bottom: none;
-}
+}*/
 
 .device .slider {
   width: 80%;

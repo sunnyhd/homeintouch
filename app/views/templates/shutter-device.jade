@@ -1,19 +1,18 @@
 script(id="device-list-shutter-item-template", type="text/template")
-  .row-fluid.device
-    .span12
-      .device-name
-        a(href="#") <%= name %>
-      .row-fluid.device-control
-        .span4.control-name Controls
-        .span8
-          .switch.btn-group
-            .btn.btn-mini.down Down
-            .btn.btn-mini.stop Stop
-            .btn.btn-mini.up Up
-      .row-fluid.device-control
-        .span4.control-name Position
-        .span8
-          input.slider.position(type="range", min="0", max="255", width="50", value!="<%= getAddress('read_position').value %>")
+  .span12
+    .device-name
+      a(href="#") <%= name %>
+    .row-fluid.device-control
+      .span4.control-name Controls
+      .span8
+        .switch.btn-group
+          .btn.btn-mini.down Down
+          .btn.btn-mini.stop Stop
+          .btn.btn-mini.up Up
+    .row-fluid.device-control
+      .span4.control-name Position
+      .span8
+        input.slider.position(type="range", min="0", max="255", width="50", value!="<%= getAddress('read_position').value %>")
 
 script(id="device-add-shutter-template", type="text/template")
   .modal-header
