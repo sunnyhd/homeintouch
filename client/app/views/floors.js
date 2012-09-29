@@ -5,6 +5,19 @@ var Floor = require('models/floor');
 // Views
 // -----
 
+exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
+    template: "#context-menu-floor-opts",
+
+    events: {
+        'click a.add-room': 'addRoomHandler'
+    },
+
+    addRoomHandler: function(e) {
+        e.preventDefault();
+        app.vent.trigger("room:add");
+    }
+});
+
 /** 
  * Floor dashboard view.
  * */

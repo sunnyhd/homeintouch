@@ -88,6 +88,9 @@ var showFloorList = function(home, floor) {
         }
     });
 
+    app.touchTopOpts.show(new floorViews.OptionsContextMenuView());
+    app.desktopTopOpts.show(new floorViews.OptionsContextMenuView());
+
     return floor;
 };
 

@@ -1,11 +1,10 @@
 .room-device-group {
-  margin: 5px 5px 0px 0px;
   padding: 0px;
   background-color: #333;
-  border-top: 1px solid #555;
-  border-left: 1px solid #555;
-  border-right: 1px solid #222;
-  border-bottom: 1px solid #222;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #555 #222 #222 #555;
+  border-radius: 5px;
   overflow-y: hidden;
   overflow-x: hidden;
 }
@@ -124,3 +123,15 @@ label.pull-right{
 .uneditable-input {
   cursor: default;
 }
+
+/**** MEDIA QUERIES ****/
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+
+  .room-devices~.room-devices, .room-device-group~.room-device-group {
+    margin-top: 10px;
+  }
+}
+
+/**** END MEDIA QUERIES ****/

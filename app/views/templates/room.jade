@@ -1,7 +1,6 @@
 script(id="room-layout-template", type="text/template")
   .container-fluid
     .room-devices.row-fluid
-      ul.span12.unstyled
 
 script(id="device-group-template", type="text/template")
   .device-group-name
@@ -80,3 +79,9 @@ script(id="room-more-options-template", type="text/template")
   ul.dropdown-menu
     li
       a.add-device-group(href="#") Add device
+
+script(id="context-menu-room-opts", type="text/template")
+  li
+    a.add-device(href="#") Add device
+  li
+    a(href="#") Room Settings

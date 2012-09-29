@@ -7,3 +7,9 @@ script(id="dashboard-floor", type="text/template")
         .hit-icon.room-item-list(data-item-id!="<%= room.id %>", style="background-image: url(img/floors/go-home-8.ico);")
           span <%= room.name %>
         <% }) %>
+
+script(id="context-menu-floor-opts", type="text/template")
+  li
+    a.add-room(href="#") Add Room
+  li
+    a(href="#") Floor Settings

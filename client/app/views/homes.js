@@ -2,6 +2,19 @@ var app = require('app');
 var homesController = require('controllers/homes');
 var Home = require('models/home');
 
+exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
+    template: "#context-menu-home-opts",
+
+    events: {
+        'click a.add-floor': 'addFloorHandler'
+    },
+
+    addFloorHandler: function(e) {
+        e.preventDefault();
+        app.vent.trigger("floor:add");
+    }
+});
+
 exports.SwitchSelectedHomeView = Backbone.Marionette.ItemView.extend({
     template: "#switch-selected-home-template",
 

@@ -19,10 +19,10 @@ exports.showRoom = function(floor, room) {
     var rooms = floor.rooms;
     exports.currentRoom = room;
 
-    var moreOptView = new roomViews.RoomMoreOptionsView({
+    /*var moreOptView = new roomViews.RoomMoreOptionsView({
         model: room
     });
-    moreOptView.render();
+    moreOptView.render();*/
     
     if (room.deviceGroups.length > 0) {
         var roomLayoutView = new roomViews.RoomLayout({
@@ -58,6 +58,10 @@ exports.showRoom = function(floor, room) {
             app.vent.trigger("floor:selected", floor);
         }
     });
+
+    var menuOpts = {model: room};
+    app.touchTopOpts.show(new roomViews.OptionsContextMenuView(menuOpts));
+    app.desktopTopOpts.show(new roomViews.OptionsContextMenuView(menuOpts));
     
     return room;
 };

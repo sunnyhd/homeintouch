@@ -29,6 +29,10 @@ exports.showHome = function(home) {
     // Touch navigation
     $('#home-touch-title').html('&nbsp;' + home.get('name'));
     $('#touch-top-nav').hide();
+
+    app.touchTopOpts.show(new homeViews.OptionsContextMenuView());
+    app.desktopTopOpts.show(new homeViews.OptionsContextMenuView());
+    
     return home;
 };
 

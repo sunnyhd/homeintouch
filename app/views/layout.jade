@@ -64,17 +64,18 @@ html(lang='en')
                 a(href="#")
                   span
             ul.nav.pull-right.visible-desktop
-              li#dektop-top-config
+              li#desktop-top-config
                 a.pull-right(href="#")
                   i.icon-cog.icon-white
                   span &nbsp;Settings
-              li#dektop-top-opts
-                a.pull-right(href="#")
+              li.dropdown#desktop-top-opts
+                a.pull-right(href="#", data-toggle="dropdown")
                   i.icon-plus.icon-white
                   span &nbsp;Options
+                ul.dropdown-menu
               li.divider-vertical
               li
-                a.pull-right#dektop-top-switch(href="#")
+                a.pull-right#desktop-top-switch(href="#")
                   i.icon-refresh.icon-white
                   span &nbsp;Switch Home
 
@@ -85,9 +86,10 @@ html(lang='en')
                   i.icon-chevron-left.icon-white
                   span
             ul.nav.pull-right.hidden-desktop
-              li#touch-top-opts
-                a.pull-right(href="#")
+              li.dropdown#touch-top-opts
+                a.pull-right(href="#", data-toggle="dropdown")
                   i.icon-plus.icon-white
+                ul.dropdown-menu
               li.divider-vertical
               li
                 a.pull-right#touch-top-switch(href="#")
@@ -105,10 +107,6 @@ html(lang='en')
         .container
 
           #navbar-bottom
-            ul.nav
-              li.active
-                a(href="#")
-                  i.icon-home.icon-white
             ul.nav.pull-right
               li#touch-bottom-config
                 a.pull-right(href="#")

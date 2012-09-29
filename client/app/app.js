@@ -15,12 +15,12 @@ app.addRegions({
 
     // Desktop regions
     desktopTopConfig: '#dektop-top-config',
-    desktopTopOpts: '#dektop-top-opts',
+    desktopTopOpts: '#desktop-top-opts ul.dropdown-menu',
     desktopTopSwitch: '#dektop-top-switch',
 
     // Touch device (tablets & phones) regions
     touchBottomConfig: '#touch-bottom-config',
-    touchTopOpts: '#touch-top-opts',
+    touchTopOpts: '#touch-top-opts ul.dropdown-menu',
     touchTopSwitch: '#touch-top-switch',
 
     // Main & Modal regions
@@ -55,6 +55,14 @@ app.updateDesktopBreadcrumbNav = function (opts) {
     (opts.handler) || (opts.handler = function(e) {
         e.preventDefault();
     });
+
+    if (opts.itemType === 'home') {
+        $('#dektop-top-switch').show();
+        $('#touch-top-switch').show();
+    } else {
+        $('#dektop-top-switch').hide();
+        $('#touch-top-switch').hide();
+    }
 
     var $breadcrumb = $('#desktop-breadcrumb-nav'); // Breadcrumb container
     $('li', $breadcrumb).removeClass('active'); // Removes the active element

@@ -2,6 +2,19 @@ var app = require('app');
 var roomsController = require('controllers/rooms');
 var Room = require('models/room');
 
+exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
+    template: "#context-menu-room-opts",
+
+    events: {
+        'click a.add-device': 'addDeviceTypeHandler'
+    },
+
+    addDeviceTypeHandler: function(e) {
+        e.preventDefault();
+        app.vent.trigger("room:addDeviceGroup", this.model);
+    }
+});
+
 exports.RoomMoreOptionsView = Backbone.Marionette.ItemView.extend({
     tagName: "li",
     id: "room-more-opts",
@@ -460,7 +473,7 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
 
     appendHtml: function(cv, iv){
         if (_.isUndefined(this.gridster)) {
-            var $devices = cv.$(".room-devices>ul");
+            var $devices = cv.$(".room-devices");
             $devices.append(iv.el);
         }
         // Initializes the scroll bar on the added device group
