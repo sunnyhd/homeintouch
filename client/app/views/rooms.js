@@ -473,8 +473,20 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
 
     appendHtml: function(cv, iv){
         if (_.isUndefined(this.gridster)) {
-            var $devices = cv.$(".room-devices");
-            $devices.append(iv.el);
+            var $rowContainer = null;
+            var $rows = cv.$(".room-devices");
+            _.each($rows, function(row) {
+                if ($('.room-device-group', row).length < 3) {
+                    $rowContainer = $(row);
+                }
+            });
+
+            if (!$rowContainer) {
+                $container = $('.container-fluid', cv.el);
+                $rowContainer = $('<div class="room-devices row-fluid">').appendTo($container);
+            }
+
+            $rowContainer.append(iv.el);
         }
         // Initializes the scroll bar on the added device group
         iv.initializeScrollBar();

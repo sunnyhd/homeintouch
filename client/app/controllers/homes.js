@@ -63,7 +63,7 @@ exports.destroy = function(home){
         app.vent.trigger("home:switch", home);
     };
 
-    $('#dektop-top-switch, #touch-top-switch').off('click').on('click', openSwitchHandler);
+    $('#desktop-top-switch, #touch-top-switch').off('click').on('click', openSwitchHandler);
 
     app.hitIcons(view.$el);
  };

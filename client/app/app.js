@@ -14,9 +14,9 @@ var Iframe = ModalManager.extend({ el: "#iframe" });
 app.addRegions({
 
     // Desktop regions
-    desktopTopConfig: '#dektop-top-config',
+    desktopTopConfig: '#desktop-top-config',
     desktopTopOpts: '#desktop-top-opts ul.dropdown-menu',
-    desktopTopSwitch: '#dektop-top-switch',
+    desktopTopSwitch: '#desktop-top-switch',
 
     // Touch device (tablets & phones) regions
     touchBottomConfig: '#touch-bottom-config',
@@ -57,10 +57,10 @@ app.updateDesktopBreadcrumbNav = function (opts) {
     });
 
     if (opts.itemType === 'home') {
-        $('#dektop-top-switch').show();
+        $('#desktop-top-switch').show();
         $('#touch-top-switch').show();
     } else {
-        $('#dektop-top-switch').hide();
+        $('#desktop-top-switch').hide();
         $('#touch-top-switch').hide();
     }
 

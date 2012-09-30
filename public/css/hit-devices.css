@@ -44,6 +44,10 @@
 .room-devices {
 }
 
+.room-devices~.room-devices {
+    margin-top: 10px;
+  }
+
 /* Device group TITLE */
 .device-group-name {
   background-color: #222;
@@ -129,7 +133,7 @@ label.pull-right{
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
 
-  .room-devices~.room-devices, .room-device-group~.room-device-group {
+  .room-device-group~.room-device-group {
     margin-top: 10px;
   }
 }

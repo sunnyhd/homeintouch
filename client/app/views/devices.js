@@ -17,7 +17,7 @@ exports.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
         this.result = {
             status: "OK",
             deviceType: type
-        }
+        };
 
         this.close();
     },
@@ -27,7 +27,7 @@ exports.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
 
         this.result = {
             status: "CANCEL"
-        }
+        };
 
         this.close();
     }
