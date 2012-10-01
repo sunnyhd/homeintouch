@@ -58,7 +58,6 @@ var addDeviceWorkflows = {
 
         editGroupForm.on("close", function(){
             if (editGroupForm.result.status === "OK"){
-                viewModel.change();
                 homesController.saveCurrentHome();
                 deviceGroup.applyStyles();
             }

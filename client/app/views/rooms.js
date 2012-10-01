@@ -392,6 +392,11 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
             var titleConfiguration = this.model.get('titleConfiguration');
             $(titleConfiguration.get('selector'), this.$el).css(titleConfiguration.getStyleAttributes());
         }
+
+        if (this.model.has('bodyConfiguration')) {
+            var bodyConfiguration = this.model.get('bodyConfiguration');
+            $(bodyConfiguration.get('selector'), this.$el).css(bodyConfiguration.getStyleAttributes());
+        }
     },
 
     initializeScrollBar: function() {

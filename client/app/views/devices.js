@@ -43,43 +43,71 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
         "click .edit.btn": "editClicked"
     },
 
+    serializeData: function(){
+
+        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
+
+        data.titleFields = this.model.get("titleFields");
+        data.bodyFields = this.model.get("bodyFields");
+
+        this.addStyleValues(data.titleFields, this.model.get("titleConfiguration"));
+        this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
+
+        return data;
+    },
+
+    addStyleValues: function(fields, configuration){
+        _.each(fields, function(field) {
+            field.value = configuration.getStyleAttribute(field.id);
+        });
+    },
+
+    extractStyle: function(formData, prefix, selector){
+
+        var styleKeys = _.keys(formData);
+        var styleNames = _.filter(styleKeys, function(styleName) {
+            return styleName.indexOf(prefix) == 0;
+        }, this);
+
+        var styleData = _.pick(formData, styleNames);
+        var newStyleData = {};
+        _.each(styleData, function(value, key){
+            newStyleData[key.substr(prefix.length)] = value;
+        }, this);
+
+        newStyleData['selector'] = selector;
+        newStyleData['prefix'] = prefix;
+
+        return newStyleData;
+    },
+
     editClicked: function(e){
         e.preventDefault();
 
-        var formFields = _.values(this.model.get("titleFields"));
+        var formFields = _.union(_.pluck(this.model.get("titleFields"), 'id'), _.pluck(this.model.get("bodyFields"), 'id'));
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
-        var styleKeys = _.keys(data);
-        var titleStyleNames = _.filter(styleKeys, function(styleName) {
-            return styleName.indexOf(this.model.titlePrefix) == 0;
-        }, this);
+        var titleConfigurationAttributes = this.extractStyle(data, this.model.titlePrefix, this.model.titleSelector);
+        var bodyConfigurationAttributes = this.extractStyle(data, this.model.bodyPrefix, this.model.bodySelector);
 
-        var bodyStyleNames = _.filter(styleKeys, function(styleName) {
-            return styleName.indexOf(this.model.bodyPrefix) == 0;
-        }, this);
+        var bodyConfiguration = this.model.get("bodyConfiguration");
 
-        var titleData = _.pick(data, titleStyleNames);
-        var newTitleData = {};
-        _.each(titleData, function(value, key){
-            newTitleData[key.substr(this.model.titlePrefix.length)] = value;
-        }, this);
+        if(bodyConfiguration == null) {
+            bodyConfiguration = new Configuration();
+            this.model.set("bodyConfiguration", bodyConfiguration);
+        }
 
-        newTitleData['selector'] = this.model.titleSelector;
+        bodyConfiguration.set(bodyConfigurationAttributes);
 
-        var bodyData = _.pick(data, bodyStyleNames);
-        var newBodyData = {};
-        _.each(bodyData, function(value, key){
-            newBodyData[key.substr(this.model.bodyPrefix.length)] = value;
-        }, this);
+        var titleConfiguration = this.model.get("titleConfiguration");
 
-        newBodyData['selector'] = this.model.bodySelector;
+        if(titleConfiguration == null) {
+            titleConfiguration = new Configuration();
+            this.model.set("titleConfiguration", titleConfiguration);
+        }
 
-        var titleConfiguration = new Configuration(newTitleData);
-        var bodyConfiguration = new Configuration(newBodyData);
-
-        this.model.set("bodyConfiguration", bodyConfiguration);
-        this.model.set("titleConfiguration", titleConfiguration);
+        titleConfiguration.set(titleConfigurationAttributes);
 
         this.result = {
             status: "OK"

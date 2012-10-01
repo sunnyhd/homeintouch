@@ -39,11 +39,19 @@ script(id="edit-group-of-room-template", type="text/template")
   .modal-header
     h2 Edit Device Group
   .modal-body
-      <% _.each(titleFields, function(val, name){ %>
+      h3 Title Style
+      <% _.each(titleFields, function(field){ %>
       .span2
-        label(for!="<%= val %>").pull-right <%= name %>
+        label(for!="<%= field.id %>").pull-right <%= field.name %>
       .span3
-        input(id!="<%= val %>", placeHolder!="<%= name %>")
+        input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+      <% }) %>
+      h3 Body Style
+      <% _.each(bodyFields, function(field){ %>
+      .span2
+        label(for!="<%= field.id %>").pull-right <%= field.name %>
+      .span3
+        input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>")
       <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
