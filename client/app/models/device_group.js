@@ -13,19 +13,17 @@ module.exports = BaseModel.extend({
 
     bodyPrefix: 'body-',
     
-    defaults: {
-        titleFields: [
-            {name: "Title Background Color", id: "title-background-color"}, 
-            {name: "Title Text Color", id: "title-color"}, 
-            {name: "Title Opacity", id: "title-opacity"}
-        ],
+    titleFields: [
+        {name: "Title Background Color", id: "title-background-color"}, 
+        {name: "Title Text Color", id: "title-color"}, 
+        {name: "Title Opacity", id: "title-opacity"}
+    ],
 
-        bodyFields: [
-            {name: "Body Background Color", id: "body-background-color"}, 
-            {name: "Body Text Color", id: "body-color"}, 
-            {name: "Body Opacity", id: "body-opacity"}
-        ]    
-    },
+    bodyFields: [
+        {name: "Body Background Color", id: "body-background-color"}, 
+        {name: "Body Text Color", id: "body-color"}, 
+        {name: "Body Opacity", id: "body-opacity"}
+    ],
 
     initialize: function(){
         this.devices = this.parseChildren("devices", Devices);
@@ -40,6 +38,9 @@ module.exports = BaseModel.extend({
             var bodyConfiguration = new Configuration(this.get("bodyConfiguration"));
             this.set("bodyConfiguration", bodyConfiguration);
         }
+
+        this.set("titleFields", this.titleFields);
+        this.set("bodyFields", this.bodyFields);
     },
 
     setDeviceType: function(){
