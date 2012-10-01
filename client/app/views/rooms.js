@@ -35,47 +35,6 @@ exports.NoRoomsView = Backbone.Marionette.ItemView.extend({
     template: "#no-rooms-template"
 });
 
-/**
- * Room Navigator Dropdown Item.
- * */
-exports.RoomItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "li",
-    template: "#home-auto-nav-item",
-
-    events: {
-        "click a": "roomClicked"
-    },
-
-    roomClicked: function(e){
-        e.preventDefault();
-        app.vent.trigger("room:selected", this.model);
-    }
-});
-
-/**
- * Room Navigator Dropdown: Creates a dropdown with the rooms and an option to create a new one.
- * */
-exports.RoomSelector = Backbone.Marionette.CompositeView.extend({
-    tagName: "li",
-    id: "room-li",
-    className: "hit-nav dropdown",
-    template: "#home-auto-nav-composite-item",
-    itemView: exports.RoomItemView,
-
-    events: {
-        "click .add-item a": "addRoomClicked"
-    },
-
-    addRoomClicked: function(e){
-        e.preventDefault();
-        app.vent.trigger("room:add");
-    },
-
-    appendHtml: function(cv, iv){ // cv: CollectionView, it: ItemView
-        cv.$("ul.dropdown-menu").prepend(iv.el);
-    }
-});
-
 exports.NoDeviceGroupView = Backbone.Marionette.ItemView.extend({
     template: "#no-device-group-template",
 });

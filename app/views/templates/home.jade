@@ -34,6 +34,10 @@ script(id="dashboard-home", type="text/template")
         .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", style="background-image: url(img/floors/go-home-8.ico);")
           span <%= floor.name %>
         <% }) %>
+        <% if(floors.length == 0) { %>
+        div.alert.alert-info
+          span There are no floors in this house.
+        <% } %>
     .span6.clearfix
       .hit-widget.clearfix
         .hit-title My Library

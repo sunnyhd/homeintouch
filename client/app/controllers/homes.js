@@ -71,22 +71,12 @@ exports.destroy = function(home){
 // Helper Methods
 // --------------
 
-function getHomeNavContainer() {
-    if (!helpers.elExists('#nav-container')) {
-        $container = helpers.getOrCreateEl('nav-container', {container: app.subnav.el});
-        $container.addClass('home-aut-nav-container');
-    }
-    $('#home-nav-ul #home-li').remove();
-    var $ul = helpers.getOrCreateEl('home-nav-ul', {type: 'ul', container: '#nav-container'});
-    return $ul.addClass('nav nav-pills');
-}
+// methods
 
 // Application Event Handlers
 // --------------------------
 
 app.vent.on("home:selected", function(home){
-    app.vent.trigger("room:remove-dropdown");
-    app.vent.trigger("floor:remove-dropdown");
     exports.showHome(home);
 });
 
