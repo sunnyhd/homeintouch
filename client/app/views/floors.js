@@ -53,51 +53,6 @@ exports.NoFloorsView = Backbone.Marionette.ItemView.extend({
     }
 });
 
-/**
- * Floor Navigator Dropdown Item.
- * */
-exports.FloorItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "li",
-    template: "#home-auto-nav-item",
-
-    events: {
-        "click a": "floorClicked"
-    },
-
-    floorClicked: function(e){
-        e.preventDefault();
-        floorsController.floors.select(this.model);
-    }
-});
-
-/**
- * Floor Navigator Dropdown: Creates a dropdown with the floors and an option to create a new one.
- * */
-exports.FloorSelector = Backbone.Marionette.CompositeView.extend({
-    tagName: "li",
-    id: "floor-li",
-    className: "hit-nav dropdown",
-    template: "#home-auto-nav-composite-item",
-    itemView: exports.FloorItemView,
-
-    events: {
-        "click .add-item": "addFloorClicked"
-    },
-
-    addFloorClicked: function(e){
-        e.preventDefault();
-        app.vent.trigger("floor:add");
-    },
-
-    /*appendHtml: function(cv, iv){
-        var $addNew = cv.$(".add-new");
-        $addNew.before(iv.el);
-    }*/
-    appendHtml: function(cv, iv){ // cv: CollectionView, it: ItemView
-        cv.$("ul.dropdown-menu").prepend(iv.el);
-    }
-});
-
 exports.AddFloorForm = Backbone.Marionette.ItemView.extend({
 
     template: "#floor-add-template",
@@ -138,6 +93,5 @@ exports.AddFloorForm = Backbone.Marionette.ItemView.extend({
     cancelClicked: function(e){
         e.preventDefault();
         this.close();
-    }
-    
+    }    
 });

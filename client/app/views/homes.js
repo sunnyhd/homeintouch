@@ -72,49 +72,7 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         app.vent.trigger("floor:add");
     }
 });
-
-/**
- * Home Navigator Dropdown Item.
- * */
-exports.HomeItemView = Backbone.Marionette.ItemView.extend({
-    tagName: "li",
-    template: "#home-auto-nav-item",
-
-    events: {
-        "click a": "homeClicked"
-    },
-
-    homeClicked: function(e){
-        e.preventDefault();
-        homesController.homes.select(this.model);
-    }
-});
-
-/**
- * Home Navigator Dropdown: Creates a dropdown with the homes and an option to create a new one.
- * */
-exports.HomeSelector = Backbone.Marionette.CompositeView.extend ({
-    tagName: "li",
-    id: "home-li",
-    className: "hit-nav dropdown",
-    template: "#home-auto-nav-composite-item",
-
-    itemView: exports.HomeItemView,
-
-    events: {
-        "click .add-item a": "addHomeClicked"
-    },
-
-    addHomeClicked: function(e){
-        e.preventDefault();
-        addNewHome();
-    },
-
-    appendHtml: function(cv, iv){ // cv: CollectionView, it: ItemView
-        cv.$("ul.dropdown-menu").prepend(iv.el);
-    }
-});
-    
+   
 exports.AddHomeForm = Backbone.Marionette.ItemView.extend({
 
     template: "#add-home-template",

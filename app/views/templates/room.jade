@@ -68,10 +68,10 @@ script(id="no-rooms-template", type="text/template")
 script(id="no-device-group-template", type="text/template")
   .no-rooms.container-fluid
     .row-fluid
-      .span9
-        h2 No Devices To Display
-      .span9
-        | Please add a device to this room
+      div.alert.alert-info.span9
+        span
+          b.show No Devices To Display
+          | Please add a device to this room
 
 script(id="room-more-options-template", type="text/template")
   a.dropdown-toggle.clearfix(href='#', data-toggle='dropdown')

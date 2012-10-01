@@ -15,6 +15,10 @@
   	color: white;
 }
 
+.hit-widget div.alert {
+	margin: 10px;
+}
+
 /* Touchable (shortcut) Icon */
 .hit-icon {
 	float: left;

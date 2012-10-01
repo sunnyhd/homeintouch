@@ -62,17 +62,3 @@ script(id="room-add-template", type="text/template")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").save.btn.btn-primary Save
-
-
-script(id="home-auto-nav-composite-item", type="text/template")
-  a.dropdown-toggle(href='#', data-toggle='dropdown')
-      | <%= name %>&nbsp;&nbsp;&nbsp;&nbsp;
-      i.icon-chevron-down.icon-white
-  ul.dropdown-menu
-    li.divider
-    li.add-item
-      a(href="#") <%= addNew %>
-
-script(id="home-auto-nav-item", type="text/template")
-  a(tabindex="-1", href="#") <%= name %>
-

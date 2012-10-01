@@ -14,24 +14,8 @@ exports.showFloors = function(home) {
 // Events
 // ---------------
 
-/*app.vent.on("home:selected", function(home) {
-    if (home.floors.length) {
-        app.vent.trigger("floor:selected", home.floors.defaultFloor());
-    } else {
-        app.vent.trigger("floor:empty");
-    }
-});*/
-
 app.vent.on("floor:selected", function(floor){
-    
-    app.vent.trigger("room:remove-dropdown");
     showFloorList(homesController.currentHome, floor);
-
-    /*if (floor.rooms.length) {
-        app.vent.trigger("room:selected", floor.rooms.defaultRoom());
-    } else {
-        app.vent.trigger("room:empty");
-    }*/
 });
 
 app.vent.on("floor:add", function(){
@@ -45,23 +29,12 @@ app.vent.on("floor:add", function(){
 });
 
 app.vent.on("floor:empty", function() {
-    getFloorNavContainer();
-
     var noFloorsView = new floorViews.NoFloorsView();
     app.main.show(noFloorsView);
 });
 
-app.vent.on("floor:remove-dropdown", function() {
-    getFloorNavContainer();
-});
-
 // Helper Methods
 // --------------
-
-function getFloorNavContainer() {
-    $('#home-nav-ul #floor-li').remove();
-    return helpers.getOrCreateEl('home-nav-ul', {type: 'ul', container: '#nav-container'});
-}
 
 var showFloorList = function(home, floor) {
     exports.floors = home.floors;

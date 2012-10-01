@@ -18,11 +18,6 @@ exports.showCurrent = function() {
 exports.showRoom = function(floor, room) {
     var rooms = floor.rooms;
     exports.currentRoom = room;
-
-    /*var moreOptView = new roomViews.RoomMoreOptionsView({
-        model: room
-    });
-    moreOptView.render();*/
     
     if (room.deviceGroups.length > 0) {
         var roomLayoutView = new roomViews.RoomLayout({
@@ -91,12 +86,6 @@ var showFirstRoom = function(home){
     }
 };
 
-function getRoomNavContainer() {
-    $('#home-nav-ul #room-li').remove();
-    $('#home-nav-ul #room-more-opts').remove();
-    return helpers.getOrCreateEl('home-nav-ul', {type: 'ul', container: '#nav-container'});
-}
-
 var showAddRoom = function(floor){
     var form = new roomViews.AddRoomForm({ model: floor });
     app.modal.show(form);
@@ -121,17 +110,7 @@ app.vent.on("room:add", function() {
     });
 });
 
-app.vent.on("floor:empty", function() {
-    getRoomNavContainer();
-});
-
 app.vent.on("room:empty", function() {
-    getRoomNavContainer();
-
     var noRoomView = new roomViews.NoRoomsView();
     app.main.show(noRoomView);
-});
-
-app.vent.on("room:remove-dropdown", function() {
-    getRoomNavContainer();
 });
