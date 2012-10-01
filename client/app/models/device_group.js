@@ -5,8 +5,6 @@ var deviceTypesController = require('controllers/device_types');
 
 module.exports = BaseModel.extend({
 
-    titleFields: {"Title Background Color" : "title-background-color", "Title Text Color" : "title-color"},
-
     titleSelector: '.device-group-name',
 
     titlePrefix: 'title-',
@@ -14,13 +12,34 @@ module.exports = BaseModel.extend({
     bodySelector: '.scroll-panel',
 
     bodyPrefix: 'body-',
+    
+    defaults: {
+        titleFields: [
+            {name: "Title Background Color", id: "title-background-color"}, 
+            {name: "Title Text Color", id: "title-color"}, 
+            {name: "Title Opacity", id: "title-opacity"}
+        ],
+
+        bodyFields: [
+            {name: "Body Background Color", id: "body-background-color"}, 
+            {name: "Body Text Color", id: "body-color"}, 
+            {name: "Body Opacity", id: "body-opacity"}
+        ]    
+    },
 
     initialize: function(){
         this.devices = this.parseChildren("devices", Devices);
         this.setDeviceType();
-        this.titleConfiguration = new Configuration(this.titleConfiguration);
-        this.set("titleConfiguration", this.titleConfiguration);
-        this.set("titleFields", this.titleFields);
+
+        if (this.has("titleConfiguration")) {
+            var titleConfiguration = new Configuration(this.get("titleConfiguration"));
+            this.set("titleConfiguration", titleConfiguration);
+        }
+
+        if (this.has("bodyConfiguration")) {
+            var bodyConfiguration = new Configuration(this.get("bodyConfiguration"));
+            this.set("bodyConfiguration", bodyConfiguration);
+        }
     },
 
     setDeviceType: function(){
@@ -43,6 +62,13 @@ module.exports = BaseModel.extend({
         if (this.has("titleConfiguration")) {
             json.titleConfiguration = this.get("titleConfiguration").toJSON();
         }
+
+        if (this.has("bodyConfiguration")) {
+            json.bodyConfiguration = this.get("bodyConfiguration").toJSON();
+        }
+
+        delete json.titleFields;
+        delete json.bodyFields;
         
         return json;
     }
