@@ -12,7 +12,7 @@ module.exports = BaseModel.extend({
     bodySelector: '.scroll-panel',
 
     bodyPrefix: 'body-',
-    
+
     titleFields: [
         {name: "Title Background Color", id: "title-background-color"}, 
         {name: "Title Text Color", id: "title-color"}, 
@@ -39,8 +39,8 @@ module.exports = BaseModel.extend({
             this.set("bodyConfiguration", bodyConfiguration);
         }
 
-        this.set("titleFields", this.titleFields);
-        this.set("bodyFields", this.bodyFields);
+        this.set("titleFields", _.clone(this.titleFields));
+        this.set("bodyFields", _.clone(this.bodyFields));
     },
 
     setDeviceType: function(){
