@@ -57,11 +57,13 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
     },
 
     addStyleValues: function(fields, configuration){
-        if (configuration != null) {
-            _.each(fields, function(field) {
+        _.each(fields, function(field) {
+            if (configuration != null) {
                 field.value = configuration.getStyleAttribute(field.id);
-            });
-        }
+            } else {
+                field.value = '';
+            }
+        });
     },
 
     extractStyle: function(formData, prefix, selector){
