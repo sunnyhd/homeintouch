@@ -59,7 +59,9 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
     events: {
         "click .floor-item-list": "floorClicked",
         "click a.add-floor": "addFloorHandler",
-        "click a.hit-slider-control": "sliderClickedHandler"
+        "click a.hit-slider-control": "sliderClickedHandler",
+
+        "webkitTransitionEnd .hit-slider-inner": "endTransition"
     },
 
     floorClicked: function(e){
@@ -73,18 +75,27 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         app.vent.trigger("floor:add");
     },
 
+    endTransition: function(e) {
+        $(e.currentTarget).data('transitioning', false);
+    },
+
     sliderClickedHandler: function(e) {
         e.preventDefault();
         var $el = $(e.currentTarget);
         var $slider = $('.hit-slider-inner', $el.parent());
 
-        var marginLeft = $slider.getPixels('margin-left');
-        if ($el.data('slide') === "next") {
-            marginLeft -= 92;
-        } else if (marginLeft < 0) {
-            marginLeft += 92;
+        if (!$slider.data('transitioning')) {
+            var marginLeft = $slider.getPixels('margin-left');
+
+            if ($el.data('slide') === "next") {
+                marginLeft -= 92;
+                $slider.data('transitioning', true);
+            } else if (marginLeft < 0) {
+                marginLeft += 92;
+                $slider.data('transitioning', true);
+            }
+            $slider.setPixels('margin-left', marginLeft);
         }
-        $slider.setPixels('margin-left', marginLeft);
     }
 });
    
