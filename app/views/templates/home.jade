@@ -29,7 +29,7 @@ script(id="dashboard-home", type="text/template")
   .row-fluid
     .span6.clearfix
       .hit-widget.clearfix
-        .hit-title My House
+        .hit-title.blue My House
         .hit-icon-container.hit-slider
           <% if(floors.length == 0) { %>
           div.alert.alert-info
@@ -37,7 +37,7 @@ script(id="dashboard-home", type="text/template")
           <% } else { %>
           .hit-slider-inner
             <% _.each(floors, function(floor){ %>
-            .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", style="background-image: url(img/floors/go-home-8.ico);")
+            .hit-icon.blue.floor-item-list(data-item-id!="<%= floor.id %>", style="background-image: url(img/floors/go-home-8.ico);")
               span <%= floor.name %>
             <% }) %>
           a.hit-slider-control.left(href="#", data-slide="prev") ‹
@@ -45,30 +45,30 @@ script(id="dashboard-home", type="text/template")
           <% } %>
     .span6.clearfix
       .hit-widget.clearfix
-        .hit-title My Library
+        .hit-title.yellow My Library
         .hit-icon-container.hit-slider
           .hit-slider-inner
-            .hit-icon(data-hit-icon-href="#movies", style="background-image: url(img/media/folder-video.ico);")
+            .hit-icon.yellow(data-hit-icon-href="#movies", style="background-image: url(img/media/folder-video.ico);")
               span Movies
-            .hit-icon(data-hit-icon-href="#artists", style="background-image: url(img/media/folder-sound.ico);")
+            .hit-icon.yellow(data-hit-icon-href="#artists", style="background-image: url(img/media/folder-sound.ico);")
               span Music
-            .hit-icon(data-hit-icon-href="#pictures", style="background-image: url(img/media/folder-image.ico);")
+            .hit-icon.yellow(data-hit-icon-href="#pictures", style="background-image: url(img/media/folder-image.ico);")
               span Photos
-            .hit-icon(data-hit-icon-href="#files", style="background-image: url(img/media/folder-documents.ico);")
+            .hit-icon.yellow(data-hit-icon-href="#files", style="background-image: url(img/media/folder-documents.ico);")
               span Files
           a.hit-slider-control.left(href="#", data-slide="prev") ‹
           a.hit-slider-control.right(href="#", data-slide="next") ›
   .row-fluid
     .span6.clearfix
       .hit-widget.clearfix
-        .hit-title Plugins
+        .hit-title.violet Plugins
         .hit-icon-container.hit-slider
           .hit-slider-inner
-            .hit-icon(style="background-image: url(img/plugins/youtube.png);")
+            .hit-icon.violet(style="background-image: url(img/plugins/youtube.png);")
               span YouTube
-            .hit-icon(style="background-image: url(img/plugins/news-subscribe.ico);")
+            .hit-icon.violet(style="background-image: url(img/plugins/news-subscribe.ico);")
               span News
-            .hit-icon(style="background-image: url(img/plugins/games-2.ico);")
+            .hit-icon.violet(style="background-image: url(img/plugins/games-2.ico);")
               span Games
           a.hit-slider-control.left(href="#", data-slide="prev") ‹
           a.hit-slider-control.right(href="#", data-slide="next") ›

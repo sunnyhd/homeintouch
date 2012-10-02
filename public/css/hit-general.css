@@ -1,3 +1,9 @@
+body {
+	background-image: url(/img/background-gradient.jpg);
+	background-repeat: repeat-x;
+	background-color: #333;
+}
+
 /* It apply only to desktop devices */
 @media (min-width: 979px) {
 	#main-content {

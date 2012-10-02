@@ -2,15 +2,18 @@ script(id="dashboard-floor", type="text/template")
   .row-fluid
     .span6.clearfix
       .hit-widget.clearfix
-        .hit-title My Rooms
-        <% _.each(rooms, function(room){ %>
-        .hit-icon.room-item-list(data-item-id!="<%= room.id %>", style="background-image: url(img/floors/go-home-8.ico);")
-          span <%= room.name %>
-        <% }) %>
-        <% if(rooms.length == 0) { %>
-        div.alert.alert-info
-          span There are no rooms in this floor.
-        <% } %>
+        .hit-title.blue My Rooms
+        .hit-icon-container.hit-slider
+          <% if(rooms.length == 0) { %>
+          div.alert.alert-info
+            span There are no rooms in this floor.
+          <% } else { %>
+          <% _.each(rooms, function(room){ %>
+          .hit-icon.blue.room-item-list(data-item-id!="<%= room.id %>", style="background-image: url(img/floors/go-home-8.ico);")
+            span <%= room.name %>
+          <% }) %>
+          <% } %>
+          
 
 script(id="context-menu-floor-opts", type="text/template")
   li
