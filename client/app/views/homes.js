@@ -58,7 +58,8 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
     events: {
         "click .floor-item-list": "floorClicked",
-        "click a.add-floor": "addFloorHandler"
+        "click a.add-floor": "addFloorHandler",
+        "click a.hit-slider-control": "sliderClickedHandler"
     },
 
     floorClicked: function(e){
@@ -70,6 +71,20 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
     addFloorHandler: function(e) {
         e.preventDefault();
         app.vent.trigger("floor:add");
+    },
+
+    sliderClickedHandler: function(e) {
+        e.preventDefault();
+        var $el = $(e.currentTarget);
+        var $slider = $('.hit-slider-inner', $el.parent());
+
+        var marginLeft = $slider.getPixels('margin-left');
+        if ($el.data('slide') === "next") {
+            marginLeft -= 92;
+        } else if (marginLeft < 0) {
+            marginLeft += 92;
+        }
+        $slider.setPixels('margin-left', marginLeft);
     }
 });
    

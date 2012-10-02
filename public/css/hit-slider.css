@@ -1,0 +1,53 @@
+.hit-slider {
+	overflow: hidden;
+	position: relative;
+}
+
+.hit-slider-inner {
+	width: 500%;
+	margin-left: 0px;
+
+	transition-property: margin-left;
+	transition-duration: 1s;
+	/* Firefox 4 */
+	-moz-transition-property: margin-left;
+	-moz-transition-duration: 1s;
+	/* Safari and Chrome */
+	-webkit-transition-property: margin-left;
+	-webkit-transition-duration: 1s;
+	/* Opera */
+	-o-transition-property: margin-left;
+	-o-transition-duration: 1s;
+}
+
+.hit-slider-control {
+	width: 30px;
+	height: 40px;
+	font-size: 50px;
+	font-weight: 100;
+	line-height: 30px;
+	color: white;
+	text-align: center;
+	background: #222;
+	border: 3px solid white;
+	border-radius: 23px;
+	opacity: .5;
+	position: absolute;
+	top: 0px; /* Override this property through a more specific selector */
+}
+
+.hit-slider-control:hover {
+	opacity: 1;
+	color: white;
+	text-decoration: none;
+}
+
+.hit-slider-control.left {
+	right: auto;
+	left: 0px;
+}
+
+.hit-slider-control.right {
+	right: 0px;
+	left: auto;	
+}

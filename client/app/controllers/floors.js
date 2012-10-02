@@ -25,6 +25,7 @@ app.vent.on("floor:add", function(){
     form.on("save", function(floor){
         home.addFloor(floor);
         homesController.save(home);
+        app.vent.trigger('home:selected', home);
     });
 });
 

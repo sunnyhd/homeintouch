@@ -243,3 +243,11 @@ itemViewPrototype.serializeData = _.wrap(itemViewPrototype.serializeData, functi
 
     return data;
 });
+
+// Jquery helpers
+$.fn.getPixels = function(property) {
+    return parseInt(this.css(property).slice(0,-2));
+};
+$.fn.setPixels = function(property, value) {
+    return this.css(property, value + 'px');
+};

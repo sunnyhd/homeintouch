@@ -19,12 +19,22 @@
 	margin: 10px;
 }
 
+.hit-icon-container {
+	height: 82px; /* height: 80px + border height: 2px */
+	margin: 10px;
+}
+
+/* Override slider styles to positionate the controls */
+.hit-icon-container .hit-slider-control { top: 18px; }
+.hit-icon-container .hit-slider-control.left { left: 0px; }
+.hit-icon-container .hit-slider-control.right { right: 0px; }
+
 /* Touchable (shortcut) Icon */
 .hit-icon {
 	float: left;
 	width: 80px; 
 	height: 80px;
-	margin: 10px;
+	margin: 0px;
 
 	background-color: #333;
 	border-style: solid;
@@ -39,4 +49,8 @@
 	color: white;
 	text-align: center;
 	font-size: 0.8em;
+}
+
+.hit-icon~.hit-icon {
+	margin-left: 10px;
 }

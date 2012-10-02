@@ -42,7 +42,6 @@ exports.saveCurrentHome = function(){
 
 exports.save = function(home){
     home.save();
-    app.vent.trigger('home:selected', home);
 };
 
 exports.destroy = function(home){
