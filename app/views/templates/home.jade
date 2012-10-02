@@ -31,17 +31,18 @@ script(id="dashboard-home", type="text/template")
       .hit-widget.clearfix
         .hit-title My House
         .hit-icon-container.hit-slider
+          <% if(floors.length == 0) { %>
+          div.alert.alert-info
+            span There are no floors in this house.
+          <% } else { %>
           .hit-slider-inner
             <% _.each(floors, function(floor){ %>
             .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", style="background-image: url(img/floors/go-home-8.ico);")
               span <%= floor.name %>
             <% }) %>
-            <% if(floors.length == 0) { %>
-            div.alert.alert-info
-              span There are no floors in this house.
-            <% } %>
           a.hit-slider-control.left(href="#", data-slide="prev") ‹
           a.hit-slider-control.right(href="#", data-slide="next") ›
+          <% } %>
     .span6.clearfix
       .hit-widget.clearfix
         .hit-title My Library
