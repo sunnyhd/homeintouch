@@ -40,19 +40,21 @@ script(id="edit-group-of-room-template", type="text/template")
     h2 Edit Device Group
   .modal-body
       h3 Title Style
-      <% _.each(titleFields, function(field){ %>
-      .span2
-        label(for!="<%= field.id %>").pull-right <%= field.name %>
-      .span3
-        input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
-      <% }) %>
+      form.form-horizontal
+        <% _.each(titleFields, function(field){ %>
+        .control-group
+          label(for!="<%= field.id %>").control-label <%= field.name %>
+          .controls
+            input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+        <% }) %>
       h3 Body Style
-      <% _.each(bodyFields, function(field){ %>
-      .span2
-        label(for!="<%= field.id %>").pull-right <%= field.name %>
-      .span3
-        input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>")
-      <% }) %>
+      form.form-horizontal
+        <% _.each(bodyFields, function(field){ %>
+        .control-group
+          label(for!="<%= field.id %>").control-label <%= field.name %>
+          .controls
+            input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+        <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").edit.btn.btn-primary Save
