@@ -5,11 +5,19 @@ script(id="device-list-thermostat-item-template", type="text/template")
     .row-fluid.device-control
       .span4.control-name Mode
       .span8
-        .mode.btn-group(data-toggle="buttons-radio")
-          .btn.btn-mini.standby(data-mode="2") Standby
-          .btn.btn-mini.comfort(data-mode="1") Comfort
-          .btn.btn-mini.night(data-mode="3") Night
-          .btn.btn-mini.frost(data-mode="4") Frost
+        .btn-group
+          button.btn#label-button Standby
+          button.btn.dropdown-toggle(data-toggle="dropdown")
+            span.caret
+          ul.dropdown-menu
+            li
+              a(data-target="#", data-mode="2") Standby
+            li
+              a(data-target="#", data-mode="1") Comfort
+            li
+              a(data-target="#", data-mode="3") Night
+            li
+              a(data-target="#", data-mode="4") Frost
     .row-fluid.device-control
       .span4.control-name Set
       .span8

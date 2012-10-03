@@ -37,24 +37,31 @@ script(id="device-add-group-to-room-template", type="text/template")
 
 script(id="edit-group-of-room-template", type="text/template")
   .modal-header
-    h2 Edit Device Group
+    h2 Edit Device Group Styles
   .modal-body
-      h3 Title Style
-      form.form-horizontal
-        <% _.each(titleFields, function(field){ %>
-        .control-group
-          label(for!="<%= field.id %>").control-label <%= field.name %>
-          .controls
-            input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
-        <% }) %>
-      h3 Body Style
-      form.form-horizontal
-        <% _.each(bodyFields, function(field){ %>
-        .control-group
-          label(for!="<%= field.id %>").control-label <%= field.name %>
-          .controls
-            input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
-        <% }) %>
+    .tabbable
+      ul.nav.nav-tabs
+        li.active
+          a(href="#tab1", data-toggle="tab") Title
+        li
+          a(href="#tab2", data-toggle="tab") Body
+      .tab-content
+        .tab-pane.active#tab1
+          form.form-horizontal
+            <% _.each(titleFields, function(field){ %>
+            .control-group
+              label(for!="<%= field.id %>").control-label <%= field.name %>
+              .controls
+                input(id!="<%= field.id %>", type="text", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+            <% }) %>
+        .tab-pane#tab2
+          form.form-horizontal
+            <% _.each(bodyFields, function(field){ %>
+            .control-group
+              label(for!="<%= field.id %>").control-label <%= field.name %>
+              .controls
+                input(id!="<%= field.id %>", type="text", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+            <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").edit.btn.btn-primary Save

@@ -44,7 +44,7 @@ exports.DeviceView = Backbone.Marionette.ItemView.extend({
 
     events: function(){
         var events = {
-            "click a": "deviceClicked"
+            "click .device-name a": "deviceClicked"
         };
         return _.extend(events, this.formEvents);
     },
@@ -73,8 +73,7 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     className: "row-fluid device",
 
     formEvents: {
-        "click .switch .btn.on": "switchOnClicked",
-        "click .switch .btn.off": "switchOffClicked"
+        "click .btn": "switchClicked"
     },
 
     initialize: function(){
@@ -83,12 +82,11 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
         this.writeAddress = this.model.getAddressByType("write_switch");
     },
 
-    switchOnClicked: function(){
-        this.flipSwitch(true);
-    },
-
-    switchOffClicked: function(){
-        this.flipSwitch(false);
+    switchClicked: function() {
+        var btnSwitch = this.$('.btn');
+        var on = !btnSwitch.hasClass('active');
+        this.flipSwitch(on);
+        this.updateSwitch(on);
     },
 
     flipSwitch: function(on){
@@ -96,14 +94,21 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
         app.vent.trigger("device:write", address, on);
     },
 
-    selectSwitch: function(address, value){
-        var $btnSwitch;
-        if (value){
-            $btnSwitch = this.$(".switch .btn.on");
+    updateSwitch: function(on) {
+        var btnSwitch = this.$('.btn');
+
+        var onClass = 'btn-success active';
+        var offClass = 'btn-danger';
+
+        if (on) {
+            btnSwitch.removeClass(offClass).addClass(onClass);
         } else {
-            $btnSwitch = this.$(".switch .btn.off");
+            btnSwitch.removeClass(onClass).addClass(offClass);
         }
-        $btnSwitch.button("toggle");
+    },
+
+    selectSwitch: function(address, value){
+        this.updateSwitch(value);
     },
 
     onRender: function(){
@@ -256,7 +261,8 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
 
     formEvents: {
         "click .mode .btn": "modeClicked",
-        "change .setpoint": "setpointChanged"
+        "change .setpoint": "setpointChanged",
+        "click .dropdown-menu a": "menuClicked"
     },
 
     modes: {
@@ -264,6 +270,13 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         2: "standby",
         3: "night",
         4: "frost"
+    },
+
+    modeNames: {
+        1: "Comfort",
+        2: "Standby",
+        3: "Night",
+        4: "Frost"
     },
 
     initialize: function(){
@@ -277,6 +290,25 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         this.bindTo(this.readMode, "change:value", this.showMode, this);
         this.bindTo(this.readSetPoint, "change:value", this.showSetPoint, this);
         this.bindTo(this.readTemperature, "change:value", this.showTemperature, this);
+    },
+
+    menuClicked: function(e) {
+        var target = $(e.currentTarget);
+        if (!target.parent().hasClass('disabled')) {
+            var mode = target.data("mode");
+            var address = this.writeMode.get("address");
+            app.vent.trigger("device:write", address, mode);
+            this.updateButtonName(mode);    
+        } else {
+            return false;
+        }
+    },
+
+    updateButtonName: function(mode) {
+        var buttonName = this.modeNames[mode];
+        this.$('#label-button').text(buttonName);
+        this.$('.dropdown-menu li > a[data-mode!="' + mode + '"]').parent().removeClass('disabled');
+        this.$('.dropdown-menu li > a[data-mode="' + mode + '"]').parent().addClass('disabled');
     },
 
     modeClicked: function(e){
@@ -297,8 +329,7 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     },
 
     showMode: function(address, mode){
-        this.$(".mode .btn").removeClass("active");
-        this.$(".mode .btn[data-mode='" + mode + "']").addClass("active");
+        this.updateButtonName(mode);
     },
 
     showSetPoint: function(address, setPoint){

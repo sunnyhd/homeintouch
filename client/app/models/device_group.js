@@ -14,15 +14,15 @@ module.exports = BaseModel.extend({
     bodyPrefix: 'body-',
 
     titleFields: [
-        {name: "Title Background Color", id: "title-background-color"}, 
-        {name: "Title Text Color", id: "title-color"}, 
-        {name: "Title Opacity", id: "title-opacity"}
+        {name: "Background Color", id: "title-background-color"}, 
+        {name: "Text Color", id: "title-color"}, 
+        {name: "Opacity", id: "title-opacity"}
     ],
 
     bodyFields: [
-        {name: "Body Background Color", id: "body-background-color"}, 
-        {name: "Body Text Color", id: "body-color"}, 
-        {name: "Body Opacity", id: "body-opacity"}
+        {name: "Background Color", id: "body-background-color"}, 
+        {name: "Text Color", id: "body-color"}, 
+        {name: "Opacity", id: "body-opacity"}
     ],
 
     initialize: function(){
