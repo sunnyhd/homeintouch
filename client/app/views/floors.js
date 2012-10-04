@@ -26,7 +26,9 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
 
     events: {
         "click .room-item-list": "roomClicked",
-        "click a.add-room": "addRoomHandler"
+        "click a.add-room": "addRoomHandler",
+        "click a.hit-slider-control": "sliderClickedHandler",
+        "webkitTransitionEnd .hit-slider-inner": "endTransition"
     },
 
     roomClicked: function(e){
@@ -38,6 +40,29 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
     addRoomHandler: function(e) {
         e.preventDefault();
         app.vent.trigger("room:add");
+    },
+
+    endTransition: function(e) {
+        $(e.currentTarget).data('transitioning', false);
+    },
+
+    sliderClickedHandler: function(e) {
+        e.preventDefault();
+        var $el = $(e.currentTarget);
+        var $slider = $('.hit-slider-inner', $el.parent());
+
+        if (!$slider.data('transitioning')) {
+            var marginLeft = $slider.getPixels('margin-left');
+
+            if ($el.data('slide') === "next") {
+                marginLeft -= 92;
+                $slider.data('transitioning', true);
+            } else if (marginLeft < 0) {
+                marginLeft += 92;
+                $slider.data('transitioning', true);
+            }
+            $slider.setPixels('margin-left', marginLeft);
+        }
     }
 });
 

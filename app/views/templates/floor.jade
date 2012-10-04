@@ -8,10 +8,13 @@ script(id="dashboard-floor", type="text/template")
           div.alert.alert-info
             span There are no rooms in this floor.
           <% } else { %>
-          <% _.each(rooms, function(room){ %>
-          .hit-icon.blue.room-item-list(data-item-id!="<%= room.id %>", style="background-image: url(img/floors/go-home-8.ico);")
-            span <%= room.name %>
-          <% }) %>
+          .hit-slider-inner
+            <% _.each(rooms, function(room){ %>
+            .hit-icon.blue.room-item-list(data-item-id!="<%= room.id %>", style="background-image: url(img/floors/go-home-8.ico);")
+              span <%= room.name %>
+            <% }) %>
+          a.hit-slider-control.left(href="#", data-slide="prev") ‹
+          a.hit-slider-control.right(href="#", data-slide="next") ›
           <% } %>
           
 

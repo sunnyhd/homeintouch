@@ -60,7 +60,6 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         "click .floor-item-list": "floorClicked",
         "click a.add-floor": "addFloorHandler",
         "click a.hit-slider-control": "sliderClickedHandler",
-
         "webkitTransitionEnd .hit-slider-inner": "endTransition"
     },
 
