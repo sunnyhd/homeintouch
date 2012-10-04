@@ -12,21 +12,19 @@ script(id="device-add-switch-template", type="text/template")
   .modal-header
     h2 Add A New <%= name %>
   .modal-body
-    .row
-      .span2
-        label(for="name").pull-right Name
-      .span3
-        input(id="name", placeHolder="Office Lamp")
-    .row
-      .span2
-        label(for="read_switch").pull-right Read Address
-      .span3
-        input(id="read_switch", placeHolder="#/#/#")
-    .row
-      .span2
-        label(for="write_switch").pull-right Write Address
-      .span3
-        input(id="write_switch", placeHolder="#/#/#")
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Office Lamp")
+      .control-group
+        label(for="read_switch").control-label Read Address
+        .controls
+          input(id="read_switch", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="write_switch").control-label Write Address
+        .controls
+          input(id="write_switch", type="text", placeHolder="#/#/#")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add

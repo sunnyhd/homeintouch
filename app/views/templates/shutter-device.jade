@@ -18,31 +18,27 @@ script(id="device-add-shutter-template", type="text/template")
   .modal-header
     h2 Add A New <%= name %>
   .modal-body
-    .row
-      .span2
-        label(for="name").pull-right Name
-      .span3
-        input(id="name", placeHolder="Fireplace")
-    .row
-      .span2
-        label(for="read_position").pull-right Read Position Address
-      .span3
-        input(id="read_position", placeHolder="#/#/#")
-    .row
-      .span2
-        label(for="write_stop").pull-right Write Stop Address
-      .span3
-        input(id="write_stop", placeHolder="#/#/#")
-    .row
-      .span2
-        label(for="write_switch").pull-right Write Switch Address
-      .span3
-        input(id="write_switch", placeHolder="#/#/#")
-    .row
-      .span2
-        label(for="write_position").pull-right Write Position Address
-      .span3
-        input(id="write_position", placeHolder="#/#/#")
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Fireplace")
+      .control-group
+        label(for="read_position").control-label Read Position Address
+        .controls
+          input(id="read_position", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="write_stop").control-label Write Stop Address
+        .controls
+          input(id="write_stop", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="write_switch").control-label Write Switch Address
+        .controls
+          input(id="write_switch", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="write_position").control-label Write Position Address
+        .controls
+          input(id="write_position", type="text", placeHolder="#/#/#")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add

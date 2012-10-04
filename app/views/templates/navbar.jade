@@ -28,20 +28,19 @@ script(id="floor-add-template", type="text/template")
   .modal-header
     h2 Add A New Floor To <%= name %>
   .modal-body
-    .row
-      .span2
-        label(for="name").pull-right 
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label 
           strong Name
-      .span3
-        input(id="name", placeHolder="2nd floor")
-    .row
-      .span2
-        label(for="rooms").pull-right
+        .controls
+          input(id="name", type="text", placeHolder="2nd floor")
+      .control-group
+        label(for="rooms").control-label
           strong Rooms
           br
           | (comma separated)
-      .span3
-        textarea(id="rooms", placeHolder="Room 1, Room 2, Room 3")
+        .controls
+          textarea(id="rooms", placeHolder="Room 1, Room 2, Room 3")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").save.btn.btn-primary Save
@@ -53,12 +52,12 @@ script(id="room-add-template", type="text/template")
   .modal-header
     h2 Add A New Room To <%= name %>
   .modal-body
-    .row
-      .span2
-        label(for="name").pull-right 
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label 
           strong Name
-      .span3
-        input(id="name", placeHolder="Kitchen")
+        .controls
+          input(id="name", type="text", placeHolder="Kitchen")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").save.btn.btn-primary Save

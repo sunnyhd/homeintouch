@@ -17,31 +17,27 @@ script(id="device-add-dimmer-template", type="text/template")
   .modal-header
     h2 Add A New <%= name %>
   .modal-body
-    .row
-      .span2
-        label(for="name").pull-right Name
-      .span3
-        input(id="name", placeHolder="Ceiling Fan")
-    .row
-      .span2
-        label(for="read_switch").pull-right Read Switch Address
-      .span3
-        input(id="read_switch", placeHolder="#/#/#")
-    .row
-      .span2
-        label(for="write_switch").pull-right Write Switch Address
-      .span3
-        input(id="write_switch", placeHolder="#/#/#")
-    .row
-      .span2
-        label(for="read_dimmer").pull-right Read Dimmer Address
-      .span3
-        input(id="read_dimmer", placeHolder="#/#/#")
-    .row
-      .span2
-        label(for="write_dimmer").pull-right Write Dimmer Address
-      .span3
-        input(id="write_dimmer", placeHolder="#/#/#")
+    .form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Ceiling Fan")
+      .control-group
+        label(for="read_switch").control-label Read Switch Address
+        .controls
+          input(id="read_switch", type="text", placeHolder="#/#/#")
+      .control-group
+          label(for="write_switch").control-label Write Switch Address
+          .controls
+            input(id="write_switch", type="text", placeHolder="#/#/#")
+      .control-group
+          label(for="read_dimmer").control-label Read Dimmer Address
+          .controls
+            input(id="read_dimmer", type="text", placeHolder="#/#/#")
+      .control-group
+          label(for="write_dimmer").control-label Write Dimmer Address
+          .controls
+            input(id="write_dimmer", type="text", placeHolder="#/#/#")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add

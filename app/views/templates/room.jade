@@ -24,13 +24,14 @@ script(id="device-add-group-to-room-template", type="text/template")
   .modal-header
     h2 Add Devices To <%= name %>
   .modal-body
-      .span2
-        label(for="type").pull-right Device Type
-      .span3
-        select(id="type")
-          <% _.each(deviceTypes, function(type){ %>
-          option(value!="<%= type.type %>") <%= type.name %>
-          <% }) %>
+    form.form-horizontal
+      .control-group
+        label(for="type").control-label Device Type
+        .controls
+          select(id="type")
+            <% _.each(deviceTypes, function(type){ %>
+            option(value!="<%= type.type %>") <%= type.name %>
+            <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Next >>

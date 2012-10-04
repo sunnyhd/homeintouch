@@ -2,11 +2,11 @@ script(id="add-home-template", type="text/template")
   .modal-header
     h2 Add New Home
   .modal-body
-    .row
-      .span2
-        label(for="home-name").pull-right Name
-      .span3
-        input(id="home-name", placeHolder="Vacation")
+    form.form-horizontal
+      .control-group
+        label(for="home-name").control-label Name
+        .controls
+          input(id="home-name", type="text", placeHolder="Vacation")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add
