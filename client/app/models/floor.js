@@ -1,7 +1,18 @@
 var BaseModel = require('models/base');
 var Rooms = require('collections/rooms');
+var Configuration = require('models/configuration');
 
 module.exports = BaseModel.extend({
+
+    bodySelector: '#main-content',
+
+    bodyPrefix: 'body-',
+
+    bodyFields: [
+        {name: "Background Color", id: "body-background-color"}, 
+        {name: "Text Color", id: "body-color"}, 
+        {name: "Opacity", id: "body-opacity"}
+    ],
 
     defaults: {
         "addNew": "Add Floor...",
@@ -10,6 +21,18 @@ module.exports = BaseModel.extend({
     initialize: function(){
         this.rooms = this.parseChildren("rooms", Rooms);
         this.rooms.parentFloor = this;
+
+        this.parseInnerData();
+    },
+
+    parseInnerData: function() {
+
+        if (this.has("bodyConfiguration")) {
+            var bodyConfiguration = new Configuration(this.get("bodyConfiguration"));
+            this.set("bodyConfiguration", bodyConfiguration);
+        }
+
+        this.set("bodyFields", _.clone(this.bodyFields));  
     },
 
     defaultRoom: function() { 
@@ -32,6 +55,12 @@ module.exports = BaseModel.extend({
         if (this.rooms){
             json.rooms = this.rooms.toJSON();
         }
+
+        if (this.has("bodyConfiguration")) {
+            json.bodyConfiguration = this.get("bodyConfiguration").toJSON();
+        }
+
+        delete json.bodyFields;
 
         return json;
     }

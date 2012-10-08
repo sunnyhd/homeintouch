@@ -5,9 +5,22 @@ module.exports = BaseModel.extend({
 	reservedAttributes: ['id', 'selector', 'prefix'],
 
 	getStyleAttributes: function() {
+		var styleKeys = this.getStyleKeys();
+		return _.pick(this.attributes, styleKeys);
+	},
 
-		var styleAttributes = _.difference(_.keys(this.attributes), this.reservedAttributes);
-		return _.pick(this.attributes, styleAttributes);
+	getStyleReset: function() {
+		var styleKeys = this.getStyleKeys();
+		var resetAttributes = {};
+		_.each(styleKeys, function(styleKey){
+			resetAttributes[styleKey] = '';
+		});
+
+		return resetAttributes;
+	},
+
+	getStyleKeys: function() {
+		return _.difference(_.keys(this.attributes), this.reservedAttributes);
 	},
 
 	getFormStyleId: function(styleId) {

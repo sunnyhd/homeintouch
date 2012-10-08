@@ -1,17 +1,24 @@
 var app = require('app');
 var homesController = require('controllers/homes');
 var Home = require('models/home');
+var Configuration = require('models/configuration');
 
 exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     template: "#context-menu-home-opts",
 
     events: {
-        'click a.add-floor': 'addFloorHandler'
+        'click a.add-floor': 'addFloorHandler',
+        'click a#editStyle': 'editStyle'
     },
 
     addFloorHandler: function(e) {
         e.preventDefault();
         app.vent.trigger("floor:add");
+    },
+
+    editStyle: function() {
+        app.vent.trigger("home:editStyle", this);
+        return false;
     }
 });
 
@@ -78,6 +85,20 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         $(e.currentTarget).data('transitioning', false);
     },
 
+    onRender: function() {
+        this.applyStyles();
+    },
+
+    applyStyles: function() {
+
+        $(this.model.bodySelector).removeAttr('style');
+
+        if (this.model.has('bodyConfiguration')) {
+            var bodyConfiguration = this.model.get('bodyConfiguration');
+            $(bodyConfiguration.get('selector')).css(bodyConfiguration.getStyleAttributes());
+        }
+    },
+
     sliderClickedHandler: function(e) {
         e.preventDefault();
         var $el = $(e.currentTarget);
@@ -142,6 +163,92 @@ exports.ViewHomeForm = Backbone.Marionette.ItemView.extend({
         this.close();
     }
 
+});
+
+exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
+
+    template: "#edit-style-template",
+
+    events: {
+        "click .cancel.btn": "cancelClicked",
+        "click .edit.btn": "editClicked"
+    },
+
+    serializeData: function(){
+
+        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
+
+        data.type = 'Home';
+        data.bodyFields = this.model.get("bodyFields");
+
+        this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
+
+        return data;
+    },
+
+    addStyleValues: function(fields, configuration){
+        _.each(fields, function(field) {
+            if (configuration != null) {
+                field.value = configuration.getStyleAttribute(field.id);
+            } else {
+                field.value = '';
+            }
+        });
+    },
+
+    extractStyle: function(formData, prefix, selector){
+
+        var styleKeys = _.keys(formData);
+        var styleNames = _.filter(styleKeys, function(styleName) {
+            return styleName.indexOf(prefix) == 0;
+        }, this);
+
+        var styleData = _.pick(formData, styleNames);
+        var newStyleData = {};
+        _.each(styleData, function(value, key){
+            newStyleData[key.substr(prefix.length)] = value;
+        }, this);
+
+        newStyleData['selector'] = selector;
+        newStyleData['prefix'] = prefix;
+
+        return newStyleData;
+    },
+
+    editClicked: function(e){
+        e.preventDefault();
+
+        var formFields = _.union(_.pluck(this.model.get("titleFields"), 'id'), _.pluck(this.model.get("bodyFields"), 'id'));
+
+        var data = Backbone.FormHelpers.getFormData(this, formFields);
+
+        var bodyConfigurationAttributes = this.extractStyle(data, this.model.bodyPrefix, this.model.bodySelector);
+
+        var bodyConfiguration = this.model.get("bodyConfiguration");
+
+        if (bodyConfiguration == null) {
+            bodyConfiguration = new Configuration();
+            this.model.set("bodyConfiguration", bodyConfiguration);
+        }
+
+        bodyConfiguration.set(bodyConfigurationAttributes);
+
+        this.result = {
+            status: "OK"
+        }
+
+        this.close();
+    },
+
+    cancelClicked: function(e){
+        e.preventDefault();
+
+        this.result = {
+            status: "CANCEL"
+        }
+
+        this.close();
+    }
 });
 
 // Helper Methods

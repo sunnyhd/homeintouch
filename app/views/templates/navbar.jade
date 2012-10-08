@@ -61,3 +61,24 @@ script(id="room-add-template", type="text/template")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").save.btn.btn-primary Save
+
+script(id="edit-style-template", type="text/template")
+  .modal-header
+    h2 Edit <%= type %> Styles
+  .modal-body
+    .tabbable
+      ul.nav.nav-tabs
+        li.active
+          a(href="#tab2", data-toggle="tab") Body
+      .tab-content
+        .tab-pane.active#tab1
+          form.form-horizontal
+            <% _.each(bodyFields, function(field){ %>
+            .control-group
+              label(for!="<%= field.id %>").control-label <%= field.name %>
+              .controls
+                input(id!="<%= field.id %>", type="text", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+            <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").edit.btn.btn-primary Save

@@ -1,17 +1,24 @@
 var app = require('app');
 var roomsController = require('controllers/rooms');
 var Room = require('models/room');
+var Configuration = require('models/configuration');
 
 exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     template: "#context-menu-room-opts",
 
     events: {
-        'click a.add-device': 'addDeviceTypeHandler'
+        'click a.add-device': 'addDeviceTypeHandler',
+        'click a#editStyle': 'editStyle'
     },
 
     addDeviceTypeHandler: function(e) {
         e.preventDefault();
         app.vent.trigger("room:addDeviceGroup", this.model);
+    },
+
+    editStyle: function() {
+        app.vent.trigger("room:editStyle", this);
+        return false;
     }
 });
 
@@ -392,6 +399,10 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         this.bindTo(this, "item:removed", this.checkEmptyCollection, this);        
     },
 
+    onRender: function() {
+        this.applyStyles();
+    },
+
     addDeviceClicked: function(e){
         e.preventDefault();
         app.vent.trigger("room:device:addToGroup", roomsController.currentRoom, this.model);
@@ -421,19 +432,19 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     applyStyles: function() {
         if (this.model.has('titleConfiguration')) {
             var titleConfiguration = this.model.get('titleConfiguration');
-            $(titleConfiguration.get('selector'), this.$el).css(titleConfiguration.getStyleAttributes());
+            this.$(titleConfiguration.get('selector')).css(titleConfiguration.getStyleReset());
+            this.$(titleConfiguration.get('selector')).css(titleConfiguration.getStyleAttributes());
         }
 
         if (this.model.has('bodyConfiguration')) {
             var bodyConfiguration = this.model.get('bodyConfiguration');
-            $(bodyConfiguration.get('selector'), this.$el).css(bodyConfiguration.getStyleAttributes());
+            this.$(bodyConfiguration.get('selector')).css(bodyConfiguration.getStyleReset());
+            this.$(bodyConfiguration.get('selector')).css(bodyConfiguration.getStyleAttributes());
         }
     },
 
     initializeScrollBar: function() {
-        this.scrollBar = $('.scroll-panel', this.$el).tinyscrollbar();
-
-        this.applyStyles();
+        this.scrollBar = this.$('.scroll-panel').tinyscrollbar();
     },
 
     updateScrollBar: function() {
@@ -496,6 +507,18 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         _.each(this.children, function(view, cid){
             that.bindItemViewEvents(view);
         });
+
+        this.applyStyles();
+    },
+
+    applyStyles: function() {
+
+        $(this.model.bodySelector).removeAttr('style');
+
+        if (this.model.has('bodyConfiguration')) {
+            var bodyConfiguration = this.model.get('bodyConfiguration');
+            $(bodyConfiguration.get('selector')).css(bodyConfiguration.getStyleAttributes());
+        }
     },
 
     bindItemViewEvents: function(itemView) {
@@ -540,4 +563,90 @@ exports.AddRoomForm = Backbone.Marionette.ItemView.extend({
         e.preventDefault();
         this.close();
     } 
+});
+
+exports.EditStyleRoomForm = Backbone.Marionette.ItemView.extend({
+
+    template: "#edit-style-template",
+
+    events: {
+        "click .cancel.btn": "cancelClicked",
+        "click .edit.btn": "editClicked"
+    },
+
+    serializeData: function(){
+
+        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
+
+        data.type = 'Room';
+        data.bodyFields = this.model.get("bodyFields");
+
+        this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
+
+        return data;
+    },
+
+    addStyleValues: function(fields, configuration){
+        _.each(fields, function(field) {
+            if (configuration != null) {
+                field.value = configuration.getStyleAttribute(field.id);
+            } else {
+                field.value = '';
+            }
+        });
+    },
+
+    extractStyle: function(formData, prefix, selector){
+
+        var styleKeys = _.keys(formData);
+        var styleNames = _.filter(styleKeys, function(styleName) {
+            return styleName.indexOf(prefix) == 0;
+        }, this);
+
+        var styleData = _.pick(formData, styleNames);
+        var newStyleData = {};
+        _.each(styleData, function(value, key){
+            newStyleData[key.substr(prefix.length)] = value;
+        }, this);
+
+        newStyleData['selector'] = selector;
+        newStyleData['prefix'] = prefix;
+
+        return newStyleData;
+    },
+
+    editClicked: function(e){
+        e.preventDefault();
+
+        var formFields = _.union(_.pluck(this.model.get("titleFields"), 'id'), _.pluck(this.model.get("bodyFields"), 'id'));
+
+        var data = Backbone.FormHelpers.getFormData(this, formFields);
+
+        var bodyConfigurationAttributes = this.extractStyle(data, this.model.bodyPrefix, this.model.bodySelector);
+
+        var bodyConfiguration = this.model.get("bodyConfiguration");
+
+        if (bodyConfiguration == null) {
+            bodyConfiguration = new Configuration();
+            this.model.set("bodyConfiguration", bodyConfiguration);
+        }
+
+        bodyConfiguration.set(bodyConfigurationAttributes);
+
+        this.result = {
+            status: "OK"
+        }
+
+        this.close();
+    },
+
+    cancelClicked: function(e){
+        e.preventDefault();
+
+        this.result = {
+            status: "CANCEL"
+        }
+
+        this.close();
+    }
 });

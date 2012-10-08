@@ -41,7 +41,10 @@ exports.saveCurrentHome = function(){
 };
 
 exports.save = function(home){
-    home.save();
+    home.save(home.attributes, {success: function(model, response){
+            model.parseInnerData();    
+        }
+    });
 };
 
 exports.destroy = function(home){
@@ -57,6 +60,10 @@ exports.destroy = function(home){
         model: home
     });
     app.main.show(view);
+
+    exports.currentDashboard = view;
+
+//    view.applyStyles();
 
     var openSwitchHandler = function(e) {
         e.preventDefault();
@@ -106,4 +113,18 @@ app.vent.on("home:switch", function(home) {
     });
 
     app.modal.show(switchView);
+});
+
+app.vent.on("home:editStyle", function(homeView) {
+    
+    var editStyleForm = new homeViews.EditStyleHomeForm({model: exports.currentHome});
+
+    editStyleForm.on("close", function(){
+        if (editStyleForm.result.status === "OK") {
+            exports.saveCurrentHome();
+            exports.currentDashboard.applyStyles();
+        }
+    });
+
+    app.modal.show(editStyleForm);
 });

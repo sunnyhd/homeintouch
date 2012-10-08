@@ -1,8 +1,19 @@
 var BaseModel = require('models/base');
 var DeviceGroups = require('collections/device_groups');
 var DeviceGroup = require('models/device_group');
+var Configuration = require('models/configuration');
 
 module.exports = BaseModel.extend({
+
+    bodySelector: '#main-content',
+
+    bodyPrefix: 'body-',
+
+    bodyFields: [
+        {name: "Background Color", id: "body-background-color"}, 
+        {name: "Text Color", id: "body-color"}, 
+        {name: "Opacity", id: "body-opacity"}
+    ],
 
     defaults: {
         "addNew": "Add Room...",
@@ -11,6 +22,7 @@ module.exports = BaseModel.extend({
     initialize: function(){
         this.deviceGroups = this.parseChildren("deviceGroups", DeviceGroups);
         this.deviceGroups.parentRoom = this;
+        this.parseInnerData();
     },
 
     findOrCreateGroup: function(deviceType){
@@ -27,12 +39,28 @@ module.exports = BaseModel.extend({
         return deviceGroup;
     },
 
+    parseInnerData: function() {
+
+        if (this.has("bodyConfiguration")) {
+            var bodyConfiguration = new Configuration(this.get("bodyConfiguration"));
+            this.set("bodyConfiguration", bodyConfiguration);
+        }
+
+        this.set("bodyFields", _.clone(this.bodyFields));  
+    },
+
     toJSON: function(){
         var json = BaseModel.prototype.toJSON.call(this);
 
         if (this.deviceGroups){
             json.deviceGroups = this.deviceGroups.toJSON();
         }
+
+        if (this.has("bodyConfiguration")) {
+            json.bodyConfiguration = this.get("bodyConfiguration").toJSON();
+        }
+
+        delete json.bodyFields;
 
         return json;
     }

@@ -34,6 +34,21 @@ app.vent.on("floor:empty", function() {
     app.main.show(noFloorsView);
 });
 
+app.vent.on("floor:editStyle", function(homeView) {
+    
+    var editStyleForm = new floorViews.EditStyleFloorForm({model: exports.currentFloor});
+    var home = homesController.currentHome;
+
+    editStyleForm.on("close", function(){
+        if (editStyleForm.result.status === "OK") {
+            homesController.save(home);
+            exports.currentDashboard.applyStyles();
+        }
+    });
+
+    app.modal.show(editStyleForm);
+});
+
 // Helper Methods
 // --------------
 
@@ -84,6 +99,8 @@ var showAddFloorForm = function(home){
     var view = new floorViews.FloorDashboardView ({
         model: floor
     });
+
+    exports.currentDashboard = view;
 
     app.main.show(view);
  };
