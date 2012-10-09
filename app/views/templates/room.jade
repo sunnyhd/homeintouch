@@ -102,6 +102,42 @@ script(id="context-menu-room-opts", type="text/template")
   li
     a.add-device(href="#") Add device
   li
-    a(href="#") Room Settings
+    a#room-settings(href="#") Room Settings
   li
     a#editStyle(href="#") Edit Styles
+
+script(id="room-add-template", type="text/template")
+  .modal-header
+    h2 Add A New Room To <%= name %>
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label 
+          strong Name
+        .controls
+          input(id="name", type="text", placeHolder="Kitchen")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").save.btn.btn-primary Save
+
+script(id="room-edit-template", type="text/template")
+  .modal-header
+    h2 Edit Room
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label 
+          strong Name
+        .controls
+          input(id="name", type="text", placeHolder="Kitchen", value!="<%=name%>")
+      .control-group
+        label(for="icon").control-label 
+          strong Icon
+        .controls
+          select(id="icon")
+            <% _.each(_.keys(icons), function(icon) { %>
+            option(value!="<%= ('rooms.' + icon) %>") <%= icon %>
+            <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").save.btn.btn-primary Save

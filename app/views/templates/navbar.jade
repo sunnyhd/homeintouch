@@ -27,20 +27,6 @@ script(id="floor-list-template", type="text/template")
 script(id="room-item-template", type="text/template")
     a(href='#') <%= name %>
 
-script(id="room-add-template", type="text/template")
-  .modal-header
-    h2 Add A New Room To <%= name %>
-  .modal-body
-    form.form-horizontal
-      .control-group
-        label(for="name").control-label 
-          strong Name
-        .controls
-          input(id="name", type="text", placeHolder="Kitchen")
-  .modal-footer
-    a(href="#").cancel.btn Cancel
-    a(href="#").save.btn.btn-primary Save
-
 script(id="edit-style-template", type="text/template")
   .modal-header
     h2 Edit <%= type %> Styles

@@ -93,6 +93,15 @@ var showAddRoom = function(floor){
     return form;
 };
 
+var showEditRoomForm = function(room){
+    var view = new roomViews.EditRoomForm({
+        model: room,
+        icons: icons.rooms
+    });
+    app.modal.show(view);
+    return view;
+};
+
 // App Event Handlers
 // ------------------
 
@@ -109,6 +118,16 @@ app.vent.on("room:add", function() {
         homesController.saveCurrentHome();
         app.vent.trigger("room:selected", room);
     });
+});
+
+app.vent.on("room:edit", function(room) {
+    var form = showEditRoomForm(room);
+
+    form.on("save", function(room) {
+        var home = homesController.currentHome;
+        homesController.save(home);
+        app.vent.trigger('room:selected', room);
+    }); 
 });
 
 app.vent.on("room:empty", function() {

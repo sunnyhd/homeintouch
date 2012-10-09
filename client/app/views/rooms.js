@@ -8,12 +8,18 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
 
     events: {
         'click a.add-device': 'addDeviceTypeHandler',
+        'click a#room-settings': 'editRoomHandler',
         'click a#editStyle': 'editStyle'
     },
 
     addDeviceTypeHandler: function(e) {
         e.preventDefault();
         app.vent.trigger("room:addDeviceGroup", this.model);
+    },
+
+    editRoomHandler: function(e) {
+        e.preventDefault();
+        app.vent.trigger("room:edit", roomsController.currentRoom);
     },
 
     editStyle: function() {
@@ -563,6 +569,50 @@ exports.AddRoomForm = Backbone.Marionette.ItemView.extend({
         e.preventDefault();
         this.close();
     } 
+});
+
+exports.EditRoomForm = Backbone.Marionette.ItemView.extend({
+
+    template: "#room-edit-template",
+
+    formFields: ["name", "icon"],
+
+    events: {
+        "click .save": "saveClicked",
+        "click .cancel": "cancelClicked"
+    },
+
+    serializeData: function(){
+        var data = {};
+
+        if (this.model) { 
+            data = this.model.toJSON();
+        }
+        if (this.options.icons) { 
+            data.icons = this.options.icons;
+        }
+        return data;
+    },
+
+    saveClicked: function(e){
+        e.preventDefault();
+
+        var room = this.model;
+        var data = Backbone.FormHelpers.getFormData(this);
+
+        room.set({
+            name: data.name,
+            icon: data.icon
+        });
+        this.trigger("save", room);
+
+        this.close();
+    },
+
+    cancelClicked: function(e){
+        e.preventDefault();
+        this.close();
+    }    
 });
 
 exports.EditStyleRoomForm = Backbone.Marionette.ItemView.extend({
