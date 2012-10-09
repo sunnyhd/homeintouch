@@ -103,7 +103,8 @@ var showAddFloorForm = function(home){
 
 var showEditFloorForm = function(floor){
     var view = new floorViews.EditFloorForm({
-        model: floor
+        model: floor,
+        icons: icons.floors
     });
     app.modal.show(view);
     return view;

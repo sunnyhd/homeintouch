@@ -161,6 +161,18 @@ exports.EditFloorForm = Backbone.Marionette.ItemView.extend({
         "click .cancel": "cancelClicked"
     },
 
+    serializeData: function(){
+        var data = {};
+
+        if (this.model) { 
+            data = this.model.toJSON();
+        }
+        if (this.options.icons) { 
+            data.icons = this.options.icons;
+        }
+        return data;
+    },
+
     saveClicked: function(e){
         e.preventDefault();
 
