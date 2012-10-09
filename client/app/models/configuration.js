@@ -6,7 +6,12 @@ module.exports = BaseModel.extend({
 
 	getStyleAttributes: function() {
 		var styleKeys = this.getStyleKeys();
-		return _.pick(this.attributes, styleKeys);
+		var styleAttributes = _.pick(this.attributes, styleKeys);
+		if (this.has('defaultStyle')) {
+			_.extend(styleAttributes, this.get('defaultStyle'));
+		}
+
+		return styleAttributes;
 	},
 
 	getStyleReset: function() {

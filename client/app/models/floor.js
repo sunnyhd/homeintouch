@@ -4,7 +4,7 @@ var Configuration = require('models/configuration');
 
 module.exports = BaseModel.extend({
 
-    bodySelector: '#main-content',
+    bodySelector: 'body',
 
     bodyPrefix: 'body-',
 
@@ -13,6 +13,11 @@ module.exports = BaseModel.extend({
         {name: "Text Color", id: "body-color"}, 
         {name: "Opacity", id: "body-opacity"}
     ],
+
+    bodyDefaultStyle: {
+        'background-image': 'none'
+    },
+
 
     defaults: {
         "addNew": "Add Floor...",
@@ -30,6 +35,8 @@ module.exports = BaseModel.extend({
 
         if (this.has("bodyConfiguration")) {
             var bodyConfiguration = new Configuration(this.get("bodyConfiguration"));
+            bodyConfiguration.set('selector', this.bodySelector);
+            bodyConfiguration.set('defaultStyle', this.bodyDefaultStyle);
             this.set("bodyConfiguration", bodyConfiguration);
         }
 
