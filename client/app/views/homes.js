@@ -108,10 +108,10 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
             var marginLeft = $slider.getPixels('margin-left');
 
             if ($el.data('slide') === "next") {
-                marginLeft -= 92;
+                marginLeft -= 102;
                 $slider.data('transitioning', true);
             } else if (marginLeft < 0) {
-                marginLeft += 92;
+                marginLeft += 102;
                 $slider.data('transitioning', true);
             }
             $slider.setPixels('margin-left', marginLeft);

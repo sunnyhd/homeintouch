@@ -24,27 +24,6 @@ script(id="floor-list-template", type="text/template")
     li
       a(href="").add-floor New Floor ...
 
-script(id="floor-add-template", type="text/template")
-  .modal-header
-    h2 Add A New Floor To <%= name %>
-  .modal-body
-    form.form-horizontal
-      .control-group
-        label(for="name").control-label 
-          strong Name
-        .controls
-          input(id="name", type="text", placeHolder="2nd floor")
-      .control-group
-        label(for="rooms").control-label
-          strong Rooms
-          br
-          | (comma separated)
-        .controls
-          textarea(id="rooms", placeHolder="Room 1, Room 2, Room 3")
-  .modal-footer
-    a(href="#").cancel.btn Cancel
-    a(href="#").save.btn.btn-primary Save
-
 script(id="room-item-template", type="text/template")
     a(href='#') <%= name %>
 

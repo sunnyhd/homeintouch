@@ -18,7 +18,7 @@
 }
 
 .hit-icon-container {
-	height: 82px; /* height: 80px + border height: 2px */
+	height: 92px; /* height: 80px + border height: 2px */
 	margin: 10px;
 }
 
@@ -30,8 +30,8 @@
 /* Touchable (shortcut) Icon */
 .hit-icon {
 	float: left;
-	width: 80px; 
-	height: 80px;
+	width: 90px; 
+	height: 90px;
 	margin: 0px;
 
 	border-style: solid;
@@ -49,7 +49,7 @@
 .hit-icon span {
 	/* Position */
 	position: relative;
-	top: 60px;
+	top: 70px;
 }
 
 .hit-icon~.hit-icon {

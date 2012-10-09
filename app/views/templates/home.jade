@@ -37,7 +37,7 @@ script(id="dashboard-home", type="text/template")
           <% } else { %>
           .hit-slider-inner
             <% _.each(floors, function(floor){ %>
-            .hit-icon.blue.floor-item-list(data-item-id!="<%= floor.id %>", style="background-image: url(img/floors/go-home-8.ico);")
+            .hit-icon.blue.floor-item-list(data-item-id!="<%= floor.id %>", data-hit-icon-type!="<%= floor.icon %>")
               span <%= floor.name %>
             <% }) %>
           a.hit-slider-control.left(href="#", data-slide="prev") ‹
@@ -48,13 +48,13 @@ script(id="dashboard-home", type="text/template")
         .hit-title.yellow My Library
         .hit-icon-container.hit-slider
           .hit-slider-inner
-            .hit-icon.yellow(data-hit-icon-href="#movies", style="background-image: url(img/media/folder-video.ico);")
+            .hit-icon.yellow(data-hit-icon-href="#movies", data-hit-icon-type="media.movies")
               span Movies
-            .hit-icon.yellow(data-hit-icon-href="#artists", style="background-image: url(img/media/folder-sound.ico);")
+            .hit-icon.yellow(data-hit-icon-href="#artists", data-hit-icon-type="media.music")
               span Music
-            .hit-icon.yellow(data-hit-icon-href="#pictures", style="background-image: url(img/media/folder-image.ico);")
+            .hit-icon.yellow(data-hit-icon-href="#pictures", data-hit-icon-type="media.photos")
               span Photos
-            .hit-icon.yellow(data-hit-icon-href="#files", style="background-image: url(img/media/folder-documents.ico);")
+            .hit-icon.yellow(data-hit-icon-href="#files", data-hit-icon-type="media.files")
               span Files
           a.hit-slider-control.left(href="#", data-slide="prev") ‹
           a.hit-slider-control.right(href="#", data-slide="next") ›
@@ -64,11 +64,11 @@ script(id="dashboard-home", type="text/template")
         .hit-title.violet Plugins
         .hit-icon-container.hit-slider
           .hit-slider-inner
-            .hit-icon.violet(style="background-image: url(img/plugins/youtube.png);")
+            .hit-icon.violet(data-hit-icon-type="plugins.youtube")
               span YouTube
-            .hit-icon.violet(style="background-image: url(img/plugins/news-subscribe.ico);")
+            .hit-icon.violet(data-hit-icon-type="plugins.news")
               span News
-            .hit-icon.violet(style="background-image: url(img/plugins/games-2.ico);")
+            .hit-icon.violet(data-hit-icon-type="plugins.games")
               span Games
           a.hit-slider-control.left(href="#", data-slide="prev") ‹
           a.hit-slider-control.right(href="#", data-slide="next") ›

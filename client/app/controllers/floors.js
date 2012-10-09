@@ -29,6 +29,16 @@ app.vent.on("floor:add", function(){
     });
 });
 
+app.vent.on("floor:edit", function(floor) {
+    var form = showEditFloorForm(floor);
+
+    form.on("save", function(floor) {
+        var home = homesController.currentHome;
+        homesController.save(home);
+        app.vent.trigger('floor:selected', floor);
+    }); 
+});
+
 app.vent.on("floor:empty", function() {
     var noFloorsView = new floorViews.NoFloorsView();
     app.main.show(noFloorsView);
@@ -91,6 +101,14 @@ var showAddFloorForm = function(home){
     return view;
 };
 
+var showEditFloorForm = function(floor){
+    var view = new floorViews.EditFloorForm({
+        model: floor
+    });
+    app.modal.show(view);
+    return view;
+};
+
 /**
  * Shows the dashboard of an specified floor.
  * */
@@ -103,4 +121,5 @@ var showAddFloorForm = function(home){
     exports.currentDashboard = view;
 
     app.main.show(view);
+    app.loadIcons(view.$el);
  };
