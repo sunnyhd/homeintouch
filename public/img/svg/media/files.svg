@@ -14,7 +14,7 @@
    id="svg3824"
    version="1.1"
    inkscape:version="0.48.2 r9819"
-   sodipodi:docname="office.svg">
+   sodipodi:docname="files.svg">
   <defs
      id="defs3826" />
   <sodipodi:namedview
@@ -25,10 +25,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.5"
-     inkscape:cx="-2.9115397"
+     inkscape:cx="-0.72727273"
      inkscape:cy="31.784549"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
      inkscape:window-width="1366"
@@ -55,36 +55,9 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
-    <g
-       id="g3773"
-       transform="translate(-0.5,-11)">
-      <path
-         inkscape:connector-curvature="0"
-         id="path2988"
-         d="m 55,54 0,-15 -45,0 0,15"
-         style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <rect
-         y="19"
-         x="15"
-         height="15"
-         width="25"
-         id="rect3760"
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path3764"
-         d="m 27.5,39 0,-5"
-         style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path3769"
-         d="m 47.090909,37.727273 0,-10"
-         style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path3771"
-         d="m 52.090909,37.727273 0,-15"
-         style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-    </g>
+    <path
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="M 17 3.5 C 14.23 3.5 12 5.73 12 8.5 L 12 43.5 C 12 46.27 14.23 48.5 17 48.5 L 47 48.5 C 49.77 48.5 52 46.27 52 43.5 L 52 8.5 C 52 5.73 49.77 3.5 47 3.5 L 17 3.5 z M 22 11.5 L 42 11.5 C 43.385 11.5 44.5 12.615 44.5 14 C 44.5 15.385 43.385 16.5 42 16.5 L 22 16.5 C 20.615 16.5 19.5 15.385 19.5 14 C 19.5 12.615 20.615 11.5 22 11.5 z M 22 23.5 L 42 23.5 C 43.385 23.5 44.5 24.615 44.5 26 C 44.5 27.385 43.385 28.5 42 28.5 L 22 28.5 C 20.615 28.5 19.5 27.385 19.5 26 C 19.5 24.615 20.615 23.5 22 23.5 z M 22 35.5 L 42 35.5 C 43.385 35.5 44.5 36.615 44.5 38 C 44.5 39.385 43.385 40.5 42 40.5 L 22 40.5 C 20.615 40.5 19.5 39.385 19.5 38 C 19.5 36.615 20.615 35.5 22 35.5 z "
+       id="rect2989" />
   </g>
 </svg>
