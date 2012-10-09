@@ -116,6 +116,14 @@ script(id="room-add-template", type="text/template")
           strong Name
         .controls
           input(id="name", type="text", placeHolder="Kitchen")
+      .control-group
+        label(for="icon").control-label 
+          strong Icon
+        .controls
+          select(id="icon")
+            <% _.each(_.keys(icons), function(icon) { %>
+            option(value!="<%= ('rooms.' + icon) %>") <%= icon %>
+            <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").save.btn.btn-primary Save

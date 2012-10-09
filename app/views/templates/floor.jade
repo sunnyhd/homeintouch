@@ -47,7 +47,10 @@ script(id="floor-add-template", type="text/template")
         label(for="icon").control-label 
           strong Icon
         .controls
-          input(id="icon", type="text", placeHolder="ground-floor")
+          select(id="icon")
+            <% _.each(_.keys(icons), function(icon) { %>
+            option(value!="<%= ('floors.' + icon) %>") <%= icon %>
+            <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").save.btn.btn-primary Save

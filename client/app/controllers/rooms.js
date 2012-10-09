@@ -88,7 +88,10 @@ var showFirstRoom = function(home){
 };
 
 var showAddRoom = function(floor){
-    var form = new roomViews.AddRoomForm({ model: floor });
+    var form = new roomViews.AddRoomForm({ 
+        model: floor,
+        icons: icons.rooms
+    });
     app.modal.show(form);
     return form;
 };

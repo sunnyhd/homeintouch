@@ -95,7 +95,8 @@ var showFloorList = function(home, floor) {
 
 var showAddFloorForm = function(home){
     var view = new floorViews.AddFloorForm({
-        model: home
+        model: home,
+        icons: icons.floors
     });
     app.modal.show(view);
     return view;

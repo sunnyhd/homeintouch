@@ -547,11 +547,23 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
 
 exports.AddRoomForm = Backbone.Marionette.ItemView.extend({
     template: "#room-add-template",
-    formFields: ["name"],
+    formFields: ["name", "icon"],
 
     events: {
         "click .save": "saveClicked",
         "click .cancel": "cancelClicked"
+    },
+
+    serializeData: function(){
+        var data = {};
+
+        if (this.model) { 
+            data = this.model.toJSON();
+        }
+        if (this.options.icons) { 
+            data.icons = this.options.icons;
+        }
+        return data;
     },
 
     saveClicked: function(e){
