@@ -11,12 +11,18 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
 
     events: {
         'click a.add-room': 'addRoomHandler',
+        'click a#floor-settings': 'editFloorHandler',
         'click a#editStyle': 'editStyle'
     },
 
     addRoomHandler: function(e) {
         e.preventDefault();
         app.vent.trigger("room:add");
+    },
+
+    editFloorHandler: function(e) {
+        e.preventDefault();
+        app.vent.trigger("floor:edit", floorsController.currentFloor);
     },
 
     editStyle: function() {
@@ -102,7 +108,7 @@ exports.AddFloorForm = Backbone.Marionette.ItemView.extend({
 
     template: "#floor-add-template",
 
-    formFields: ["name", "rooms"],
+    formFields: ["name", "rooms", "icon"],
 
     events: {
         "click .save": "saveClicked",
@@ -119,17 +125,52 @@ exports.AddFloorForm = Backbone.Marionette.ItemView.extend({
         
         for(var i = 0, length = roomNames.length; i<length; i++){
             var roomName = $.trim(roomNames[i]);
-            var room = {
-                name: roomName
-            };
-            rooms.push(room);
+            if (roomName !== '') {
+                var room = {
+                    name: roomName
+                };
+                rooms.push(room);
+            }
         }
 
         var floor = new Floor({
             name: data.name,
-            rooms: rooms
+            rooms: rooms,
+            icon: data.icon
         });
 
+        this.trigger("save", floor);
+
+        this.close();
+    },
+
+    cancelClicked: function(e){
+        e.preventDefault();
+        this.close();
+    }    
+});
+
+exports.EditFloorForm = Backbone.Marionette.ItemView.extend({
+
+    template: "#floor-edit-template",
+
+    formFields: ["name", "icon"],
+
+    events: {
+        "click .save": "saveClicked",
+        "click .cancel": "cancelClicked"
+    },
+
+    saveClicked: function(e){
+        e.preventDefault();
+
+        var floor = this.model;
+        var data = Backbone.FormHelpers.getFormData(this);
+
+        floor.set({
+            name: data.name,
+            icon: data.icon
+        });
         this.trigger("save", floor);
 
         this.close();

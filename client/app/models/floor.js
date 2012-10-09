@@ -21,6 +21,7 @@ module.exports = BaseModel.extend({
 
     defaults: {
         "addNew": "Add Floor...",
+        "icon": "floors.floor" // Default icon
     },
 
     initialize: function(){

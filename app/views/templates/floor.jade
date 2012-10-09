@@ -10,7 +10,7 @@ script(id="dashboard-floor", type="text/template")
           <% } else { %>
           .hit-slider-inner
             <% _.each(rooms, function(room){ %>
-            .hit-icon.blue.room-item-list(data-item-id!="<%= room.id %>", style="background-image: url(img/floors/go-home-8.ico);")
+            .hit-icon.blue.room-item-list(data-item-id!="<%= room.id %>", data-hit-icon-type!="<%= room.icon %>")
               span <%= room.name %>
             <% }) %>
           a.hit-slider-control.left(href="#", data-slide="prev") ‹
@@ -22,6 +22,51 @@ script(id="context-menu-floor-opts", type="text/template")
   li
     a.add-room(href="#") Add Room
   li
-    a(href="#") Floor Settings
+    a#floor-settings(href="#") Floor Settings
   li
     a#editStyle(href="#") Edit Styles
+
+script(id="floor-add-template", type="text/template")
+  .modal-header
+    h2 Add A New Floor To <%= name %>
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label 
+          strong Name
+        .controls
+          input(id="name", type="text", placeHolder="2nd floor")
+      .control-group
+        label(for="rooms").control-label
+          strong Rooms
+          br
+          | (comma separated)
+        .controls
+          textarea(id="rooms", placeHolder="Room 1, Room 2, Room 3")
+      .control-group
+        label(for="icon").control-label 
+          strong Icon
+        .controls
+          input(id="icon", type="text", placeHolder="ground-floor")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").save.btn.btn-primary Save
+
+script(id="floor-edit-template", type="text/template")
+  .modal-header
+    h2 Edit Floor
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label 
+          strong Name
+        .controls
+          input(id="name", type="text", placeHolder="2nd floor", value!="<%=name%>")
+      .control-group
+        label(for="icon").control-label 
+          strong Icon
+        .controls
+          input(id="icon", type="text", placeHolder="ground-floor", value!="<%=icon%>")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").save.btn.btn-primary Save

@@ -73,6 +73,7 @@ exports.destroy = function(home){
     $('#desktop-top-switch, #touch-top-switch').off('click').on('click', openSwitchHandler);
 
     app.hitIcons(view.$el);
+    app.loadIcons(view.$el);
  };
 
 // Helper Methods
