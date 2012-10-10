@@ -63,8 +63,6 @@ exports.destroy = function(home){
 
     exports.currentDashboard = view;
 
-//    view.applyStyles();
-
     var openSwitchHandler = function(e) {
         e.preventDefault();
         app.vent.trigger("home:switch", home);
@@ -72,8 +70,7 @@ exports.destroy = function(home){
 
     $('#desktop-top-switch, #touch-top-switch').off('click').on('click', openSwitchHandler);
 
-    app.hitIcons(view.$el);
-    app.loadIcons(view.$el);
+    view.applyStyles();    
  };
 
 // Helper Methods
@@ -123,7 +120,7 @@ app.vent.on("home:editStyle", function(homeView) {
     editStyleForm.on("close", function(){
         if (editStyleForm.result.status === "OK") {
             exports.saveCurrentHome();
-            exports.currentDashboard.applyStyles();
+            exports.showCurrent();
         }
     });
 

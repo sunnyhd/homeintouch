@@ -85,18 +85,42 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         $(e.currentTarget).data('transitioning', false);
     },
 
-    onRender: function() {
-        this.applyStyles();
+    applyStyle: function(styleConfigurationName) {
+
+        if (this.model.has(styleConfigurationName)) {
+            var configuration = this.model.get(styleConfigurationName);
+            var selector = configuration.get('selector');
+            var selectorArray = [];
+            if (!_.isArray(selector)) {
+                selectorArray.push(selector);
+            } else {
+                selectorArray = selector;
+            }
+            _.each(selectorArray, function(selector){
+                $(selector).removeAttr('style');
+                var className = configuration.getClassesToApply();
+                if (className !== '') {
+                    this.$(selector).addClass(className);
+                }
+                this.$(selector).css(configuration.getStyleAttributes());
+            });
+        }
     },
 
     applyStyles: function() {
 
-        $(this.model.bodySelector).removeAttr('style');
+        app.hitIcons(this.$el);
 
-        if (this.model.has('bodyConfiguration')) {
-            var bodyConfiguration = this.model.get('bodyConfiguration');
-            $(bodyConfiguration.get('selector')).css(bodyConfiguration.getStyleAttributes());
+        this.applyStyle('bodyConfiguration');
+
+        if (this.model.has('myHomeConfiguration')) {
+            var myHomeModel = this.model.get('myHomeConfiguration');
+            this.applyStyle('myHomeConfiguration');
+            app.loadIcons('#my-house', myHomeModel.getColor());        
         }
+        
+        app.loadIcons('#my-library');    
+        app.loadIcons('#plugins');    
     },
 
     sliderClickedHandler: function(e) {
@@ -108,10 +132,10 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
             var marginLeft = $slider.getPixels('margin-left');
 
             if ($el.data('slide') === "next") {
-                marginLeft -= 102;
+                marginLeft -= 92;
                 $slider.data('transitioning', true);
             } else if (marginLeft < 0) {
-                marginLeft += 102;
+                marginLeft += 92;
                 $slider.data('transitioning', true);
             }
             $slider.setPixels('margin-left', marginLeft);
@@ -167,7 +191,7 @@ exports.ViewHomeForm = Backbone.Marionette.ItemView.extend({
 
 exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
 
-    template: "#edit-style-template",
+    template: "#edit-home-style-template",
 
     events: {
         "click .cancel.btn": "cancelClicked",
@@ -180,8 +204,10 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
 
         data.type = 'Home';
         data.bodyFields = this.model.get("bodyFields");
+        data.myHomeFields = this.model.get("myHomeFields");
 
         this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
+        this.addStyleValues(data.myHomeFields, this.model.get("myHomeConfiguration"));
 
         return data;
     },
@@ -196,7 +222,7 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
         });
     },
 
-    extractStyle: function(formData, prefix, selector){
+    extractStyle: function(formData, prefix, selector) {
 
         var styleKeys = _.keys(formData);
         var styleNames = _.filter(styleKeys, function(styleName) {
@@ -215,23 +241,31 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
         return newStyleData;
     },
 
+    updateStyleConfiguration: function(formData, prefix, selector, attributeName) {
+
+        var configurationAttributes = this.extractStyle(formData, prefix, selector);
+
+        var configuration = this.model.get(attributeName);
+
+        if (configuration == null) {
+            configuration = new Configuration();
+            this.model.set(attributeName, configuration);
+        }
+
+        configuration.resetAttributes();
+
+        configuration.set(configurationAttributes);
+    },
+
     editClicked: function(e){
         e.preventDefault();
 
-        var formFields = _.union(_.pluck(this.model.get("titleFields"), 'id'), _.pluck(this.model.get("bodyFields"), 'id'));
+        var formFields = _.union(_.pluck(this.model.get("myHomeFields"), 'id'), _.pluck(this.model.get("bodyFields"), 'id'));
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
-        var bodyConfigurationAttributes = this.extractStyle(data, this.model.bodyPrefix, this.model.bodySelector);
-
-        var bodyConfiguration = this.model.get("bodyConfiguration");
-
-        if (bodyConfiguration == null) {
-            bodyConfiguration = new Configuration();
-            this.model.set("bodyConfiguration", bodyConfiguration);
-        }
-
-        bodyConfiguration.set(bodyConfigurationAttributes);
+        this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
+        this.updateStyleConfiguration(data, this.model.myHomePrefix, this.model.myHomeSelector, "myHomeConfiguration");
 
         this.result = {
             status: "OK"

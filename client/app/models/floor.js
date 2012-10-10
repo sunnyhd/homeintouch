@@ -18,7 +18,6 @@ module.exports = BaseModel.extend({
         'background-image': 'none'
     },
 
-
     defaults: {
         "addNew": "Add Floor...",
         "icon": "floors.floor" // Default icon

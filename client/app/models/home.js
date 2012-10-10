@@ -24,6 +24,21 @@ module.exports = BaseModel.extend({
         'background-image': 'none'
     },
 
+    myHomeSelector: ['#my-house .hit-title', '#my-house .hit-icon'],
+
+    myHomePrefix: 'my-house-',
+
+    myHomeFields: [
+        {name: "Text Color", id: "my-house-color"}, 
+        {name: "Background Color", id: "my-house-class-background-color", type: "class-list", 
+            options: [{label: "Dark Gray", value: "dark-gray"}, {label: "Gray", value: "gray"}, 
+                      {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}]}, 
+        {name: "Opacity", id: "my-house-opacity"}
+    ],
+
+    myHomeDefaultStyle: {
+        'class-background-image': 'blue'
+    },
     
     initialize: function() {
         this.parseInnerData();
@@ -40,7 +55,15 @@ module.exports = BaseModel.extend({
             this.set("bodyConfiguration", bodyConfiguration);
         }
 
+        if (this.has("myHomeConfiguration")) {
+            var myHomeConfiguration = new Configuration(this.get("myHomeConfiguration"));
+            myHomeConfiguration.set('selector', this.myHomeSelector);
+            myHomeConfiguration.set('defaultStyle', this.myHomeDefaultStyle);
+            this.set("myHomeConfiguration", myHomeConfiguration);
+        }
+
         this.set("bodyFields", _.clone(this.bodyFields));  
+        this.set("myHomeFields", _.clone(this.myHomeFields));  
     },
 
     defaultFloor: function() {
@@ -68,7 +91,12 @@ module.exports = BaseModel.extend({
             json.bodyConfiguration = this.get("bodyConfiguration").toJSON();
         }
 
+        if (this.has("myHomeConfiguration")) {
+            json.myHomeConfiguration = this.get("myHomeConfiguration").toJSON();
+        }
+
         delete json.bodyFields;
+        delete json.myHomeFields;
 
         return json;
     }

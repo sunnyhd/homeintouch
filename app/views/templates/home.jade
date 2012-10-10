@@ -28,8 +28,8 @@ script(id="view-home-template", type="text/template")
 script(id="dashboard-home", type="text/template")
   .row-fluid
     .span6.clearfix
-      .hit-widget.clearfix
-        .hit-title.blue My House
+      .hit-widget.clearfix#my-house
+        .hit-title My House
         .hit-icon-container.hit-slider
           <% if(floors.length == 0) { %>
           div.alert.alert-info
@@ -37,14 +37,14 @@ script(id="dashboard-home", type="text/template")
           <% } else { %>
           .hit-slider-inner
             <% _.each(floors, function(floor){ %>
-            .hit-icon.blue.floor-item-list(data-item-id!="<%= floor.id %>", data-hit-icon-type!="<%= floor.icon %>")
+            .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", data-hit-icon-type!="<%= floor.icon %>")
               span <%= floor.name %>
             <% }) %>
           a.hit-slider-control.left(href="#", data-slide="prev") ‹
           a.hit-slider-control.right(href="#", data-slide="next") ›
           <% } %>
     .span6.clearfix
-      .hit-widget.clearfix
+      .hit-widget.clearfix#my-library
         .hit-title.yellow My Library
         .hit-icon-container.hit-slider
           .hit-slider-inner
@@ -60,7 +60,7 @@ script(id="dashboard-home", type="text/template")
           a.hit-slider-control.right(href="#", data-slide="next") ›
   .row-fluid
     .span6.clearfix
-      .hit-widget.clearfix
+      .hit-widget.clearfix#plugins
         .hit-title.violet Plugins
         .hit-icon-container.hit-slider
           .hit-slider-inner

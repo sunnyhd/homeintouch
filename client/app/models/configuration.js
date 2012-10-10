@@ -2,7 +2,11 @@ var BaseModel = require('models/base');
 
 module.exports = BaseModel.extend({
 
-	reservedAttributes: ['id', 'selector', 'prefix'],
+	reservedAttributes: ['id', 'selector', 'prefix', 'defaultStyle'],
+
+	classPrefix: 'class-',
+
+	colorAttribute: 'color',
 
 	getStyleAttributes: function() {
 		var styleKeys = this.getStyleKeys();
@@ -12,6 +16,34 @@ module.exports = BaseModel.extend({
 		}
 
 		return styleAttributes;
+	},
+
+	getColor: function() {
+		return this.get(this.colorAttribute);
+	},
+
+	getClassesToApply: function() {
+
+		var classString = '';
+
+		var styleNames = _.filter(_.keys(this.attributes), function(styleName) {
+            return styleName.indexOf(this.classPrefix) == 0;
+        }, this);
+
+        _.each(styleNames, function(styleName) {
+        	classString += this.get(styleName) + ' ';
+        }, this);
+
+        return classString;
+	},
+
+	resetAttributes: function() {
+		var styleKeys = _.difference(_.keys(this.attributes), this.reservedAttributes);
+
+		_.each(styleKeys, function(key){
+			this.unset(key, {silent: true});
+		}, this);
+		
 	},
 
 	getStyleReset: function() {
@@ -25,7 +57,13 @@ module.exports = BaseModel.extend({
 	},
 
 	getStyleKeys: function() {
-		return _.difference(_.keys(this.attributes), this.reservedAttributes);
+		var styleKeys = _.difference(_.keys(this.attributes), this.reservedAttributes);
+
+		var styleNames = _.filter(styleKeys, function(styleName) {
+            return styleName.indexOf(this.classPrefix) == -1;
+        }, this);
+
+        return styleNames;
 	},
 
 	getFormStyleId: function(styleId) {

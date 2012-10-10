@@ -108,12 +108,16 @@ app.hitIcons = function($el) {
 /**
  * Loads the svg icons depending on the data-hit-icon-type value.
  */
-app.loadIcons = function(container) {
+app.loadIcons = function(container, color) {
     var $container = $(container);
+    var appliedColor = "#FFFFFF";
+    if (color) {
+        appliedColor = color;
+    }
 
     $.each($('.hit-icon[data-hit-icon-type]', $container), function (idx, icon) {
         var iconType = $(icon).data('hit-icon-type');
-        var svgIcon = eval("icons." + iconType).replace(/#000000/g, "#FFFFFF");
+        var svgIcon = eval("icons." + iconType).replace(/#000000/g, appliedColor);
         if (svgIcon != '') {
             $(icon).css('background-image', "url(\"data:image/svg+xml;utf8,"+svgIcon+"\")");
         }

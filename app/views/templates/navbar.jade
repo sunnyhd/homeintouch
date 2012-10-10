@@ -34,7 +34,7 @@ script(id="edit-style-template", type="text/template")
     .tabbable
       ul.nav.nav-tabs
         li.active
-          a(href="#tab2", data-toggle="tab") Body
+          a(href="#tab1", data-toggle="tab") Body
       .tab-content
         .tab-pane.active#tab1
           form.form-horizontal
@@ -43,6 +43,51 @@ script(id="edit-style-template", type="text/template")
               label(for!="<%= field.id %>").control-label <%= field.name %>
               .controls
                 input(id!="<%= field.id %>", type="text", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+            <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").edit.btn.btn-primary Save
+
+
+script(id="edit-home-style-template", type="text/template")
+  .modal-header
+    h2 Edit <%= type %> Styles
+  .modal-body
+    .tabbable
+      ul.nav.nav-tabs
+        li.active
+          a(href="#tab1", data-toggle="tab") Body
+        li
+          a(href="#tab2", data-toggle="tab") My House
+      .tab-content
+        .tab-pane.active#tab1
+          form.form-horizontal
+            <% _.each(bodyFields, function(field){ %>
+            .control-group
+              label(for!="<%= field.id %>").control-label <%= field.name %>
+              .controls
+                input(id!="<%= field.id %>", type="text", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+            <% }) %>
+        .tab-pane#tab2
+          form.form-horizontal
+            <% _.each(myHomeFields, function(field){ %>
+            .control-group.
+              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
+              <div class="controls">
+                <% if (field.type !== 'class-list') { %>
+                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
+                <% } else { %>
+                <select id="<%= field.id %>">
+                  <% _.each(field.options, function(option) { %>
+                  <% if (option.value === field.value) { %>
+                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
+                  <% } else { %>
+                  <option value="<%= option.value %>"> <%= option.label %> </option>
+                  <% } %>
+                  <% }) %> 
+                </select>
+              <% } %>
+              </div>
             <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
