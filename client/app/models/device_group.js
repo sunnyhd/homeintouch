@@ -54,6 +54,7 @@ module.exports = BaseModel.extend({
         if (type){
             this.deviceType = type;
             this.set("name", type.get("name"));
+            this.set("widgetSize", type.get("widgetSize"));
         }
     },
 
