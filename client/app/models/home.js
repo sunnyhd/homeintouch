@@ -24,7 +24,7 @@ module.exports = BaseModel.extend({
         'background-image': 'none'
     },
 
-    myHomeSelector: ['#my-house .hit-title', '#my-house .hit-icon'],
+    myHomeSelector: {context: '#my-house', selector: ['.hit-title', '.hit-icon']},
 
     myHomePrefix: 'my-house-',
 
@@ -32,11 +32,31 @@ module.exports = BaseModel.extend({
         {name: "Text Color", id: "my-house-color"}, 
         {name: "Background Color", id: "my-house-class-background-color", type: "class-list", 
             options: [{label: "Dark Gray", value: "dark-gray"}, {label: "Gray", value: "gray"}, 
-                      {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}]}, 
+                      {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}, 
+                      {label: "Yellow", value: "yellow"}, {label: "Dark Yellow", value: "dark-yellow"},
+                      {label: "Violet", value: "violet"}]}, 
         {name: "Opacity", id: "my-house-opacity"}
     ],
 
     myHomeDefaultStyle: {
+        'class-background-image': 'blue'
+    },
+
+    myLibrarySelector: {context: '#my-library', selector: ['.hit-title', '.hit-icon']},
+
+    myLibraryPrefix: 'my-library-',
+
+    myLibraryFields: [
+        {name: "Text Color", id: "my-library-color"}, 
+        {name: "Background Color", id: "my-library-class-background-color", type: "class-list", 
+            options: [{label: "Dark Gray", value: "dark-gray"}, {label: "Gray", value: "gray"}, 
+                      {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}, 
+                      {label: "Yellow", value: "yellow"}, {label: "Dark Yellow", value: "dark-yellow"},
+                      {label: "Violet", value: "violet"}]}, 
+        {name: "Opacity", id: "my-library-opacity"}
+    ],
+
+    myLibraryDefaultStyle: {
         'class-background-image': 'blue'
     },
     
@@ -62,8 +82,16 @@ module.exports = BaseModel.extend({
             this.set("myHomeConfiguration", myHomeConfiguration);
         }
 
+        if (this.has("myLibraryConfiguration")) {
+            var myLibraryConfiguration = new Configuration(this.get("myLibraryConfiguration"));
+            myLibraryConfiguration.set('selector', this.myLibrarySelector);
+            myLibraryConfiguration.set('defaultStyle', this.myLibraryDefaultStyle);
+            this.set("myLibraryConfiguration", myLibraryConfiguration);
+        }
+
         this.set("bodyFields", _.clone(this.bodyFields));  
-        this.set("myHomeFields", _.clone(this.myHomeFields));  
+        this.set("myHomeFields", _.clone(this.myHomeFields));
+        this.set("myLibraryFields", _.clone(this.myLibraryFields));
     },
 
     defaultFloor: function() {
