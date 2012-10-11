@@ -1,10 +1,5 @@
 .room-device-group {
   padding: 0px;
-  background-color: #333;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #555 #222 #222 #555;
-  border-radius: 5px;
   overflow-y: hidden;
   overflow-x: hidden;
 }
@@ -38,7 +33,7 @@
 }
 
 .room-device-group .scroll-panel .viewport{
-  height: 262px;
+  /*height: 262px;*/
 }
 
 .room-devices {
@@ -61,12 +56,12 @@
 
 /* Device list container */
 .device-list {
-  padding: 5px;
-  margin: 0px;
+  /*padding: 5px;
+  margin: 0px;*/
 }
 
 .device-list.overview { /* FIXME: Verify */
-  position: relative;
+  /*position: relative;*/
 }
 
 /*ul.device-list li {

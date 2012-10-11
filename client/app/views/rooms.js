@@ -83,13 +83,13 @@ exports.DeviceView = Backbone.Marionette.ItemView.extend({
 exports.SwitchDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-switch-item-template",
-    className: "row-fluid device",
+    className: "hit-icon blue",
 
     formEvents: {
         "click .btn": "switchClicked"
     },
 
-    initialize: function(){
+    initialize: function() {
         this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
         this.readAddress = this.model.getAddressByType("read_switch");
         this.writeAddress = this.model.getAddressByType("write_switch");
@@ -134,7 +134,7 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
 exports.DimmerDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-dimmer-item-template",
-    className: "row-fluid device",
+    className: "hit-icon blue",
 
     formEvents: {
         "click .switch .btn.on": "switchOnClicked",
@@ -208,7 +208,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 exports.ShutterDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-shutter-item-template",
-    className: "row-fluid device",
+    className: "hit-icon blue",
 
     formEvents: {
         "click .up": "upClicked",
@@ -270,7 +270,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 exports.ThermostatDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-thermostat-item-template",
-    className: "row-fluid device",
+    className: "hit-icon blue",
 
     formEvents: {
         "click .mode .btn": "modeClicked",
@@ -376,13 +376,9 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
 });
 
 exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
-
     template: "#device-group-template",
-
-    className: "room-device-group span4",
+    className: "room-device-group span6 clearfix",
     
-    //tagName: 'li',
-
     events: {
         "click .addDevice": "addDeviceClicked",
         "click .editDeviceGroup": "editDeviceGroupClicked"
@@ -461,7 +457,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
 
     template: "#room-layout-template",
-
+    id: "room-layout",
     itemView: exports.DeviceGroupView,
 
     events: {
@@ -488,20 +484,20 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
             var $rowContainer = null;
             var $rows = cv.$(".room-devices");
             _.each($rows, function(row) {
-                if ($('.room-device-group', row).length < 3) {
+                if ($('.room-device-group', row).length < 2) {
                     $rowContainer = $(row);
                 }
             });
 
             if (!$rowContainer) {
-                $container = $('.container-fluid', cv.el);
+                $container = $(cv.el);
                 $rowContainer = $('<div class="room-devices row-fluid">').appendTo($container);
             }
 
             $rowContainer.append(iv.el);
         }
         // Initializes the scroll bar on the added device group
-        iv.initializeScrollBar();
+        //iv.initializeScrollBar();
     },
 
     onRender: function() {

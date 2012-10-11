@@ -1,31 +1,5 @@
 script(id="device-list-thermostat-item-template", type="text/template")
-  .span12
-    .device-name
-      a(href="#") <%= name %> 
-    .row-fluid.device-control
-      .span4.control-name Mode
-      .span8
-        .btn-group
-          button.btn#label-button Standby
-          button.btn.dropdown-toggle(data-toggle="dropdown")
-            span.caret
-          ul.dropdown-menu
-            li
-              a(data-target="#", data-mode="2") Standby
-            li
-              a(data-target="#", data-mode="1") Comfort
-            li
-              a(data-target="#", data-mode="3") Night
-            li
-              a(data-target="#", data-mode="4") Frost
-    .row-fluid.device-control
-      .span4.control-name Set
-      .span8
-        input.setpoint(type="number", min="-100", max="100", step="0.1", value!="<%= getAddress('read_temperature_set').value %>")
-    .row-fluid.device-control
-      .span4.control-name Room Temp
-      .span8
-        input.actual.uneditable-input.input-mini(disabled="disabled")
+  span <%= name %>
 
 script(id="device-add-thermostat-template", type="text/template")
   .modal-header
