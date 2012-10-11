@@ -5,6 +5,10 @@ var deviceTypesController = require('controllers/device_types');
 
 module.exports = BaseModel.extend({
 
+    defaults: {
+        "widgetSize": "small"
+    },
+
     titleSelector: '.device-group-name',
 
     titlePrefix: 'title-',

@@ -2,7 +2,7 @@ script(id="room-layout-template", type="text/template")
   .room-devices.row-fluid
 
 script(id="device-group-template", type="text/template")
-  .hit-widget.clearfix
+  div(class!="hit-widget <%= widgetSize %> clearfix")
     .hit-title.blue <%= name %>
     .hit-icon-container.hit-slider
       .hit-slider-inner.device-list
