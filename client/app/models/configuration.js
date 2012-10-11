@@ -22,6 +22,37 @@ module.exports = BaseModel.extend({
 		return this.get(this.colorAttribute);
 	},
 
+	getSelectors: function() {
+		var selector = this.get('selector');
+		var selectorArray = [];
+		if (_.isString(selector)) {
+			selectorArray.push(selector);
+		} else if (_.isObject(selector)) {
+			var context = selector.context;
+			var innerSelector = selector.selector;
+			if (_.isArray(innerSelector)) {
+				_.each(innerSelector, function(innerItem){
+					selectorArray.push(context + ' ' + innerItem);
+				});
+			} else {
+				selectorArray.push(context + ' ' + innerSelector);
+			}
+		}
+
+		return selectorArray;
+	},
+
+	getSelectorContext: function() {
+		var selector = this.get('selector');
+		if (_.isString(selector)) {
+			return selector;
+		} else if (_.isObject(selector)) {
+			return selector.context;
+		}
+
+		return '';
+	},
+
 	getClassesToApply: function() {
 
 		var classString = '';

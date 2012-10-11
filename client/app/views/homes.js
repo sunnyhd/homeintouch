@@ -89,13 +89,7 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
-            var selector = configuration.get('selector');
-            var selectorArray = [];
-            if (!_.isArray(selector)) {
-                selectorArray.push(selector);
-            } else {
-                selectorArray = selector;
-            }
+            var selectorArray = configuration.getSelectors();
             _.each(selectorArray, function(selector){
                 $(selector).removeAttr('style');
                 var className = configuration.getClassesToApply();
@@ -116,10 +110,19 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         if (this.model.has('myHomeConfiguration')) {
             var myHomeModel = this.model.get('myHomeConfiguration');
             this.applyStyle('myHomeConfiguration');
-            app.loadIcons('#my-house', myHomeModel.getColor());        
+            app.loadIcons(myHomeModel.getSelectorContext(), myHomeModel.getColor());
+        } else {
+            app.loadIcons('#my-house');
         }
         
-        app.loadIcons('#my-library');    
+        if (this.model.has('myLibraryConfiguration')) {
+            var myLibraryModel = this.model.get('myLibraryConfiguration');
+            this.applyStyle('myLibraryConfiguration');
+            app.loadIcons(myLibraryModel.getSelectorContext(), myLibraryModel.getColor());
+        } else {
+            app.loadIcons('#my-library');    
+        }
+        
         app.loadIcons('#plugins');    
     },
 
@@ -205,9 +208,11 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
         data.type = 'Home';
         data.bodyFields = this.model.get("bodyFields");
         data.myHomeFields = this.model.get("myHomeFields");
+        data.myLibraryFields = this.model.get("myLibraryFields");
 
         this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
         this.addStyleValues(data.myHomeFields, this.model.get("myHomeConfiguration"));
+        this.addStyleValues(data.myLibraryFields, this.model.get("myLibraryConfiguration"));
 
         return data;
     },
@@ -260,12 +265,15 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
     editClicked: function(e){
         e.preventDefault();
 
-        var formFields = _.union(_.pluck(this.model.get("myHomeFields"), 'id'), _.pluck(this.model.get("bodyFields"), 'id'));
+        var formFields = _.union(_.pluck(this.model.get("myLibraryFields"), 'id'), 
+                                 _.pluck(this.model.get("myHomeFields"), 'id'), 
+                                 _.pluck(this.model.get("bodyFields"), 'id'));
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
         this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
         this.updateStyleConfiguration(data, this.model.myHomePrefix, this.model.myHomeSelector, "myHomeConfiguration");
+        this.updateStyleConfiguration(data, this.model.myLibraryPrefix, this.model.myLibrarySelector, "myLibraryConfiguration");
 
         this.result = {
             status: "OK"
