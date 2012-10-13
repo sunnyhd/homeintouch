@@ -167,6 +167,12 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var $dimmer = $(e.currentTarget);
         var value = parseInt($dimmer.val());
         var address = this.writeDimmer.get("address");
+
+        $('.dimmer-detail', this.$el).html(value + '%');
+
+        if (value === 0) {
+            this.selectSwitch(address, false);
+        }
         app.vent.trigger("device:write", address, value);
 
         var self = this;
@@ -186,13 +192,21 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     selectSwitch: function(address, value){
-        var $btnSwitch;
+        /*var $btnSwitch;
         if (value){
             $btnSwitch = this.$(".switch .btn.on");
         } else {
             $btnSwitch = this.$(".switch .btn.off");
         }
-        $btnSwitch.button("toggle");
+        $btnSwitch.button("toggle");*/
+
+        $('a', this.$el).removeClass('active');
+
+        if (value) {
+            $('a[data-value="on"]', this.$el).addClass('active');
+        } else {
+            $('a[data-value="off"]', this.$el).addClass('active');
+        }
     },
 
     selectDimmer: function(address, value){

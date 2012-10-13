@@ -54,7 +54,7 @@
 .hit-icon-wrapper~.hit-icon-wrapper { margin-left: 10px; }
 
 /** Device Widgets */
-.hit-icon.device-widget { position: relative; }
+.hit-icon.device-widget { position: relative; background-position: top; }
 .hit-icon.device-widget span { top: 0px; }
 .hit-icon.device-widget .widget-opts {
 	height: 35%;
@@ -95,6 +95,12 @@
 	color: #1AA1E1;
 }
 
+.dimmer-detail {
+	position: absolute;
+	right: 10px;
+	font-size: 1.3em;
+	top: 55px;
+}
 
 /*.hit-icon.device-widget[data-widget-type="switch"] .widget-opts btn {
 	margin-top: 10px;
@@ -113,6 +119,8 @@
 
 .hit-widget.medium .hit-icon-container { height: 137px; } /* height: 135px border height: 2px */
 .hit-widget.medium .hit-icon { width: 135px; height: 135px; }
+.hit-widget.medium .hit-icon.device-widget .widget-opts { height: 45%; }
+.hit-widget.medium .hit-icon.device-widget .widget-opts input[type="range"] { width: 110px; }
 
 .hit-widget.large .hit-icon-container { height: 182px; } /* height: 180px border height: 2px */
 .hit-widget.large .hit-icon { width: 180px; height: 180px; }
