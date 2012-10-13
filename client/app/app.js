@@ -124,6 +124,17 @@ app.loadIcons = function(container, color) {
     });
 };
 
+app.changeIconState = function($icon, color) {
+
+    if ($icon.length) {
+        var iconType = $icon.data('hit-icon-type');
+        var svgIcon = eval("icons." + iconType).replace(/#000000/g, color);
+        if (svgIcon != '') {
+            $icon.css('background-image', "url(\"data:image/svg+xml;utf8,"+svgIcon+"\")");
+        }
+    }
+};
+
 app.vent.on('device:read', function(address){
     socket.emit('eib:get', address);
 });
