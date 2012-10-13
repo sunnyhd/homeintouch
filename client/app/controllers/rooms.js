@@ -31,6 +31,7 @@ exports.showRoom = function(floor, room) {
         // start the Gridster.js library to allow drag & drop of device groups
         // start the tinyscroll.js to insert scroll bars to the device groups
         roomLayoutView.initializeUIEffects();
+        roomLayoutView.applyStyles();
 
     } else {
         var noDeviceGroupsView = new roomViews.NoDeviceGroupView();
@@ -145,7 +146,7 @@ app.vent.on("room:editStyle", function(roomView) {
     editStyleForm.on("close", function(){
         if (editStyleForm.result.status === "OK") {
             homesController.saveCurrentHome();
-            exports.currentDashboard.applyStyles();
+            app.vent.trigger('room:selected', exports.currentRoom);
         }
     });
 

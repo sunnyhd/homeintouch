@@ -42,8 +42,12 @@ script(id="edit-style-template", type="text/template")
             .control-group
               label(for!="<%= field.id %>").control-label <%= field.name %>
               .controls
-                input(id!="<%= field.id %>", type="text", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+                input(id!="<%= field.id %>", type!="<%= field.type %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
             <% }) %>
+            .control-group
+              label(for="holder").control-label Background Preview
+                .controls
+                  #holder
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").edit.btn.btn-primary Save
@@ -68,8 +72,12 @@ script(id="edit-home-style-template", type="text/template")
             .control-group
               label(for!="<%= field.id %>").control-label <%= field.name %>
               .controls
-                input(id!="<%= field.id %>", type="text", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+                input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>", type!="<%= field.type %>") 
             <% }) %>
+            .control-group
+              label(for="holder").control-label Background Preview
+                .controls
+                  #holder
         .tab-pane#tab2
           form.form-horizontal
             <% _.each(myHomeFields, function(field){ %>

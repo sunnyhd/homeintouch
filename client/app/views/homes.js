@@ -123,7 +123,7 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
             app.loadIcons('#my-library');    
         }
         
-        app.loadIcons('#plugins');    
+        app.loadIcons('#plugins');
     },
 
     sliderClickedHandler: function(e) {
@@ -198,7 +198,38 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
 
     events: {
         "click .cancel.btn": "cancelClicked",
-        "click .edit.btn": "editClicked"
+        "click .edit.btn": "editClicked",
+        "change #body-background-image" : "loadFile"
+    },
+
+    loadFile: function(event){
+        var imageFile = event.target.files[0];
+        this.previewFile(imageFile);
+        
+        var that = this;
+        var fileName = imageFile.name;
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            that.imageStream = event.target.result;
+            that.imageFileName = fileName;
+        };
+
+        reader.readAsBinaryString(imageFile);
+    },
+
+    previewFile: function(file) {
+        
+        var previewReader = new FileReader();
+        previewReader.onload = function (event) {
+            $('#holder').children().remove();
+            var image = new Image();
+            image.src = event.target.result;
+            image.width = 150; // a fake resize
+            holder.appendChild(image);
+        };
+
+        previewReader.readAsDataURL(file);        
     },
 
     serializeData: function(){
@@ -237,7 +268,9 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
         var styleData = _.pick(formData, styleNames);
         var newStyleData = {};
         _.each(styleData, function(value, key){
-            newStyleData[key.substr(prefix.length)] = value;
+            if (value != null && value != '') {
+                newStyleData[key.substr(prefix.length)] = value;    
+            }
         }, this);
 
         newStyleData['selector'] = selector;
@@ -270,16 +303,40 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
                                  _.pluck(this.model.get("bodyFields"), 'id'));
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
-
-        this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
+        
         this.updateStyleConfiguration(data, this.model.myHomePrefix, this.model.myHomeSelector, "myHomeConfiguration");
         this.updateStyleConfiguration(data, this.model.myLibraryPrefix, this.model.myLibrarySelector, "myLibraryConfiguration");
 
-        this.result = {
-            status: "OK"
-        }
+        if (this.imageStream) {
+            var that = this;
+            $.ajax({
+                type: "POST",
+                url: "/api/images",
+                data: {
+                    fileName: that.imageFileName,
+                    fileStream: that.imageStream
+                },
+                success: function (response) {
+                    var imagePath = response.imagePath;
+                    data['body-background-image'] = 'url(' + imagePath + ')';
+                    that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
 
-        this.close();
+                    that.result = {
+                        status: "OK"
+                    }
+
+                    that.close();
+                }
+            });      
+        } else {
+            this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
+
+            this.result = {
+                status: "OK"
+            }
+
+            this.close();
+        }
     },
 
     cancelClicked: function(e){

@@ -15,9 +15,10 @@ module.exports = BaseModel.extend({
     bodyPrefix: 'body-',
 
     bodyFields: [
-        {name: "Background Color", id: "body-background-color"}, 
-        {name: "Text Color", id: "body-color"}, 
-        {name: "Opacity", id: "body-opacity"}
+        {name: "Background Color", id: "body-background-color", type: "text"}, 
+        {name: "Text Color", id: "body-color", type: "text"}, 
+        {name: "Opacity", id: "body-opacity", type: "text"},
+        {name: "Background Image", id: "body-background-image", type: "file"}
     ],
 
     bodyDefaultStyle: {
@@ -68,26 +69,35 @@ module.exports = BaseModel.extend({
         this.floors = this.parseChildren("floors", Floors);
         this.floors.parentHome = this;
 
+        // Initialize Body Configuration
+        var bodyConfiguration = new Configuration();
         if (this.has("bodyConfiguration")) {
-            var bodyConfiguration = new Configuration(this.get("bodyConfiguration"));
-            bodyConfiguration.set('selector', this.bodySelector);
-            bodyConfiguration.set('defaultStyle', this.bodyDefaultStyle);
-            this.set("bodyConfiguration", bodyConfiguration);
+            bodyConfiguration.set(this.get("bodyConfiguration"));
         }
 
+        bodyConfiguration.set('selector', this.bodySelector);
+        bodyConfiguration.set('defaultStyle', this.bodyDefaultStyle);
+        this.set("bodyConfiguration", bodyConfiguration);
+
+        // Initialize My Home Configuration
+        var myHomeConfiguration = new Configuration();
         if (this.has("myHomeConfiguration")) {
-            var myHomeConfiguration = new Configuration(this.get("myHomeConfiguration"));
-            myHomeConfiguration.set('selector', this.myHomeSelector);
-            myHomeConfiguration.set('defaultStyle', this.myHomeDefaultStyle);
-            this.set("myHomeConfiguration", myHomeConfiguration);
-        }
+            myHomeConfiguration.set(this.get("myHomeConfiguration"));
+        }            
 
+        myHomeConfiguration.set('selector', this.myHomeSelector);
+        myHomeConfiguration.set('defaultStyle', this.myHomeDefaultStyle);
+        this.set("myHomeConfiguration", myHomeConfiguration);
+        
+        // Initialize My Library Configuration
+        var myLibraryConfiguration = new Configuration();
         if (this.has("myLibraryConfiguration")) {
-            var myLibraryConfiguration = new Configuration(this.get("myLibraryConfiguration"));
-            myLibraryConfiguration.set('selector', this.myLibrarySelector);
-            myLibraryConfiguration.set('defaultStyle', this.myLibraryDefaultStyle);
-            this.set("myLibraryConfiguration", myLibraryConfiguration);
+            myLibraryConfiguration.set(this.get("myLibraryConfiguration"));
         }
+        
+        myLibraryConfiguration.set('selector', this.myLibrarySelector);
+        myLibraryConfiguration.set('defaultStyle', this.myLibraryDefaultStyle);
+        this.set("myLibraryConfiguration", myLibraryConfiguration);
 
         this.set("bodyFields", _.clone(this.bodyFields));  
         this.set("myHomeFields", _.clone(this.myHomeFields));
@@ -121,6 +131,10 @@ module.exports = BaseModel.extend({
 
         if (this.has("myHomeConfiguration")) {
             json.myHomeConfiguration = this.get("myHomeConfiguration").toJSON();
+        }
+
+        if (this.has("myLibraryConfiguration")) {
+            json.myHomeConfiguration = this.get("myLibraryConfiguration").toJSON();
         }
 
         delete json.bodyFields;

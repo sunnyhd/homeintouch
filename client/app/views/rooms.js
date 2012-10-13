@@ -509,18 +509,29 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         _.each(this.children, function(view, cid){
             that.bindItemViewEvents(view);
         });
+    },
 
-        this.applyStyles();
+    applyStyle: function(styleConfigurationName) {
+
+        if (this.model.has(styleConfigurationName)) {
+            var configuration = this.model.get(styleConfigurationName);
+            var selectorArray = configuration.getSelectors();
+            _.each(selectorArray, function(selector){
+                $(selector).removeAttr('style');
+                var className = configuration.getClassesToApply();
+                if (className !== '') {
+                    this.$(selector).addClass(className);
+                }
+                this.$(selector).css(configuration.getStyleAttributes());
+            });
+        }
     },
 
     applyStyles: function() {
+        this.applyStyle('bodyConfiguration');
 
-        $(this.model.bodySelector).removeAttr('style');
-
-        if (this.model.has('bodyConfiguration')) {
-            var bodyConfiguration = this.model.get('bodyConfiguration');
-            $(bodyConfiguration.get('selector')).css(bodyConfiguration.getStyleAttributes());
-        }
+        app.main.show(this);
+        app.loadIcons(this.$el);
     },
 
     bindItemViewEvents: function(itemView) {
@@ -629,7 +640,38 @@ exports.EditStyleRoomForm = Backbone.Marionette.ItemView.extend({
 
     events: {
         "click .cancel.btn": "cancelClicked",
-        "click .edit.btn": "editClicked"
+        "click .edit.btn": "editClicked",
+        "change #body-background-image" : "loadFile"
+    },
+
+    loadFile: function(event){
+        var imageFile = event.target.files[0];
+        this.previewFile(imageFile);
+        
+        var that = this;
+        var fileName = imageFile.name;
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            that.imageStream = event.target.result;
+            that.imageFileName = fileName;
+        };
+
+        reader.readAsBinaryString(imageFile);
+    },
+
+    previewFile: function(file) {
+        
+        var previewReader = new FileReader();
+        previewReader.onload = function (event) {
+            $('#holder').children().remove();
+            var image = new Image();
+            image.src = event.target.result;
+            image.width = 150; // a fake resize
+            holder.appendChild(image);
+        };
+
+        previewReader.readAsDataURL(file);        
     },
 
     serializeData: function(){
@@ -664,13 +706,31 @@ exports.EditStyleRoomForm = Backbone.Marionette.ItemView.extend({
         var styleData = _.pick(formData, styleNames);
         var newStyleData = {};
         _.each(styleData, function(value, key){
-            newStyleData[key.substr(prefix.length)] = value;
+            if (value != null && value != '') {
+                newStyleData[key.substr(prefix.length)] = value;
+            }
         }, this);
 
         newStyleData['selector'] = selector;
         newStyleData['prefix'] = prefix;
 
         return newStyleData;
+    },
+
+    updateStyleConfiguration: function(formData, prefix, selector, attributeName) {
+
+        var configurationAttributes = this.extractStyle(formData, prefix, selector);
+
+        var configuration = this.model.get(attributeName);
+
+        if (configuration == null) {
+            configuration = new Configuration();
+            this.model.set(attributeName, configuration);
+        }
+
+        configuration.resetAttributes();
+
+        configuration.set(configurationAttributes);
     },
 
     editClicked: function(e){
@@ -680,22 +740,36 @@ exports.EditStyleRoomForm = Backbone.Marionette.ItemView.extend({
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
-        var bodyConfigurationAttributes = this.extractStyle(data, this.model.bodyPrefix, this.model.bodySelector);
+        if (this.imageStream) {
+            var that = this;
+            $.ajax({
+                type: "POST",
+                url: "/api/images",
+                data: {
+                    fileName: that.imageFileName,
+                    fileStream: that.imageStream
+                },
+                success: function (response) {
+                    var imagePath = response.imagePath;
+                    data['body-background-image'] = 'url(' + imagePath + ')';
+                    that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
 
-        var bodyConfiguration = this.model.get("bodyConfiguration");
+                    that.result = {
+                        status: "OK"
+                    }
 
-        if (bodyConfiguration == null) {
-            bodyConfiguration = new Configuration();
-            this.model.set("bodyConfiguration", bodyConfiguration);
+                    that.close();
+                }
+            });      
+        } else {
+            this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
+
+            this.result = {
+                status: "OK"
+            }
+
+            this.close();
         }
-
-        bodyConfiguration.set(bodyConfigurationAttributes);
-
-        this.result = {
-            status: "OK"
-        }
-
-        this.close();
     },
 
     cancelClicked: function(e){

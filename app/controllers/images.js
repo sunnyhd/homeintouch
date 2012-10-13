@@ -1,4 +1,5 @@
 var images = require('../../lib/images');
+var fs = require('fs');
 
 exports.show = function(req, res, next) {
     images.get(req.params.image, function(err, buffer) {
@@ -6,3 +7,16 @@ exports.show = function(req, res, next) {
         res.end(buffer.toString(), 'binary');
     });
 };
+
+exports.create = function(req, res) {
+	
+	images.put(new Buffer(req.body.fileStream), function(err, doc) {
+    	res.writeHead(200, { 'Content-Type': 'application/json' }); 
+  		res.end(JSON.stringify({
+      		success: true,
+      		imagePath: 'api/images/' + doc._id
+  		}));
+	});
+
+	
+}

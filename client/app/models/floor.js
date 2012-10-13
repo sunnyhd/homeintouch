@@ -9,9 +9,10 @@ module.exports = BaseModel.extend({
     bodyPrefix: 'body-',
 
     bodyFields: [
-        {name: "Background Color", id: "body-background-color"}, 
-        {name: "Text Color", id: "body-color"}, 
-        {name: "Opacity", id: "body-opacity"}
+        {name: "Background Color", id: "body-background-color", type: "text"}, 
+        {name: "Text Color", id: "body-color", type: "text"}, 
+        {name: "Opacity", id: "body-opacity", type: "text"},
+        {name: "Background Image", id: "body-background-image", type: "file"}
     ],
 
     bodyDefaultStyle: {
@@ -32,12 +33,15 @@ module.exports = BaseModel.extend({
 
     parseInnerData: function() {
 
+        // Initialize Body Configuration
+        var bodyConfiguration = new Configuration();
         if (this.has("bodyConfiguration")) {
-            var bodyConfiguration = new Configuration(this.get("bodyConfiguration"));
-            bodyConfiguration.set('selector', this.bodySelector);
-            bodyConfiguration.set('defaultStyle', this.bodyDefaultStyle);
-            this.set("bodyConfiguration", bodyConfiguration);
-        }
+            bodyConfiguration.set(this.get("bodyConfiguration"));
+        } 
+
+        bodyConfiguration.set('selector', this.bodySelector);
+        bodyConfiguration.set('defaultStyle', this.bodyDefaultStyle);
+        this.set("bodyConfiguration", bodyConfiguration);
 
         this.set("bodyFields", _.clone(this.bodyFields));  
     },

@@ -52,7 +52,7 @@ app.vent.on("floor:editStyle", function(homeView) {
     editStyleForm.on("close", function(){
         if (editStyleForm.result.status === "OK") {
             homesController.save(home);
-            exports.currentDashboard.applyStyles();
+            app.vent.trigger('floor:selected', exports.currentFloor);
         }
     });
 
@@ -122,6 +122,5 @@ var showEditFloorForm = function(floor){
 
     exports.currentDashboard = view;
 
-    app.main.show(view);
-    app.loadIcons(view.$el);
+    view.applyStyles();    
  };

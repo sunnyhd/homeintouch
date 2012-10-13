@@ -8,11 +8,13 @@ module.exports = BaseModel.extend({
 
 	colorAttribute: 'color',
 
+	fileAttributes: ['background-image'],
+
 	getStyleAttributes: function() {
 		var styleKeys = this.getStyleKeys();
 		var styleAttributes = _.pick(this.attributes, styleKeys);
 		if (this.has('defaultStyle')) {
-			_.extend(styleAttributes, this.get('defaultStyle'));
+			_.extend(this.get('defaultStyle'), styleAttributes);
 		}
 
 		return styleAttributes;
@@ -69,7 +71,7 @@ module.exports = BaseModel.extend({
 	},
 
 	resetAttributes: function() {
-		var styleKeys = _.difference(_.keys(this.attributes), this.reservedAttributes);
+		var styleKeys = _.difference(_.keys(this.attributes), this.reservedAttributes, this.fileAttributes);
 
 		_.each(styleKeys, function(key){
 			this.unset(key, {silent: true});
