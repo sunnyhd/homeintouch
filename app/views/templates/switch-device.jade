@@ -1,5 +1,12 @@
 script(id="device-list-switch-item-template", type="text/template")
-  span <%= name %>
+  .hit-icon.device-widget.blue(data-widget-type="switch", data-hit-icon-type="devices.lightSwitch")
+    span <%= name %>
+    .widget-opts
+      ul.device-btn-group.clearfix
+        li.device-btn
+          a(href="#", data-value="on") ON
+        li.device-btn
+          a(href="#", data-value="off") OFF
 
 script(id="device-add-switch-template", type="text/template")
   .modal-header

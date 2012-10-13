@@ -83,10 +83,10 @@ exports.DeviceView = Backbone.Marionette.ItemView.extend({
 exports.SwitchDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-switch-item-template",
-    className: "hit-icon blue",
+    className: "hit-icon-wrapper",
 
     formEvents: {
-        "click .btn": "switchClicked"
+        "click .hit-icon a": "switchClicked"
     },
 
     initialize: function() {
@@ -95,9 +95,14 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
         this.writeAddress = this.model.getAddressByType("write_switch");
     },
 
-    switchClicked: function() {
-        var btnSwitch = this.$('.btn');
-        var on = !btnSwitch.hasClass('active');
+    switchClicked: function (e) {
+        e.preventDefault();
+        var btnClicked = $(e.currentTarget);
+        var on = (btnClicked.data('value') === 'on');
+
+        // var $widget = $('.hit-icon', this.$el);
+        // app.changeIconState($widget, 'yellow'); // Change the image state here!
+
         this.flipSwitch(on);
         this.updateSwitch(on);
     },
@@ -108,15 +113,13 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(on) {
-        var btnSwitch = this.$('.btn');
 
-        var onClass = 'btn-success active';
-        var offClass = 'btn-danger';
+        $('a', this.$el).removeClass('active');
 
         if (on) {
-            btnSwitch.removeClass(offClass).addClass(onClass);
+            $('a[data-value="on"]', this.$el).addClass('active');
         } else {
-            btnSwitch.removeClass(onClass).addClass(offClass);
+            $('a[data-value="off"]', this.$el).addClass('active');
         }
     },
 
@@ -134,11 +137,10 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
 exports.DimmerDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-dimmer-item-template",
-    className: "hit-icon blue",
+    className: "hit-icon-wrapper",
 
     formEvents: {
-        "click .switch .btn.on": "switchOnClicked",
-        "click .switch .btn.off": "switchOffClicked",
+        "click .hit-icon a": "switchClicked",
         "change .dimmer": "dimmerChanged"
     },
 
@@ -152,18 +154,25 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         this.bindTo(this.readSwitch, "change:value", this.selectSwitch, this);
     },
 
-    switchOnClicked: function(){
-        this.flipSwitch(true);
-    },
+    switchClicked: function (e) {
+        e.preventDefault();
 
-    switchOffClicked: function(){
-        this.flipSwitch(false);
+        var btnClicked = $(e.currentTarget);
+        var on = (btnClicked.data('value') === 'on');
+
+        this.flipSwitch(on);
     },
 
     dimmerChanged: function(e){
         var $dimmer = $(e.currentTarget);
         var value = parseInt($dimmer.val());
         var address = this.writeDimmer.get("address");
+
+        $('.dimmer-detail', this.$el).html(value + '%');
+
+        if (value === 0) {
+            this.selectSwitch(address, false);
+        }
         app.vent.trigger("device:write", address, value);
 
         var self = this;
@@ -183,13 +192,21 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     selectSwitch: function(address, value){
-        var $btnSwitch;
+        /*var $btnSwitch;
         if (value){
             $btnSwitch = this.$(".switch .btn.on");
         } else {
             $btnSwitch = this.$(".switch .btn.off");
         }
-        $btnSwitch.button("toggle");
+        $btnSwitch.button("toggle");*/
+
+        $('a', this.$el).removeClass('active');
+
+        if (value) {
+            $('a[data-value="on"]', this.$el).addClass('active');
+        } else {
+            $('a[data-value="off"]', this.$el).addClass('active');
+        }
     },
 
     selectDimmer: function(address, value){
@@ -391,10 +408,10 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         "shutter": exports.ShutterDeviceView
     },
 
-    initialize: function(){
-        this.collection = this.model.devices;
-
+    initialize: function() {
         var type = this.model.get("type");
+
+        this.collection = this.model.devices;
         this.itemView = this.itemViewTypes[type];
 
         // Bind event when the devices are removed to check if there devices in the collection
@@ -417,21 +434,27 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     appendHtml: function(cv, iv){
         cv.$(".device-list").append(iv.el);
+
+        app.loadIcons(iv.$el);
+
         // If the scroll bar component is created, update it
-        if (this.scrollBar) {
+        /*if (this.scrollBar) {
             this.updateScrollBar();
-        }
+        }*/
     },
 
     checkEmptyCollection: function() {
         if (this.collection.length == 0) {
             this.trigger('room:device-group:empty', this);
         } else {
-            this.updateScrollBar();
+            // this.updateScrollBar();
         }
     },
 
     applyStyles: function() {
+        //app.loadIcons('#' + this.id, cv.$(".device-list"));
+        app.loadIcons('#' + this.id);
+
         if (this.model.has('titleConfiguration')) {
             var titleConfiguration = this.model.get('titleConfiguration');
             this.$(titleConfiguration.get('selector')).css(titleConfiguration.getStyleReset());
@@ -446,11 +469,11 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     },
 
     initializeScrollBar: function() {
-        this.scrollBar = this.$('.scroll-panel').tinyscrollbar();
+        // this.scrollBar = this.$('.scroll-panel').tinyscrollbar();
     },
 
     updateScrollBar: function() {
-        $('.scroll-panel', this.$el).tinyscrollbar_update();
+        // $('.scroll-panel', this.$el).tinyscrollbar_update();
     }
 });
 
