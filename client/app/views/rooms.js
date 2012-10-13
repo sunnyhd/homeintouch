@@ -137,11 +137,10 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
 exports.DimmerDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-dimmer-item-template",
-    className: "hit-icon blue",
+    className: "hit-icon-wrapper",
 
     formEvents: {
-        "click .switch .btn.on": "switchOnClicked",
-        "click .switch .btn.off": "switchOffClicked",
+        "click .hit-icon a": "switchClicked",
         "change .dimmer": "dimmerChanged"
     },
 
@@ -155,12 +154,13 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         this.bindTo(this.readSwitch, "change:value", this.selectSwitch, this);
     },
 
-    switchOnClicked: function(){
-        this.flipSwitch(true);
-    },
+    switchClicked: function (e) {
+        e.preventDefault();
 
-    switchOffClicked: function(){
-        this.flipSwitch(false);
+        var btnClicked = $(e.currentTarget);
+        var on = (btnClicked.data('value') === 'on');
+
+        this.flipSwitch(on);
     },
 
     dimmerChanged: function(e){

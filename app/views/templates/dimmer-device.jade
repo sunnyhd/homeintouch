@@ -1,5 +1,12 @@
 script(id="device-list-dimmer-item-template", type="text/template")
-  span <%= name %>
+  .hit-icon.device-widget.blue(data-widget-type="dimmer", data-hit-icon-type="devices.lightDimmer")
+    span <%= name %>
+    .widget-opts
+      ul.device-btn-group.clearfix
+        li.device-btn
+          a(href="#", data-value="on") ON
+        li.device-btn
+          a(href="#", data-value="off") OFF
 
 script(id="device-add-dimmer-template", type="text/template")
   .modal-header
