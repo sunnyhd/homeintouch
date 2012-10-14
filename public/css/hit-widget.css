@@ -71,9 +71,14 @@
 }
 .device-btn-group .device-btn {
 	float: left;
-	width: 50%;
+	width: 100%;
 	text-align: center;
 }
+.device-btn-group.two .device-btn { width: 50%; }
+.device-btn-group.three .device-btn { width: 33.33%; }
+.device-btn-group.four .device-btn { width: 25%; }
+.device-btn-group.five .device-btn { width: 20%; }
+
 .device-btn-group .device-btn a {
 	display: block;
 	text-decoration: none;
@@ -96,6 +101,12 @@
 	color: #1AA1E1;
 }
 
+/** Switch styles */
+/*.hit-icon.device-widget[data-widget-type="switch"] .widget-opts btn {
+	margin-top: 10px;
+}*/
+
+/** Dimmer styles */
 .dimmer-detail {
 	position: absolute;
 	right: 10px;
@@ -103,18 +114,25 @@
 	top: 55px;
 }
 
-/*.hit-icon.device-widget[data-widget-type="switch"] .widget-opts btn {
-	margin-top: 10px;
-}*/
+/** Thermostat styles */
+.hit-icon.device-widget[data-widget-type="thermostat"] { background-position: -5% 10%; }
 
-.hit-widget .hit-icon-container { height: 92px; } /* height: 90px border height: 2px */
-.hit-widget .hit-icon { width: 90px; height: 90px; }
+.thermostat-detail {
+	margin-top: 30px;
+	font-size: 2.5em;
+	font-weight: bold;
+}
+.thermostat-detail span { font-size: 0.5em; }
+
 /** 
  * WIDGET SIZES: 
  *	- small: 	90px X 90px;
  *	- medium: 	135px X 135px;
  *	- large: 	180px X 180px;
  * */
+.hit-widget .hit-icon-container { height: 92px; } /* height: 90px border height: 2px */
+.hit-widget .hit-icon { width: 90px; height: 90px; }
+
 .hit-widget.small .hit-icon-container { height: 112px; } /* height: 110px border height: 2px */
 .hit-widget.small .hit-icon { width: 110px; height: 110px; }
 
@@ -125,3 +143,4 @@
 
 .hit-widget.large .hit-icon-container { height: 182px; } /* height: 180px border height: 2px */
 .hit-widget.large .hit-icon { width: 180px; height: 180px; }
+.hit-widget.large .hit-icon.device-widget .widget-opts { height: 45%; }

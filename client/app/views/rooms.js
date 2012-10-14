@@ -301,7 +301,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 exports.ThermostatDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-thermostat-item-template",
-    className: "hit-icon blue",
+    className: "hit-icon-wrapper",
 
     formEvents: {
         "click .mode .btn": "modeClicked",
@@ -394,6 +394,11 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         this.$("input.actual").val(decimal);
     },
 
+    updateIconColor: function(value) {
+        var $widget = $('.hit-icon', this.$el);
+        app.changeIconState($widget, '#FFFFFF');
+    },
+
     onRender: function(){
         var mode = this.readMode.get("value");
         this.showMode(null, mode);
@@ -403,6 +408,8 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
 
         var temperature = this.readTemperature.get("value");
         this.showTemperature(null, temperature);
+
+        this.updateIconColor();
     }
 });
 
@@ -467,7 +474,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     applyStyles: function() {
         //app.loadIcons('#' + this.id, cv.$(".device-list"));
-        app.loadIcons('#' + this.id);
+        // app.loadIcons('#' + this.id);
 
         if (this.model.has('titleConfiguration')) {
             var titleConfiguration = this.model.get('titleConfiguration');
@@ -568,7 +575,7 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         this.applyStyle('bodyConfiguration');
 
         app.main.show(this);
-        app.loadIcons(this.$el);
+        // app.loadIcons(this.$el);
     },
 
     bindItemViewEvents: function(itemView) {
