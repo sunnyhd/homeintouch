@@ -100,9 +100,6 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
         var btnClicked = $(e.currentTarget);
         var on = (btnClicked.data('value') === 'on');
 
-        // var $widget = $('.hit-icon', this.$el);
-        // app.changeIconState($widget, 'yellow'); // Change the image state here!
-
         this.flipSwitch(on);
         this.updateSwitch(on);
     },
@@ -115,11 +112,20 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     updateSwitch: function(on) {
 
         $('a', this.$el).removeClass('active');
-
         if (on) {
             $('a[data-value="on"]', this.$el).addClass('active');
         } else {
             $('a[data-value="off"]', this.$el).addClass('active');
+        }
+        this.updateIconColor(on);
+    },
+
+    updateIconColor: function(on) {
+        var $widget = $('.hit-icon', this.$el);
+        if (on) {
+            app.changeIconState($widget, '#FF9522');
+        } else {
+            app.changeIconState($widget, 'gray');
         }
     },
 
