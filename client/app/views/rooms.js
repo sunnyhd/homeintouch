@@ -110,7 +110,6 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(on) {
-
         $('a', this.$el).removeClass('active');
         if (on) {
             $('a[data-value="on"]', this.$el).addClass('active');
@@ -167,6 +166,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var on = (btnClicked.data('value') === 'on');
 
         this.flipSwitch(on);
+        this.updateDimmerDetail((on) ? 100 : 0);
     },
 
     dimmerChanged: function(e){
@@ -174,22 +174,17 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var value = parseInt($dimmer.val());
         var address = this.writeDimmer.get("address");
 
-        $('.dimmer-detail', this.$el).html(value + '%');
-
-        if (value === 0) {
-            this.selectSwitch(address, false);
-        }
+        this.updateDimmerDetail(value);
+        this.selectSwitch(address, (value !== 0));
         app.vent.trigger("device:write", address, value);
 
-        var self = this;
-
+        /*var self = this;
         if (this.dimmerTimeout) {
             clearTimeout(this.dimmerTimeout);
         }
-
         this.dimmerTimeout = setTimeout(function() {
             self.dimmerTimeout = null;
-        }, 500);
+        }, 500);*/
     },
 
     flipSwitch: function(on){
@@ -197,21 +192,30 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         app.vent.trigger("device:write", address, on);
     },
 
+    updateDimmerSlider: function(value) {
+        $('.dimmer', this.$el).val(value);
+    },
+
+    updateDimmerDetail: function(value) {
+        $('.dimmer-detail', this.$el).html(value + '%');
+    },
+
     selectSwitch: function(address, value){
-        /*var $btnSwitch;
-        if (value){
-            $btnSwitch = this.$(".switch .btn.on");
-        } else {
-            $btnSwitch = this.$(".switch .btn.off");
-        }
-        $btnSwitch.button("toggle");*/
-
         $('a', this.$el).removeClass('active');
-
         if (value) {
             $('a[data-value="on"]', this.$el).addClass('active');
         } else {
             $('a[data-value="off"]', this.$el).addClass('active');
+        }
+        this.updateIconColor(value);
+    },
+
+    updateIconColor: function(on) {
+        var $widget = $('.hit-icon', this.$el);
+        if (on) {
+            app.changeIconState($widget, '#FF9522');
+        } else {
+            app.changeIconState($widget, 'gray');
         }
     },
 
@@ -225,6 +229,10 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     onRender: function(){
         var value = this.readSwitch.get("value");
         this.selectSwitch(null, value);
+
+        value = this.readDimmer.get("value");
+        this.updateDimmerSlider(value);
+        this.updateDimmerDetail(value);
     }
 });
 
@@ -441,7 +449,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     appendHtml: function(cv, iv){
         cv.$(".device-list").append(iv.el);
 
-        app.loadIcons(iv.$el);
+        //app.loadIcons(iv.$el);
 
         // If the scroll bar component is created, update it
         /*if (this.scrollBar) {
