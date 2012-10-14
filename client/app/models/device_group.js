@@ -1,3 +1,4 @@
+var app = require('app');
 var BaseModel = require('models/base');
 var Devices = require('collections/devices');
 var Configuration = require('models/configuration');
@@ -9,39 +10,57 @@ module.exports = BaseModel.extend({
         "widgetSize": "small"
     },
 
-    titleSelector: '.device-group-name',
+    titleSelector: '.hit-title',
 
     titlePrefix: 'title-',
 
-    bodySelector: '.scroll-panel',
+    bodySelector: {selector: ['.hit-icon', '.device-btn', '.device-btn a']},
 
     bodyPrefix: 'body-',
 
     titleFields: [
-        {name: "Background Color", id: "title-background-color"}, 
+        {name: "Background Color", id: "title-class-background-color", type: "class-list", options: app.colorClasses}, 
         {name: "Text Color", id: "title-color"}, 
         {name: "Opacity", id: "title-opacity"}
     ],
 
+    titleDefaultStyle: {
+        'class-background-image': 'blue'
+    },
+
     bodyFields: [
-        {name: "Background Color", id: "body-background-color"}, 
+        {name: "Background Color", id: "body-class-background-color", type: "class-list", options: app.colorClasses}, 
         {name: "Text Color", id: "body-color"}, 
         {name: "Opacity", id: "body-opacity"}
     ],
+
+    bodyDefaultStyle: {
+        'class-background-image': 'blue'
+    },
 
     initialize: function(){
         this.devices = this.parseChildren("devices", Devices);
         this.setDeviceType();
 
-        if (this.has("titleConfiguration")) {
-            var titleConfiguration = new Configuration(this.get("titleConfiguration"));
-            this.set("titleConfiguration", titleConfiguration);
+        // Initialize Body Configuration
+        var bodyConfiguration = new Configuration();
+        if (this.has("bodyConfiguration")) {
+            bodyConfiguration.set(this.get("bodyConfiguration"));
         }
 
-        if (this.has("bodyConfiguration")) {
-            var bodyConfiguration = new Configuration(this.get("bodyConfiguration"));
-            this.set("bodyConfiguration", bodyConfiguration);
+        bodyConfiguration.set('selector', this.bodySelector);
+        bodyConfiguration.set('defaultStyle', this.bodyDefaultStyle);
+        this.set("bodyConfiguration", bodyConfiguration);
+
+        // Initialize Title Configuration
+        var titleConfiguration = new Configuration();
+        if (this.has("titleConfiguration")) {
+            titleConfiguration.set(this.get("titleConfiguration"));
         }
+
+        titleConfiguration.set('selector', this.titleSelector);
+        titleConfiguration.set('defaultStyle', this.titleDefaultStyle);
+        this.set("titleConfiguration", titleConfiguration);
 
         this.set("titleFields", _.clone(this.titleFields));
         this.set("bodyFields", _.clone(this.bodyFields));

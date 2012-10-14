@@ -76,13 +76,31 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
         var styleData = _.pick(formData, styleNames);
         var newStyleData = {};
         _.each(styleData, function(value, key){
-            newStyleData[key.substr(prefix.length)] = value;
+            if (value != null && value != '') {
+                newStyleData[key.substr(prefix.length)] = value;
+            }
         }, this);
 
         newStyleData['selector'] = selector;
         newStyleData['prefix'] = prefix;
 
         return newStyleData;
+    },
+
+    updateStyleConfiguration: function(formData, prefix, selector, attributeName) {
+
+        var configurationAttributes = this.extractStyle(formData, prefix, selector);
+
+        var configuration = this.model.get(attributeName);
+
+        if (configuration == null) {
+            configuration = new Configuration();
+            this.model.set(attributeName, configuration);
+        }
+
+        configuration.resetAttributes();
+
+        configuration.set(configurationAttributes);
     },
 
     editClicked: function(e){
@@ -92,26 +110,8 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
-        var titleConfigurationAttributes = this.extractStyle(data, this.model.titlePrefix, this.model.titleSelector);
-        var bodyConfigurationAttributes = this.extractStyle(data, this.model.bodyPrefix, this.model.bodySelector);
-
-        var bodyConfiguration = this.model.get("bodyConfiguration");
-
-        if(bodyConfiguration == null) {
-            bodyConfiguration = new Configuration();
-            this.model.set("bodyConfiguration", bodyConfiguration);
-        }
-
-        bodyConfiguration.set(bodyConfigurationAttributes);
-
-        var titleConfiguration = this.model.get("titleConfiguration");
-
-        if(titleConfiguration == null) {
-            titleConfiguration = new Configuration();
-            this.model.set("titleConfiguration", titleConfiguration);
-        }
-
-        titleConfiguration.set(titleConfigurationAttributes);
+        this.updateStyleConfiguration(data, this.model.titlePrefix, this.model.titleSelector, "titleConfiguration");
+        this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
 
         this.result = {
             status: "OK"

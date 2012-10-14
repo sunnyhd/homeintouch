@@ -1,3 +1,4 @@
+var app = require('app');
 var BaseModel = require('models/base');
 var Floors = require('collections/floors');
 var Configuration = require('models/configuration');
@@ -31,11 +32,7 @@ module.exports = BaseModel.extend({
 
     myHomeFields: [
         {name: "Text Color", id: "my-house-color"}, 
-        {name: "Background Color", id: "my-house-class-background-color", type: "class-list", 
-            options: [{label: "Dark Gray", value: "dark-gray"}, {label: "Gray", value: "gray"}, 
-                      {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}, 
-                      {label: "Yellow", value: "yellow"}, {label: "Dark Yellow", value: "dark-yellow"},
-                      {label: "Violet", value: "violet"}]}, 
+        {name: "Background Color", id: "my-house-class-background-color", type: "class-list", options: app.colorClasses}, 
         {name: "Opacity", id: "my-house-opacity"}
     ],
 
