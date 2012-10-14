@@ -76,8 +76,10 @@ exports.DeviceView = Backbone.Marionette.ItemView.extend({
     deviceClicked: function(e){
         e.preventDefault();
         app.vent.trigger("device:selected", this.model);
-    }
+    },
 
+    refreshIcon: function() {
+    }
 });
 
 exports.SwitchDeviceView = exports.DeviceView.extend({
@@ -107,6 +109,14 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     flipSwitch: function(on){
         var address = this.writeAddress.get("address");
         app.vent.trigger("device:write", address, on);
+    },
+
+    isSwitchOn: function() {
+        return (this.$('.active').data('value') === 'on');
+    },
+
+    refreshIcon: function() {
+        this.updateIconColor(this.isSwitchOn());
     },
 
     updateSwitch: function(on) {
@@ -208,6 +218,14 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
             $('a[data-value="off"]', this.$el).addClass('active');
         }
         this.updateIconColor(value);
+    },
+
+    isSwitchOn: function() {
+        return (this.$('.active').data('value') === 'on');
+    },
+
+    refreshIcon: function() {
+        this.updateIconColor(this.isSwitchOn());
     },
 
     updateIconColor: function(on) {
@@ -419,7 +437,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     
     events: {
         "click .addDevice": "addDeviceClicked",
-        "click .editDeviceGroup": "editDeviceGroupClicked"
+        "click a#editDeviceGroupStyle": "editDeviceGroupClicked"
     },
 
     itemViewTypes: {
@@ -441,6 +459,11 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     onRender: function() {
         this.applyStyles();
+    },
+
+    getViewId: function() {
+        var prefix = "#device-group-";
+        return prefix + this.model.get("type");
     },
 
     addDeviceClicked: function(e){
@@ -472,21 +495,37 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         }
     },
 
+    applyStyle: function(styleConfigurationName, context, applySelector) {
+
+        if (this.model.has(styleConfigurationName)) {
+            var configuration = this.model.get(styleConfigurationName);
+            var selectorArray = configuration.getSelectors();
+            var that = this;
+            _.each(selectorArray, function(selector){
+                var fullSelector = selector;
+                if (context) {
+                    fullSelector = context + ' ' + selector;
+                }
+                that.$(fullSelector).removeAttr('style');
+                var className = configuration.getClassesToApply();
+                if (className !== '') {
+                    var classesToRemove = _.pluck(app.colorClasses, 'value').join(' ');
+                    that.$(fullSelector).removeClass(classesToRemove).addClass(className);
+                }
+                that.$(fullSelector).css(configuration.getStyleAttributes());
+            });
+        }
+    },
+
     applyStyles: function() {
-        //app.loadIcons('#' + this.id, cv.$(".device-list"));
-        // app.loadIcons('#' + this.id);
 
-        if (this.model.has('titleConfiguration')) {
-            var titleConfiguration = this.model.get('titleConfiguration');
-            this.$(titleConfiguration.get('selector')).css(titleConfiguration.getStyleReset());
-            this.$(titleConfiguration.get('selector')).css(titleConfiguration.getStyleAttributes());
-        }
+        this.applyStyle('bodyConfiguration', this.getViewId(), true);
+        this.applyStyle('titleConfiguration', this.getViewId(), true);
 
-        if (this.model.has('bodyConfiguration')) {
-            var bodyConfiguration = this.model.get('bodyConfiguration');
-            this.$(bodyConfiguration.get('selector')).css(bodyConfiguration.getStyleReset());
-            this.$(bodyConfiguration.get('selector')).css(bodyConfiguration.getStyleAttributes());
-        }
+        _.each(_.values(this.children), function(itemView){
+            itemView.refreshIcon();
+        });
+
     },
 
     initializeScrollBar: function() {

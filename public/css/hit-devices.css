@@ -36,6 +36,14 @@
   /*height: 262px;*/
 }
 
+.room-device-group .hit-title a#editDeviceGroupStyle {
+  padding: 0px 5px;
+}
+
+.room-device-group .hit-title .nav > li > a:hover {
+  background-color: transparent;
+}
+
 .room-devices {
 }
 

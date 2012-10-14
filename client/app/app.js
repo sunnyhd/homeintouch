@@ -259,7 +259,7 @@ var viewHelpers = {
             return addr.type == addressType
         });
         return address;
-    }
+    }    
 };
 
 // apply all view helpers to the base item view's serialize data
@@ -281,3 +281,10 @@ $.fn.getPixels = function(property) {
 $.fn.setPixels = function(property, value) {
     return this.css(property, value + 'px');
 };
+
+// Widget color classes
+app.colorClasses = [{label: "Dark Gray", value: "dark-gray"}, {label: "Gray", value: "gray"}, 
+                    {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}, 
+                    {label: "Yellow", value: "yellow"}, {label: "Dark Yellow", value: "dark-yellow"},
+                    {label: "Violet", value: "violet"}]; 
+

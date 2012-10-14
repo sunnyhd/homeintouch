@@ -30,14 +30,14 @@ module.exports = BaseModel.extend({
 		if (_.isString(selector)) {
 			selectorArray.push(selector);
 		} else if (_.isObject(selector)) {
-			var context = selector.context;
+			var context = (selector.context ? (selector.context + ' ') : '');
 			var innerSelector = selector.selector;
 			if (_.isArray(innerSelector)) {
 				_.each(innerSelector, function(innerItem){
-					selectorArray.push(context + ' ' + innerItem);
+					selectorArray.push(context + innerItem);
 				});
 			} else {
-				selectorArray.push(context + ' ' + innerSelector);
+				selectorArray.push(context + innerSelector);
 			}
 		}
 
@@ -66,6 +66,25 @@ module.exports = BaseModel.extend({
         _.each(styleNames, function(styleName) {
         	classString += this.get(styleName) + ' ';
         }, this);
+
+        if (classString === '') {
+        	// Apply the default values
+			if (this.has('defaultStyle')) {
+				var defaultStyles = this.get('defaultStyle');
+
+				var defaultStyleNames = _.filter(_.keys(defaultStyles), function(styleName) {
+		            return styleName.indexOf(this.classPrefix) == 0;
+		        }, this);
+
+		        defaultStyleNames = _.union(defaultStyleNames, styleNames);
+				
+				_.each(defaultStyleNames, function(styleName) {
+					if (_.has(defaultStyles, styleName)) {
+						classString += defaultStyles[styleName] + ' ';
+					}
+        		}, this);
+			}        	
+        }
 
         return classString;
 	},
