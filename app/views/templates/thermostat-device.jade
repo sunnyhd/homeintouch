@@ -1,28 +1,29 @@
 script(id="device-list-thermostat-item-template", type="text/template")
   .hit-icon.device-widget.blue(data-widget-type="thermostat", data-hit-icon-type="devices.thermostatWidget")
     span <%= name %>
-    .thermostat-detail 21&nbsp;
-      span C&deg;
+    .thermostat-detail
+      span.temperature 0&nbsp;
+      span.measure C&deg;
     .widget-opts
       ul.device-btn-group.four.clearfix
         li.device-btn
-          a.blue(href="#", data-value="on")
+          a.blue(href="#", data-mode="1")
             img(src="img/svg/devices/thermostat/comfort-white.svg")
         li.device-btn
-          a.blue(href="#", data-value="off")
+          a.blue(href="#", data-mode="2")
             img(src="img/svg/devices/thermostat/standby-white.svg")
         li.device-btn
-          a.blue(href="#", data-value="on")
+          a.blue(href="#", data-mode="3")
             img(src="img/svg/devices/thermostat/night-white.svg")
         li.device-btn
-          a.blue(href="#", data-value="off")
+          a.blue(href="#", data-mode="4")
             img(src="img/svg/devices/thermostat/frost-white.svg")
-      ul.device-btn-group.two.clearfix
+      ul.device-btn-group.two.clearfix.thermostat-control
         li.device-btn
-          a.blue(href="#", data-value="on")
+          a.blue(href="#", data-value="plus")
             i.icon-plus.icon-white
         li.device-btn
-          a.blue(href="#", data-value="off")
+          a.blue(href="#", data-value="minus")
             i.icon-minus.icon-white
 
 script(id="device-add-thermostat-template", type="text/template")
