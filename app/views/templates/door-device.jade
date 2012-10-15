@@ -1,0 +1,42 @@
+script(id="device-list-door-item-template", type="text/template")
+  .hit-icon.device-widget(data-widget-type="door", data-hit-icon-type="devices.doorClose")
+    span <%= name %>
+    .widget-opts
+      ul.device-btn-group.clearfix
+        li.device-btn
+          a.open(href="#") OPEN
+
+script(id="device-add-door-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Front Door")
+      .control-group
+        label(for="read_switch").control-label Read Address
+        .controls
+          input(id="read_switch", type="text", placeHolder="#/#/#")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-door-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span2
+        label(for="read_address").pull-right Read Address
+      .span3
+        <%= getAddress('read_switch').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close

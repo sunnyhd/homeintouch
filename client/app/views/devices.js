@@ -293,3 +293,45 @@ exports.ViewDimmerDeviceForm = exports.AddEditDeviceTypeForm.extend({
     template: "#device-view-dimmer-template"
     
 });
+
+exports.AddDoorDeviceForm = exports.AddEditDeviceTypeForm.extend({
+
+    template: "#device-add-door-template",
+
+    formFields: ["name", "read_switch"],
+
+    buildDevice: function(data){
+        var device = new Device({
+            name: data.name,
+            type: data.type
+        });
+
+        device.addAddress("read_door", data.read_switch);
+        return device;
+    }
+});
+
+exports.ViewDoorDeviceForm = exports.AddEditDeviceTypeForm.extend({
+    template: "#device-view-door-template"
+});
+
+exports.AddWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
+
+    template: "#device-add-window-template",
+
+    formFields: ["name", "read_switch"],
+
+    buildDevice: function(data){
+        var device = new Device({
+            name: data.name,
+            type: data.type
+        });
+
+        device.addAddress("read_window", data.read_switch);
+        return device;
+    }
+});
+
+exports.ViewWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
+    template: "#device-view-window-template"
+});

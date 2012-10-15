@@ -10,14 +10,18 @@ var deviceTypeAddForm = {
     "switch": deviceViews.AddSwitchDeviceForm,
     "dimmer": deviceViews.AddDimmerDeviceForm,
     "thermostat": deviceViews.AddThermostatDeviceForm,
-    "shutter": deviceViews.AddShutterDeviceForm
+    "shutter": deviceViews.AddShutterDeviceForm,
+    "door": deviceViews.AddDoorDeviceForm,
+    "window": deviceViews.AddWindowDeviceForm
 };
 
 var deviceTypeViewForm = {
     "switch": deviceViews.ViewSwitchDeviceForm,
     "dimmer": deviceViews.ViewDimmerDeviceForm,
     "thermostat": deviceViews.ViewThermostatDeviceForm,
-    "shutter": deviceViews.ViewShutterDeviceForm
+    "shutter": deviceViews.ViewShutterDeviceForm,
+    "door": deviceViews.ViewDoorDeviceForm,
+    "window": deviceViews.ViewWindowDeviceForm
 };
 
 // Helper Methods
