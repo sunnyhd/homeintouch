@@ -83,6 +83,7 @@ script(id="switch-selected-home-template", type="text/template")
       option(value!="<%= home.id %>") <%= home.name %>
       <% }) %>
   .modal-footer
+    a(href="#").addHome.btn.btn-primary.pull-left Add New Home
     a(href="#").cancel.btn Cancel
     a(href="#").switch.btn.btn-primary Switch
 

@@ -27,7 +27,8 @@ exports.SwitchSelectedHomeView = Backbone.Marionette.ItemView.extend({
 
     events: {
         "click .cancel": "closeClicked",
-        "click .switch": "switchClicked"
+        "click .switch": "switchClicked",
+        "click .addHome": "addHomeClicked"
     },
 
     /** Overrides original implementation */
@@ -54,6 +55,12 @@ exports.SwitchSelectedHomeView = Backbone.Marionette.ItemView.extend({
         var home = homesController.homes.get(homeId);
         app.vent.trigger("home:selected", home);
         this.close();
+    },
+
+    addHomeClicked: function(e){
+        e.preventDefault();
+        this.close();
+        addNewHome();
     }
 });
 
@@ -361,6 +368,7 @@ var addNewHome = function(){
 
         homesController.homes.add(home);
         homesController.save(home);
+        app.vent.trigger("home:selected", home);
     });
 
     app.modal.show(form);
