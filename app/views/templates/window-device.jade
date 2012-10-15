@@ -16,9 +16,9 @@ script(id="device-add-window-template", type="text/template")
         .controls
           input(id="name", type="text", placeHolder="Bathroom Window")
       .control-group
-        label(for="read_switch").control-label Read Address
+        label(for="read_window").control-label Read Address
         .controls
-          input(id="read_switch", type="text", placeHolder="#/#/#")
+          input(id="read_window", type="text", placeHolder="#/#/#")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add
@@ -34,9 +34,9 @@ script(id="device-view-window-template", type="text/template")
         <%= name %>
     .row
       .span2
-        label(for="read_address").pull-right Read Address
+        label(for="read_window").pull-right Read Address
       .span3
-        <%= getAddress('read_switch').address %>
+        <%= getAddress('read_window').address %>
   .modal-footer
     a(href="#").delete.btn.pull-left Delete
     a(href="#").cancel.btn.btn-primary Close

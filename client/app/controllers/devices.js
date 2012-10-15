@@ -12,7 +12,8 @@ var deviceTypeAddForm = {
     "thermostat": deviceViews.AddThermostatDeviceForm,
     "shutter": deviceViews.AddShutterDeviceForm,
     "door": deviceViews.AddDoorDeviceForm,
-    "window": deviceViews.AddWindowDeviceForm
+    "window": deviceViews.AddWindowDeviceForm,
+    "socket": deviceViews.AddSocketDeviceForm
 };
 
 var deviceTypeViewForm = {
@@ -21,7 +22,8 @@ var deviceTypeViewForm = {
     "thermostat": deviceViews.ViewThermostatDeviceForm,
     "shutter": deviceViews.ViewShutterDeviceForm,
     "door": deviceViews.ViewDoorDeviceForm,
-    "window": deviceViews.ViewWindowDeviceForm
+    "window": deviceViews.ViewWindowDeviceForm,
+    "socket": deviceViews.ViewSocketDeviceForm
 };
 
 // Helper Methods

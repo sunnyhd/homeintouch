@@ -298,7 +298,7 @@ exports.AddDoorDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-door-template",
 
-    formFields: ["name", "read_switch"],
+    formFields: ["name", "read_door"],
 
     buildDevice: function(data){
         var device = new Device({
@@ -306,7 +306,7 @@ exports.AddDoorDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_door", data.read_switch);
+        device.addAddress("read_door", data.read_door);
         return device;
     }
 });
@@ -319,7 +319,7 @@ exports.AddWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-window-template",
 
-    formFields: ["name", "read_switch"],
+    formFields: ["name", "read_window"],
 
     buildDevice: function(data){
         var device = new Device({
@@ -327,11 +327,35 @@ exports.AddWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_window", data.read_switch);
+        device.addAddress("read_window", data.read_window);
         return device;
     }
 });
 
 exports.ViewWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
     template: "#device-view-window-template"
+});
+
+exports.AddSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
+
+    template: "#device-add-socket-template",
+
+    formFields: ["name", "read_socket", "write_socket"],
+
+    buildDevice: function(data){
+        var device = new Device({
+            name: data.name,
+            type: data.type
+        });
+
+        device.addAddress("read_socket", data.read_socket);
+        device.addAddress("write_socket",data.write_socket);
+
+        return device;
+    }
+
+});
+
+exports.ViewSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
+    template: "#device-view-socket-template"
 });

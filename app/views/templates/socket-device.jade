@@ -1,0 +1,53 @@
+script(id="device-list-socket-item-template", type="text/template")
+  .hit-icon.device-widget(data-widget-type="socket", data-hit-icon-type="devices.socket")
+    span <%= name %>
+    .widget-opts
+      ul.device-btn-group.two.clearfix
+        li.device-btn
+          a(href="#", data-value="on") ON
+        li.device-btn
+          a(href="#", data-value="off") OFF
+
+script(id="device-add-socket-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Office Socket")
+      .control-group
+        label(for="read_socket").control-label Read Address
+        .controls
+          input(id="read_socket", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="write_socket").control-label Write Address
+        .controls
+          input(id="write_socket", type="text", placeHolder="#/#/#")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-socket-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span2
+        label(for="read_address").pull-right Read Address
+      .span3
+        <%= getAddress('read_socket').address %>
+    .row
+      .span2
+        label(for="write_address").pull-right Write Address
+      .span3
+        <%= getAddress('write_socket').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close
