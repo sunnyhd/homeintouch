@@ -431,6 +431,104 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     }
 });
 
+exports.DoorDeviceView = exports.DeviceView.extend({
+
+    template: "#device-list-door-item-template",
+    className: "hit-icon-wrapper",
+
+    formEvents: {
+    },
+
+    initialize: function() {
+        this.bindTo(this.model, "change:address:value", this.updateStatus, this);
+        this.readAddress = this.model.getAddressByType("read_door");
+    },
+
+    updateSwitch: function(on) {
+        this.$('a').removeClass('active');
+        if (on) {
+            this.$('a.open').addClass('active');
+        } else {
+            this.$('a.open').removeClass('active');
+        }
+        this.updateIconColor(on);
+    },
+
+    updateIconColor: function(on) {
+        var $widget = this.$('.hit-icon');
+        if (on) {
+            $widget.data('hit-icon-type',"devices.doorOpen");
+            app.changeIconState($widget, 'white');
+        } else {
+            $widget.data('hit-icon-type',"devices.doorClose");
+            app.changeIconState($widget, 'gray');
+        }
+    },
+
+    refreshIcon: function() {
+        var value = this.readAddress.get("value");
+        this.updateStatus(null, value);
+    },
+
+    updateStatus: function(address, value){
+        this.updateSwitch(value);
+    },
+
+    onRender: function(){
+        this.refreshIcon();
+    }
+
+});
+
+exports.WindowDeviceView = exports.DeviceView.extend({
+
+    template: "#device-list-window-item-template",
+    className: "hit-icon-wrapper",
+
+    formEvents: {
+    },
+
+    initialize: function() {
+        this.bindTo(this.model, "change:address:value", this.updateStatus, this);
+        this.readAddress = this.model.getAddressByType("read_window");
+    },
+
+    updateSwitch: function(on) {
+        $('a', this.$el).removeClass('active');
+        if (on) {
+            $('a.open', this.$el).addClass('active');
+        } else {
+            $('a.open', this.$el).removeClass('active');
+        }
+        this.updateIconColor(on);
+    },
+
+    updateIconColor: function(on) {
+        var $widget = $('.hit-icon', this.$el);
+        if (on) {
+            $widget.data('hit-icon-type',"devices.windowOpen");
+            app.changeIconState($widget, 'white');
+        } else {
+            $widget.data('hit-icon-type',"devices.windowClose");
+            app.changeIconState($widget, 'gray');
+        }
+    },
+
+    refreshIcon: function() {
+        var value = this.readAddress.get("value");
+        this.updateStatus(null, value);
+    },
+
+    updateStatus: function(address, value){
+        this.updateSwitch(value);
+    },
+
+    onRender: function(){
+        this.refreshIcon();
+    }
+
+});
+
 exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-group-template",
     className: "room-device-group span6 clearfix",
@@ -444,7 +542,9 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         "switch": exports.SwitchDeviceView,
         "dimmer": exports.DimmerDeviceView,
         "thermostat": exports.ThermostatDeviceView,
-        "shutter": exports.ShutterDeviceView
+        "shutter": exports.ShutterDeviceView,
+        "door": exports.DoorDeviceView,
+        "window": exports.WindowDeviceView
     },
 
     initialize: function() {
