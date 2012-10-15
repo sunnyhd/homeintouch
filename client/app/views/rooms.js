@@ -112,7 +112,7 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     },
 
     isSwitchOn: function() {
-        return (this.$('.active').data('value') === 'on');
+        return (this.$('.selected').data('value') === 'on');
     },
 
     refreshIcon: function() {
@@ -120,11 +120,11 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(on) {
-        $('a', this.$el).removeClass('active');
+        $('a', this.$el).removeClass('selected');
         if (on) {
-            $('a[data-value="on"]', this.$el).addClass('active');
+            $('a[data-value="on"]', this.$el).addClass('selected');
         } else {
-            $('a[data-value="off"]', this.$el).addClass('active');
+            $('a[data-value="off"]', this.$el).addClass('selected');
         }
         this.updateIconColor(on);
     },
@@ -211,17 +211,17 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     selectSwitch: function(address, value){
-        $('a', this.$el).removeClass('active');
+        $('a', this.$el).removeClass('selected');
         if (value) {
-            $('a[data-value="on"]', this.$el).addClass('active');
+            $('a[data-value="on"]', this.$el).addClass('selected');
         } else {
-            $('a[data-value="off"]', this.$el).addClass('active');
+            $('a[data-value="off"]', this.$el).addClass('selected');
         }
         this.updateIconColor(value);
     },
 
     isSwitchOn: function() {
-        return (this.$('.active').data('value') === 'on');
+        return (this.$('.selected').data('value') === 'on');
     },
 
     refreshIcon: function() {
@@ -322,9 +322,8 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     className: "hit-icon-wrapper",
 
     formEvents: {
-        "click .mode .btn": "modeClicked",
-        "change .setpoint": "setpointChanged",
-        "click .dropdown-menu a": "menuClicked"
+        "click a[data-mode]": "modeClicked",
+        "click .thermostat-control a": "setpointChanged"
     },
 
     modes: {
@@ -354,25 +353,6 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         this.bindTo(this.readTemperature, "change:value", this.showTemperature, this);
     },
 
-    menuClicked: function(e) {
-        var target = $(e.currentTarget);
-        if (!target.parent().hasClass('disabled')) {
-            var mode = target.data("mode");
-            var address = this.writeMode.get("address");
-            app.vent.trigger("device:write", address, mode);
-            this.updateButtonName(mode);    
-        } else {
-            return false;
-        }
-    },
-
-    updateButtonName: function(mode) {
-        var buttonName = this.modeNames[mode];
-        this.$('#label-button').text(buttonName);
-        this.$('.dropdown-menu li > a[data-mode!="' + mode + '"]').parent().removeClass('disabled');
-        this.$('.dropdown-menu li > a[data-mode="' + mode + '"]').parent().addClass('disabled');
-    },
-
     modeClicked: function(e){
         e.preventDefault();
         var mode = $(e.currentTarget).data("mode");
@@ -381,17 +361,22 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     },
 
     setpointChanged: function(e){
+        e.preventDefault();
+        var $control = $(e.currentTarget);
+
         var address = this.writeSetPoint.get("address");
 
-        var setpoint = $(e.currentTarget).val();
-        setpoint = parseFloat(setpoint);
-        setpoint = app.decimalToEibd(setpoint);
+        var changeTemp = ($control.data('value') === 'minus') ? parseFloat("0.5") : parseFloat("-0.5");
+        var currentTemperature = app.eibdToDecimal(this.readTemperature.get("value"));
+
+        var currentPoint = app.eibdToDecimal(this.readSetPoint.get("value"));
+        var setpoint = app.decimalToEibd(currentPoint + changePoint);
 
         app.vent.trigger("device:write", address, setpoint);
     },
 
     showMode: function(address, mode){
-        this.updateButtonName(mode);
+        //this.updateButtonName(mode);
     },
 
     showSetPoint: function(address, setPoint){
@@ -400,7 +385,7 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         console.log("setpoint eibd value: ", setPoint);
         console.log("setpoint decimal value: ", decimal);
 
-        this.$("input.setpoint").val(decimal);
+        // this.$(".temperature").val(decimal + "&nbsp;");
     },
 
     showTemperature: function(address, temperature){
@@ -409,12 +394,16 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         console.log("temperature eibd value: ", temperature);
         console.log("temperature decimal value: ", decimal);
 
-        this.$("input.actual").val(decimal);
+        this.$(".temperature").html(decimal + "&nbsp;");
     },
 
     updateIconColor: function(value) {
         var $widget = $('.hit-icon', this.$el);
         app.changeIconState($widget, '#FFFFFF');
+    },
+
+    refreshIcon: function() {
+        this.updateIconColor();
     },
 
     onRender: function(){
