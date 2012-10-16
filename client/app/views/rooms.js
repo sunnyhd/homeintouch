@@ -263,7 +263,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         "click a[data-value='up']": "upClicked",
         "click a[data-value='down']": "downClicked",
         "click a[data-value='stop']": "stopClicked",
-        "change .position": "positionChanged"
+        "change .dimmer": "positionChanged"
     },
 
     initialize: function(){
@@ -279,12 +279,12 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 
     upClicked: function(e){
         e.preventDefault();
-        this.switchUpDown(false);
+        this.switchUpDown(true);
     },
 
     downClicked: function(e){
         e.preventDefault();
-        this.switchUpDown(true);
+        this.switchUpDown(false);
     },
 
     stopClicked: function(e){
@@ -298,6 +298,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         var value = parseInt($position.val());
         var address = this.writePosition.get("address");
         app.vent.trigger("device:write", address, value);
+        this.updateShutterDetails(value);
     },
 
     switchUpDown: function(moveDown){
@@ -306,7 +307,14 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     showPosition: function(address, value){
-        this.$("input.position").val(value);
+        this.$("input.dimmer").val(value);
+        this.updateShutterDetails(value);
+    },
+
+    updateShutterDetails: function(shutterValue) {
+        var maxValue = parseInt(this.$("input.dimmer").attr('max'));
+        var shutterPercentage = Math.floor((shutterValue / maxValue) * 100);
+        this.$('.shutter-detail').html(shutterPercentage + '%');
     },
 
     refreshIcon: function() {
