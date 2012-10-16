@@ -553,7 +553,7 @@ exports.SocketDeviceView = exports.DeviceView.extend({
     },
 
     isSwitchOn: function() {
-        return (this.$('.active').data('value') === 'on');
+        return (this.$('.selected').data('value') === 'on');
     },
 
     refreshIcon: function() {
@@ -562,11 +562,11 @@ exports.SocketDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(on) {
-        $('a', this.$el).removeClass('active');
+        $('a', this.$el).removeClass('selected');
         if (on) {
-            $('a[data-value="on"]', this.$el).addClass('active');
+            $('a[data-value="on"]', this.$el).addClass('selected');
         } else {
-            $('a[data-value="off"]', this.$el).addClass('active');
+            $('a[data-value="off"]', this.$el).addClass('selected');
         }
         this.updateIconColor(on);
     },
