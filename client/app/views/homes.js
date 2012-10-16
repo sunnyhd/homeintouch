@@ -101,9 +101,9 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
                 $(selector).removeAttr('style');
                 var className = configuration.getClassesToApply();
                 if (className !== '') {
-                    this.$(selector).addClass(className);
+                    $(selector).addClass(className);
                 }
-                this.$(selector).css(configuration.getStyleAttributes());
+                $(selector).css(configuration.getStyleAttributes());
             });
         }
     },
@@ -310,9 +310,6 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
                                  _.pluck(this.model.get("bodyFields"), 'id'));
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
-        
-        this.updateStyleConfiguration(data, this.model.myHomePrefix, this.model.myHomeSelector, "myHomeConfiguration");
-        this.updateStyleConfiguration(data, this.model.myLibraryPrefix, this.model.myLibrarySelector, "myLibraryConfiguration");
 
         if (this.imageStream) {
             var that = this;
@@ -327,6 +324,9 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
                     var imagePath = response.imagePath;
                     data['body-background-image'] = 'url(' + imagePath + ')';
                     that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
+                    that.updateStyleConfiguration(data, that.model.myLibraryPrefix, that.model.myLibrarySelector, "myLibraryConfiguration");
+                    this.updateStyleConfiguration(data, this.model.myHomePrefix, this.model.myHomeSelector, "myHomeConfiguration");
+                    
 
                     that.result = {
                         status: "OK"
@@ -337,6 +337,9 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
             });      
         } else {
             this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
+            this.updateStyleConfiguration(data, this.model.myLibraryPrefix, this.model.myLibrarySelector, "myLibraryConfiguration");
+            this.updateStyleConfiguration(data, this.model.myHomePrefix, this.model.myHomeSelector, "myHomeConfiguration");
+            
 
             this.result = {
                 status: "OK"

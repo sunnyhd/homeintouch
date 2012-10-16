@@ -26,6 +26,11 @@ module.exports = BaseModel.extend({
         'background-image': 'none'
     },
 
+    // Use to add a particular fixed style when a parameter is set.
+    bodyFixedStyle: {
+        'background-image': {'background-size' : 'cover'} 
+    },
+
     myHomeSelector: {context: '#my-house', selector: ['.hit-title', '.hit-icon']},
 
     myHomePrefix: 'my-house-',
@@ -46,11 +51,7 @@ module.exports = BaseModel.extend({
 
     myLibraryFields: [
         {name: "Text Color", id: "my-library-color"}, 
-        {name: "Background Color", id: "my-library-class-background-color", type: "class-list", 
-            options: [{label: "Dark Gray", value: "dark-gray"}, {label: "Gray", value: "gray"}, 
-                      {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}, 
-                      {label: "Yellow", value: "yellow"}, {label: "Dark Yellow", value: "dark-yellow"},
-                      {label: "Violet", value: "violet"}]}, 
+        {name: "Background Color", id: "my-library-class-background-color", type: "class-list", options: app.colorClasses}, 
         {name: "Opacity", id: "my-library-opacity"}
     ],
 
@@ -74,6 +75,7 @@ module.exports = BaseModel.extend({
 
         bodyConfiguration.set('selector', this.bodySelector);
         bodyConfiguration.set('defaultStyle', this.bodyDefaultStyle);
+        bodyConfiguration.set('fixedStyle', this.bodyFixedStyle);
         this.set("bodyConfiguration", bodyConfiguration);
 
         // Initialize My Home Configuration
@@ -131,7 +133,7 @@ module.exports = BaseModel.extend({
         }
 
         if (this.has("myLibraryConfiguration")) {
-            json.myHomeConfiguration = this.get("myLibraryConfiguration").toJSON();
+            json.myLibraryConfiguration = this.get("myLibraryConfiguration").toJSON();
         }
 
         delete json.bodyFields;

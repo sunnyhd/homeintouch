@@ -20,6 +20,11 @@ module.exports = BaseModel.extend({
         'background-image': 'none'
     },
 
+    // Use to add a particular fixed style when a parameter is set.
+    bodyFixedStyle: {
+        'background-image': {'background-size' : 'cover'} 
+    },
+
     defaults: {
         "addNew": "Add Room...",
         "icon": "rooms.room" // Default icon
@@ -52,8 +57,9 @@ module.exports = BaseModel.extend({
         if (this.has("bodyConfiguration")) {
             bodyConfiguration.set(this.get("bodyConfiguration"));
         }            
-        
+
         bodyConfiguration.set('selector', this.bodySelector);
+        bodyConfiguration.set('fixedStyle', this.bodyFixedStyle);
         bodyConfiguration.set('defaultStyle', this.bodyDefaultStyle);
         this.set("bodyConfiguration", bodyConfiguration);
 

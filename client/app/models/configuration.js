@@ -2,7 +2,7 @@ var BaseModel = require('models/base');
 
 module.exports = BaseModel.extend({
 
-	reservedAttributes: ['id', 'selector', 'prefix', 'defaultStyle'],
+	reservedAttributes: ['id', 'selector', 'prefix', 'defaultStyle', 'fixedStyle'],
 
 	classPrefix: 'class-',
 
@@ -13,6 +13,23 @@ module.exports = BaseModel.extend({
 	getStyleAttributes: function() {
 		var styleKeys = this.getStyleKeys();
 		var styleAttributes = _.pick(this.attributes, styleKeys);
+
+		if (this.has('fixedStyle')) {
+			var fixedStyle = this.get('fixedStyle');
+
+			var keyList = _.keys(fixedStyle);
+
+			var stylesToAdd = {};
+
+			_.each(keyList, function(keyStyle) {
+				if (_.has(styleAttributes, keyStyle)) {
+					_.extend(stylesToAdd, fixedStyle[keyStyle]);
+				}
+			});	
+
+			_.extend(styleAttributes, stylesToAdd);
+		}
+
 		if (this.has('defaultStyle')) {
 			_.extend(this.get('defaultStyle'), styleAttributes);
 		}

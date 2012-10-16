@@ -68,9 +68,9 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
                 $(selector).removeAttr('style');
                 var className = configuration.getClassesToApply();
                 if (className !== '') {
-                    this.$(selector).addClass(className);
+                    $(selector).addClass(className);
                 }
-                this.$(selector).css(configuration.getStyleAttributes());
+                $(selector).css(configuration.getStyleAttributes());
             });
         }
     },
