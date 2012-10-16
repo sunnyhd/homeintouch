@@ -257,12 +257,12 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 exports.ShutterDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-shutter-item-template",
-    className: "hit-icon blue",
+    className: "hit-icon-wrapper",
 
     formEvents: {
-        "click .up": "upClicked",
-        "click .down": "downClicked",
-        "click .stop": "stopClicked",
+        "click a[data-value='up']": "upClicked",
+        "click a[data-value='down']": "downClicked",
+        "click a[data-value='stop']": "stopClicked",
         "change .position": "positionChanged"
     },
 
@@ -307,6 +307,11 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 
     showPosition: function(address, value){
         this.$("input.position").val(value);
+    },
+
+    refreshIcon: function() {
+        var $widget = $('.hit-icon', this.$el);
+        app.changeIconState($widget, '#FFFFFF');
     },
 
     onRender: function(){
