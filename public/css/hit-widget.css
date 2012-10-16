@@ -124,6 +124,11 @@
 }
 .thermostat-detail span.measure { font-size: 0.5em; }
 
+.thermostat-detail div span.setpoint {
+	font-size: 0.6em; 
+	font-weight: normal;
+}
+
 /** Shutter styles */
 .hit-icon.device-widget[data-widget-type="shutter"] input[type="range"] {
 	-webkit-appearance: slider-vertical;

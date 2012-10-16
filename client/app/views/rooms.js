@@ -363,6 +363,13 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         var mode = $(e.currentTarget).data("mode");
         var address = this.writeMode.get("address");
         app.vent.trigger("device:write", address, mode);
+
+        this.updateModeButton(mode);
+    },
+
+    updateModeButton: function(mode) {
+        this.$('a[data-mode]').removeClass('selected');
+        this.$('a[data-mode="' + mode + '"]').addClass('selected');
     },
 
     setpointChanged: function(e){
@@ -371,17 +378,16 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
 
         var address = this.writeSetPoint.get("address");
 
-        var changeTemp = ($control.data('value') === 'minus') ? parseFloat("0.5") : parseFloat("-0.5");
-        var currentTemperature = app.eibdToDecimal(this.readTemperature.get("value"));
+        var changeTemp = ($control.data('value') === 'minus') ? parseFloat("-0.5") : parseFloat("0.5");
 
         var currentPoint = app.eibdToDecimal(this.readSetPoint.get("value"));
-        var setpoint = app.decimalToEibd(currentPoint + changePoint);
+        var setpoint = app.decimalToEibd(currentPoint + changeTemp);
 
         app.vent.trigger("device:write", address, setpoint);
     },
 
     showMode: function(address, mode){
-        //this.updateButtonName(mode);
+        this.updateModeButton(mode);
     },
 
     showSetPoint: function(address, setPoint){
@@ -390,7 +396,7 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         console.log("setpoint eibd value: ", setPoint);
         console.log("setpoint decimal value: ", decimal);
 
-        // this.$(".temperature").val(decimal + "&nbsp;");
+        this.$(".setpoint").html(decimal + "&nbsp;");
     },
 
     showTemperature: function(address, temperature){
