@@ -1,5 +1,19 @@
 script(id="device-list-shutter-item-template", type="text/template")
-  span <%= name %>
+  .hit-icon.device-widget(data-widget-type="shutter", data-hit-icon-type="devices.shutterOpen")
+    span <%= name %>
+    input.dimmer(type="range", min="0", max="100", step="1")
+    .widget-opts
+      .shutter-detail 0% 
+      ul.device-btn-group.three.clearfix
+        li.device-btn
+          a.blue(href="#", data-value="up")
+            i.icon-chevron-up.icon-white
+        li.device-btn
+          a.blue(href="#", data-value="stop")
+            i.icon-stop.icon-white
+        li.device-btn
+          a.blue(href="#", data-value="down")
+            i.icon-chevron-down.icon-white
 
 script(id="device-add-shutter-template", type="text/template")
   .modal-header
