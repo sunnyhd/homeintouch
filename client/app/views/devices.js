@@ -359,3 +359,37 @@ exports.AddSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
 exports.ViewSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
     template: "#device-view-socket-template"
 });
+
+exports.AddCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
+
+    template: "#device-add-camera-template",
+
+    formFields: ["name", "url", "refresh", "cmd_opt1_name", "write_camera_opt1", 
+    "cmd_opt2_name", "write_camera_opt2", "cmd_opt3_name", "write_camera_opt3"],
+
+    buildDevice: function(data){
+        var device = new Device({
+            name: data.name,
+            url: data.url,
+            refresh: data.refresh,
+            type: data.type,
+            cmd_opt1_name: data["cmd_opt1_name"], 
+            write_camera_opt1: data["write_camera_opt1"],
+            cmd_opt2_name: data["cmd_opt2_name"], 
+            write_camera_opt2: data["write_camera_opt2"],
+            cmd_opt3_name: data["cmd_opt3_name"], 
+            write_camera_opt3: data["write_camera_opt3"]
+        });
+
+        device.addAddress("write_camera_opt1",data.write_camera_opt1);
+        device.addAddress("write_camera_opt2",data.write_camera_opt2);
+        device.addAddress("write_camera_opt3",data.write_camera_opt3);
+
+        return device;
+    }
+
+});
+
+exports.ViewCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
+    template: "#device-view-camera-template"
+});

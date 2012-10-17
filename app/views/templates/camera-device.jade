@@ -1,0 +1,111 @@
+script(id="device-list-camera-item-template", type="text/template")
+  .hit-icon.device-widget(data-widget-type="camera")
+    span <%= name %>
+    video(width="100%", height="110", controls="controls")
+      source(src!="<%= url %>")
+    .widget-opts
+
+script(id="device-list-camera-optional-buttons-template", type="text/template")
+  ul.device-btn-group.clearfix(class!="<%= (optBtnsClass) %>")
+    <% _.each(optBtns, function(btn) { %>
+    li.device-btn
+      a(href="#", data-address!="<%=btn.address%>", data-value="") <%=btn.name%>
+    <% }); %>
+
+script(id="device-add-camera-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Office camera")
+      .control-group
+        label(for="url").control-label Url
+        .controls
+          input(id="url", type="text", placeHolder="Camera source URL")
+      .control-group
+        label(for="refresh").control-label Refresh
+        .controls
+          input(id="refresh", type="number", placeHolder="Refresh Ms")
+      .control-group
+        label(for="cmd_opt1_name").control-label Custom Command 1 Name
+        .controls
+          input(id="cmd_opt1_name", type="text", placeHolder="Command name")
+      .control-group
+        label(for="write_camera_opt1").control-label Custom Command 1 Write Address
+        .controls
+          input(id="write_camera_opt1", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="cmd_opt2_name").control-label Custom Command 2 Name
+        .controls
+          input(id="cmd_opt2_name", type="text", placeHolder="Command name")
+      .control-group
+        label(for="write_camera_opt2").control-label Custom Command 2 Write Address
+        .controls
+          input(id="write_camera_opt2", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="cmd_opt3_name").control-label Custom Command 3 Name
+        .controls
+          input(id="cmd_opt3_name", type="text", placeHolder="Command name")
+      .control-group
+        label(for="write_camera_opt3").control-label Custom Command 3 Write Address
+        .controls
+          input(id="write_camera_opt3", type="text", placeHolder="#/#/#")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-camera-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span2
+        label(for="url").pull-right Url
+      .span3
+        <%= url %>
+    .row
+      .span2
+        label(for="refresh").pull-right Refresh
+      .span3
+        <%= refresh %>
+    .row
+      .span2
+        label(for="cmd_opt1_name").pull-right Custom Command 1 Name
+      .span3
+        <%= cmd_opt1_name %>
+    .row
+      .span2
+        label(for="write_camera_opt1").pull-right Custom Command 1 Write Address
+      .span3
+        <%= getAddress('write_camera_opt1').address %>
+    .row
+      .span2
+        label(for="cmd_opt2_name").pull-right Custom Command 2 Name
+      .span3
+        <%= cmd_opt2_name %>
+    .row
+      .span2
+        label(for="write_camera_opt2").pull-right Custom Command 2 Write Address
+      .span3
+        <%= getAddress('write_camera_opt2').address %>
+    .row
+      .span2
+        label(for="cmd_opt3_name").pull-right Custom Command 3 Name
+      .span3
+        <%= cmd_opt3_name %>
+    .row
+      .span2
+        label(for="write_camera_opt3").pull-right Custom Command 3 Write Address
+      .span3
+        <%= getAddress('write_camera_opt3').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close

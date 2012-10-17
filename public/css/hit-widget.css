@@ -142,6 +142,13 @@
 	font-size: 1.2em;
 }
 
+/** Camera styles */
+.hit-widget.large .hit-icon.device-widget[data-widget-type="camera"] .widget-opts { 
+	height: 23%; 
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
 /** 
  * WIDGET SIZES: 
  *	- small: 	90px X 90px;
