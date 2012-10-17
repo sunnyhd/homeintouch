@@ -359,3 +359,30 @@ exports.AddSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
 exports.ViewSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
     template: "#device-view-socket-template"
 });
+
+exports.AddCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
+
+    template: "#device-add-camera-template",
+
+    formFields: ["name", "url", "width", "height", "refresh", "cmd_opt1_name", "write_camera_opt1"],
+
+    buildDevice: function(data){
+        var device = new Device({
+            name: data.name,
+            url: data.url,
+            width: data.width,
+            height: data.height,
+            refresh: data.refresh,
+            type: data.type
+        });
+
+        device.addAddress("write_camera_opt1",data.write_camera_opt1);
+
+        return device;
+    }
+
+});
+
+exports.ViewCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
+    template: "#device-view-camera-template"
+});

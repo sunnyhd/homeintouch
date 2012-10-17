@@ -590,6 +590,73 @@ exports.SocketDeviceView = exports.DeviceView.extend({
 
 });
 
+exports.CameraDeviceView = exports.DeviceView.extend({
+
+    template: "#device-list-socket-item-template",
+    className: "hit-icon-wrapper",
+
+    formEvents: {
+        // "click .hit-icon a": "socketClicked"
+    },
+
+    initialize: function() {
+        /*this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
+        this.readAddress = this.model.getAddressByType("read_socket");
+        this.writeAddress = this.model.getAddressByType("write_socket");*/
+    },
+
+    socketClicked: function (e) {
+        e.preventDefault();
+        var btnClicked = $(e.currentTarget);
+        var on = (btnClicked.data('value') === 'on');
+
+        this.flipSwitch(on);
+        this.updateSwitch(on);
+    },
+
+    flipSwitch: function(on){
+        var address = this.writeAddress.get("address");
+        app.vent.trigger("device:write", address, on);
+    },
+
+    isSwitchOn: function() {
+        return (this.$('.active').data('value') === 'on');
+    },
+
+    refreshIcon: function() {
+        /*var value = this.readAddress.get("value");
+        this.selectSwitch(null, value);*/
+    },
+
+    /*updateSwitch: function(on) {
+        $('a', this.$el).removeClass('active');
+        if (on) {
+            $('a[data-value="on"]', this.$el).addClass('active');
+        } else {
+            $('a[data-value="off"]', this.$el).addClass('active');
+        }
+        this.updateIconColor(on);
+    },
+
+    updateIconColor: function(on) {
+        var $widget = $('.hit-icon', this.$el);
+        if (on) {
+            app.changeIconState($widget, '#FF9522');
+        } else {
+            app.changeIconState($widget, 'gray');
+        }
+    },*/
+
+    selectSwitch: function(address, value){
+        this.updateSwitch(value);
+    },
+
+    onRender: function(){
+        // this.refreshIcon();
+    }
+
+});
+
 exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-group-template",
     className: "room-device-group span6 clearfix",
@@ -606,7 +673,8 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         "shutter": exports.ShutterDeviceView,
         "door": exports.DoorDeviceView,
         "window": exports.WindowDeviceView,
-        "socket": exports.SocketDeviceView
+        "socket": exports.SocketDeviceView,
+        "camera": exports.CameraDeviceView
     },
 
     initialize: function() {

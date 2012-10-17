@@ -1,0 +1,91 @@
+script(id="device-list-camera-item-template", type="text/template")
+  .hit-icon.device-widget(data-widget-type="camera", data-hit-icon-type="devices.camera")
+    span <%= name %>
+    video(width="170", height="100", controls="controls")
+      source(src="http://www.w3schools.com/html/movie.mp4", type="video/mp4")
+    .widget-opts
+      ul.device-btn-group.two.clearfix
+        li.device-btn
+          a(href="#", data-value="on") ON
+        li.device-btn
+          a(href="#", data-value="off") OFF
+
+script(id="device-add-camera-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Office camera")
+      .control-group
+        label(for="url").control-label Url
+        .controls
+          input(id="url", type="text", placeHolder="Camera source URL")
+      .control-group
+        label(for="width").control-label Width
+        .controls
+          input(id="width", type="number", placeHolder="Width")
+      .control-group
+        label(for="height").control-label Height
+        .controls
+          input(id="height", type="number", placeHolder="Height")
+      .control-group
+        label(for="refresh").control-label Refresh
+        .controls
+          input(id="refresh", type="number", placeHolder="Refresh Ms")
+      .control-group
+        label(for="cmd_opt1_name").control-label Custom Command Name
+        .controls
+          input(id="cmd_opt1_name", type="text", placeHolder="Command name")
+      .control-group
+        label(for="write_camera_opt1").control-label Custom Command Write Address
+        .controls
+          input(id="write_camera_opt1", type="text", placeHolder="#/#/#")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-camera-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span2
+        label(for="url").pull-right Url
+      .span3
+        <%= url %>
+    .row
+      .span2
+        label(for="width").pull-right Width
+      .span3
+        <%= width %>
+    .row
+      .span2
+        label(for="height").pull-right Height
+      .span3
+        <%= height %>
+    .row
+      .span2
+        label(for="refresh").pull-right Refresh
+      .span3
+        <%= refresh %>
+    .row
+      .span2
+        label(for="cmd_opt1_name").pull-right Custom Command Name
+      .span3
+        <%= cmd_opt1_name %>
+    .row
+      .span2
+        label(for="write_camera_opt1").pull-right Custom Command Write Address
+      .span3
+        <%= getAddress('write_camera_opt1').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close
