@@ -4,11 +4,13 @@ script(id="device-list-camera-item-template", type="text/template")
     video(width="170", height="100", controls="controls")
       source(src="http://www.w3schools.com/html/movie.mp4", type="video/mp4")
     .widget-opts
-      ul.device-btn-group.two.clearfix
-        li.device-btn
-          a(href="#", data-value="on") ON
-        li.device-btn
-          a(href="#", data-value="off") OFF
+
+script(id="device-list-camera-optional-buttons-template", type="text/template")
+  ul.device-btn-group.clearfix(class!="<%= (optBtnsClass) %>")
+    <% _.each(optBtns, function(btn) { %>
+    li.device-btn
+      a(href="#", data-address!="<%=btn.address%>", data-value="") <%=btn.name%>
+    <% }); %>
 
 script(id="device-add-camera-template", type="text/template")
   .modal-header
@@ -23,14 +25,6 @@ script(id="device-add-camera-template", type="text/template")
         label(for="url").control-label Url
         .controls
           input(id="url", type="text", placeHolder="Camera source URL")
-      .control-group
-        label(for="width").control-label Width
-        .controls
-          input(id="width", type="number", placeHolder="Width")
-      .control-group
-        label(for="height").control-label Height
-        .controls
-          input(id="height", type="number", placeHolder="Height")
       .control-group
         label(for="refresh").control-label Refresh
         .controls
@@ -61,16 +55,6 @@ script(id="device-view-camera-template", type="text/template")
         label(for="url").pull-right Url
       .span3
         <%= url %>
-    .row
-      .span2
-        label(for="width").pull-right Width
-      .span3
-        <%= width %>
-    .row
-      .span2
-        label(for="height").pull-right Height
-      .span3
-        <%= height %>
     .row
       .span2
         label(for="refresh").pull-right Refresh

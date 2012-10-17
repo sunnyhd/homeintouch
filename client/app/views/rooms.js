@@ -606,7 +606,7 @@ exports.SocketDeviceView = exports.DeviceView.extend({
 
 exports.CameraDeviceView = exports.DeviceView.extend({
 
-    template: "#device-list-socket-item-template",
+    template: "#device-list-camera-item-template",
     className: "hit-icon-wrapper",
 
     formEvents: {
@@ -617,6 +617,38 @@ exports.CameraDeviceView = exports.DeviceView.extend({
         /*this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
         this.readAddress = this.model.getAddressByType("read_socket");
         this.writeAddress = this.model.getAddressByType("write_socket");*/
+    },
+
+    /**
+     * Renders the optional buttons configured for the camera.
+     * */
+    renderOptionalButtons: function() {
+        var optBtnProps = [ {name: 'cmd_opt1_name', address: 'write_camera_opt1' },
+                            {name: 'cmd_opt2_name', address: 'write_camera_opt2' },
+                            {name: 'cmd_opt3_name', address: 'write_camera_opt3' } ];
+        var optBtns = new Array();
+
+        _.each(optBtnProps, function(prop) {
+            var name = this.model.get(prop.name);
+            var address = this.model.get(prop.address);
+            if (name && address) {
+                optBtns.push({name: name, address: address});
+            }
+        }, this);
+
+        var optBtnsClass = "";
+        if (optBtns.length === 1) {
+            optBtnsClass = "one";
+        } else if (optBtns.length === 2) {
+            optBtnsClass = "two";
+        } else if (optBtns.length === 3) {
+            optBtnsClass = "three";
+        }
+
+        var template = $('#device-list-camera-optional-buttons-template').html();
+        var compiled = _.template(template, {_:_, optBtnsClass: optBtnsClass, optBtns: optBtns});
+        
+        $('.widget-opts', this.$el).html(compiled);
     },
 
     socketClicked: function (e) {
@@ -667,6 +699,8 @@ exports.CameraDeviceView = exports.DeviceView.extend({
 
     onRender: function(){
         // this.refreshIcon();
+
+        this.renderOptionalButtons();
     }
 
 });
