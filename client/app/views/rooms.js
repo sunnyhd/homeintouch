@@ -263,7 +263,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         "click a[data-value='up']": "upClicked",
         "click a[data-value='down']": "downClicked",
         "click a[data-value='stop']": "stopClicked",
-        "change .position": "positionChanged"
+        "change .dimmer": "positionChanged"
     },
 
     initialize: function(){
@@ -279,12 +279,12 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 
     upClicked: function(e){
         e.preventDefault();
-        this.switchUpDown(false);
+        this.switchUpDown(true);
     },
 
     downClicked: function(e){
         e.preventDefault();
-        this.switchUpDown(true);
+        this.switchUpDown(false);
     },
 
     stopClicked: function(e){
@@ -298,6 +298,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         var value = parseInt($position.val());
         var address = this.writePosition.get("address");
         app.vent.trigger("device:write", address, value);
+        this.updateShutterDetails(value);
     },
 
     switchUpDown: function(moveDown){
@@ -306,7 +307,14 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     showPosition: function(address, value){
-        this.$("input.position").val(value);
+        this.$("input.dimmer").val(value);
+        this.updateShutterDetails(value);
+    },
+
+    updateShutterDetails: function(shutterValue) {
+        var maxValue = parseInt(this.$("input.dimmer").attr('max'));
+        var shutterPercentage = Math.floor((shutterValue / maxValue) * 100);
+        this.$('.shutter-detail').html(shutterPercentage + '%');
     },
 
     refreshIcon: function() {
@@ -363,6 +371,13 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         var mode = $(e.currentTarget).data("mode");
         var address = this.writeMode.get("address");
         app.vent.trigger("device:write", address, mode);
+
+        this.updateModeButton(mode);
+    },
+
+    updateModeButton: function(mode) {
+        this.$('a[data-mode]').removeClass('selected');
+        this.$('a[data-mode="' + mode + '"]').addClass('selected');
     },
 
     setpointChanged: function(e){
@@ -371,17 +386,16 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
 
         var address = this.writeSetPoint.get("address");
 
-        var changeTemp = ($control.data('value') === 'minus') ? parseFloat("0.5") : parseFloat("-0.5");
-        var currentTemperature = app.eibdToDecimal(this.readTemperature.get("value"));
+        var changeTemp = ($control.data('value') === 'minus') ? parseFloat("-0.5") : parseFloat("0.5");
 
         var currentPoint = app.eibdToDecimal(this.readSetPoint.get("value"));
-        var setpoint = app.decimalToEibd(currentPoint + changePoint);
+        var setpoint = app.decimalToEibd(currentPoint + changeTemp);
 
         app.vent.trigger("device:write", address, setpoint);
     },
 
     showMode: function(address, mode){
-        //this.updateButtonName(mode);
+        this.updateModeButton(mode);
     },
 
     showSetPoint: function(address, setPoint){
@@ -390,7 +404,7 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         console.log("setpoint eibd value: ", setPoint);
         console.log("setpoint decimal value: ", decimal);
 
-        // this.$(".temperature").val(decimal + "&nbsp;");
+        this.$(".setpoint").html(decimal + "&nbsp;");
     },
 
     showTemperature: function(address, temperature){
@@ -553,7 +567,7 @@ exports.SocketDeviceView = exports.DeviceView.extend({
     },
 
     isSwitchOn: function() {
-        return (this.$('.active').data('value') === 'on');
+        return (this.$('.selected').data('value') === 'on');
     },
 
     refreshIcon: function() {
@@ -562,11 +576,11 @@ exports.SocketDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(on) {
-        $('a', this.$el).removeClass('active');
+        $('a', this.$el).removeClass('selected');
         if (on) {
-            $('a[data-value="on"]', this.$el).addClass('active');
+            $('a[data-value="on"]', this.$el).addClass('selected');
         } else {
-            $('a[data-value="off"]', this.$el).addClass('active');
+            $('a[data-value="off"]', this.$el).addClass('selected');
         }
         this.updateIconColor(on);
     },
