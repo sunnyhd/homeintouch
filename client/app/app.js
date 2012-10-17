@@ -282,6 +282,75 @@ $.fn.setPixels = function(property, value) {
     return this.css(property, value + 'px');
 };
 
+/**
+* Injects the given CSS as string to the head of the document.
+*
+* @method add_style_tag
+* @param {String} css The styles to apply.
+* @return {Object} Returns the instance of the Gridster class.
+*/
+app.addStyleTag = function(css) {
+  var d = document;
+
+  var head = d.getElementsByTagName('head')[0];
+  var styleTag;
+  var childList = head.children;
+  for (var i = 0; i < childList.length; i++) {
+    var styleNode = childList[i];
+    var styleId = styleNode.getAttribute('id');
+    if (styleId) {
+        if (styleId === 'body-style') {
+            styleTag = styleNode;
+        }
+    }
+  }
+
+  if (!styleTag) {
+    styleTag = d.createElement('style');
+    head.appendChild(styleTag);
+    styleTag.setAttribute('type', 'text/css');
+    styleTag.setAttribute('id', 'body-style');  
+  }
+
+  if (styleTag.styleSheet) {
+    styleTag.styleSheet.cssText = css;
+  } else {
+
+    if ( styleTag.hasChildNodes() )
+    {
+        while ( styleTag.childNodes.length >= 1 )
+        {
+            styleTag.removeChild( styleTag.firstChild );       
+        } 
+    }
+    styleTag.appendChild(document.createTextNode(css));
+  }
+  return this;
+};
+
+app.generateStylesheet = function(selector, stylesheet) {
+
+    var result = '';
+
+    if (_.size(stylesheet) > 0) {
+
+        result = selector;
+        result += ' {'
+        _.each(stylesheet, function(value, key){
+            result += key;
+            result += ' : ';
+            result += value;
+            result += '; '
+        });
+
+        result += '}';
+    }
+
+    return result;
+
+    
+}
+
 // Widget color classes
 app.colorClasses = [{label: "Dark Gray", value: "dark-gray"}, {label: "Gray", value: "gray"}, 
                     {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}, 

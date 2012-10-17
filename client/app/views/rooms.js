@@ -630,7 +630,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         this.itemView = this.itemViewTypes[type];
 
         // Bind event when the devices are removed to check if there devices in the collection
-        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);        
+        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);      
     },
 
     onRender: function() {
@@ -654,6 +654,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     appendHtml: function(cv, iv){
         cv.$(".device-list").append(iv.el);
+        this.applyStyles();
 
         //app.loadIcons(iv.$el);
 
@@ -671,7 +672,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         }
     },
 
-    applyStyle: function(styleConfigurationName, context, applySelector) {
+    applyStyle: function(styleConfigurationName, context, applySelector, createStylesheet) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -688,14 +689,19 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
                     var classesToRemove = _.pluck(app.colorClasses, 'value').join(' ');
                     that.$(fullSelector).removeClass(classesToRemove).addClass(className);
                 }
-                that.$(fullSelector).css(configuration.getStyleAttributes());
+                if (createStylesheet) {
+                    var stylesheet = app.generateStylesheet(fullSelector, configuration.getStyleAttributes());
+                    app.addStyleTag(stylesheet);
+                } else {
+                    $(fullSelector).css(configuration.getStyleAttributes());    
+                }
             });
         }
     },
 
     applyStyles: function() {
 
-        this.applyStyle('bodyConfiguration', this.getViewId(), true);
+        this.applyStyle('bodyConfiguration', this.getViewId(), true, true);
         this.applyStyle('titleConfiguration', this.getViewId(), true);
 
         _.each(_.values(this.children), function(itemView){

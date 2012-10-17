@@ -59,7 +59,7 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
         $(e.currentTarget).data('transitioning', false);
     },
 
-    applyStyle: function(styleConfigurationName) {
+    applyStyle: function(styleConfigurationName, createStylesheet) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -70,13 +70,19 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
                 if (className !== '') {
                     $(selector).addClass(className);
                 }
-                $(selector).css(configuration.getStyleAttributes());
+                if (createStylesheet) {
+                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes());
+                    app.addStyleTag(stylesheet);
+                } else {
+                    $(selector).css(configuration.getStyleAttributes());    
+                }
+                
             });
         }
     },
 
     applyStyles: function() {
-        this.applyStyle('bodyConfiguration');
+        this.applyStyle('bodyConfiguration', true);
 
         app.main.show(this);
         app.loadIcons(this.$el);

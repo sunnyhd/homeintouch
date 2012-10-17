@@ -5,7 +5,7 @@ var Configuration = require('models/configuration');
 
 module.exports = BaseModel.extend({
 
-    bodySelector: 'body',
+    bodySelector: 'body:before',
 
     bodyPrefix: 'body-',
 

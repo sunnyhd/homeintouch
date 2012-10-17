@@ -92,7 +92,7 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         $(e.currentTarget).data('transitioning', false);
     },
 
-    applyStyle: function(styleConfigurationName) {
+    applyStyle: function(styleConfigurationName, createStylesheet) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -103,7 +103,13 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
                 if (className !== '') {
                     $(selector).addClass(className);
                 }
-                $(selector).css(configuration.getStyleAttributes());
+                if (createStylesheet) {
+                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes());
+                    app.addStyleTag(stylesheet);
+                } else {
+                    $(selector).css(configuration.getStyleAttributes());    
+                }
+                
             });
         }
     },
@@ -112,7 +118,7 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
         app.hitIcons(this.$el);
 
-        this.applyStyle('bodyConfiguration');
+        this.applyStyle('bodyConfiguration', true);
 
         if (this.model.has('myHomeConfiguration')) {
             var myHomeModel = this.model.get('myHomeConfiguration');
@@ -325,7 +331,7 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
                     data['body-background-image'] = 'url(' + imagePath + ')';
                     that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
                     that.updateStyleConfiguration(data, that.model.myLibraryPrefix, that.model.myLibrarySelector, "myLibraryConfiguration");
-                    this.updateStyleConfiguration(data, this.model.myHomePrefix, this.model.myHomeSelector, "myHomeConfiguration");
+                    that.updateStyleConfiguration(data, that.model.myHomePrefix, that.model.myHomeSelector, "myHomeConfiguration");
                     
 
                     that.result = {

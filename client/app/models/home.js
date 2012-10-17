@@ -11,7 +11,7 @@ module.exports = BaseModel.extend({
   
     urlRoot: '/api/homes',
 
-    bodySelector: 'body',
+    bodySelector: 'body:before',
 
     bodyPrefix: 'body-',
 
