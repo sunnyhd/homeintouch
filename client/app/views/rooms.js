@@ -627,6 +627,7 @@ exports.CameraDeviceView = exports.DeviceView.extend({
                             {name: 'cmd_opt2_name', address: 'write_camera_opt2' },
                             {name: 'cmd_opt3_name', address: 'write_camera_opt3' } ];
         var optBtns = new Array();
+        var $widgetOpts = $('.widget-opts', this.$el);
 
         _.each(optBtnProps, function(prop) {
             var name = this.model.get(prop.name);
@@ -636,19 +637,23 @@ exports.CameraDeviceView = exports.DeviceView.extend({
             }
         }, this);
 
-        var optBtnsClass = "";
-        if (optBtns.length === 1) {
-            optBtnsClass = "one";
-        } else if (optBtns.length === 2) {
-            optBtnsClass = "two";
-        } else if (optBtns.length === 3) {
-            optBtnsClass = "three";
-        }
+        if (optBtns.length > 0) {
+            var optBtnsClass = "";
+            if (optBtns.length === 1) {
+                optBtnsClass = "one";
+            } else if (optBtns.length === 2) {
+                optBtnsClass = "two";
+            } else if (optBtns.length === 3) {
+                optBtnsClass = "three";
+            }
 
-        var template = $('#device-list-camera-optional-buttons-template').html();
-        var compiled = _.template(template, {_:_, optBtnsClass: optBtnsClass, optBtns: optBtns});
-        
-        $('.widget-opts', this.$el).html(compiled);
+            var template = $('#device-list-camera-optional-buttons-template').html();
+            var compiled = _.template(template, {_:_, optBtnsClass: optBtnsClass, optBtns: optBtns});
+            
+            $widgetOpts.html(compiled);
+        } else {
+            $widgetOpts.data('hit-icon-type', 'devices.camera');
+        }
     },
 
     socketClicked: function (e) {
@@ -670,8 +675,8 @@ exports.CameraDeviceView = exports.DeviceView.extend({
     },
 
     refreshIcon: function() {
-        /*var value = this.readAddress.get("value");
-        this.selectSwitch(null, value);*/
+        var $widget = $('.hit-icon .widget-opts', this.$el);
+        app.changeIconState($widget, '#FFFFFF');
     },
 
     /*updateSwitch: function(on) {
@@ -698,9 +703,8 @@ exports.CameraDeviceView = exports.DeviceView.extend({
     },
 
     onRender: function(){
-        // this.refreshIcon();
-
         this.renderOptionalButtons();
+        this.refreshIcon();
     }
 
 });

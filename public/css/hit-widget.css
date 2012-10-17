@@ -143,7 +143,11 @@
 }
 
 /** Camera styles */
-.hit-widget.large .hit-icon.device-widget[data-widget-type="camera"] .widget-opts { height: 23%; }
+.hit-widget.large .hit-icon.device-widget[data-widget-type="camera"] .widget-opts { 
+	height: 23%; 
+	background-repeat: no-repeat;
+	background-position: center;
+}
 
 /** 
  * WIDGET SIZES: 

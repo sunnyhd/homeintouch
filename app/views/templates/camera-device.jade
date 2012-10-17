@@ -1,8 +1,8 @@
 script(id="device-list-camera-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="camera", data-hit-icon-type="devices.camera")
+  .hit-icon.device-widget(data-widget-type="camera")
     span <%= name %>
-    video(width="170", height="100", controls="controls")
-      source(src="http://www.w3schools.com/html/movie.mp4", type="video/mp4")
+    video(width="100%", height="110", controls="controls")
+      source(src!="<%= url %>")
     .widget-opts
 
 script(id="device-list-camera-optional-buttons-template", type="text/template")
@@ -30,13 +30,29 @@ script(id="device-add-camera-template", type="text/template")
         .controls
           input(id="refresh", type="number", placeHolder="Refresh Ms")
       .control-group
-        label(for="cmd_opt1_name").control-label Custom Command Name
+        label(for="cmd_opt1_name").control-label Custom Command 1 Name
         .controls
           input(id="cmd_opt1_name", type="text", placeHolder="Command name")
       .control-group
-        label(for="write_camera_opt1").control-label Custom Command Write Address
+        label(for="write_camera_opt1").control-label Custom Command 1 Write Address
         .controls
           input(id="write_camera_opt1", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="cmd_opt2_name").control-label Custom Command 2 Name
+        .controls
+          input(id="cmd_opt2_name", type="text", placeHolder="Command name")
+      .control-group
+        label(for="write_camera_opt2").control-label Custom Command 2 Write Address
+        .controls
+          input(id="write_camera_opt2", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="cmd_opt3_name").control-label Custom Command 3 Name
+        .controls
+          input(id="cmd_opt3_name", type="text", placeHolder="Command name")
+      .control-group
+        label(for="write_camera_opt3").control-label Custom Command 3 Write Address
+        .controls
+          input(id="write_camera_opt3", type="text", placeHolder="#/#/#")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add
@@ -62,14 +78,34 @@ script(id="device-view-camera-template", type="text/template")
         <%= refresh %>
     .row
       .span2
-        label(for="cmd_opt1_name").pull-right Custom Command Name
+        label(for="cmd_opt1_name").pull-right Custom Command 1 Name
       .span3
         <%= cmd_opt1_name %>
     .row
       .span2
-        label(for="write_camera_opt1").pull-right Custom Command Write Address
+        label(for="write_camera_opt1").pull-right Custom Command 1 Write Address
       .span3
         <%= getAddress('write_camera_opt1').address %>
+    .row
+      .span2
+        label(for="cmd_opt2_name").pull-right Custom Command 2 Name
+      .span3
+        <%= cmd_opt2_name %>
+    .row
+      .span2
+        label(for="write_camera_opt2").pull-right Custom Command 2 Write Address
+      .span3
+        <%= getAddress('write_camera_opt2').address %>
+    .row
+      .span2
+        label(for="cmd_opt3_name").pull-right Custom Command 3 Name
+      .span3
+        <%= cmd_opt3_name %>
+    .row
+      .span2
+        label(for="write_camera_opt3").pull-right Custom Command 3 Write Address
+      .span3
+        <%= getAddress('write_camera_opt3').address %>
   .modal-footer
     a(href="#").delete.btn.pull-left Delete
     a(href="#").cancel.btn.btn-primary Close
