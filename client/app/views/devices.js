@@ -364,28 +364,56 @@ exports.AddCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-camera-template",
 
-    formFields: ["name", "url", "refresh", "cmd_opt1_name", "write_camera_opt1", 
-    "cmd_opt2_name", "write_camera_opt2", "cmd_opt3_name", "write_camera_opt3"],
+    formEvents: {
+        'change #cameraType': 'cameraTypeChanged'
+    },
 
-    buildDevice: function(data){
+    formFields: ["name", "cameraType", "url", "refresh", "autoPlay", "cmd_opt1_btn_name", "cmd_opt1_cmd", "cmd_opt1_read_address", 
+    "cmd_opt2_btn_name", "cmd_opt2_cmd", "cmd_opt2_read_address", "cmd_opt3_btn_name", "cmd_opt3_cmd", 
+    "cmd_opt3_read_address"],
+
+    buildDevice: function(data) {
         var device = new Device({
             name: data.name,
+            cameraType: data.cameraType,
             url: data.url,
             refresh: data.refresh,
+            autoPlay: data.autoPlay,
             type: data.type,
-            cmd_opt1_name: data["cmd_opt1_name"], 
-            write_camera_opt1: data["write_camera_opt1"],
-            cmd_opt2_name: data["cmd_opt2_name"], 
-            write_camera_opt2: data["write_camera_opt2"],
-            cmd_opt3_name: data["cmd_opt3_name"], 
-            write_camera_opt3: data["write_camera_opt3"]
+            cmd_opt1_btn_name: data["cmd_opt1_btn_name"], 
+            cmd_opt1_cmd: data["cmd_opt1_cmd"], 
+            cmd_opt1_read_address: data["cmd_opt1_read_address"], 
+            cmd_opt2_btn_name: data["cmd_opt2_btn_name"], 
+            cmd_opt2_cmd: data["cmd_opt2_cmd"], 
+            cmd_opt2_read_address: data["cmd_opt2_read_address"], 
+            cmd_opt3_btn_name: data["cmd_opt3_btn_name"], 
+            cmd_opt3_cmd: data["cmd_opt3_cmd"], 
+            cmd_opt3_read_address: data["cmd_opt3_read_address"]
         });
 
-        device.addAddress("write_camera_opt1",data.write_camera_opt1);
-        device.addAddress("write_camera_opt2",data.write_camera_opt2);
-        device.addAddress("write_camera_opt3",data.write_camera_opt3);
+        device.addAddress("cmd_opt1_read_address",data.cmd_opt1_read_address);
+        device.addAddress("cmd_opt2_read_address",data.cmd_opt2_read_address);
+        device.addAddress("cmd_opt3_read_address",data.cmd_opt3_read_address);
 
         return device;
+    },
+
+    cameraTypeChanged: function(e) {
+        var value = $('#cameraType', this.$el).val();
+
+        if (value === 'video') {
+            $('#refreshGroup', this.$el).hide();
+            $('#autoPlayGroup', this.$el).show();
+
+        } else if (value === 'img') {
+            $('#autoPlayGroup', this.$el).hide();
+            $('#refreshGroup', this.$el).show();
+        }
+    },
+
+    onRender: function() {
+        this.cameraTypeChanged();
+        $('*[rel="tooltip"]', this.$el).tooltip();
     }
 
 });

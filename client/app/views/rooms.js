@@ -610,30 +610,30 @@ exports.CameraDeviceView = exports.DeviceView.extend({
     className: "hit-icon-wrapper",
 
     formEvents: {
-        // "click .hit-icon a": "socketClicked"
+        
     },
 
     initialize: function() {
-        /*this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
-        this.readAddress = this.model.getAddressByType("read_socket");
-        this.writeAddress = this.model.getAddressByType("write_socket");*/
+        
     },
 
     /**
      * Renders the optional buttons configured for the camera.
      * */
     renderOptionalButtons: function() {
-        var optBtnProps = [ {name: 'cmd_opt1_name', address: 'write_camera_opt1' },
-                            {name: 'cmd_opt2_name', address: 'write_camera_opt2' },
-                            {name: 'cmd_opt3_name', address: 'write_camera_opt3' } ];
+        var optBtnProps = [ {btnName: 'cmd_opt1_btn_name', cmd: 'cmd_opt1_cmd', address: 'cmd_opt1_read_address' },
+                            {btnName: 'cmd_opt2_btn_name', cmd: 'cmd_opt2_cmd', address: 'cmd_opt2_read_address' },
+                            {btnName: 'cmd_opt3_btn_name', cmd: 'cmd_opt3_cmd', address: 'cmd_opt3_read_address' } ];
+
         var optBtns = new Array();
         var $widgetOpts = $('.widget-opts', this.$el);
 
         _.each(optBtnProps, function(prop) {
-            var name = this.model.get(prop.name);
+            var btnName = this.model.get(prop.btnName);
+            var cmd = this.model.get(prop.cmd);
             var address = this.model.get(prop.address);
-            if (name && address) {
-                optBtns.push({name: name, address: address});
+            if (btnName && cmd) {
+                optBtns.push({btnName: btnName, cmd: cmd, address: address});
             }
         }, this);
 
@@ -656,55 +656,47 @@ exports.CameraDeviceView = exports.DeviceView.extend({
         }
     },
 
-    socketClicked: function (e) {
-        e.preventDefault();
-        var btnClicked = $(e.currentTarget);
-        var on = (btnClicked.data('value') === 'on');
-
-        this.flipSwitch(on);
-        this.updateSwitch(on);
-    },
-
-    flipSwitch: function(on){
-        var address = this.writeAddress.get("address");
-        app.vent.trigger("device:write", address, on);
-    },
-
-    isSwitchOn: function() {
-        return (this.$('.active').data('value') === 'on');
-    },
-
     refreshIcon: function() {
         var $widget = $('.hit-icon .widget-opts', this.$el);
         app.changeIconState($widget, '#FFFFFF');
     },
 
-    /*updateSwitch: function(on) {
-        $('a', this.$el).removeClass('active');
-        if (on) {
-            $('a[data-value="on"]', this.$el).addClass('active');
-        } else {
-            $('a[data-value="off"]', this.$el).addClass('active');
+    close: function() {
+        if (this.scheduledTask) {
+            clearTimeout( this.scheduledTask );
         }
-        this.updateIconColor(on);
     },
 
-    updateIconColor: function(on) {
-        var $widget = $('.hit-icon', this.$el);
-        if (on) {
-            app.changeIconState($widget, '#FF9522');
-        } else {
-            app.changeIconState($widget, 'gray');
-        }
-    },*/
+    refreshImg: function() {
+        var $img = $('img', this.$el);
+        $img.attr('src', this.model.get('url') + '?' + Math.random());
 
-    selectSwitch: function(address, value){
-        this.updateSwitch(value);
+        var refresh = this.model.get('refresh');
+        if (!_.isNaN(refresh)) { 
+            var proxy = $.proxy(this.refreshImg, this);
+            this.scheduledTask = setTimeout( proxy, parseInt(refresh) );
+        }
+    },
+
+    setVideoOptions: function() {
+        if (this.model.get('autoPlay')) {
+            var $video = $('video', this.$el);
+            $video.attr('autoplay', 'autoplay');
+            $video.click(function() {
+                this.webkitRequestFullScreen();
+            });
+        }
     },
 
     onRender: function(){
         this.renderOptionalButtons();
         this.refreshIcon();
+
+        if (this.model.get('cameraType') === 'img') {
+            this.refreshImg();
+        } else if (this.model.get('cameraType') === 'video') {
+            this.setVideoOptions();
+        }
     }
 
 });
@@ -900,9 +892,6 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
 
     applyStyles: function() {
         this.applyStyle('bodyConfiguration');
-
-        app.main.show(this);
-        // app.loadIcons(this.$el);
     },
 
     bindItemViewEvents: function(itemView) {

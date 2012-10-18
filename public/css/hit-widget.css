@@ -148,6 +148,13 @@
 	background-repeat: no-repeat;
 	background-position: center;
 }
+.hit-icon.device-widget[data-widget-type="camera"] img, video {
+    width: 160px;
+    height: 110px;
+}
+.hit-icon.device-widget[data-widget-type="camera"] span.widget-title {
+	display: block;
+}
 
 /** 
  * WIDGET SIZES: 

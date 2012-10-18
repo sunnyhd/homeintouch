@@ -1,15 +1,19 @@
 script(id="device-list-camera-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="camera")
-    span <%= name %>
-    video(width="100%", height="110", controls="controls")
+  .hit-icon.device-widget(data-widget-type="camera", id!="device-camera-<%= id %>")
+    span.widget-title <%= name %>
+    <% if (cameraType === 'img') { %>
+    img(src!="<%= url %>")
+    <% } else if (cameraType === 'video') { %>
+    video
       source(src!="<%= url %>")
+    <% } %>
     .widget-opts
 
 script(id="device-list-camera-optional-buttons-template", type="text/template")
   ul.device-btn-group.clearfix(class!="<%= (optBtnsClass) %>")
     <% _.each(optBtns, function(btn) { %>
     li.device-btn
-      a(href="#", data-address!="<%=btn.address%>", data-value="") <%=btn.name%>
+      a(href="#", data-address!="<%=btn.address%>", data-cmd!="<%=btn.cmd%>") <%=btn.btnName%>
     <% }); %>
 
 script(id="device-add-camera-template", type="text/template")
@@ -17,42 +21,97 @@ script(id="device-add-camera-template", type="text/template")
     h2 Add A New <%= name %>
   .modal-body
     form.form-horizontal
-      .control-group
-        label(for="name").control-label Name
-        .controls
-          input(id="name", type="text", placeHolder="Office camera")
-      .control-group
-        label(for="url").control-label Url
-        .controls
-          input(id="url", type="text", placeHolder="Camera source URL")
-      .control-group
-        label(for="refresh").control-label Refresh
-        .controls
-          input(id="refresh", type="number", placeHolder="Refresh Ms")
-      .control-group
-        label(for="cmd_opt1_name").control-label Custom Command 1 Name
-        .controls
-          input(id="cmd_opt1_name", type="text", placeHolder="Command name")
-      .control-group
-        label(for="write_camera_opt1").control-label Custom Command 1 Write Address
-        .controls
-          input(id="write_camera_opt1", type="text", placeHolder="#/#/#")
-      .control-group
-        label(for="cmd_opt2_name").control-label Custom Command 2 Name
-        .controls
-          input(id="cmd_opt2_name", type="text", placeHolder="Command name")
-      .control-group
-        label(for="write_camera_opt2").control-label Custom Command 2 Write Address
-        .controls
-          input(id="write_camera_opt2", type="text", placeHolder="#/#/#")
-      .control-group
-        label(for="cmd_opt3_name").control-label Custom Command 3 Name
-        .controls
-          input(id="cmd_opt3_name", type="text", placeHolder="Command name")
-      .control-group
-        label(for="write_camera_opt3").control-label Custom Command 3 Write Address
-        .controls
-          input(id="write_camera_opt3", type="text", placeHolder="#/#/#")
+      .tabbable
+        ul.nav.nav-tabs
+          li.active
+            a(href="#camera-form-tab1", data-toggle="tab") Camera Data
+          li
+            a(href="#camera-form-tab2", data-toggle="tab") Command 1
+          li
+            a(href="#camera-form-tab3", data-toggle="tab") Command 2
+          li
+            a(href="#camera-form-tab4", data-toggle="tab") Command 3
+        .tab-content
+          .tab-pane.active#camera-form-tab1
+            .control-group
+              label(for="name").control-label Name
+              .controls
+                input(id="name", type="text", placeHolder="Office camera")
+            .control-group
+              label(for="cameraType").control-label Type
+              .controls
+                select(id="cameraType")
+                  option(value="video") Video
+                  option(value="img") Image
+            .control-group
+              label(for="url").control-label Url
+              .controls
+                input(id="url", type="text", placeHolder="Camera source URL")
+            .control-group#refreshGroup
+              label(for="refresh").control-label Refresh
+              .controls
+                input(id="refresh", type="number", placeHolder="Refresh Ms")
+            .control-group#autoPlayGroup
+              label(for="autoPlay").control-label Auto Play
+              .controls
+                input(id="autoPlay", type="checkbox")
+          .tab-pane#camera-form-tab2
+            .control-group
+              label(for="cmd_opt1_btn_name").control-label Button Name
+              .controls
+                input(id="cmd_opt1_btn_name", type="text", placeHolder="UI Friendly Name")
+                span.help-inline(rel="tooltip", data-placement="left", title="The text of the button displayed in the UI.")
+                  i.icon-question-sign
+            .control-group
+              label(for="cmd_opt1_cmd").control-label Command
+              .controls
+                input(id="cmd_opt1_cmd", type="text", placeHolder="Command")
+                span.help-inline(rel="tooltip", data-placement="left", title="The command sent to the HIT server. Example: hitbot_send mobotix picture")
+                  i.icon-question-sign
+            .control-group
+              label(for="cmd_opt1_read_address").control-label Trigger Address
+              .controls
+                input(id="cmd_opt1_read_address", type="text", placeHolder="#/#/#")
+                span.help-inline(rel="tooltip", data-placement="left", title="Optional. When this address receives the value '1', the command is sent to the HIT server.")
+                  i.icon-question-sign
+          .tab-pane#camera-form-tab3
+            .control-group
+              label(for="cmd_opt2_btn_name").control-label Button Name
+              .controls
+                input(id="cmd_opt2_btn_name", type="text", placeHolder="UI Friendly Name")
+                span.help-inline(rel="tooltip", data-placement="left", title="The text of the button displayed in the UI.")
+                  i.icon-question-sign
+            .control-group
+              label(for="cmd_opt2_cmd").control-label Command
+              .controls
+                input(id="cmd_opt2_cmd", type="text", placeHolder="Command")
+                span.help-inline(rel="tooltip", data-placement="left", title="The command sent to the HIT server. Example: hitbot_send mobotix picture")
+                  i.icon-question-sign
+            .control-group
+              label(for="cmd_opt2_read_address").control-label Trigger Address
+              .controls
+                input(id="cmd_opt2_read_address", type="text", placeHolder="#/#/#")
+                span.help-inline(rel="tooltip", data-placement="left", title="Optional. When this address receives the value '1', the command is sent to the HIT server.")
+                  i.icon-question-sign
+          .tab-pane#camera-form-tab4
+            .control-group
+              label(for="cmd_opt3_btn_name").control-label Button Name
+              .controls
+                input(id="cmd_opt3_btn_name", type="text", placeHolder="UI Friendly Name")
+                span.help-inline(rel="tooltip", data-placement="left", title="The text of the button displayed in the UI.")
+                  i.icon-question-sign
+            .control-group
+              label(for="cmd_opt3_cmd").control-label Command
+              .controls
+                input(id="cmd_opt3_cmd", type="text", placeHolder="Command")
+                span.help-inline(rel="tooltip", data-placement="left", title="The command sent to the HIT server. Example: hitbot_send mobotix picture")
+                  i.icon-question-sign
+            .control-group
+              label(for="cmd_opt3_read_address").control-label Trigger Address
+              .controls
+                input(id="cmd_opt3_read_address", type="text", placeHolder="#/#/#")
+                span.help-inline(rel="tooltip", data-placement="left", title="Optional. When this address receives the value '1', the command is sent to the HIT server.")
+                  i.icon-question-sign
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add
@@ -76,36 +135,6 @@ script(id="device-view-camera-template", type="text/template")
         label(for="refresh").pull-right Refresh
       .span3
         <%= refresh %>
-    .row
-      .span2
-        label(for="cmd_opt1_name").pull-right Custom Command 1 Name
-      .span3
-        <%= cmd_opt1_name %>
-    .row
-      .span2
-        label(for="write_camera_opt1").pull-right Custom Command 1 Write Address
-      .span3
-        <%= getAddress('write_camera_opt1').address %>
-    .row
-      .span2
-        label(for="cmd_opt2_name").pull-right Custom Command 2 Name
-      .span3
-        <%= cmd_opt2_name %>
-    .row
-      .span2
-        label(for="write_camera_opt2").pull-right Custom Command 2 Write Address
-      .span3
-        <%= getAddress('write_camera_opt2').address %>
-    .row
-      .span2
-        label(for="cmd_opt3_name").pull-right Custom Command 3 Name
-      .span3
-        <%= cmd_opt3_name %>
-    .row
-      .span2
-        label(for="write_camera_opt3").pull-right Custom Command 3 Write Address
-      .span3
-        <%= getAddress('write_camera_opt3').address %>
   .modal-footer
     a(href="#").delete.btn.pull-left Delete
     a(href="#").cancel.btn.btn-primary Close
