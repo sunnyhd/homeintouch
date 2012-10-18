@@ -711,8 +711,6 @@ exports.ScenesDeviceView = exports.DeviceView.extend({
     },
 
     initialize: function() {
-        //this.bindTo(this.model, "change:address:value", this.updateStatus, this);
-        //this.readAddress = this.model.getAddressByType("read_motion");
         this.writeAddress = this.model.getAddressByType("write_scenes");
     },
 
@@ -730,6 +728,81 @@ exports.ScenesDeviceView = exports.DeviceView.extend({
         var $widget = $('.hit-icon', this.$el);
         $widget.data('hit-icon-type',icon);
         app.changeIconState($widget, 'white');
+    },
+
+    onRender: function(){
+        this.refreshIcon();
+    }
+
+});
+
+exports.MotionDeviceView = exports.DeviceView.extend({
+
+    template: "#device-list-motion-item-template",
+    className: "hit-icon-wrapper",
+
+    formEvents: {
+    },
+
+    initialize: function() {
+        this.bindTo(this.model, "change:address:value", this.updateStatus, this);
+        this.readAddress = this.model.getAddressByType("read_motion");
+    },
+
+    updateMotion: function(on) {
+        this.resetAnimation();
+        var $widget = this.$('[data-hit-icon-type]');
+        if (on) {
+            $widget.data('hit-icon-type',"devices.doorClose");
+            app.changeIconState($widget, 'red');
+            this.backgroundImage = $widget.css('background-image');
+            this.icon = $widget;
+            this.refreshImg();
+        } else {
+            $widget.data('hit-icon-type',"devices.doorClose");
+            app.changeIconState($widget, 'gray');
+        }
+    },
+
+    setIcon: function() {
+        this.iconShowed = true;
+        this.icon.css('background-image', this.backgroundImage);
+    },
+
+    unsetIcon: function() {
+        this.iconShowed = false;
+        this.icon.css('background-image', '');
+    },
+
+    close: function() {
+        this.resetAnimation();
+    },
+
+    resetAnimation: function() {
+        this.iconShowed = true;
+        if (this.scheduledTask) {
+            clearTimeout( this.scheduledTask );
+        }
+    },
+
+    refreshImg: function() {
+        if (this.iconShowed) {
+            this.unsetIcon();
+        } else {
+            this.setIcon();
+        }
+
+        var proxy = $.proxy(this.refreshImg, this);
+        this.scheduledTask = setTimeout(proxy, 200);
+    },
+
+    refreshIcon: function() {
+        var value = this.readAddress.get("value");
+        this.updateStatus(null, value);
+    },
+
+    updateStatus: function(address, value){
+        this.updateMotion(value);
     },
 
     onRender: function(){
@@ -756,7 +829,8 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         "window": exports.WindowDeviceView,
         "socket": exports.SocketDeviceView,
         "camera": exports.CameraDeviceView,
-        "scenes": exports.ScenesDeviceView
+        "scenes": exports.ScenesDeviceView,
+        "motion": exports.MotionDeviceView
     },
 
     initialize: function() {

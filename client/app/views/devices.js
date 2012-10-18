@@ -453,3 +453,26 @@ exports.AddScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
 exports.ViewScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
     template: "#device-view-scenes-template"
 });
+
+exports.AddMotionDeviceForm = exports.AddEditDeviceTypeForm.extend({
+
+    template: "#device-add-motion-template",
+
+    formFields: ["name", "read_motion"],
+
+    buildDevice: function(data){
+        var device = new Device({
+            name: data.name,
+            type: data.type
+        });
+
+        device.addAddress("read_motion", data.read_motion);
+
+        return device;
+    }
+
+});
+
+exports.ViewMotionDeviceForm = exports.AddEditDeviceTypeForm.extend({
+    template: "#device-view-motion-template"
+});

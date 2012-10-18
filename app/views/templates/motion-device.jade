@@ -1,0 +1,38 @@
+script(id="device-list-motion-item-template", type="text/template")
+  .hit-icon.device-widget(data-widget-type="motion", data-hit-icon-type="devices.doorClose")
+    span <%= name %>
+
+script(id="device-add-motion-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Motion Sensor")
+      .control-group
+        label(for="read_motion").control-label Read Address
+        .controls
+          input(id="read_motion", type="text", placeHolder="#/#/#")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-motion-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span2
+        label(for="read_motion").pull-right Read Address
+      .span3
+        <%= getAddress('read_motion').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close
