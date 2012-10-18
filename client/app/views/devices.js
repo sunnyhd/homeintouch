@@ -393,3 +393,35 @@ exports.AddCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
 exports.ViewCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
     template: "#device-view-camera-template"
 });
+
+exports.AddScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
+
+    template: "#device-add-scenes-template",
+
+    formFields: ["name", "write_scenes", "icon"],
+
+    serializeData: function(){
+        var data = Backbone.Marionette.CompositeView.prototype.serializeData.apply(this, arguments);
+
+        data.icons = icons.floors;
+
+        return data;
+    },
+
+    buildDevice: function(data){
+        var device = new Device({
+            name: data.name,
+            type: data.type,
+            scenesIcon: data.icon
+        });
+
+        device.addAddress("write_scenes",data.write_scenes);
+
+        return device;
+    }
+
+});
+
+exports.ViewScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
+    template: "#device-view-scenes-template"
+});

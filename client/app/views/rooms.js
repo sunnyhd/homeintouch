@@ -709,6 +709,43 @@ exports.CameraDeviceView = exports.DeviceView.extend({
 
 });
 
+exports.ScenesDeviceView = exports.DeviceView.extend({
+
+    template: "#device-list-scenes-item-template",
+    className: "hit-icon-wrapper",
+
+    formEvents: {
+        "click .hit-icon": "scenesClicked"
+    },
+
+    initialize: function() {
+        //this.bindTo(this.model, "change:address:value", this.updateStatus, this);
+        //this.readAddress = this.model.getAddressByType("read_motion");
+        this.writeAddress = this.model.getAddressByType("write_scenes");
+    },
+
+    scenesClicked: function (e) {
+        e.preventDefault();
+        var btnClicked = $(e.currentTarget);
+        var on = true;
+
+        var address = this.writeAddress.get("address");
+        app.vent.trigger("device:write", address, on);
+    },
+
+    refreshIcon: function() {
+        var icon = this.model.get('icon');
+        var $widget = $('.hit-icon', this.$el);
+        $widget.data('hit-icon-type',icon);
+        app.changeIconState($widget, 'white');
+    },
+
+    onRender: function(){
+        this.refreshIcon();
+    }
+
+});
+
 exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-group-template",
     className: "room-device-group span6 clearfix",
@@ -726,7 +763,8 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         "door": exports.DoorDeviceView,
         "window": exports.WindowDeviceView,
         "socket": exports.SocketDeviceView,
-        "camera": exports.CameraDeviceView
+        "camera": exports.CameraDeviceView,
+        "scenes": exports.ScenesDeviceView
     },
 
     initialize: function() {
@@ -741,6 +779,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     onRender: function() {
         this.applyStyles();
+        this.deviceGroupRendered = true;
     },
 
     getViewId: function() {
@@ -760,7 +799,9 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     appendHtml: function(cv, iv){
         cv.$(".device-list").append(iv.el);
-        this.applyStyles();
+        if (this.deviceGroupRendered) {
+            this.applyStyles();    
+        }
 
         //app.loadIcons(iv.$el);
 
