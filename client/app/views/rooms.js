@@ -711,8 +711,6 @@ exports.ScenesDeviceView = exports.DeviceView.extend({
     },
 
     initialize: function() {
-        //this.bindTo(this.model, "change:address:value", this.updateStatus, this);
-        //this.readAddress = this.model.getAddressByType("read_motion");
         this.writeAddress = this.model.getAddressByType("write_scenes");
     },
 

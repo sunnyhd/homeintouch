@@ -431,7 +431,7 @@ exports.AddScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
     serializeData: function(){
         var data = Backbone.Marionette.CompositeView.prototype.serializeData.apply(this, arguments);
 
-        data.icons = icons.floors;
+        data.icons = icons.devices.scenes;
 
         return data;
     },

@@ -156,6 +156,10 @@
 	display: block;
 }
 
+/** Scenes styles */
+.hit-icon.device-widget[data-widget-type="scenes"] { background-position: center; }
+
+
 /** 
  * WIDGET SIZES: 
  *	- small: 	90px X 90px;

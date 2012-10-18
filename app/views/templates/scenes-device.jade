@@ -1,5 +1,5 @@
 script(id="device-list-scenes-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="scenes", data-hit-icon-type="devices.doorClose")
+  .hit-icon.device-widget(data-widget-type="scenes", data-hit-icon-type!="<%=scenesIcon%>")
     span <%= name %>
 
 script(id="device-add-scenes-template", type="text/template")
@@ -20,7 +20,7 @@ script(id="device-add-scenes-template", type="text/template")
         .controls
           select(id="icon")
             <% _.each(_.keys(icons), function(icon) { %>
-            option(value!="<%= ('floors.' + icon) %>") <%= icon %>
+            option(value!="<%= ('devices.scenes.' + icon) %>") <%= icon %>
             <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
