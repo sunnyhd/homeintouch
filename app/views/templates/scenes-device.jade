@@ -1,0 +1,45 @@
+script(id="device-list-scenes-item-template", type="text/template")
+  .hit-icon.device-widget(data-widget-type="scenes", data-hit-icon-type="devices.doorClose")
+    span <%= name %>
+
+script(id="device-add-scenes-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Dinner")
+      .control-group
+        label(for="write_scenes").control-label Write Address
+        .controls
+          input(id="write_scenes", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="scenes_icon").control-label Icon
+        .controls
+          select(id="icon")
+            <% _.each(_.keys(icons), function(icon) { %>
+            option(value!="<%= ('floors.' + icon) %>") <%= icon %>
+            <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-scenes-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span2
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span2
+        label(for="write_scenes").pull-right Write Address
+      .span3
+        <%= getAddress('write_scenes').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close

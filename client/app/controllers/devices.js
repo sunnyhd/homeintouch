@@ -14,7 +14,8 @@ var deviceTypeAddForm = {
     "door": deviceViews.AddDoorDeviceForm,
     "window": deviceViews.AddWindowDeviceForm,
     "socket": deviceViews.AddSocketDeviceForm,
-    "camera": deviceViews.AddCameraDeviceForm
+    "camera": deviceViews.AddCameraDeviceForm,
+    "scenes": deviceViews.AddScenesDeviceForm
 };
 
 var deviceTypeViewForm = {
@@ -25,7 +26,8 @@ var deviceTypeViewForm = {
     "door": deviceViews.ViewDoorDeviceForm,
     "window": deviceViews.ViewWindowDeviceForm,
     "socket": deviceViews.ViewSocketDeviceForm,
-    "camera": deviceViews.ViewCameraDeviceForm
+    "camera": deviceViews.ViewCameraDeviceForm,
+    "scenes": deviceViews.ViewScenesDeviceForm
 };
 
 // Helper Methods
