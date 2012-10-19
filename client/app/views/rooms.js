@@ -240,8 +240,8 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     selectDimmer: function(address, value){
         if (this.dimmerTimeout) return;
 
-        var $dimmer = this.$(".dimmer");
-        $dimmer.val(value);
+        this.updateDimmerSlider(value);
+        this.updateDimmerDetail(value);
     },
 
     onRender: function(){
