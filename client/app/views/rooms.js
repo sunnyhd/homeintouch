@@ -669,7 +669,10 @@ exports.CameraDeviceView = exports.DeviceView.extend({
 
     refreshImg: function() {
         var $img = $('img', this.$el);
-        $img.attr('src', this.model.get('url') + '?' + Math.random());
+        var url = this.model.get('url');
+        url += ((url.indexOf('?') != -1) ? '&' : '?') + Math.random();
+
+        $img.attr('src', url);
 
         var refresh = this.model.get('refresh');
         if (!_.isNaN(refresh)) { 
@@ -753,13 +756,13 @@ exports.MotionDeviceView = exports.DeviceView.extend({
         this.resetAnimation();
         var $widget = this.$('[data-hit-icon-type]');
         if (on) {
-            $widget.data('hit-icon-type',"devices.doorClose");
+            $widget.data('hit-icon-type',"devices.motion");
             app.changeIconState($widget, 'red');
             this.backgroundImage = $widget.css('background-image');
             this.icon = $widget;
             this.refreshImg();
         } else {
-            $widget.data('hit-icon-type',"devices.doorClose");
+            $widget.data('hit-icon-type',"devices.motion");
             app.changeIconState($widget, 'gray');
         }
     },
