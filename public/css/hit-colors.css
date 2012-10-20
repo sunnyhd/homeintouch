@@ -7,22 +7,22 @@ FUCXIA: #9e149e
 /** DARK GRAY **/
 .dark-gray { background-color: #222; border-color: #555 #111 #111 #555; }
 .dark-gray.selected { border-color: #111 #555 #555 #111; }
-.device-widget a.dark-gray { border-color: #111 #555 #555 #111; }
-.device-widget a.dark-gray.selected { border-color: #555 #111 #111 #555; }
+.device-widget a.dark-gray { border-color: #555 #111 #111 #555; }
+.device-widget a.dark-gray.selected { border-color: #111 #555 #555 #111; }
 .dark-gray .active { color: #222 !important;}
 
 /** GRAY **/
 .gray {	background-color: #333;	border-color: #555 #222 #222 #555; }
 .gray.selected { border-color: #222 #555 #555 #222; }
-.device-widget a.gray { border-color: #222 #555 #555 #222; }
-.device-widget a.gray.selected { border-color: #555 #222 #222 #555; }
+.device-widget a.gray { border-color: #555 #222 #222 #555; }
+.device-widget a.gray.selected { border-color: #222 #555 #555 #222; }
 .gray .active { color: #333 !important; }
 
 /** DARK BLUE **/
 .dark-blue { background-color: #124191; border-color: #0E3474 #4167A7 #4167A7 #0E3474; }
 .dark-blue.selected { border-color: #4167A7 #0E3474 #0E3474 #4167A7; }
-.device-widget a.dark-blue { border-color: #0E3474 #4167A7 #4167A7 #0E3474; }
-.device-widget a.dark-blue.selected { border-color: #4167A7 #0E3474 #0E3474 #4167A7; }
+.device-widget a.dark-blue { border-color: #4167A7 #0E3474 #0E3474 #4167A7; }
+.device-widget a.dark-blue.selected { border-color: #0E3474 #4167A7 #4167A7 #0E3474; }
 .dark-blue .active { color: #124191 !important; }
 
 /** BLUE **/
@@ -56,6 +56,6 @@ FUCXIA: #9e149e
 /** GREEN **/
 .green { background-color: #82c300; border-color: #9BCF33 #689C00 #689C00 #9BCF33; }
 .green.selected { border-color: #689C00 #9BCF33 #9BCF33 #689C00; }
-.device-widget a.green { border-color: #689C00 #9BCF33 #9BCF33 #689C00; }
-.device-widget a.green.selected { border-color: #9BCF33 #689C00 #689C00 #9BCF33; }
+.device-widget a.green { border-color: #9BCF33 #689C00 #689C00 #9BCF33; }
+.device-widget a.green.selected { border-color: #689C00 #9BCF33 #9BCF33 #689C00; }
 .green .active { color: #82c300 !important; }

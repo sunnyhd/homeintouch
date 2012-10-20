@@ -356,6 +356,6 @@ app.generateStylesheet = function(selector, stylesheet) {
 // Widget color classes
 app.colorClasses = [{label: "Dark Gray", value: "dark-gray"}, {label: "Gray", value: "gray"}, 
                     {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}, 
-                    {label: "Yellow", value: "yellow"}, {label: "Dark Yellow", value: "dark-yellow"},
+                    {label: "Dark Yellow", value: "dark-yellow"},
                     {label: "Violet", value: "violet"}, {label: "Green", value: "green"}]; 
 
