@@ -989,7 +989,7 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         });
     },
 
-    applyStyle: function(styleConfigurationName) {
+    applyStyle: function(styleConfigurationName, createStylesheet) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -998,15 +998,21 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
                 $(selector).removeAttr('style');
                 var className = configuration.getClassesToApply();
                 if (className !== '') {
-                    this.$(selector).addClass(className);
+                    $(selector).addClass(className);
                 }
-                this.$(selector).css(configuration.getStyleAttributes());
+                if (createStylesheet) {
+                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes());
+                    app.addStyleTag(stylesheet);
+                } else {
+                    $(selector).css(configuration.getStyleAttributes());    
+                }
+                
             });
         }
     },
 
     applyStyles: function() {
-        this.applyStyle('bodyConfiguration');
+        this.applyStyle('bodyConfiguration', true);
     },
 
     bindItemViewEvents: function(itemView) {
