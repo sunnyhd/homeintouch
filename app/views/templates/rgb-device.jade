@@ -1,0 +1,109 @@
+script(id="device-list-rgb-item-template", type="text/template")
+  .hit-icon.device-widget(data-widget-type="rgb", data-hit-icon-type="devices.lightDimmer")
+    span <%= name %>
+    .rgb-detail 0%
+    .widget-opts
+      input.rgb(type="range", min="0", max="100", step="1")
+      ul.device-btn-group.two.clearfix
+        li.device-btn
+          a.blue(href="#", data-value="on") ON
+        li.device-btn
+          a.blue(href="#", data-value="off") OFF
+
+script(id="device-add-rgb-template", type="text/template")
+  .modal-header
+    h2 Add A New <%= name %>
+  .modal-body
+    .form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="RGB Device")
+      .control-group
+        label(for="read_red_color").control-label Read Red Color Address
+        .controls
+          input(id="read_red_color", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="write_red_color").control-label Write Red Color Address
+        .controls
+          input(id="write_red_color", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="read_green_color").control-label Read Green Color Address
+        .controls
+          input(id="read_green_color", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="write_green_color").control-label Write Green Color Address
+        .controls
+          input(id="write_green_color", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="read_blue_color").control-label Read Blue Color Address
+        .controls
+          input(id="read_blue_color", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="write_blue_color").control-label Write Blue Color Address
+        .controls
+          input(id="write_blue_color", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="read_brightness").control-label Read Brightness Address
+        .controls
+          input(id="read_brightness", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="write_brightness").control-label Write Brightness Address
+        .controls
+          input(id="write_brightness", type="text", placeHolder="#/#/#")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").add.btn.btn-primary Add
+
+script(id="device-view-rgb-template", type="text/template")
+  .modal-header
+    h2 <%= name %>
+  .modal-body
+    .row
+      .span3
+        label(for="name").pull-right Name
+      .span3
+        <%= name %>
+    .row
+      .span3
+        label.pull-right Read Red Color Address
+      .span3
+        <%= getAddress('read_red_color').address %>
+    .row
+      .span3
+        label.pull-right Write Red Color Address
+      .span3
+        <%= getAddress('write_red_color').address %>
+    .row
+      .span3
+        label.pull-right Read Green Color Address
+      .span3
+        <%= getAddress('read_green_color').address %>
+    .row
+      .span3
+        label.pull-right Write Green Color Address
+      .span3
+        <%= getAddress('write_green_color').address %>
+    .row
+      .span3
+        label.pull-right Read Blue Color Address
+      .span3
+        <%= getAddress('read_blue_color').address %>
+    .row
+      .span3
+        label.pull-right Write Blue Color Address
+      .span3
+        <%= getAddress('write_blue_color').address %>
+    .row
+      .span3
+        label.pull-right Read Brightness Address
+      .span3
+        <%= getAddress('read_brightness_color').address %>
+    .row
+      .span3
+        label.pull-right Write Brightness Address
+      .span3
+        <%= getAddress('write_brightness_color').address %>
+  .modal-footer
+    a(href="#").delete.btn.pull-left Delete
+    a(href="#").cancel.btn.btn-primary Close

@@ -16,7 +16,8 @@ var deviceTypeAddForm = {
     "socket": deviceViews.AddSocketDeviceForm,
     "camera": deviceViews.AddCameraDeviceForm,
     "scenes": deviceViews.AddScenesDeviceForm,
-    "motion": deviceViews.AddMotionDeviceForm
+    "motion": deviceViews.AddMotionDeviceForm,
+    "rgb": deviceViews.AddRgbDeviceForm
 };
 
 var deviceTypeViewForm = {
@@ -29,7 +30,8 @@ var deviceTypeViewForm = {
     "socket": deviceViews.ViewSocketDeviceForm,
     "camera": deviceViews.ViewCameraDeviceForm,
     "scenes": deviceViews.ViewScenesDeviceForm,
-    "motion": deviceViews.ViewMotionDeviceForm
+    "motion": deviceViews.ViewMotionDeviceForm,
+    "rgb": deviceViews.ViewRgbDeviceForm
 };
 
 // Helper Methods

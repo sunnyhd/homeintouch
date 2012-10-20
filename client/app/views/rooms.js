@@ -814,6 +814,37 @@ exports.MotionDeviceView = exports.DeviceView.extend({
 
 });
 
+exports.RgbDeviceView = exports.DeviceView.extend({
+
+    template: "#device-list-rgb-item-template",
+    className: "hit-icon-wrapper",
+
+    formEvents: {
+        //"click .hit-icon a": "switchClicked"
+    },
+
+    initialize: function() {
+        // this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
+        this.readRedAddress = this.model.getAddressByType("read_red_color");
+        this.writeRedAddress = this.model.getAddressByType("write_red_color");
+
+        this.readGreenAddress = this.model.getAddressByType("read_green_color");
+        this.writeGreenAddress = this.model.getAddressByType("write_green_color");
+
+        this.readBlueAddress = this.model.getAddressByType("read_blue_color");
+        this.writeBlueAddress = this.model.getAddressByType("write_blue_color");
+
+        this.readBrightnessAddress = this.model.getAddressByType("read_brightness");
+        this.writeBrightnessAddress = this.model.getAddressByType("write_brightness");
+    },
+
+    onRender: function(){
+        /*var value = this.readAddress.get("value");
+        this.selectSwitch(null, value);*/
+    }
+
+});
+
 exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-group-template",
     className: "room-device-group span6 clearfix",
@@ -833,7 +864,8 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         "socket": exports.SocketDeviceView,
         "camera": exports.CameraDeviceView,
         "scenes": exports.ScenesDeviceView,
-        "motion": exports.MotionDeviceView
+        "motion": exports.MotionDeviceView,
+        "rgb": exports.RgbDeviceView
     },
 
     initialize: function() {
