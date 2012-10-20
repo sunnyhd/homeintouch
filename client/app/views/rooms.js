@@ -669,7 +669,10 @@ exports.CameraDeviceView = exports.DeviceView.extend({
 
     refreshImg: function() {
         var $img = $('img', this.$el);
-        $img.attr('src', this.model.get('url') + '?' + Math.random());
+        var url = this.model.get('url');
+        url += ((url.indexOf('?') != -1) ? '&' : '?') + Math.random();
+
+        $img.attr('src', url);
 
         var refresh = this.model.get('refresh');
         if (!_.isNaN(refresh)) { 
