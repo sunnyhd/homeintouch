@@ -38,6 +38,7 @@ routes(app);
 io.sockets.on('connection', function (socket) {
     socket.on('eib:set', eib.set);
     socket.on('eib:get', eib.get);
+    socket.on('eib:command:send', eib.commandSend);
 });
 
 eib.on('address', function(id, value) {
