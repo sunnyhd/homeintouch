@@ -1,14 +1,16 @@
 script(id="device-list-rgb-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="rgb", data-hit-icon-type="devices.lightDimmer")
+  .hit-icon.device-widget(data-widget-type="rgb")
     span <%= name %>
-    .rgb-detail 0%
+    .rgb-canvas
+      canvas(id="picker", var="5", width="150", height="150")
     .widget-opts
-      input.rgb(type="range", min="0", max="100", step="1")
-      ul.device-btn-group.two.clearfix
+      ul.device-btn-group
         li.device-btn
-          a.blue(href="#", data-value="on") ON
+          a.blue(href="#", data-value="plus")
+            i.icon-plus.icon-white
         li.device-btn
-          a.blue(href="#", data-value="off") OFF
+          a.blue(href="#", data-value="minus")
+            i.icon-minus.icon-white
 
 script(id="device-add-rgb-template", type="text/template")
   .modal-header

@@ -820,7 +820,14 @@ exports.RgbDeviceView = exports.DeviceView.extend({
     className: "hit-icon-wrapper",
 
     formEvents: {
-        //"click .hit-icon a": "switchClicked"
+        "mousemove canvas#picker": "onPickerMove",
+        "touchmove canvas#picker": "onPickerMove",
+
+        "mousedown canvas#picker": "onPickerDown",
+        "touchstart canvas#picker": "onPickerDown",
+
+        "mouseup canvas#picker": "onPickerUp",
+        "touchend canvas#picker": "onPickerUp"
     },
 
     initialize: function() {
@@ -838,9 +845,90 @@ exports.RgbDeviceView = exports.DeviceView.extend({
         this.writeBrightnessAddress = this.model.getAddressByType("write_brightness");
     },
 
+    initializeCanvas: function() {
+        // create canvas and context objects
+        var $canvas = $('#picker', this.$el);
+        if ($canvas.length) {
+            var canvas = $canvas[0];
+            var ctx = canvas.getContext('2d');
+
+            canvas.width = canvas.width;
+
+            // drawing active image
+            var image = new Image();
+            image.onload = function () {
+                ctx.drawImage(image, 0, 0, image.width, image.height); // draw the image on the canvas
+            }
+            image.src = 'img/colorwheel.png';
+        }
+    },
+
+    onPickerDown: function(e) {
+        this.canPickerMove = true;
+        this.initializeCanvas();
+        return false;
+    },
+
+    onPickerUp: function(e) {
+        this.canPickerMove = false;
+        this.onPickerChangeColor(e, true);
+        return false;
+    },
+
+    onPickerMove: function(e) {
+        if (this.canPickerMove) {
+            this.onPickerChangeColor(e);
+        }
+        e.preventDefault();
+        return false;
+    },
+
+    onPickerChangeColor: function (e, isFinalColor) {
+        var $canvas = $('#picker', this.$el);
+        var canvas = $canvas[0];
+        var ctx = canvas.getContext('2d');
+
+        // get coordinates of current position
+        var canvasOffset = $canvas.offset();
+        var pageX = e.pageX, pageY = e.pageY;
+
+        // Workaround for touch devices
+        if (_.isUndefined(e.pageX)) {
+            var c = e.originalEvent.targetTouches[0];
+            if (_.isUndefined(c)) {
+                pageX = this.lastPageX; pageY = this.lastPageY;
+            } else {
+                pageX = this.lastPageX = c.pageX; pageY = this.lastPageY = c.pageY;
+            }
+        }
+
+        var canvasX = Math.floor(pageX - canvasOffset.left);
+        var canvasY = Math.floor(pageY - canvasOffset.top);
+
+        // get current pixel
+        var imageData = ctx.getImageData(canvasX, canvasY, 1, 1);
+        var pixel = imageData.data;
+
+        // update preview color
+        if ( !(pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0)) {
+            var pixelColor = "rgb("+pixel[0]+", "+pixel[1]+", "+pixel[2]+")";
+
+            // Displays the circle pointing the color selected
+            if (isFinalColor) {
+                ctx.beginPath();
+                ctx.arc(canvasX, canvasY, 5, 0, Math.PI*2, true);
+                ctx.closePath();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+            }
+        }
+    },
+
     onRender: function(){
         /*var value = this.readAddress.get("value");
         this.selectSwitch(null, value);*/
+        this.initializeCanvas();
     }
 
 });
