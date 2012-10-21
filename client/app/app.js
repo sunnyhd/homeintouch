@@ -145,6 +145,10 @@ app.vent.on('device:write', function(address, value){
     socket.emit('eib:set', address, value);
 });
 
+app.vent.on('device:camera:command', function(address, value){
+    socket.emit('eib:command:send', value);
+});
+
 var controllers = {};
 app.controller = function(name) {
     if (!controllers[name]) {

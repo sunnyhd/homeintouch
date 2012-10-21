@@ -610,7 +610,7 @@ exports.CameraDeviceView = exports.DeviceView.extend({
     className: "hit-icon-wrapper",
 
     formEvents: {
-        
+        'click .device-btn a' : 'cmdButtonClicked'
     },
 
     initialize: function() {
@@ -654,6 +654,13 @@ exports.CameraDeviceView = exports.DeviceView.extend({
         } else {
             $widgetOpts.data('hit-icon-type', 'devices.camera');
         }
+    },
+
+    cmdButtonClicked: function(e) {
+        var $btnClicked = $(e.currentTarget);
+        var cmd = $btnClicked.data('cmd');
+        var address = $btnClicked.data('address');
+        app.vent.trigger("device:camera:command", address, cmd);
     },
 
     refreshIcon: function() {
