@@ -499,8 +499,8 @@ exports.AddRgbDeviceForm = exports.AddEditDeviceTypeForm.extend({
         device.addAddress("read_blue_color", data.read_blue_color);
         device.addAddress("write_blue_color", data.write_blue_color);
 
-        device.addAddress("read_brightness", data.read_brightness);
-        device.addAddress("write_brightness", data.write_brightness);
+        device.addAddress("read_brightness", data.read_brightness, '5.001');
+        device.addAddress("write_brightness", data.write_brightness, '5.001');
 
         return device;
     }

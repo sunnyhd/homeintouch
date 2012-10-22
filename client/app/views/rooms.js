@@ -829,7 +829,9 @@ exports.RgbDeviceView = exports.DeviceView.extend({
         "touchstart canvas#picker": "onPickerDown",
 
         "mouseup canvas#picker": "onPickerUp",
-        "touchend canvas#picker": "onPickerUp"
+        "touchend canvas#picker": "onPickerUp",
+
+        "click .device-btn a": "brightnessChanged"
     },
 
     initialize: function() {
@@ -914,6 +916,7 @@ exports.RgbDeviceView = exports.DeviceView.extend({
         // update preview color
         if ( !(pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0)) {
             var pixelColor = "rgb("+pixel[0]+", "+pixel[1]+", "+pixel[2]+")";
+            this.color = {r: pixel[0], g: pixel[1], b: pixel[2]};
 
             // Displays the circle pointing the color selected
             if (isFinalColor) {
@@ -924,12 +927,26 @@ exports.RgbDeviceView = exports.DeviceView.extend({
                 ctx.strokeStyle = "white";
                 ctx.stroke();
             }
+
+            app.vent.trigger("device:write", this.writeRedAddress, this.color.r);
+            app.vent.trigger("device:write", this.writeGreenAddress, this.color.g);
+            app.vent.trigger("device:write", this.writeBlueAddress, this.color.b);
         }
     },
 
+    brightnessChanged: function(e) {
+        e.preventDefault();
+        var $control = $(e.currentTarget);
+
+        var changeTemp = ($control.data('value') === 'minus') ? parseFloat("-1") : parseFloat("1");
+
+        var currentBrightness = this.readBrightnessAddress.get("value");
+        var brightness = currentBrightness > 0 ? ((currentBrightness + changeTemp) % 101) : 0;
+
+        app.vent.trigger("device:write", this.writeBrightnessAddress, brightness);
+    },
+
     onRender: function(){
-        /*var value = this.readAddress.get("value");
-        this.selectSwitch(null, value);*/
         this.initializeCanvas();
     }
 

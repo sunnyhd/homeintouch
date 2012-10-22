@@ -156,11 +156,13 @@ app.vent.on('device:write', function(addressModel, value){
         var dptType = addressModel.get('dptType');
         if (dptType) {
             encodedValue = '0x' + DPT_Transfomer.getDptEncode(dptType)(value);
+        } else {
+            encodedValue = '0x' + value.toString(16);
         }
         
         address = addressModel.get("address");    
     }
-
+    console.log('set value', encodedValue);
     socket.emit('eib:set', address, encodedValue);
 });
 
