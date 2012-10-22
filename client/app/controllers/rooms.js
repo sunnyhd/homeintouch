@@ -28,7 +28,6 @@ exports.showRoom = function(floor, room) {
         exports.currentDashboard = roomLayoutView;
 
         // After the elements are added to the DOM:
-        // start the Gridster.js library to allow drag & drop of device groups
         // start the tinyscroll.js to insert scroll bars to the device groups
         roomLayoutView.initializeUIEffects();
         roomLayoutView.applyStyles();

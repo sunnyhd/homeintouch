@@ -1,5 +1,6 @@
 var app = require('app');
 var roomsController = require('controllers/rooms');
+var homesController = require('controllers/homes');
 var Room = require('models/room');
 var Configuration = require('models/configuration');
 
@@ -1050,6 +1051,19 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         }
     },
 
+    reorderDevices: function() {
+        console.log('reordering devices of the device group');
+        var that = this;
+        var index = 0;
+        this.$('[data-model-id]').each(function(){
+            var modelId = $(this).data('model-id');
+            that.model.devices.get(modelId).set('order', ++index);
+        });
+
+        this.model.devices.sort({silent: true});
+        homesController.saveCurrentHome();
+    },
+
     applyStyle: function(styleConfigurationName, context, applySelector, createStylesheet) {
 
         if (this.model.has(styleConfigurationName)) {
@@ -1085,8 +1099,11 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         _.each(_.values(this.children), function(itemView){
             itemView.refreshIcon();
         });
-
-        $(this.getViewId() + ' .device-list', this.$el).sortable();
+        var proxy = $.proxy(this.reorderDevices, this);
+        $(this.getViewId() + ' .device-list', this.$el).sortable({
+            update: proxy
+        });
+        
         $(this.getViewId() + ' .device-list', this.$el).disableSelection();
     }
 });
@@ -1117,24 +1134,20 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
     },
 
     appendHtml: function(cv, iv){
-        if (_.isUndefined(this.gridster)) {
-            var $rowContainer = null;
-            var $rows = cv.$(".room-devices");
-            _.each($rows, function(row) {
-                if ($('.room-device-group', row).length < 2) {
-                    $rowContainer = $(row);
-                }
-            });
-
-            if (!$rowContainer) {
-                $container = $(cv.el);
-                $rowContainer = $('<div class="room-devices row-fluid">').appendTo($container);
+        var $rowContainer = null;
+        var $rows = cv.$(".room-devices");
+        _.each($rows, function(row) {
+            if ($('.room-device-group', row).length < 2) {
+                $rowContainer = $(row);
             }
+        });
 
-            $rowContainer.append(iv.el);
+        if (!$rowContainer) {
+            $container = $(cv.el);
+            $rowContainer = $('<div class="room-devices row-fluid">').appendTo($container);
         }
-        // Initializes the scroll bar on the added device group
-        //iv.initializeScrollBar();
+
+        $rowContainer.append(iv.el);
     },
 
     onRender: function() {

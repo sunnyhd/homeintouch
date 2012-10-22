@@ -109,6 +109,10 @@ var addDeviceWorkflows = {
             deviceGroup.devices.add(result.device);
             room.deviceGroups.add(deviceGroup);
             homesController.saveCurrentHome();
+
+            if (room.deviceGroups.length === 1) {
+                room.collection.select(room);
+            }
         }
     },
 

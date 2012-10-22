@@ -314,7 +314,6 @@ $.fn.setPixels = function(property, value) {
 *
 * @method add_style_tag
 * @param {String} css The styles to apply.
-* @return {Object} Returns the instance of the Gridster class.
 */
 app.addStyleTag = function(css) {
   var d = document;
@@ -351,8 +350,7 @@ app.addStyleTag = function(css) {
         } 
     }
     styleTag.appendChild(document.createTextNode(css));
-  }
-  return this;
+  }  
 };
 
 app.generateStylesheet = function(selector, stylesheet) {

@@ -1,5 +1,5 @@
 script(id="device-list-switch-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="switch", data-hit-icon-type="devices.lightSwitch")
+  .hit-icon.device-widget(data-widget-type="switch", data-hit-icon-type="devices.lightSwitch", data-model-id!="<%=id%>")
     span <%= name %>
     .widget-opts
       ul.device-btn-group.two.clearfix

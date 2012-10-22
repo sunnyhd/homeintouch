@@ -1,5 +1,5 @@
 script(id="device-list-socket-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="socket", data-hit-icon-type="devices.socket")
+  .hit-icon.device-widget(data-widget-type="socket", data-hit-icon-type="devices.socket", data-model-id!="<%=id%>")
     span <%= name %>
     .widget-opts
       ul.device-btn-group.two.clearfix

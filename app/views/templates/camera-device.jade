@@ -1,5 +1,5 @@
 script(id="device-list-camera-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="camera", id!="device-camera-<%= id %>")
+  .hit-icon.device-widget(data-widget-type="camera", id!="device-camera-<%= id %>", data-model-id!="<%=id%>")
     span.widget-title <%= name %>
     <% if (cameraType === 'img') { %>
     img(src!="<%= url %>")
