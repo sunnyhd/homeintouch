@@ -107,8 +107,8 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     },
 
     flipSwitch: function(on){
-        var address = this.writeAddress.get("address");
-        app.vent.trigger("device:write", address, on);
+        //var address = this.writeAddress.get("address");
+        app.vent.trigger("device:write", this.writeAddress, (on ? 1 : 0));
     },
 
     isSwitchOn: function() {
@@ -139,7 +139,7 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     },
 
     selectSwitch: function(address, value){
-        this.updateSwitch(value);
+        this.updateSwitch(value == 1);
     },
 
     onRender: function(){
@@ -166,7 +166,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         this.writeDimmer = this.model.getAddressByType("write_dimmer");
 
         this.bindTo(this.readDimmer, "change:value", this.selectDimmer, this);
-        this.bindTo(this.readSwitch, "change:value", this.selectSwitch, this);
+        this.bindTo(this.readSwitch, "change:value", this.updateSwitch, this);
     },
 
     switchClicked: function (e) {
@@ -185,8 +185,8 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var address = this.writeDimmer.get("address");
 
         this.updateDimmerDetail(value);
-        this.selectSwitch(address, (value !== 0));
-        app.vent.trigger("device:write", address, value);
+        this.selectSwitch((value !== 0));
+        app.vent.trigger("device:write", this.writeDimmer, value);
 
         /*var self = this;
         if (this.dimmerTimeout) {
@@ -199,7 +199,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
     flipSwitch: function(on){
         var address = this.writeSwitch.get("address");
-        app.vent.trigger("device:write", address, on);
+        app.vent.trigger("device:write", this.writeSwitch, (on ? 1 : 0));
     },
 
     updateDimmerSlider: function(value) {
@@ -207,10 +207,10 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     updateDimmerDetail: function(value) {
-        $('.dimmer-detail', this.$el).html(value + '%');
+        $('.dimmer-detail', this.$el).html((value|0) + '%');
     },
 
-    selectSwitch: function(address, value){
+    selectSwitch: function(value){
         $('a', this.$el).removeClass('selected');
         if (value) {
             $('a[data-value="on"]', this.$el).addClass('selected');
@@ -237,6 +237,10 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         }
     },
 
+    updateSwitch: function(address, value){
+        this.selectSwitch(value == 1);
+    },
+
     selectDimmer: function(address, value){
         if (this.dimmerTimeout) return;
 
@@ -246,7 +250,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
     onRender: function(){
         var value = this.readSwitch.get("value");
-        this.selectSwitch(null, value);
+        this.updateSwitch(null, value);
 
         value = this.readDimmer.get("value");
         this.updateDimmerSlider(value);
@@ -290,20 +294,20 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     stopClicked: function(e){
         e.preventDefault();
         var address = this.writeStop.get("address");
-        app.vent.trigger("device:write", address, 1);
+        app.vent.trigger("device:write", this.writeStop, 1);
     },
 
     positionChanged: function(e){
         var $position = $(e.currentTarget);
         var value = parseInt($position.val());
         var address = this.writePosition.get("address");
-        app.vent.trigger("device:write", address, value);
+        app.vent.trigger("device:write", this.writePosition, value);
         this.updateShutterDetails(value);
     },
 
-    switchUpDown: function(moveDown){
+    switchUpDown: function(up){
         var address = this.writeSwitch.get("address");
-        app.vent.trigger("device:write", address, moveDown);
+        app.vent.trigger("device:write", this.writeSwitch, (up ? 1 : 0));
     },
 
     showPosition: function(address, value){
@@ -312,9 +316,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     updateShutterDetails: function(shutterValue) {
-        var maxValue = parseInt(this.$("input.dimmer").attr('max'));
-        var shutterPercentage = Math.floor((shutterValue / maxValue) * 100);
-        this.$('.shutter-detail').html(shutterPercentage + '%');
+        this.$('.shutter-detail').html((shutterValue | 0) + '%');
     },
 
     refreshIcon: function() {
@@ -346,13 +348,6 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         4: "frost"
     },
 
-    modeNames: {
-        1: "Comfort",
-        2: "Standby",
-        3: "Night",
-        4: "Frost"
-    },
-
     initialize: function(){
         this.writeMode = this.model.getAddressByType("write_mode");
         this.writeSetPoint = this.model.getAddressByType("write_temperature_set");
@@ -370,7 +365,7 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         e.preventDefault();
         var mode = $(e.currentTarget).data("mode");
         var address = this.writeMode.get("address");
-        app.vent.trigger("device:write", address, mode);
+        app.vent.trigger("device:write", this.writeMode, mode);
 
         this.updateModeButton(mode);
     },
@@ -388,10 +383,10 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
 
         var changeTemp = ($control.data('value') === 'minus') ? parseFloat("-0.5") : parseFloat("0.5");
 
-        var currentPoint = app.eibdToDecimal(this.readSetPoint.get("value"));
-        var setpoint = app.decimalToEibd(currentPoint + changeTemp);
+        var currentPoint = this.readSetPoint.get("value");
+        var setpoint = currentPoint + changeTemp;
 
-        app.vent.trigger("device:write", address, setpoint);
+        app.vent.trigger("device:write", this.writeSetPoint, setpoint);
     },
 
     showMode: function(address, mode){
@@ -399,21 +394,21 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     },
 
     showSetPoint: function(address, setPoint){
-        var decimal = app.eibdToDecimal(setPoint);
+        var decimal = setPoint;
 
         console.log("setpoint eibd value: ", setPoint);
         console.log("setpoint decimal value: ", decimal);
 
-        this.$(".setpoint").html(decimal + "&nbsp;");
+        this.$(".setpoint").html(decimal.toFixed(2) + "&nbsp;");
     },
 
     showTemperature: function(address, temperature){
-        var decimal = app.eibdToDecimal(temperature);
+        var decimal = temperature;
 
         console.log("temperature eibd value: ", temperature);
         console.log("temperature decimal value: ", decimal);
 
-        this.$(".temperature").html(decimal + "&nbsp;");
+        this.$(".temperature").html(decimal.toFixed(2) + "&nbsp;");
     },
 
     updateIconColor: function(value) {
@@ -479,7 +474,7 @@ exports.DoorDeviceView = exports.DeviceView.extend({
     },
 
     updateStatus: function(address, value){
-        this.updateSwitch(value);
+        this.updateSwitch(value == 1);
     },
 
     onRender: function(){
@@ -528,7 +523,7 @@ exports.WindowDeviceView = exports.DeviceView.extend({
     },
 
     updateStatus: function(address, value){
-        this.updateSwitch(value);
+        this.updateSwitch(value == 1);
     },
 
     onRender: function(){
@@ -563,7 +558,7 @@ exports.SocketDeviceView = exports.DeviceView.extend({
 
     flipSwitch: function(on){
         var address = this.writeAddress.get("address");
-        app.vent.trigger("device:write", address, on);
+        app.vent.trigger("device:write", this.writeAddress, (on ? 1 : 0));
     },
 
     isSwitchOn: function() {
@@ -595,7 +590,7 @@ exports.SocketDeviceView = exports.DeviceView.extend({
     },
 
     selectSwitch: function(address, value){
-        this.updateSwitch(value);
+        this.updateSwitch(value == 1);
     },
 
     onRender: function(){
@@ -730,7 +725,7 @@ exports.ScenesDeviceView = exports.DeviceView.extend({
         var on = true;
 
         var address = this.writeAddress.get("address");
-        app.vent.trigger("device:write", address, on);
+        app.vent.trigger("device:write", this.writeAddress, (on ? 1 : 0));
     },
 
     refreshIcon: function() {
@@ -812,7 +807,7 @@ exports.MotionDeviceView = exports.DeviceView.extend({
     },
 
     updateStatus: function(address, value){
-        this.updateMotion(value);
+        this.updateMotion(value == 1);
     },
 
     onRender: function(){
@@ -834,7 +829,9 @@ exports.RgbDeviceView = exports.DeviceView.extend({
         "touchstart canvas#picker": "onPickerDown",
 
         "mouseup canvas#picker": "onPickerUp",
-        "touchend canvas#picker": "onPickerUp"
+        "touchend canvas#picker": "onPickerUp",
+
+        "click .device-btn a": "brightnessChanged"
     },
 
     initialize: function() {
@@ -919,6 +916,7 @@ exports.RgbDeviceView = exports.DeviceView.extend({
         // update preview color
         if ( !(pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0)) {
             var pixelColor = "rgb("+pixel[0]+", "+pixel[1]+", "+pixel[2]+")";
+            this.color = {r: pixel[0], g: pixel[1], b: pixel[2]};
 
             // Displays the circle pointing the color selected
             if (isFinalColor) {
@@ -929,12 +927,26 @@ exports.RgbDeviceView = exports.DeviceView.extend({
                 ctx.strokeStyle = "white";
                 ctx.stroke();
             }
+
+            app.vent.trigger("device:write", this.writeRedAddress, this.color.r);
+            app.vent.trigger("device:write", this.writeGreenAddress, this.color.g);
+            app.vent.trigger("device:write", this.writeBlueAddress, this.color.b);
         }
     },
 
+    brightnessChanged: function(e) {
+        e.preventDefault();
+        var $control = $(e.currentTarget);
+
+        var changeTemp = ($control.data('value') === 'minus') ? parseFloat("-1") : parseFloat("1");
+
+        var currentBrightness = this.readBrightnessAddress.get("value");
+        var brightness = currentBrightness > 0 ? ((currentBrightness + changeTemp) % 101) : 0;
+
+        app.vent.trigger("device:write", this.writeBrightnessAddress, brightness);
+    },
+
     onRender: function(){
-        /*var value = this.readAddress.get("value");
-        this.selectSwitch(null, value);*/
         this.initializeCanvas();
     }
 

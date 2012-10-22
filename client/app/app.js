@@ -1,4 +1,5 @@
 var Router = require('router');
+var DPT_Transfomer = require('lib/dpt');
 var ModalManager = require('lib/modal_manager');
 
 var app = module.exports = new Backbone.Marionette.Application();
@@ -145,8 +146,24 @@ app.vent.on('device:read', function(address){
     socket.emit('eib:get', address);
 });
 
-app.vent.on('device:write', function(address, value){
-    socket.emit('eib:set', address, value);
+app.vent.on('device:write', function(addressModel, value){
+    
+    var address;
+    var encodedValue = value;
+    if (_.isString(addressModel)) {
+        address = addressModel
+    } else {
+        var dptType = addressModel.get('dptType');
+        if (dptType) {
+            encodedValue = '0x' + DPT_Transfomer.getDptEncode(dptType)(value);
+        } else {
+            encodedValue = '0x' + value.toString(16);
+        }
+        
+        address = addressModel.get("address");    
+    }
+    console.log('set value', encodedValue);
+    socket.emit('eib:set', address, encodedValue);
 });
 
 app.vent.on('device:camera:command', function(address, value){
