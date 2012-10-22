@@ -121,6 +121,5 @@ var showEditFloorForm = function(floor){
     });
 
     exports.currentDashboard = view;
-
-    view.applyStyles();    
+    view.applyStyles();
  };

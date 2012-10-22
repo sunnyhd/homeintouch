@@ -970,12 +970,40 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         this.itemView = this.itemViewTypes[type];
 
         // Bind event when the devices are removed to check if there devices in the collection
-        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);      
+        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);
+
+        this.resizeHandler = $.proxy(this.updateScrollBar, this);
+        $(window).on("resize", this.resizeHandler);
+    },
+
+    close: function() {
+        $(window).off("resize", this.resizeHandler);  
     },
 
     onRender: function() {
         this.applyStyles();
         this.deviceGroupRendered = true;
+        this.setScrollbarOverview();
+    },
+
+    initScrollBar: function() {
+        var opts = { axis: 'x', invertscroll: app.isTouchDevice() };
+        this.$el.find(this.getViewId()).tinyscrollbar(opts);
+    },
+
+    updateScrollBar: function() {
+        this.$el.find(this.getViewId()).tinyscrollbar_update();
+    },
+
+    setScrollbarOverview: function() {
+        var $widget = $('.hit-widget', this.$el);
+        var $icons = $('.hit-icon', $widget);
+        var width = 102;
+        if ($widget.hasClass('large')) { width = 192; }
+        else if ($widget.hasClass('medium')) { width = 147; } 
+        else if ($widget.hasClass('small')) { width = 122; } 
+        
+        $('.overview', this.$el).setPixels('width', $icons.length * width);
     },
 
     getViewId: function() {
@@ -998,13 +1026,6 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         if (this.deviceGroupRendered) {
             this.applyStyles();    
         }
-
-        //app.loadIcons(iv.$el);
-
-        // If the scroll bar component is created, update it
-        /*if (this.scrollBar) {
-            this.updateScrollBar();
-        }*/
     },
 
     checkEmptyCollection: function() {
@@ -1050,15 +1071,6 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         _.each(_.values(this.children), function(itemView){
             itemView.refreshIcon();
         });
-
-    },
-
-    initializeScrollBar: function() {
-        // this.scrollBar = this.$('.scroll-panel').tinyscrollbar();
-    },
-
-    updateScrollBar: function() {
-        // $('.scroll-panel', this.$el).tinyscrollbar_update();
     }
 });
 
@@ -1158,7 +1170,7 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
 
         // Initialize the scroll bar component for the device groups
         _.each(this.children, function(view, cid){
-            view.initializeScrollBar();
+            view.initScrollBar();
         });
     }
 });

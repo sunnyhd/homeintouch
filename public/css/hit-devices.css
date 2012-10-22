@@ -4,38 +4,6 @@
   overflow-x: hidden;
 }
 
-.room-device-group .scroll-panel .scrollbar {  
-  opacity: 0;
-  transition: opacity 1s;
-  -moz-transition: opacity 1s;
-  -webkit-transition: opacity 1s;
-  -o-transition: opacity 1s;
-}
-
-.scrollbar .thumb {
-  -webkit-background-clip: content-box;
-  background-color: #008CD8;
-  -webkit-border-radius: 7px;
-  position: absolute;
-  right: 0;
-  opacity: 0.4;
-  transition: width 250ms;
-  -webkit-transition: width 250ms;
-  width: 5px;
-}
-
-.scrollbar .thumb:hover {
-  width: 10px;
-}
-
-.room-device-group .scroll-panel:hover .scrollbar {
-  opacity: 0.8;
-}
-
-.room-device-group .scroll-panel .viewport{
-  /*height: 262px;*/
-}
-
 .room-device-group .hit-title a#editDeviceGroupStyle {
   padding: 0px 5px;
 }
