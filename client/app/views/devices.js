@@ -195,8 +195,8 @@ exports.AddSwitchDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_switch", data.read_switch);
-        device.addAddress("write_switch",data.write_switch);
+        device.addAddress("read_switch", data.read_switch, '1.001');
+        device.addAddress("write_switch", data.write_switch, '1.001');
 
         return device;
     }
@@ -221,10 +221,10 @@ exports.AddShutterDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_position", data.read_position);
-        device.addAddress("write_stop", data.write_stop);
-        device.addAddress("write_position", data.write_position);
-        device.addAddress("write_switch", data.write_switch);
+        device.addAddress("read_position", data.read_position, '5.001');
+        device.addAddress("write_stop", data.write_stop, '1.001');
+        device.addAddress("write_position", data.write_position, '5.001');
+        device.addAddress("write_switch", data.write_switch, '1.008');
 
         return device;
     }
@@ -249,11 +249,11 @@ exports.AddThermostatDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_mode", data.read_mode);
-        device.addAddress("write_mode", data.write_mode);
-        device.addAddress("read_temperature_set", data.read_temperature_set);
-        device.addAddress("write_temperature_set", data.write_temperature_set);
-        device.addAddress("read_temperature_actual", data.read_temperature_actual);
+        device.addAddress("read_mode", data.read_mode, '20.102');
+        device.addAddress("write_mode", data.write_mode, '20.102');
+        device.addAddress("read_temperature_set", data.read_temperature_set, '9.001');
+        device.addAddress("write_temperature_set", data.write_temperature_set, '9.001');
+        device.addAddress("read_temperature_actual", data.read_temperature_actual, '9.001');
 
         return device;
     }
@@ -278,10 +278,10 @@ exports.AddDimmerDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_switch", data.read_switch);
-        device.addAddress("write_switch",data.write_switch);
-        device.addAddress("read_dimmer", data.read_dimmer);
-        device.addAddress("write_dimmer",data.write_dimmer);
+        device.addAddress("read_switch", data.read_switch, '1.001');
+        device.addAddress("write_switch",data.write_switch, '1.001');
+        device.addAddress("read_dimmer", data.read_dimmer, '5.001');
+        device.addAddress("write_dimmer",data.write_dimmer, '5.001');
 
         return device;
     }
@@ -306,7 +306,7 @@ exports.AddDoorDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_door", data.read_door);
+        device.addAddress("read_door", data.read_door, '1.009');
         return device;
     }
 });
@@ -327,7 +327,7 @@ exports.AddWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_window", data.read_window);
+        device.addAddress("read_window", data.read_window, '1.009');
         return device;
     }
 });
@@ -348,8 +348,8 @@ exports.AddSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_socket", data.read_socket);
-        device.addAddress("write_socket",data.write_socket);
+        device.addAddress("read_socket", data.read_socket, '1.001');
+        device.addAddress("write_socket",data.write_socket, '1.001');
 
         return device;
     }
@@ -443,7 +443,7 @@ exports.AddScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
             scenesIcon: data.icon
         });
 
-        device.addAddress("write_scenes",data.write_scenes);
+        device.addAddress("write_scenes",data.write_scenes, '1.001');
 
         return device;
     }
@@ -466,7 +466,7 @@ exports.AddMotionDeviceForm = exports.AddEditDeviceTypeForm.extend({
             type: data.type
         });
 
-        device.addAddress("read_motion", data.read_motion);
+        device.addAddress("read_motion", data.read_motion, '1.011');
 
         return device;
     }

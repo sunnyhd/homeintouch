@@ -17,7 +17,7 @@ module.exports = BaseModel.extend({
         return addr
     },
 
-    addAddress: function(type, addr){
+    addAddress: function(type, addr, dptType){
         if (arguments.length === 1){
             address = type;
             this.addresses.add(addr);
@@ -25,6 +25,7 @@ module.exports = BaseModel.extend({
             var address = new Address({
                 type: type,
                 address: addr,
+                dptType: dptType,
                 value: ""
             });
 

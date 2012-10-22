@@ -1,4 +1,5 @@
 var Address = require('models/address');
+var DPT_Transfomer = require('lib/dpt');
 
 module.exports = Backbone.Collection.extend({
 
@@ -18,8 +19,19 @@ module.exports = Backbone.Collection.extend({
         this.each(function(deviceAddr){
             var addr = deviceAddr.get("address");
 
-            if (addr === address){
-                deviceAddr.set({value: value});
+            if (addr === address){                
+
+                var dptType = deviceAddr.get('dptType');
+                if (!_.isString(value)) {
+                    value = value.toString();
+                }
+
+                var decodedValue = value;
+                if (dptType) {
+                    decodedValue = DPT_Transfomer.getDptDecode(dptType)(value);
+                }
+
+                deviceAddr.set({value: decodedValue});
             };
         });
     }

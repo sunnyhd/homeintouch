@@ -1,7 +1,7 @@
 script(id="device-list-shutter-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="shutter", data-hit-icon-type="devices.shutterOpen")
     span <%= name %>
-    input.dimmer(type="range", min="0", max="255", step="1")
+    input.dimmer(type="range", min="0", max="100", step="1")
     .widget-opts
       .shutter-detail 0% 
       ul.device-btn-group.three.clearfix
