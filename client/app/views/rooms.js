@@ -1036,7 +1036,9 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     appendHtml: function(cv, iv){
         cv.$(".device-list").append(iv.el);
         if (this.deviceGroupRendered) {
-            this.applyStyles();    
+            this.applyStyles();
+            this.setScrollbarOverview();
+            this.updateScrollBar();
         }
     },
 
