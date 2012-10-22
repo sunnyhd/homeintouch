@@ -1,5 +1,5 @@
 script(id="device-list-door-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="door", data-hit-icon-type="devices.doorClose")
+  .hit-icon.device-widget(data-widget-type="door", data-hit-icon-type="devices.doorClose", data-model-id!="<%=id%>")
     span <%= name %>
     .widget-opts
       ul.device-btn-group.clearfix

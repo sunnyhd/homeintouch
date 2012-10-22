@@ -1,5 +1,5 @@
 script(id="device-list-rgb-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="rgb")
+  .hit-icon.device-widget(data-widget-type="rgb", data-model-id!="<%=id%>")
     span <%= name %>
     .rgb-canvas
       canvas(id="picker", var="5", width="150", height="150")

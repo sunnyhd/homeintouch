@@ -1,5 +1,5 @@
 script(id="device-list-thermostat-item-template", type="text/template")
-  .hit-icon.device-widget.blue(data-widget-type="thermostat", data-hit-icon-type="devices.thermostatWidget")
+  .hit-icon.device-widget.blue(data-widget-type="thermostat", data-hit-icon-type="devices.thermostatWidget", data-model-id!="<%=id%>")
     span <%= name %>
     .thermostat-detail
       span.temperature 0&nbsp;
