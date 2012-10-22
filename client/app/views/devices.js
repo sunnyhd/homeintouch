@@ -476,3 +476,39 @@ exports.AddMotionDeviceForm = exports.AddEditDeviceTypeForm.extend({
 exports.ViewMotionDeviceForm = exports.AddEditDeviceTypeForm.extend({
     template: "#device-view-motion-template"
 });
+
+exports.AddRgbDeviceForm = exports.AddEditDeviceTypeForm.extend({
+
+    template: "#device-add-rgb-template",
+
+    formFields: ["name", "read_red_color", "write_red_color", "read_green_color", "write_green_color",
+                "read_blue_color", "write_blue_color", "read_brightness", "write_brightness"],
+
+    buildDevice: function(data){
+        var device = new Device({
+            name: data.name,
+            type: data.type
+        });
+
+        device.addAddress("read_red_color", data.read_red_color);
+        device.addAddress("write_red_color", data.write_red_color);
+
+        device.addAddress("read_green_color", data.read_green_color);
+        device.addAddress("write_green_color", data.write_green_color);
+
+        device.addAddress("read_blue_color", data.read_blue_color);
+        device.addAddress("write_blue_color", data.write_blue_color);
+
+        device.addAddress("read_brightness", data.read_brightness);
+        device.addAddress("write_brightness", data.write_brightness);
+
+        return device;
+    }
+
+});
+
+exports.ViewRgbDeviceForm = exports.AddEditDeviceTypeForm.extend({
+
+    template: "#device-view-rgb-template"
+
+});

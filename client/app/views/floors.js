@@ -44,6 +44,15 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
         "webkitTransitionEnd .hit-slider-inner": "endTransition"
     },
 
+    initialize: function() {
+        this.resizeHandler = $.proxy(this.updateScrollBar, this);
+        $(window).on("resize", this.resizeHandler);
+    },
+
+    close: function() {
+        $(window).off("resize", this.resizeHandler);  
+    },
+
     roomClicked: function(e){
         e.preventDefault();
         var roomId = ($(e.currentTarget).data('item-id'));
@@ -86,6 +95,8 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
 
         app.main.show(this);
         app.loadIcons(this.$el);
+
+        this.initScrollBar();
     },
 
     sliderClickedHandler: function(e) {
@@ -105,6 +116,30 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
             }
             $slider.setPixels('margin-left', marginLeft);
         }
+    },
+
+    initScrollBar: function() {
+        var opts = { axis: 'x', invertscroll: app.isTouchDevice() };
+        this.$el.find('#my-rooms').tinyscrollbar(opts);
+    },
+
+    updateScrollBar: function() {
+        this.$el.find('#my-rooms').tinyscrollbar_update();
+    },
+
+    setScrollbarOverview: function() {
+        var $widget = $('.hit-widget', this.$el);
+        var $icons = $('.hit-icon', $widget);
+        var width = 102;
+        if ($widget.hasClass('large')) { width = 192; }
+        else if ($widget.hasClass('medium')) { width = 147; } 
+        else if ($widget.hasClass('small')) { width = 122; } 
+        
+        $('.overview', this.$el).setPixels('width', $icons.length * width);
+    },
+
+    onRender: function() {
+        this.setScrollbarOverview();
     }
 });
 

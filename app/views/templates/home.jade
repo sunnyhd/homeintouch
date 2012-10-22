@@ -28,26 +28,29 @@ script(id="view-home-template", type="text/template")
 script(id="dashboard-home", type="text/template")
   .row-fluid
     .span6.clearfix
-      .hit-widget.clearfix#my-house
+      .hit-widget.clearfix.scrollable-x#my-house
         .hit-title My House
-        .hit-icon-container.hit-slider
+        .hit-icon-container.viewport
           <% if(floors.length == 0) { %>
+          .overview
           div.alert.alert-info
             span There are no floors in this house.
           <% } else { %>
-          .hit-slider-inner
+          .overview
             <% _.each(floors, function(floor){ %>
             .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", data-hit-icon-type!="<%= floor.icon %>")
               span <%= floor.name %>
             <% }) %>
-          a.hit-slider-control.left(href="#", data-slide="prev") ‹
-          a.hit-slider-control.right(href="#", data-slide="next") ›
           <% } %>
+        .scrollbar
+          .track
+            .thumb
+              .end
     .span6.clearfix
-      .hit-widget.clearfix#my-library
+      .hit-widget.clearfix.scrollable-x#my-library
         .hit-title My Library
-        .hit-icon-container.hit-slider
-          .hit-slider-inner
+        .hit-icon-container.viewport
+          .overview
             .hit-icon(data-hit-icon-href="#movies", data-hit-icon-type="media.movies")
               span Movies
             .hit-icon(data-hit-icon-href="#artists", data-hit-icon-type="media.music")
@@ -56,22 +59,26 @@ script(id="dashboard-home", type="text/template")
               span Photos
             .hit-icon(data-hit-icon-href="#files", data-hit-icon-type="media.files")
               span Files
-          a.hit-slider-control.left(href="#", data-slide="prev") ‹
-          a.hit-slider-control.right(href="#", data-slide="next") ›
+        .scrollbar
+          .track
+            .thumb
+              .end
   .row-fluid
     .span6.clearfix
-      .hit-widget.clearfix#plugins
+      .hit-widget.clearfix.scrollable-x#plugins
         .hit-title.violet Plugins
-        .hit-icon-container.hit-slider
-          .hit-slider-inner
+        .hit-icon-container.viewport
+          .overview
             .hit-icon.violet(data-hit-icon-type="plugins.youtube")
               span YouTube
             .hit-icon.violet(data-hit-icon-type="plugins.news")
               span News
             .hit-icon.violet(data-hit-icon-type="plugins.games")
               span Games
-          a.hit-slider-control.left(href="#", data-slide="prev") ‹
-          a.hit-slider-control.right(href="#", data-slide="next") ›
+        .scrollbar
+          .track
+            .thumb
+              .end
     .span6.clearfix
 
 script(id="switch-selected-home-template", type="text/template")

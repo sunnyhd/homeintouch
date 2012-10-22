@@ -10,8 +10,8 @@ html(lang='en')
     title HOME in touch
 
     // Libraries
-    link(href='/css/bootstrap.min.css', rel='stylesheet')
-    link(href='/css/bootstrap-responsive.min.css', rel='stylesheet')
+    link(href='/css/bootstrap.2.0.4.css', rel='stylesheet')
+    link(href='/css/bootstrap-responsive.2.0.4.css', rel='stylesheet')
     link(href='/css/scrollbar.css', rel='stylesheet')
 
     // Custom css
@@ -55,6 +55,8 @@ html(lang='en')
 
     include templates/motion-device
 
+    include templates/rgb-device
+
   body
     .navbar.navbar-inverse.navbar-fixed-top
       .navbar-inner
@@ -68,6 +70,9 @@ html(lang='en')
 
             // Desktop Top Navigation 
             ul#desktop-breadcrumb-nav.nav.visible-desktop
+              li
+                img.hit-refresh.hit-logo(src="img/svg/hit-white.svg")
+              li.divider-vertical
               li.hit-home
                 a(href="#")
                   i.icon-home.icon-white
@@ -120,8 +125,8 @@ html(lang='en')
     .navbar.navbar-inverse.navbar-fixed-bottom.hidden-desktop
       .navbar-inner
         .container
-
           #navbar-bottom
+            img.hit-refresh(src="img/svg/hit-white.svg")
             ul.nav.pull-right
               li#touch-bottom-config
                 a.pull-right(href="#")

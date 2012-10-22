@@ -11,3 +11,16 @@
     padding: 10px 0px;
     color: white;
 }
+
+@media (max-width: 979px) {
+
+	#main-content {
+		margin: 60px 0px;
+	}
+
+	/** Sets the navbars fixed */
+	.navbar-fixed-top, .navbar-fixed-bottom {
+		position: fixed;
+		margin: 0px;
+	}
+}

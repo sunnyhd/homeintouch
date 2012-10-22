@@ -161,6 +161,17 @@
 	background-position: center; 
 }
 
+/** RGB Widget */
+.rgb-canvas {
+	cursor: crosshair;
+}
+.hit-icon.device-widget[data-widget-type="rgb"] .widget-opts { 
+	width: 44px;
+	height: 72px;
+	position: absolute;
+	top: 58px;
+	left: 68px;
+}
 
 /** 
  * WIDGET SIZES: 

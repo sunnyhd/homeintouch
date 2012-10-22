@@ -816,6 +816,125 @@ exports.MotionDeviceView = exports.DeviceView.extend({
 
 });
 
+exports.RgbDeviceView = exports.DeviceView.extend({
+
+    template: "#device-list-rgb-item-template",
+    className: "hit-icon-wrapper",
+
+    formEvents: {
+        "mousemove canvas#picker": "onPickerMove",
+        "touchmove canvas#picker": "onPickerMove",
+
+        "mousedown canvas#picker": "onPickerDown",
+        "touchstart canvas#picker": "onPickerDown",
+
+        "mouseup canvas#picker": "onPickerUp",
+        "touchend canvas#picker": "onPickerUp"
+    },
+
+    initialize: function() {
+        // this.bindTo(this.model, "change:address:value", this.selectSwitch, this);
+        this.readRedAddress = this.model.getAddressByType("read_red_color");
+        this.writeRedAddress = this.model.getAddressByType("write_red_color");
+
+        this.readGreenAddress = this.model.getAddressByType("read_green_color");
+        this.writeGreenAddress = this.model.getAddressByType("write_green_color");
+
+        this.readBlueAddress = this.model.getAddressByType("read_blue_color");
+        this.writeBlueAddress = this.model.getAddressByType("write_blue_color");
+
+        this.readBrightnessAddress = this.model.getAddressByType("read_brightness");
+        this.writeBrightnessAddress = this.model.getAddressByType("write_brightness");
+    },
+
+    initializeCanvas: function() {
+        // create canvas and context objects
+        var $canvas = $('#picker', this.$el);
+        if ($canvas.length) {
+            var canvas = $canvas[0];
+            var ctx = canvas.getContext('2d');
+
+            canvas.width = canvas.width;
+
+            // drawing active image
+            var image = new Image();
+            image.onload = function () {
+                ctx.drawImage(image, 0, 0, image.width, image.height); // draw the image on the canvas
+            }
+            image.src = 'img/colorwheel.png';
+        }
+    },
+
+    onPickerDown: function(e) {
+        this.canPickerMove = true;
+        this.initializeCanvas();
+        return false;
+    },
+
+    onPickerUp: function(e) {
+        this.canPickerMove = false;
+        this.onPickerChangeColor(e, true);
+        return false;
+    },
+
+    onPickerMove: function(e) {
+        if (this.canPickerMove) {
+            this.onPickerChangeColor(e);
+        }
+        e.preventDefault();
+        return false;
+    },
+
+    onPickerChangeColor: function (e, isFinalColor) {
+        var $canvas = $('#picker', this.$el);
+        var canvas = $canvas[0];
+        var ctx = canvas.getContext('2d');
+
+        // get coordinates of current position
+        var canvasOffset = $canvas.offset();
+        var pageX = e.pageX, pageY = e.pageY;
+
+        // Workaround for touch devices
+        if (_.isUndefined(e.pageX)) {
+            var c = e.originalEvent.targetTouches[0];
+            if (_.isUndefined(c)) {
+                pageX = this.lastPageX; pageY = this.lastPageY;
+            } else {
+                pageX = this.lastPageX = c.pageX; pageY = this.lastPageY = c.pageY;
+            }
+        }
+
+        var canvasX = Math.floor(pageX - canvasOffset.left);
+        var canvasY = Math.floor(pageY - canvasOffset.top);
+
+        // get current pixel
+        var imageData = ctx.getImageData(canvasX, canvasY, 1, 1);
+        var pixel = imageData.data;
+
+        // update preview color
+        if ( !(pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0)) {
+            var pixelColor = "rgb("+pixel[0]+", "+pixel[1]+", "+pixel[2]+")";
+
+            // Displays the circle pointing the color selected
+            if (isFinalColor) {
+                ctx.beginPath();
+                ctx.arc(canvasX, canvasY, 5, 0, Math.PI*2, true);
+                ctx.closePath();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+            }
+        }
+    },
+
+    onRender: function(){
+        /*var value = this.readAddress.get("value");
+        this.selectSwitch(null, value);*/
+        this.initializeCanvas();
+    }
+
+});
+
 exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     template: "#device-group-template",
     className: "room-device-group span6 clearfix",
@@ -835,7 +954,8 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         "socket": exports.SocketDeviceView,
         "camera": exports.CameraDeviceView,
         "scenes": exports.ScenesDeviceView,
-        "motion": exports.MotionDeviceView
+        "motion": exports.MotionDeviceView,
+        "rgb": exports.RgbDeviceView
     },
 
     initialize: function() {
@@ -845,12 +965,40 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         this.itemView = this.itemViewTypes[type];
 
         // Bind event when the devices are removed to check if there devices in the collection
-        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);      
+        this.bindTo(this, "item:removed", this.checkEmptyCollection, this);
+
+        this.resizeHandler = $.proxy(this.updateScrollBar, this);
+        $(window).on("resize", this.resizeHandler);
+    },
+
+    close: function() {
+        $(window).off("resize", this.resizeHandler);  
     },
 
     onRender: function() {
         this.applyStyles();
         this.deviceGroupRendered = true;
+        this.setScrollbarOverview();
+    },
+
+    initScrollBar: function() {
+        var opts = { axis: 'x', invertscroll: app.isTouchDevice() };
+        this.$el.find(this.getViewId()).tinyscrollbar(opts);
+    },
+
+    updateScrollBar: function() {
+        this.$el.find(this.getViewId()).tinyscrollbar_update();
+    },
+
+    setScrollbarOverview: function() {
+        var $widget = $('.hit-widget', this.$el);
+        var $icons = $('.hit-icon', $widget);
+        var width = 102;
+        if ($widget.hasClass('large')) { width = 192; }
+        else if ($widget.hasClass('medium')) { width = 147; } 
+        else if ($widget.hasClass('small')) { width = 122; } 
+        
+        $('.overview', this.$el).setPixels('width', $icons.length * width);
     },
 
     getViewId: function() {
@@ -873,13 +1021,6 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         if (this.deviceGroupRendered) {
             this.applyStyles();    
         }
-
-        //app.loadIcons(iv.$el);
-
-        // If the scroll bar component is created, update it
-        /*if (this.scrollBar) {
-            this.updateScrollBar();
-        }*/
     },
 
     checkEmptyCollection: function() {
@@ -925,15 +1066,6 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         _.each(_.values(this.children), function(itemView){
             itemView.refreshIcon();
         });
-
-    },
-
-    initializeScrollBar: function() {
-        // this.scrollBar = this.$('.scroll-panel').tinyscrollbar();
-    },
-
-    updateScrollBar: function() {
-        // $('.scroll-panel', this.$el).tinyscrollbar_update();
     }
 });
 
@@ -1033,7 +1165,7 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
 
         // Initialize the scroll bar component for the device groups
         _.each(this.children, function(view, cid){
-            view.initializeScrollBar();
+            view.initScrollBar();
         });
     }
 });

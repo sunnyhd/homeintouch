@@ -72,9 +72,16 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
     events: {
         "click .floor-item-list": "floorClicked",
-        "click a.add-floor": "addFloorHandler",
-        "click a.hit-slider-control": "sliderClickedHandler",
-        "webkitTransitionEnd .hit-slider-inner": "endTransition"
+        "click a.add-floor": "addFloorHandler"
+    },
+
+    initialize: function() {
+        this.resizeHandler = $.proxy(this.updateScrollBar, this);
+        $(window).on("resize", this.resizeHandler);
+    },
+
+    close: function() {
+        $(window).off("resize", this.resizeHandler);  
     },
 
     floorClicked: function(e){
@@ -86,10 +93,6 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
     addFloorHandler: function(e) {
         e.preventDefault();
         app.vent.trigger("floor:add");
-    },
-
-    endTransition: function(e) {
-        $(e.currentTarget).data('transitioning', false);
     },
 
     applyStyle: function(styleConfigurationName, createStylesheet) {
@@ -137,25 +140,39 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         }
         
         app.loadIcons('#plugins');
+        this.initScrollBar();
     },
 
-    sliderClickedHandler: function(e) {
-        e.preventDefault();
-        var $el = $(e.currentTarget);
-        var $slider = $('.hit-slider-inner', $el.parent());
+    initScrollBar: function() {
+        var opts = { axis: 'x', invertscroll: app.isTouchDevice() };
+        this.$el.find('.scrollable-x').tinyscrollbar(opts);
+    },
 
-        if (!$slider.data('transitioning')) {
-            var marginLeft = $slider.getPixels('margin-left');
+    updateScrollBar: function() {
+        var $containers = this.$el.find('.scrollable-x');
+        _.each($containers, function(c) {
+            $(c).tinyscrollbar_update();
+        });
+    },
 
-            if ($el.data('slide') === "next") {
-                marginLeft -= 92;
-                $slider.data('transitioning', true);
-            } else if (marginLeft < 0) {
-                marginLeft += 92;
-                $slider.data('transitioning', true);
-            }
-            $slider.setPixels('margin-left', marginLeft);
-        }
+    setScrollbarOverview: function() {
+        var $scrollableContainers = this.$el.find('.scrollable-x');
+
+        // For each scrollable container, sets the overview width
+        _.each($scrollableContainers, function(container) {
+            var $widget = $(container);
+            var $icons = $('.hit-icon', $widget);
+            var width = 102;
+            if ($widget.hasClass('large')) { width = 192; }
+            else if ($widget.hasClass('medium')) { width = 147; } 
+            else if ($widget.hasClass('small')) { width = 122; } 
+            
+            $('.overview', $widget).setPixels('width', $icons.length * width);
+        });
+    },
+
+    onRender: function() {
+        this.setScrollbarOverview();
     }
 });
    

@@ -2,14 +2,18 @@ script(id="room-layout-template", type="text/template")
   .room-devices.row-fluid
 
 script(id="device-group-template", type="text/template")
-  div(id!="<%= 'device-group-' + type %>", class!="hit-widget <%= widgetSize %> clearfix")
+  div(id!="<%= 'device-group-' + type %>", class!="hit-widget <%= widgetSize %> clearfix scrollable-x")
     .hit-title <%= name %>
       ul.nav.pull-right
         li
           a#editDeviceGroupStyle.pull-right(href="#")
             i.icon-plus.icon-white
-    .hit-icon-container.hit-slider
-      .hit-slider-inner.device-list
+    .hit-icon-container.viewport
+      .overview.device-list
+    .scrollbar
+      .track
+        .thumb
+          .end
 
 script(id="device-add-group-to-room-template", type="text/template")
   .modal-header
