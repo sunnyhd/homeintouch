@@ -1071,6 +1071,9 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         _.each(_.values(this.children), function(itemView){
             itemView.refreshIcon();
         });
+
+        $(this.getViewId() + ' .device-list', this.$el).sortable();
+        $(this.getViewId() + ' .device-list', this.$el).disableSelection();
     }
 });
 
