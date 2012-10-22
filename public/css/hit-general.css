@@ -13,6 +13,13 @@ body:before {
    background-color: black;
 }
 
+.hit-refresh {
+	cursor: pointer;
+}
+.hit-logo {
+	margin-top: 3px;
+}
+
 /* It apply only to desktop devices */
 @media (min-width: 979px) {
 	#main-content {

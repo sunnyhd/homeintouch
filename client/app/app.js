@@ -11,6 +11,10 @@ app.decimalToEibd = function (n){return n * 0x32 + 0x800 };
 var Modal = ModalManager.extend({ el: "#modal" });
 var Iframe = ModalManager.extend({ el: "#iframe" });
 
+$('.hit-refresh').click(function() {
+    window.location.reload();
+});
+
 app.addRegions({
 
     // Desktop regions
