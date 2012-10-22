@@ -52,6 +52,39 @@ script(id="edit-style-template", type="text/template")
     a(href="#").cancel.btn Cancel
     a(href="#").edit.btn.btn-primary Save
 
+script(id="edit-room-style-template", type="text/template")
+  .modal-header
+    h2 Edit <%= type %> Styles
+  .modal-body
+    .tabbable
+      ul.nav.nav-tabs
+        li.active
+          a(href="#tab1", data-toggle="tab") Body
+        li
+          a(href="#tab2", data-toggle="tab") Device Group Order
+      .tab-content
+        .tab-pane.active#tab1
+          form.form-horizontal
+            <% _.each(bodyFields, function(field){ %>
+            .control-group
+              label(for!="<%= field.id %>").control-label <%= field.name %>
+              .controls
+                input(id!="<%= field.id %>", type!="<%= field.type %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>") 
+            <% }) %>
+            .control-group
+              label(for="holder").control-label Background Preview
+                .controls
+                  #holder
+        .tab-pane#tab2
+          label Set the device group order with drag & drop
+          ul.nav.nav-tabs.nav-stacked#device-group-sortable
+            <% _.each(deviceGroups, function(group) { %>
+            li(data-model-id!="<%= group.id %>")
+              a(href="#") <%= group.name %>
+            <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").edit.btn.btn-primary Save
 
 script(id="edit-home-style-template", type="text/template")
   .modal-header

@@ -1276,7 +1276,7 @@ exports.EditRoomForm = Backbone.Marionette.ItemView.extend({
 
 exports.EditStyleRoomForm = Backbone.Marionette.ItemView.extend({
 
-    template: "#edit-style-template",
+    template: "#edit-room-style-template",
 
     events: {
         "click .cancel.btn": "cancelClicked",
@@ -1380,6 +1380,14 @@ exports.EditStyleRoomForm = Backbone.Marionette.ItemView.extend({
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
+        var $lis = $('#device-group-sortable li', this.$el);
+        _.each($lis, function(li, idx) {
+            var id = $(li).data('model-id');
+            var deviceGroup = this.model.deviceGroups.get(id);
+            deviceGroup.set('order', idx);
+        }, this);
+        this.model.deviceGroups.sort({silent: true});
+
         if (this.imageStream) {
             var that = this;
             $.ajax({
@@ -1420,5 +1428,10 @@ exports.EditStyleRoomForm = Backbone.Marionette.ItemView.extend({
         }
 
         this.close();
+    },
+
+    onRender: function() {
+        $('#device-group-sortable', this.$el).sortable();
+        $('#device-group-sortable', this.$el).disableSelection();
     }
 });
