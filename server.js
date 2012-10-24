@@ -21,7 +21,7 @@ app.configure(function() {
 
     io.set('log level', 2);
 
-    app.use(express.basicAuth(settings.credentials.username, settings.credentials.password));
+    //app.use(express.basicAuth(settings.credentials.username, settings.credentials.password));
     app.use(express.bodyParser());
 
     app.get('/application.js', client.assets.createServer());
