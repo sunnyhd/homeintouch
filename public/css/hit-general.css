@@ -11,6 +11,7 @@ body:before {
    left:0;
    right:0;
    background-color: black;
+   background: url(../img/background.jpg);
 }
 
 .hit-refresh {
