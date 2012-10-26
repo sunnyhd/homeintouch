@@ -53,6 +53,18 @@
 .hit-icon-wrapper { float: left; }
 .hit-icon-wrapper~.hit-icon-wrapper { margin-left: 10px; }
 
+/** Slider components **/
+.slider-horizontal {
+	width: 80%;
+	margin: 5px 10%;
+}
+.slider-vertical {
+	height: 70px;
+	position: absolute;
+	right: 15px;
+	top: 20px;
+}
+
 /** Device Widgets */
 .hit-icon.device-widget { position: relative; background-position: 50% 10%; }
 .hit-icon.device-widget span { top: 0px; }
@@ -151,6 +163,10 @@
 .hit-icon.device-widget[data-widget-type="camera"] img, video {
     width: 160px;
     height: 110px;
+}
+.hit-icon.device-widget[data-widget-type="camera"] img:-webkit-full-screen {
+  	width: initial;
+  	height: initial;
 }
 .hit-icon.device-widget[data-widget-type="camera"] span.widget-title {
 	display: block;

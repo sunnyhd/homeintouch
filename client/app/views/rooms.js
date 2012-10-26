@@ -156,8 +156,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     className: "hit-icon-wrapper",
 
     formEvents: {
-        "click .hit-icon a": "switchClicked",
-        "change .dimmer": "dimmerChanged"
+        "click .hit-icon a": "switchClicked"
     },
 
     initialize: function(){
@@ -181,21 +180,13 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     dimmerChanged: function(e){
-        var $dimmer = $(e.currentTarget);
-        var value = parseInt($dimmer.val());
+        var $dimmer = this.$el.find('.slider-horizontal');
+        var value = parseInt( $dimmer.slider("value") );
         var address = this.writeDimmer.get("address");
 
         this.updateDimmerDetail(value);
         this.selectSwitch((value !== 0));
         app.vent.trigger("device:write", this.writeDimmer, value);
-
-        /*var self = this;
-        if (this.dimmerTimeout) {
-            clearTimeout(this.dimmerTimeout);
-        }
-        this.dimmerTimeout = setTimeout(function() {
-            self.dimmerTimeout = null;
-        }, 500);*/
     },
 
     flipSwitch: function(on){
@@ -204,7 +195,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     updateDimmerSlider: function(value) {
-        $('.dimmer', this.$el).val(value);
+        this.$el.find('.slider-horizontal').slider("value", value);
     },
 
     updateDimmerDetail: function(value) {
@@ -253,6 +244,12 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var value = this.readSwitch.get("value");
         this.updateSwitch(null, value);
 
+        var onSliderChange = $.proxy(this.dimmerChanged, this);
+        this.$el.find(".slider-horizontal").slider({
+            range: "min", min: 0, max: 100,
+            change: onSliderChange
+        });
+
         value = this.readDimmer.get("value");
         this.updateDimmerSlider(value);
         this.updateDimmerDetail(value);
@@ -267,8 +264,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     formEvents: {
         "click a[data-value='up']": "upClicked",
         "click a[data-value='down']": "downClicked",
-        "click a[data-value='stop']": "stopClicked",
-        "change .dimmer": "positionChanged"
+        "click a[data-value='stop']": "stopClicked"
     },
 
     initialize: function(){
@@ -299,8 +295,8 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     positionChanged: function(e){
-        var $position = $(e.currentTarget);
-        var value = parseInt($position.val());
+        var $position = this.$el.find(".slider-vertical");
+        var value = parseInt($position.slider("value"));
         var address = this.writePosition.get("address");
         app.vent.trigger("device:write", this.writePosition, value);
         this.updateShutterDetails(value);
@@ -312,7 +308,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     showPosition: function(address, value){
-        this.$("input.dimmer").val(value);
+        this.$el.find('.slider-vertical').slider("value", value);
         this.updateShutterDetails(value);
     },
 
@@ -327,6 +323,14 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 
     onRender: function(){
         var position = this.readPosition.get("value");
+
+        var onSliderChange = $.proxy(this.positionChanged, this);
+        this.$el.find(".slider-vertical").slider({
+            orientation: "vertical",
+            range: "max", min: 0, max: 100,
+            change: onSliderChange
+        });
+
         this.showPosition(null, position);
     }
 
@@ -676,6 +680,9 @@ exports.CameraDeviceView = exports.DeviceView.extend({
         url += ((url.indexOf('?') != -1) ? '&' : '?') + Math.random();
 
         $img.attr('src', url);
+        $img.die().click(function() {
+            this.webkitRequestFullScreen();
+        });
 
         var refresh = this.model.get('refresh');
         if (!_.isNaN(refresh)) { 
