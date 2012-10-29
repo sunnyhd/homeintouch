@@ -3,6 +3,7 @@ var roomsController = require('controllers/rooms');
 var homesController = require('controllers/homes');
 var Room = require('models/room');
 var Configuration = require('models/configuration');
+var DPT_Transfomer = require('lib/dpt');
 
 exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     template: "#context-menu-room-opts",
@@ -1106,12 +1107,12 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
         _.each(_.values(this.children), function(itemView){
             itemView.refreshIcon();
         });
-        var proxy = $.proxy(this.reorderDevices, this);
+        /*var proxy = $.proxy(this.reorderDevices, this);
         $(this.getViewId() + ' .device-list', this.$el).sortable({
             update: proxy
         });
         
-        $(this.getViewId() + ' .device-list', this.$el).disableSelection();
+        $(this.getViewId() + ' .device-list', this.$el).disableSelection();*/
     }
 });
 

@@ -90,15 +90,6 @@ var transformationFunctions = { 'DPT': {
       return hex;
     }
   },
-  /*'1.001': {
-    name  : 'DPT_Switch',
-    encode: function( phy ){
-      return (phy | 0x80).toString( 16 );
-    },
-    decode: function( hex ){
-      return parseInt( hex , 16 );
-    }
-  },*/
   '1': {
     link  : '1.001'
   },
@@ -130,7 +121,7 @@ var transformationFunctions = { 'DPT': {
     name : 'DPT_Char_ASCII',
     encode: function( phy ){
       var val = phy.charCodeAt( 0 ).toString( 16 );
-      return (val.length == 1 ? '800' : '80') + val;
+      return val;
     },
     decode: function( hex ){
       return String.fromCharCode(parseInt( hex, 16 ));
@@ -149,7 +140,7 @@ var transformationFunctions = { 'DPT': {
     },
     encode: function( phy ){
       var val = parseInt( phy * 255 / 100 ).toString( 16 );
-      return (val.length == 1 ? '800' : '80') + val;
+      return val;
     },
     decode: function( hex ){
       return parseInt( hex, 16 ) * 100 / 255.0;
@@ -164,7 +155,7 @@ var transformationFunctions = { 'DPT': {
     },
     encode: function( phy ){
       var val = parseInt( phy * 255 / 360 ).toString( 16 );
-      return (val.length == 1 ? '800' : '80') + val;
+      return val;
     },
     decode: function( hex ){
       return parseInt( hex, 16 ) * 360 / 255.0;
@@ -179,7 +170,7 @@ var transformationFunctions = { 'DPT': {
     },
     encode: function( phy ){
       var val = parseInt( phy ).toString( 16 );
-      return (val.length == 1 ? '800' : '80') + val;
+      return val;
     },
     decode: function( hex ){
       return parseInt( hex, 16 );
@@ -200,7 +191,7 @@ var transformationFunctions = { 'DPT': {
     encode: function( phy ){
       var val = phy < 0 ? phy + 256 : phy;
       val = val.toString( 16 );
-      return (val.length == 1 ? '800' : '80') + val;
+      return val;
     },
     decode: function( hex ){
       var val = parseInt( hex, 16 )
@@ -229,7 +220,7 @@ var transformationFunctions = { 'DPT': {
     name  : 'DPT_Value_2_Count',
     encode: function( phy ){
       var val = phy < 0 ? phy + 65536 : phy;
-      return '80' + val.toString( 16 );
+      return val.toString( 16 );
     },
     decode: function( hex ){
       var val = parseInt( hex, 16 );
@@ -277,7 +268,7 @@ var transformationFunctions = { 'DPT': {
       var val = zeroFillString( ((phy.getDay() << 5) + phy.getHours()).toString(16), 2);
       val += zeroFillString( phy.getMinutes().toString(16), 2 );
       val += zeroFillString( phy.getSeconds().toString(16), 2 );
-      return '80' + val;
+      return val;
     },
     decode: function( hex ){ 
       var date = new Date(); // assume today
@@ -313,7 +304,7 @@ var transformationFunctions = { 'DPT': {
     name  : 'DPT_Value_4_Ucount',
     encode: function( phy ){
       var val = phy.toString( 16 );
-      return (val.length == 1 ? '800' : '80') + val;
+      return val;
     },
     decode: function( hex ){ 
       return parseInt( hex, 16 );
@@ -328,7 +319,7 @@ var transformationFunctions = { 'DPT': {
     encode: function( phy ){
       var val = phy < 0 ? phy + 4294967296 : phy;
       val = val.toString( 16 );
-      return (val.length == 1 ? '800' : '80') + val;
+      return val;
     },
     decode: function( hex ){
       var val = parseInt( hex, 16 );
@@ -342,7 +333,7 @@ var transformationFunctions = { 'DPT': {
   '14.001' : {
     name  : 'DPT_Value_Acceleration_Angular',
     encode: function( phy ){
-      return '80' + phy;
+      return phy;
     },
     decode: function( hex ){
       var val = parseInt( hex, 16 );
@@ -435,7 +426,7 @@ var transformationFunctions = { 'DPT': {
           val = 0;
       }
       val = val.toString( 16 );
-      return (val.length == 1 ? '800' : '80') + val;
+      return val;
     },
     decode: function( hex ){
       switch( parseInt( hex, 16 ) )
