@@ -469,11 +469,14 @@ exports.DoorDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(on) {
-        this.$('a').removeClass('active');
+        var $anchor = $('a', this.$el);
+        $anchor.removeClass('selected');
         if (on) {
-            this.$('a.open').addClass('active');
+            $anchor.addClass('selected');
+            $anchor.html('OPEN');
         } else {
-            this.$('a.open').removeClass('active');
+            $anchor.removeClass('selected');
+            $anchor.html('CLOSE');
         }
         this.updateIconColor(on);
     },
@@ -518,11 +521,14 @@ exports.WindowDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(on) {
-        $('a', this.$el).removeClass('active');
+        var $anchor = $('a', this.$el);
+        $anchor.removeClass('selected');
         if (on) {
-            $('a.open', this.$el).addClass('active');
+            $anchor.addClass('selected');
+            $anchor.html('OPEN');
         } else {
-            $('a.open', this.$el).removeClass('active');
+            $anchor.removeClass('selected');
+            $anchor.html('CLOSE');
         }
         this.updateIconColor(on);
     },
