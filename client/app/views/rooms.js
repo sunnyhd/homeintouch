@@ -314,11 +314,26 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     updateShutterDetails: function(shutterValue) {
+        this.refreshIcon(shutterValue);
         this.$('.shutter-detail').html((shutterValue | 0) + '%');
     },
 
-    refreshIcon: function() {
+    refreshIcon: function(value) {
         var $widget = $('.hit-icon', this.$el);
+        value || (value = 0);
+        if (value < 100 && value >= 80) {
+            value = 80;
+        } else if (value < 80 && value >= 60) {
+            value = 60;
+        } else if (value < 60 && value >= 40) {
+            value = 40;
+        } else if (value < 40 && value >= 20) {
+            value = 20;
+        } else if (value < 20 && value >= 0) {
+            value = 0;
+        }
+        $widget.data('hit-icon-type', 'devices.shutterOpen' + value);
+
         app.changeIconState($widget, '#FFFFFF');
     },
 
