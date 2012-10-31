@@ -40,6 +40,14 @@ script(id="device-add-shutter-template", type="text/template")
         label(for="write_position").control-label Write Position Address
         .controls
           input(id="write_position", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="max_value").control-label Max Value
+        .controls
+          input(id="max_value", type="text", placeHolder="100")
+      .control-group
+        label(for="min_value").control-label Min Value
+        .controls
+          input(id="min_value", type="text", placeHolder="0")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add

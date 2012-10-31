@@ -2,7 +2,7 @@ script(id="dashboard-floor", type="text/template")
   .row-fluid
     .span6.clearfix
       .hit-widget.clearfix.scrollable-x#my-rooms
-        .hit-title.blue My Rooms
+        .hit-title My Rooms
         .hit-icon-container.viewport
           <% if(rooms.length == 0) { %>
           .overview
@@ -11,7 +11,7 @@ script(id="dashboard-floor", type="text/template")
           <% } else { %>
           .overview
             <% _.each(rooms, function(room){ %>
-            .hit-icon.blue.room-item-list(data-item-id!="<%= room.id %>", data-hit-icon-type!="<%= room.icon %>")
+            .hit-icon.room-item-list(data-item-id!="<%= room.id %>", data-hit-icon-type!="<%= room.icon %>")
               span <%= room.name %>
             <% }) %>
           <% } %>

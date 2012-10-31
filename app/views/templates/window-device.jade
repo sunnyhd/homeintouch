@@ -19,6 +19,14 @@ script(id="device-add-window-template", type="text/template")
         label(for="read_window").control-label Read Address
         .controls
           input(id="read_window", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="open_value").control-label Open Value
+        .controls
+          input(id="open_value", type="text", placeHolder="1")
+      .control-group
+        label(for="close_value").control-label Close Value
+        .controls
+          input(id="close_value", type="text", placeHolder="0")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add

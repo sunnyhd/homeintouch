@@ -58,6 +58,10 @@ script(id="device-add-thermostat-template", type="text/template")
         label(for="write_temperature_set").control-label Write Temp Setpont Address
         .controls
           input(id="write_temperature_set", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="step").control-label Increase/Decrease Step
+        .controls
+          input(id="step", type="text", placeHolder="0.5")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add

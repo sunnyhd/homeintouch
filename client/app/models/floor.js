@@ -1,3 +1,4 @@
+var app = require('app');
 var BaseModel = require('models/base');
 var Rooms = require('collections/rooms');
 var Configuration = require('models/configuration');
@@ -22,6 +23,20 @@ module.exports = BaseModel.extend({
     // Use to add a particular fixed style when a parameter is set.
     bodyFixedStyle: {
         'background-image': {'background-size' : 'cover'} 
+    },
+
+    myRoomsSelector: {context: '#my-rooms', selector: ['.hit-title', '.hit-icon']},
+
+    myRoomsPrefix: 'my-rooms-',
+
+    myRoomsFields: [
+        {name: "Text Color", id: "my-rooms-color"}, 
+        {name: "Background Color", id: "my-rooms-class-background-color", type: "class-list", options: app.colorClasses}, 
+        {name: "Opacity", id: "my-rooms-opacity"}
+    ],
+
+    myRoomsDefaultStyle: {
+        'class-background-image': 'blue'
     },
 
     defaults: {
@@ -49,7 +64,19 @@ module.exports = BaseModel.extend({
         bodyConfiguration.set('defaultStyle', this.bodyDefaultStyle);
         this.set("bodyConfiguration", bodyConfiguration);
 
-        this.set("bodyFields", _.clone(this.bodyFields));  
+        this.set("bodyFields", _.clone(this.bodyFields));
+
+         // Initialize My Rooms Configuration
+        var myRoomsConfiguration = new Configuration();
+        if (this.has("myRoomsConfiguration")) {
+            myRoomsConfiguration.set(this.get("myRoomsConfiguration"));
+        }            
+
+        myRoomsConfiguration.set('selector', this.myRoomsSelector);
+        myRoomsConfiguration.set('defaultStyle', this.myRoomsDefaultStyle);
+        this.set("myRoomsConfiguration", myRoomsConfiguration);
+
+        this.set("myRoomsFields", _.clone(this.myRoomsFields));  
     },
 
     defaultRoom: function() { 
@@ -77,7 +104,12 @@ module.exports = BaseModel.extend({
             json.bodyConfiguration = this.get("bodyConfiguration").toJSON();
         }
 
+         if (this.has("myRoomsConfiguration")) {
+            json.myRoomsConfiguration = this.get("myRoomsConfiguration").toJSON();
+        }
+
         delete json.bodyFields;
+        delete json.myRoomsFields;
 
         return json;
     }

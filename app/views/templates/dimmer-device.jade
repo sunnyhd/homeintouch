@@ -6,9 +6,9 @@ script(id="device-list-dimmer-item-template", type="text/template")
       .slider-horizontal
       ul.device-btn-group.two.clearfix
         li.device-btn
-          a.blue(href="#", data-value="on") ON
+          a(href="#", data-value!="<%=on_value%>") ON
         li.device-btn
-          a.blue(href="#", data-value="off") OFF
+          a(href="#", data-value!="<%=off_value%>") OFF
 
 script(id="device-add-dimmer-template", type="text/template")
   .modal-header
@@ -35,6 +35,14 @@ script(id="device-add-dimmer-template", type="text/template")
           label(for="write_dimmer").control-label Write Dimmer Address
           .controls
             input(id="write_dimmer", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="on_value").control-label On Value
+        .controls
+          input(id="on_value", type="text", placeHolder="1")
+      .control-group
+        label(for="off_value").control-label Off Value
+        .controls
+          input(id="off_value", type="text", placeHolder="0")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add

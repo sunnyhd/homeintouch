@@ -15,6 +15,14 @@ script(id="device-add-motion-template", type="text/template")
         label(for="read_motion").control-label Read Address
         .controls
           input(id="read_motion", type="text", placeHolder="#/#/#")
+      .control-group
+        label(for="on_value").control-label On Value
+        .controls
+          input(id="on_value", type="text", placeHolder="1")
+      .control-group
+        label(for="off_value").control-label Off Value
+        .controls
+          input(id="off_value", type="text", placeHolder="0")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add

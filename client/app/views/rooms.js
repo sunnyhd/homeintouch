@@ -102,38 +102,34 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     switchClicked: function (e) {
         e.preventDefault();
         var btnClicked = $(e.currentTarget);
-        var on = (btnClicked.data('value') === 'on');
+        var value = btnClicked.data('value');
 
-        this.flipSwitch(on);
-        this.updateSwitch(on);
+        this.flipSwitch(value);
+        this.updateSwitch(value);
     },
 
-    flipSwitch: function(on){
+    flipSwitch: function(value){
         //var address = this.writeAddress.get("address");
-        app.vent.trigger("device:write", this.writeAddress, (on ? 1 : 0));
+        app.vent.trigger("device:write", this.writeAddress, value);
     },
 
     isSwitchOn: function() {
-        return (this.$('.selected').data('value') === 'on');
+        return (this.$('.selected').data('value') === Number(this.model.get('on_value')));
     },
 
     refreshIcon: function() {
         this.updateIconColor(this.isSwitchOn());
     },
 
-    updateSwitch: function(on) {
+    updateSwitch: function(value) {
         $('a', this.$el).removeClass('selected');
-        if (on) {
-            $('a[data-value="on"]', this.$el).addClass('selected');
-        } else {
-            $('a[data-value="off"]', this.$el).addClass('selected');
-        }
-        this.updateIconColor(on);
+        $('a[data-value="' + value + '"]', this.$el).addClass('selected');
+        this.updateIconColor(value);
     },
 
-    updateIconColor: function(on) {
+    updateIconColor: function(value) {
         var $widget = $('.hit-icon', this.$el);
-        if (on) {
+        if (value === Number(this.model.get('on_value'))) {
             app.changeIconState($widget, '#FF9522');
         } else {
             app.changeIconState($widget, 'gray');
@@ -141,7 +137,7 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     },
 
     selectSwitch: function(address, value){
-        this.updateSwitch(value == 1);
+        this.updateSwitch(Number(value));
     },
 
     onRender: function(){
@@ -176,10 +172,10 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         e.preventDefault();
 
         var btnClicked = $(e.currentTarget);
-        var on = (btnClicked.data('value') === 'on');
+        var value = btnClicked.data('value');
 
-        this.flipSwitch(on);
-        this.updateDimmerDetail((on) ? 100 : 0);
+        this.flipSwitch(value);
+        this.updateDimmerDetail((value === Number(this.model.get('on_value'))) ? 100 : 0);
     },
 
     dimmerChanged: function(e){
@@ -188,13 +184,12 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var address = this.writeDimmer.get("address");
 
         this.updateDimmerDetail(value);
-        this.selectSwitch((value !== 0));
+        this.selectSwitch(value);
         app.vent.trigger("device:write", this.writeDimmer, value);
     },
 
-    flipSwitch: function(on){
-        var address = this.writeSwitch.get("address");
-        app.vent.trigger("device:write", this.writeSwitch, (on ? 1 : 0));
+    flipSwitch: function(value){
+        app.vent.trigger("device:write", this.writeSwitch, value);
     },
 
     updateDimmerSlider: function(value) {
@@ -207,25 +202,21 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
     selectSwitch: function(value){
         $('a', this.$el).removeClass('selected');
-        if (value) {
-            $('a[data-value="on"]', this.$el).addClass('selected');
-        } else {
-            $('a[data-value="off"]', this.$el).addClass('selected');
-        }
+        $('a[data-value="' + value + '"]', this.$el).addClass('selected');
         this.updateIconColor(value);
     },
 
     isSwitchOn: function() {
-        return (this.$('.selected').data('value') === 'on');
+        return (this.$('.selected').data('value') === Number(this.model.get('on_value')));
     },
 
     refreshIcon: function() {
         this.updateIconColor(this.isSwitchOn());
     },
 
-    updateIconColor: function(on) {
+    updateIconColor: function(value) {
         var $widget = $('.hit-icon', this.$el);
-        if (on) {
+        if (value === Number(this.model.get('on_value'))) {
             app.changeIconState($widget, '#FF9522');
         } else {
             app.changeIconState($widget, 'gray');
@@ -233,7 +224,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(address, value){
-        this.selectSwitch(value == 1);
+        this.selectSwitch(Number(value));
     },
 
     selectDimmer: function(address, value){
@@ -249,8 +240,8 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
         var onSliderChange = $.proxy(this.dimmerChanged, this);
         this.$el.find(".slider-horizontal").slider({
-            range: "min", min: 0, max: 100,
-            change: onSliderChange
+            range: "min", min: 0, max: 100/*,
+            change: onSliderChange*/
         });
 
         value = this.readDimmer.get("value");
@@ -283,12 +274,12 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 
     upClicked: function(e){
         e.preventDefault();
-        this.switchUpDown(true);
+        this.switchUpDown(Number(this.model.get('min_value')) < Number(this.model.get('max_value')));
     },
 
     downClicked: function(e){
         e.preventDefault();
-        this.switchUpDown(false);
+        this.switchUpDown(Number(this.model.get('min_value')) > Number(this.model.get('max_value')));
     },
 
     stopClicked: function(e){
@@ -311,8 +302,9 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     showPosition: function(address, value){
-        this.$el.find('.slider-vertical').slider("value", value);
-        this.updateShutterDetails(value);
+        var actualValue = this.calculateShutterValue(value);
+        this.$el.find('.slider-vertical').slider("value", actualValue);
+        this.updateShutterDetails(actualValue);
     },
 
     updateShutterDetails: function(shutterValue) {
@@ -322,6 +314,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 
     refreshIcon: function(value) {
         var $widget = $('.hit-icon', this.$el);
+        
         value || (value = 0);
         if (value < 100 && value >= 80) {
             value = 80;
@@ -350,6 +343,11 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         });
 
         this.showPosition(null, position);
+    },
+
+    calculateShutterValue: function(value) {
+        var shutterValue = Math.abs(Number(this.model.get('min_value')) - Number(value));
+        return shutterValue;        
     }
 
 });
@@ -404,7 +402,9 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
 
         var address = this.writeSetPoint.get("address");
 
-        var changeTemp = ($control.data('value') === 'minus') ? parseFloat("-0.5") : parseFloat("0.5");
+        var step = Number(this.model.get("step"));
+
+        var changeTemp = (($control.data('value') === 'minus') ? -1 : 1) * step;
 
         var currentPoint = this.readSetPoint.get("value");
         var setpoint = currentPoint + changeTemp;
@@ -417,7 +417,7 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     },
 
     showSetPoint: function(address, setPoint){
-        var decimal = setPoint;
+        var decimal = (setPoint | 0);
 
         console.log("setpoint eibd value: ", setPoint);
         console.log("setpoint decimal value: ", decimal);
@@ -426,7 +426,7 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     },
 
     showTemperature: function(address, temperature){
-        var decimal = temperature;
+        var decimal = (temperature | 0);
 
         console.log("temperature eibd value: ", temperature);
         console.log("temperature decimal value: ", decimal);
@@ -500,7 +500,7 @@ exports.DoorDeviceView = exports.DeviceView.extend({
     },
 
     updateStatus: function(address, value){
-        this.updateSwitch(value == 1);
+        this.updateSwitch(value == this.model.get('open_value'));
     },
 
     onRender: function(){
@@ -552,7 +552,7 @@ exports.WindowDeviceView = exports.DeviceView.extend({
     },
 
     updateStatus: function(address, value){
-        this.updateSwitch(value == 1);
+        this.updateSwitch(value == this.model.get('open_value'));
     },
 
     onRender: function(){
@@ -579,19 +579,18 @@ exports.SocketDeviceView = exports.DeviceView.extend({
     socketClicked: function (e) {
         e.preventDefault();
         var btnClicked = $(e.currentTarget);
-        var on = (btnClicked.data('value') === 'on');
+        var value = btnClicked.data('value');
 
-        this.flipSwitch(on);
-        this.updateSwitch(on);
+        this.flipSwitch(value);
+        this.updateSwitch(value);
     },
 
-    flipSwitch: function(on){
-        var address = this.writeAddress.get("address");
-        app.vent.trigger("device:write", this.writeAddress, (on ? 1 : 0));
+    flipSwitch: function(value){
+        app.vent.trigger("device:write", this.writeAddress, value);
     },
 
     isSwitchOn: function() {
-        return (this.$('.selected').data('value') === 'on');
+        return (this.$('.selected').data('value') === Number(this.model.get('on_value')));
     },
 
     refreshIcon: function() {
@@ -599,19 +598,15 @@ exports.SocketDeviceView = exports.DeviceView.extend({
         this.selectSwitch(null, value);
     },
 
-    updateSwitch: function(on) {
+    updateSwitch: function(value) {
         $('a', this.$el).removeClass('selected');
-        if (on) {
-            $('a[data-value="on"]', this.$el).addClass('selected');
-        } else {
-            $('a[data-value="off"]', this.$el).addClass('selected');
-        }
-        this.updateIconColor(on);
+        $('a[data-value="' + value + '"]', this.$el).addClass('selected');
+        this.updateIconColor(value);
     },
 
-    updateIconColor: function(on) {
+    updateIconColor: function(value) {
         var $widget = $('.hit-icon', this.$el);
-        if (on) {
+        if (value === Number(this.model.get('on_value'))) {
             app.changeIconState($widget, '#FF9522');
         } else {
             app.changeIconState($widget, 'gray');
@@ -619,7 +614,7 @@ exports.SocketDeviceView = exports.DeviceView.extend({
     },
 
     selectSwitch: function(address, value){
-        this.updateSwitch(value == 1);
+        this.updateSwitch(Number(value));
     },
 
     onRender: function(){
@@ -839,7 +834,7 @@ exports.MotionDeviceView = exports.DeviceView.extend({
     },
 
     updateStatus: function(address, value){
-        this.updateMotion(value == 1);
+        this.updateMotion(value == this.model.get('on_value'));
     },
 
     onRender: function(){

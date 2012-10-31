@@ -199,12 +199,14 @@ exports.AddSwitchDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-switch-template",
 
-    formFields: ["name", "read_switch", "write_switch"],
+    formFields: ["name", "read_switch", "write_switch", "on_value", "off_value"],
 
     buildDevice: function(data){
         var device = new Device({
             name: data.name,
-            type: data.type
+            type: data.type,
+            on_value: data.on_value,
+            off_value: data.off_value
         });
 
         device.addAddress("read_switch", data.read_switch, '1.001');
@@ -225,12 +227,14 @@ exports.AddShutterDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-shutter-template",
 
-    formFields: ["name", "read_position", "write_stop", "write_position", "write_switch"],
+    formFields: ["name", "read_position", "write_stop", "write_position", "write_switch", "max_value", "min_value"],
 
     buildDevice: function(data){
         var device = new Device({
             name: data.name,
-            type: data.type
+            type: data.type,
+            max_value: data.max_value,
+            min_value: data.min_value
         });
 
         device.addAddress("read_position", data.read_position, '5.001');
@@ -253,12 +257,13 @@ exports.AddThermostatDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-thermostat-template",
 
-    formFields: ["name", "read_mode", "write_mode", "read_temperature_set", "write_temperature_set", "read_temperature_actual"],
+    formFields: ["name", "read_mode", "write_mode", "read_temperature_set", "write_temperature_set", "read_temperature_actual", "step"],
 
     buildDevice: function(data){
         var device = new Device({
             name: data.name,
-            type: data.type
+            type: data.type,
+            step: data.step
         });
 
         device.addAddress("read_mode", data.read_mode, '20.102');
@@ -282,12 +287,14 @@ exports.AddDimmerDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-dimmer-template",
 
-    formFields: ["name", "read_switch", "write_switch", "read_dimmer", "write_dimmer"],
+    formFields: ["name", "read_switch", "write_switch", "read_dimmer", "write_dimmer", "on_value", "off_value"],
 
     buildDevice: function(data){
         var device = new Device({
             name: data.name,
-            type: data.type
+            type: data.type,
+            on_value: data.on_value,
+            off_value: data.off_value
         });
 
         device.addAddress("read_switch", data.read_switch, '1.001');
@@ -310,12 +317,14 @@ exports.AddDoorDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-door-template",
 
-    formFields: ["name", "read_door"],
+    formFields: ["name", "read_door", "open_value", "close_value"],
 
     buildDevice: function(data){
         var device = new Device({
             name: data.name,
-            type: data.type
+            type: data.type,
+            open_value: data.open_value,
+            close_value: data.close_value
         });
 
         device.addAddress("read_door", data.read_door, '1.009');
@@ -331,12 +340,14 @@ exports.AddWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-window-template",
 
-    formFields: ["name", "read_window"],
+    formFields: ["name", "read_window", "open_value", "close_value"],
 
     buildDevice: function(data){
         var device = new Device({
             name: data.name,
-            type: data.type
+            type: data.type,
+            open_value: data.open_value,
+            close_value: data.close_value
         });
 
         device.addAddress("read_window", data.read_window, '1.009');
@@ -352,12 +363,14 @@ exports.AddSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-socket-template",
 
-    formFields: ["name", "read_socket", "write_socket"],
+    formFields: ["name", "read_socket", "write_socket", "on_value", "off_value"],
 
     buildDevice: function(data){
         var device = new Device({
             name: data.name,
-            type: data.type
+            type: data.type,
+            on_value: data.on_value,
+            off_value: data.off_value
         });
 
         device.addAddress("read_socket", data.read_socket, '1.001');
@@ -470,12 +483,14 @@ exports.AddMotionDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     template: "#device-add-motion-template",
 
-    formFields: ["name", "read_motion"],
+    formFields: ["name", "read_motion", "on_value", "off_value"],
 
     buildDevice: function(data){
         var device = new Device({
             name: data.name,
-            type: data.type
+            type: data.type,
+            on_value: data.on_value,
+            off_value: data.off_value
         });
 
         device.addAddress("read_motion", data.read_motion, '1.011');
@@ -512,7 +527,7 @@ exports.AddRgbDeviceForm = exports.AddEditDeviceTypeForm.extend({
         device.addAddress("write_blue_color", data.write_blue_color);
 
         device.addAddress("read_brightness", data.read_brightness, '5.001');
-        device.addAddress("write_brightness", data.write_brightness, '5.001');
+        device.addAddress("write_brightness", data.write_brightness);
 
         return device;
     }

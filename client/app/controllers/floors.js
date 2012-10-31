@@ -120,6 +120,8 @@ var showEditFloorForm = function(floor){
         model: floor
     });
 
+    app.main.show(view);
+
     exports.currentDashboard = view;
     view.applyStyles();
  };

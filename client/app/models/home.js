@@ -138,6 +138,7 @@ module.exports = BaseModel.extend({
 
         delete json.bodyFields;
         delete json.myHomeFields;
+        delete json.myLibraryFields;
 
         return json;
     }
