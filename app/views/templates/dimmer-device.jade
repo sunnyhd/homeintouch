@@ -3,7 +3,7 @@ script(id="device-list-dimmer-item-template", type="text/template")
     span <%= name %>
     .dimmer-detail 0%
     .widget-opts
-      .slider-horizontal
+      .slider-horizontal(data-sliding="false")
       ul.device-btn-group.two.clearfix
         li.device-btn
           a(href="#", data-value!="<%=on_value%>") ON

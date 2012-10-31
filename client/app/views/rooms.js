@@ -175,7 +175,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var value = btnClicked.data('value');
 
         this.flipSwitch(value);
-        this.updateDimmerDetail((value === Number(this.model.get('on_value'))) ? 100 : 0);
+        this.updateDimmerDetail((value === Number(this.model.get('on_value'))) ? 100 : 0); // FIXME: It needs to be the configured number, not 100!
     },
 
     dimmerChanged: function(e){
@@ -202,16 +202,16 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
     selectSwitch: function(value){
         $('a', this.$el).removeClass('selected');
-        $('a[data-value="' + value + '"]', this.$el).addClass('selected');
-        this.updateIconColor(value);
+        $('a[data-value="' + ((this.isSwitchOn(value)) ? 1 : 0) + '"]', this.$el).addClass('selected');
+        this.refreshIcon(value);
     },
 
-    isSwitchOn: function() {
-        return (this.$('.selected').data('value') === Number(this.model.get('on_value')));
+    isSwitchOn: function(value) {
+        return (value !== Number(this.model.get('off_value')));
     },
 
-    refreshIcon: function() {
-        this.updateIconColor(this.isSwitchOn());
+    refreshIcon: function(value) {
+        this.updateIconColor(this.isSwitchOn(value));
     },
 
     updateIconColor: function(value) {
@@ -234,14 +234,24 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         this.updateDimmerDetail(value);
     },
 
+    onSliderStart: function(e, ui) {
+        this.$el.find(".slider-horizontal").data('sliding', 'true');
+    },
+    onSliderStop: function(e, ui) {
+        this.$el.find(".slider-horizontal").data('sliding', 'false');
+        this.dimmerChanged(e);
+    },
+
     onRender: function(){
         var value = this.readSwitch.get("value");
         this.updateSwitch(null, value);
 
-        var onSliderChange = $.proxy(this.dimmerChanged, this);
+        var onSliderStart = $.proxy(this.onSliderStart, this);
+        var onSliderStop = $.proxy(this.onSliderStop, this);
         this.$el.find(".slider-horizontal").slider({
-            range: "min", min: 0, max: 100 /*,
-            change: onSliderChange*/
+            range: "min", min: 0, max: 100,
+            start: onSliderStart,
+            stop: onSliderStop
         });
 
         value = this.readDimmer.get("value");
@@ -332,14 +342,24 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         app.changeIconState($widget, '#FFFFFF');
     },
 
+    onSliderStart: function(e, ui) {
+        this.$el.find(".slider-vertical").data('sliding', 'true');
+    },
+    onSliderStop: function(e, ui) {
+        this.$el.find(".slider-vertical").data('sliding', 'false');
+        this.positionChanged(e);
+    },
+
     onRender: function(){
         var position = this.readPosition.get("value");
 
-        var onSliderChange = $.proxy(this.positionChanged, this);
+        var onSliderStart = $.proxy(this.onSliderStart, this);
+        var onSliderStop = $.proxy(this.onSliderStop, this);
         this.$el.find(".slider-vertical").slider({
             orientation: "vertical",
-            range: "max", min: 0, max: 100 /*,
-            change: onSliderChange*/
+            range: "max", min: 0, max: 100,
+            start: onSliderStart,
+            stop: onSliderStop
         });
 
         this.showPosition(null, position);
@@ -349,7 +369,6 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         var shutterValue = Math.abs(Number(this.model.get('min_value')) - Number(value));
         return shutterValue;        
     }
-
 });
 
 exports.ThermostatDeviceView = exports.DeviceView.extend({

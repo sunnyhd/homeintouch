@@ -1,7 +1,7 @@
 script(id="device-list-shutter-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="shutter", data-hit-icon-type="devices.shutterOpen0")
     span <%= name %>
-    .slider-vertical
+    .slider-vertical(data-sliding="false")
     .widget-opts
       .shutter-detail 0% 
       ul.device-btn-group.three.clearfix
