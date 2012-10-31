@@ -384,8 +384,8 @@ app.isTouchDevice = function() {
 }
 
 // Widget color classes
-app.colorClasses = [{label: "Dark Gray", value: "dark-gray"}, {label: "Gray", value: "gray"}, 
-                    {label: "Dark Blue", value: "dark-blue"}, {label: "Blue", value: "blue"}, 
-                    {label: "Dark Yellow", value: "dark-yellow"}, {label: "Yellow", value: "yellow"},
-                    {label: "Dark Violet", value: "dark-violet"}, {label: "Violet", value: "violet"}, 
-                    {label: "Dark Green", value: "dark-green"}, {label: "Green", value: "green"} ];
+app.colorClasses = [{label: "Blue", value: "blue"}, {label: "Dark Blue", value: "dark-blue"}, 
+                    {label: "Yellow", value: "yellow"}, {label: "Dark Yellow", value: "dark-yellow"}, 
+                    {label: "Violet", value: "violet"}, {label: "Dark Violet", value: "dark-violet"}, 
+                    {label: "Green", value: "green"}, {label: "Dark Green", value: "dark-green"},
+                    {label: "Gray", value: "gray"}, {label: "Dark Gray", value: "dark-gray"} ];

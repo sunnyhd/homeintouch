@@ -1,5 +1,6 @@
 var Device = require('models/device');
 var Configuration = require('models/configuration');
+var roomsController = require('controllers/rooms');
 
 exports.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
 
@@ -126,6 +127,8 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
         }
 
         this.close();
+
+        roomsController.showCurrent();
     },
 
     cancelClicked: function(e){
