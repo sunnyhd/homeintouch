@@ -240,7 +240,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
         var onSliderChange = $.proxy(this.dimmerChanged, this);
         this.$el.find(".slider-horizontal").slider({
-            range: "min", min: 0, max: 100/*,
+            range: "min", min: 0, max: 100 /*,
             change: onSliderChange*/
         });
 
@@ -338,8 +338,8 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         var onSliderChange = $.proxy(this.positionChanged, this);
         this.$el.find(".slider-vertical").slider({
             orientation: "vertical",
-            range: "max", min: 0, max: 100,
-            change: onSliderChange
+            range: "max", min: 0, max: 100 /*,
+            change: onSliderChange*/
         });
 
         this.showPosition(null, position);
@@ -500,7 +500,7 @@ exports.DoorDeviceView = exports.DeviceView.extend({
     },
 
     updateStatus: function(address, value){
-        this.updateSwitch(value == this.model.get('open_value'));
+        this.updateSwitch(Number(value) == Number(this.model.get('open_value')));
     },
 
     onRender: function(){
@@ -552,7 +552,7 @@ exports.WindowDeviceView = exports.DeviceView.extend({
     },
 
     updateStatus: function(address, value){
-        this.updateSwitch(value == this.model.get('open_value'));
+        this.updateSwitch(Number(value) == Number(this.model.get('open_value')));
     },
 
     onRender: function(){
@@ -834,7 +834,7 @@ exports.MotionDeviceView = exports.DeviceView.extend({
     },
 
     updateStatus: function(address, value){
-        this.updateMotion(value == this.model.get('on_value'));
+        this.updateMotion(Number(value) == Number(this.model.get('on_value')));
     },
 
     onRender: function(){
