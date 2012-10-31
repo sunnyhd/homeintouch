@@ -1,0 +1,78 @@
+/**
+Tool: http://www.w3schools.com/tags/ref_colorpicker.asp
+VERDE: #82c300
+FUCXIA: #9e149e
+*/
+
+@gray: 			#222222;
+@darkGray: 		darken(@gray, 10%);
+@blue:			#1AA1E1;
+@darkBlue:		darken(@blue, 10%);
+@yellow:		#DAA520;
+@darkYellow:	darken(@yellow, 10%);
+@violet:		#A11253;
+@darkViolet:	darken(@violet, 10%);
+@green:			#82c300;
+@darkGreen:		darken(@green, 10%);
+
+.with-color (@color) {
+	background-color: @color;
+	border-color: lighten(@color, 10%) darken(@color, 10%) darken(@color, 10%) lighten(@color, 10%);
+	.selected {
+		background-color: darken(@color, 5%);
+		border-color: darken(@color, 10%) lighten(@color, 10%) lighten(@color, 10%) darken(@color, 10%);
+	}
+	&.selectable {
+		&:active {
+			background-color: darken(@color, 10%);
+		}	
+	}
+}
+.with-color-selectable (@color) {
+	background-color: @color;
+	border-color: lighten(@color, 10%) darken(@color, 10%) darken(@color, 10%) lighten(@color, 10%);
+	.selected, &:active {
+		background-color: darken(@color, 5%);
+		border-color: darken(@color, 10%) lighten(@color, 10%) lighten(@color, 10%) darken(@color, 10%);
+	}
+}
+
+/** DARK GRAY **/
+.dark-gray { .with-color (@darkGray); }
+a.dark-gray { .with-color-selectable (@darkGray); }
+
+/** GRAY **/
+.gray { .with-color (@gray); }
+a.gray { .with-color-selectable (@gray); }
+
+/** DARK BLUE **/
+.dark-blue { .with-color (@darkBlue); }
+a.dark-blue { .with-color-selectable (@darkBlue); }
+
+/** BLUE **/
+.blue { .with-color (@blue); }
+a.blue { .with-color-selectable (@blue); }
+
+/** VIOLET **/
+.violet { .with-color (@violet); }
+a.violet { .with-color-selectable (@violet); }
+
+/** DARK VIOLET **/
+.dark-violet { .with-color (@darkViolet); }
+a.dark-violet { .with-color-selectable (@darkViolet); }
+
+/** GREEN **/
+.green { .with-color (@green); }
+a.green { .with-color-selectable (@green); }
+
+/** DARK GREEN **/
+.dark-green { .with-color (@darkGreen); }
+a.dark-green { .with-color-selectable (@darkGreen); }
+
+/** YELLOW **/
+.yellow { .with-color (@yellow); }
+a.yellow { .with-color-selectable (@yellow); }
+
+/** DARK YELLOW **/
+.dark-yellow { .with-color (@darkYellow); }
+a.dark-yellow { .with-color-selectable (@darkYellow); }
