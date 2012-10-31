@@ -166,6 +166,8 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         this.readDimmer = this.model.getAddressByType("read_dimmer");
         this.writeDimmer = this.model.getAddressByType("write_dimmer");
 
+        this.dimmerChanged = _.debounce(this.dimmerChanged, 500);
+
         this.bindTo(this.readDimmer, "change:value", this.selectDimmer, this);
         this.bindTo(this.readSwitch, "change:value", this.updateSwitch, this);
     },

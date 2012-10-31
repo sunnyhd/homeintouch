@@ -110,6 +110,14 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
+        var $lis = $('#device-widgets-sortable li', this.$el);
+        _.each($lis, function(li, idx) {
+            var id = $(li).data('model-id');
+            var device = this.model.devices.get(id);
+            device.set('order', idx);
+        }, this);
+        this.model.devices.sort({silent: true});
+
         this.updateStyleConfiguration(data, this.model.titlePrefix, this.model.titleSelector, "titleConfiguration");
         this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
 
@@ -128,8 +136,12 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
         }
 
         this.close();
-    }
+    },
 
+    onRender: function() {
+        $('#device-widgets-sortable', this.$el).sortable();
+        $('#device-widgets-sortable', this.$el).disableSelection();
+    }
 });
 
 // Base form for adding device types.

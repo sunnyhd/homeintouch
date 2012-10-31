@@ -41,6 +41,8 @@ script(id="edit-group-of-room-template", type="text/template")
           a(href="#tab1", data-toggle="tab") Title
         li
           a(href="#tab2", data-toggle="tab") Body
+        li
+          a(href="#tab3", data-toggle="tab") Order
       .tab-content
         .tab-pane.active#tab1
           form.form-horizontal
@@ -83,6 +85,13 @@ script(id="edit-group-of-room-template", type="text/template")
                 </select>
               <% } %>
               </div>
+            <% }) %>
+        .tab-pane#tab3
+          label Set the wdgets order with drag & drop
+          ul.nav.nav-tabs.nav-stacked#device-widgets-sortable
+            <% _.each(devices, function(device) { %>
+            li(data-model-id!="<%= device.id %>")
+              a(href="#") <%= device.name %>
             <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
