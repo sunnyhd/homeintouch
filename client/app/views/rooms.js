@@ -1047,11 +1047,11 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     initScrollBar: function() {
         var opts = { axis: 'x', invertscroll: app.isTouchDevice() };
-        this.$el.find(this.getViewId()).tinyscrollbar(opts);
+        this.$(this.getViewId()).tinyscrollbar(opts);
     },
 
     updateScrollBar: function() {
-        this.$el.find(this.getViewId()).tinyscrollbar_update();
+        this.$(this.getViewId()).tinyscrollbar_update();
     },
 
     setScrollbarOverview: function() {
