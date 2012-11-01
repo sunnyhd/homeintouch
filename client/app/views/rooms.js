@@ -440,11 +440,20 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     updateModeButton: function(mode) {
         this.$('a[data-mode]').removeClass('selected');
         this.$('a[data-mode="' + mode + '"]').addClass('selected');
+
+        if (mode !== "comfort") {
+            this.$('.thermostat-control a').addClass('disabled');
+        } else {
+            this.$('.thermostat-control a').removeClass('disabled');
+        }
     },
 
     setpointChanged: function(e){
         e.preventDefault();
         var $control = $(e.currentTarget);
+        if ($control.hasClass('disabled')) {
+            return;
+        }
 
         var step = Number(this.model.get("step"));
         console.log('Thermostat step: ' + step);

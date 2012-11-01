@@ -36,43 +36,99 @@ FUCXIA: #9e149e
 		border-color: darken(@color, 10%) lighten(@color, 10%) lighten(@color, 10%) darken(@color, 10%);
 	}
 }
+.with-color-disabled (@color) {
+	cursor: not-allowed;
+	opacity: 0.5;
+	background-color: @color;
+	border-color: lighten(@color, 10%) darken(@color, 10%) darken(@color, 10%) lighten(@color, 10%);
+}
 
 /** DARK GRAY **/
 .dark-gray { .with-color (@darkGray); }
-a.dark-gray { .with-color-selectable (@darkGray); }
+a.dark-gray { 
+	.with-color-selectable (@darkGray); 
+	&.disabled {
+		.with-color-disabled (@darkGray);
+	}
+}
 
 /** GRAY **/
 .gray { .with-color (@gray); }
-a.gray { .with-color-selectable (@gray); }
+a.gray { 
+	.with-color-selectable (@gray); 
+	&.disabled {
+		.with-color-disabled (@gray);
+	}
+}
 
 /** DARK BLUE **/
 .dark-blue { .with-color (@darkBlue); }
-a.dark-blue { .with-color-selectable (@darkBlue); }
+a.dark-blue { 
+	.with-color-selectable (@darkBlue); 
+	&.disabled {
+		.with-color-disabled (@darkBlue);
+	}
+}
 
 /** BLUE **/
 .blue { .with-color (@blue); }
-a.blue { .with-color-selectable (@blue); }
+a.blue { 
+	.with-color-selectable (@blue); 
+	&.disabled {
+		.with-color-disabled (@blue);
+	}
+}
 
 /** VIOLET **/
 .violet { .with-color (@violet); }
-a.violet { .with-color-selectable (@violet); }
+a.violet { 
+	.with-color-selectable (@violet); 
+	&.disabled {
+		.with-color-disabled (@violet);
+	}
+}
 
 /** DARK VIOLET **/
 .dark-violet { .with-color (@darkViolet); }
-a.dark-violet { .with-color-selectable (@darkViolet); }
+a.dark-violet { 
+	.with-color-selectable (@darkViolet); 
+	&.disabled {
+		.with-color-disabled (@darkViolet);
+	}
+}
 
 /** GREEN **/
 .green { .with-color (@green); }
-a.green { .with-color-selectable (@green); }
+a.green { 
+	.with-color-selectable (@green); 
+	&.disabled {
+		.with-color-disabled (@green);
+	}
+}
 
 /** DARK GREEN **/
 .dark-green { .with-color (@darkGreen); }
-a.dark-green { .with-color-selectable (@darkGreen); }
+a.dark-green { 
+	.with-color-selectable (@darkGreen); 
+	&.disabled {
+		.with-color-disabled (@darkGreen);
+	}
+}
 
 /** YELLOW **/
 .yellow { .with-color (@yellow); }
-a.yellow { .with-color-selectable (@yellow); }
+a.yellow { 
+	.with-color-selectable (@yellow); 
+	&.disabled {
+		.with-color-disabled (@yellow);
+	}
+}
 
 /** DARK YELLOW **/
 .dark-yellow { .with-color (@darkYellow); }
-a.dark-yellow { .with-color-selectable (@darkYellow); }
+a.dark-yellow { 
+	.with-color-selectable (@darkYellow); 
+	&.disabled {
+		.with-color-disabled (@darkYellow);
+	}
+}
