@@ -164,8 +164,15 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
         this.dimmerChanged = _.debounce(this.dimmerChanged, 500);
 
-        this.bindTo(this.readDimmer, "change:value", this.selectDimmer, this);
+        this.setReadValue = true;
+        console.log('initialize: this.setReadValue = ' + this.setReadValue);
+
+        this.bindTo(this.readDimmer, "change", this.changeReadDimmer, this);
+
+        this.bindTo(this.writeDimmer, "change:value", this.selectDimmer, this);
         this.bindTo(this.readSwitch, "change:value", this.updateSwitch, this);
+
+
     },
 
     switchClicked: function (e) {
@@ -175,7 +182,9 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var value = btnClicked.data('value');
 
         this.flipSwitch(value);
-        this.updateDimmerDetail( (this.isSwitchOn()) ? 100 : 0 );
+
+        this.setReadValue = true;
+        console.log('switchClicked: this.setReadValue = ' + this.setReadValue);
     },
 
     dimmerChanged: function(e){
@@ -184,7 +193,6 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var address = this.writeDimmer.get("address");
 
         this.updateDimmerDetail(value);
-        this.selectSwitch(value);
         app.vent.trigger("device:write", this.writeDimmer, value);
     },
 
@@ -197,18 +205,17 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     updateDimmerDetail: function(value) {
-        $('.dimmer-detail', this.$el).html((value|0) + '%');
+        $('.dimmer-detail', this.$el).html(Math.ceil(value) + '%');
     },
 
     selectSwitch: function(value){
         $('a', this.$el).removeClass('selected');
-        $('a[data-value="' + ((value > 0) ? 1 : 0) + '"]', this.$el).addClass('selected');
+        $('a[data-value="' + value + '"]', this.$el).addClass('selected');
         this.refreshIcon(value);
     },
 
     isSwitchOn: function() {
-        // The comparation is with the data-value that is always 1 or 0. It is not related to the Dpt value.
-        return (this.$('.selected').data('value') === 1);
+        return (this.$('.selected').data('value') === Number(this.model.get('on_value')));
     },
 
     refreshIcon: function() {
@@ -226,6 +233,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
     updateSwitch: function(address, value){
         this.selectSwitch(Number(value));
+        this.setReadValue = true;
     },
 
     selectDimmer: function(address, value){
@@ -233,6 +241,16 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
         this.updateDimmerSlider(value);
         this.updateDimmerDetail(value);
+    },
+
+    changeReadDimmer: function(address){
+
+        console.log('changeReadDimmer: this.setReadValue = ' + this.setReadValue);
+        if (this.setReadValue) {
+            this.updateDimmerSlider(address.get('value'));
+            this.updateDimmerDetail(address.get('value'));    
+        }
+        this.setReadValue = false;
     },
 
     onSliderStart: function(e, ui) {
@@ -248,7 +266,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         this.currentMovsAmount++;
         this.updateDimmerDetail(value);
 
-        if (this.currentMovsAmount >= 5) { // Send to the HIT server each 5 slider movements
+        if (this.currentMovsAmount >= 3) { // Send to the HIT server each 5 slider movements
             this.currentMovsAmount = 0;
             var $dimmer = this.$el.find(".slider-horizontal");
             $dimmer.data('sliding', 'false');
@@ -259,6 +277,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
     onRender: function(){
         var value = this.readSwitch.get("value");
+
         this.updateSwitch(null, value);
 
         this.currentMovsAmount = 0;
@@ -271,11 +290,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
             start: onSliderStart,
             stop: onSliderStop,
             slide: onSliderMoving
-        });
-
-        //value = this.readDimmer.get("value");
-        //this.updateDimmerSlider(value);
-        //this.updateDimmerDetail(value);
+        });        
     }
 });
 
@@ -339,7 +354,8 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
 
     updateShutterDetails: function(shutterValue) {
         this.refreshIcon(shutterValue);
-        this.$('.shutter-detail').html((shutterValue | 0) + '%');
+
+        this.$('.shutter-detail').html(Math.ceil(shutterValue) + '%');
     },
 
     refreshIcon: function(value) {
@@ -1063,7 +1079,8 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     },
 
     close: function() {
-        $(window).off("resize", this.resizeHandler);  
+        $(window).off("resize", this.resizeHandler);
+        Backbone.Marionette.CompositeView.prototype.close.apply(this);
     },
 
     onRender: function() {

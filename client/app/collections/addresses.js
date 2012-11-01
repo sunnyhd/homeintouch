@@ -31,6 +31,7 @@ module.exports = Backbone.Collection.extend({
                     decodedValue = DPT_Transfomer.getDptDecode(dptType)(value);
                 }
 
+                deviceAddr.set({value: 0}, {silent: true});
                 deviceAddr.set({value: decodedValue});
             };
         });
