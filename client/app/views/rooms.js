@@ -243,13 +243,16 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         this.dimmerChanged(e);
     },
     onSliderMoving: function(e, ui) {
+        var value = Number(ui.value);
+
         this.currentMovsAmount++;
+        this.updateDimmerDetail(value);
 
         if (this.currentMovsAmount >= 5) { // Send to the HIT server each 5 slider movements
             this.currentMovsAmount = 0;
             var $dimmer = this.$el.find(".slider-horizontal");
             $dimmer.data('sliding', 'false');
-            $dimmer.slider("value", Number(ui.value));
+            $dimmer.slider("value", value);
             this.dimmerChanged(e);
         }
     },
@@ -366,18 +369,25 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         this.$el.find(".slider-vertical").data('sliding', 'false');
         this.positionChanged(e);
     },
+    onSliderMoving: function(e, ui) {
+        var value = Number(ui.value);
+        this.updateShutterDetails(value);
+    },
 
     onRender: function(){
         var position = this.readPosition.get("value");
 
         var onSliderStart = $.proxy(this.onSliderStart, this);
         var onSliderStop = $.proxy(this.onSliderStop, this);
+        var onSliderMoving = $.proxy(this.onSliderMoving, this);
         this.$el.find(".slider-vertical").slider({
             orientation: "vertical",
             range: "max", min: 0, max: 100,
             start: onSliderStart,
-            stop: onSliderStop
+            stop: onSliderStop,
+            slide: onSliderMoving
         });
+
 
         this.showPosition(null, position);
     },
@@ -436,14 +446,16 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         e.preventDefault();
         var $control = $(e.currentTarget);
 
-        var address = this.writeSetPoint.get("address");
-
         var step = Number(this.model.get("step"));
+        console.log('Thermostat step: ' + step);
 
         var changeTemp = (($control.data('value') === 'minus') ? -1 : 1) * step;
 
+        console.log('ChangeTemp: ' + changeTemp);
+
         var currentPoint = this.readSetPoint.get("value");
         var setpoint = currentPoint + changeTemp;
+        console.log('New Set Point: ' + setpoint);
 
         app.vent.trigger("device:write", this.writeSetPoint, setpoint);
     },
@@ -453,21 +465,11 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     },
 
     showSetPoint: function(address, setPoint){
-        var decimal = (setPoint | 0);
-
-        console.log("setpoint eibd value: ", setPoint);
-        console.log("setpoint decimal value: ", decimal);
-
-        this.$(".setpoint").html(decimal.toFixed(2) + "&nbsp;");
+        this.$(".setpoint").html(setPoint.toFixed(2) + "&nbsp;");
     },
 
     showTemperature: function(address, temperature){
-        var decimal = (temperature | 0);
-
-        console.log("temperature eibd value: ", temperature);
-        console.log("temperature decimal value: ", decimal);
-
-        this.$(".temperature").html(decimal.toFixed(2) + "&nbsp;");
+        this.$(".temperature").html(temperature.toFixed(2) + "&nbsp;");
     },
 
     updateIconColor: function(value) {
