@@ -301,8 +301,9 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     positionChanged: function(e){
         var $position = this.$el.find(".slider-vertical");
         var value = parseInt($position.slider("value"));
+        var actualValue = this.calculateShutterValue(value);
         var address = this.writePosition.get("address");
-        app.vent.trigger("device:write", this.writePosition, value);
+        app.vent.trigger("device:write", this.writePosition, actualValue);
         this.updateShutterDetails(value);
     },
 
