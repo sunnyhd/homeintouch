@@ -19,7 +19,7 @@ app.configure(function() {
     app.set('views', __dirname + '/app/views');
     app.set('view engine', 'jade');
 
-    io.set('log level', 3);
+    io.set('log level', 2);
 
     //app.use(express.basicAuth(settings.credentials.username, settings.credentials.password));
     app.use(express.bodyParser());

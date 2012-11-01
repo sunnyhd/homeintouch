@@ -150,10 +150,11 @@ app.vent.on('device:write', function(addressModel, value){
     
     var address;
     var encodedValue = value;
+    var dptType = '';
     if (_.isString(addressModel)) {
         address = addressModel
     } else {
-        var dptType = addressModel.get('dptType');
+        dptType = addressModel.get('dptType');
         if (dptType) {
             encodedValue = '0x' + DPT_Transfomer.getDptEncode(dptType)(value);
         } else {
@@ -163,7 +164,7 @@ app.vent.on('device:write', function(addressModel, value){
         address = addressModel.get("address");    
     }
     console.log('set value', encodedValue);
-    socket.emit('eib:set', address, encodedValue);
+    socket.emit('eib:set', address, encodedValue, dptType);
 });
 
 app.vent.on('device:camera:command', function(address, value){
