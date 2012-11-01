@@ -242,17 +242,32 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         this.$el.find(".slider-horizontal").data('sliding', 'false');
         this.dimmerChanged(e);
     },
+    onSliderMoving: function(e, ui) {
+        this.currentMovsAmount++;
+
+        if (this.currentMovsAmount >= 5) { // Send to the HIT server each 5 slider movements
+            this.currentMovsAmount = 0;
+            var $dimmer = this.$el.find(".slider-horizontal");
+            $dimmer.data('sliding', 'false');
+            $dimmer.slider("value", Number(ui.value));
+            this.dimmerChanged(e);
+        }
+    },
 
     onRender: function(){
         var value = this.readSwitch.get("value");
         this.updateSwitch(null, value);
 
+        this.currentMovsAmount = 0;
+
         var onSliderStart = $.proxy(this.onSliderStart, this);
         var onSliderStop = $.proxy(this.onSliderStop, this);
+        var onSliderMoving = $.proxy(this.onSliderMoving, this);
         this.$el.find(".slider-horizontal").slider({
             range: "min", min: 0, max: 100,
             start: onSliderStart,
-            stop: onSliderStop
+            stop: onSliderStop,
+            slide: onSliderMoving
         });
 
         //value = this.readDimmer.get("value");
