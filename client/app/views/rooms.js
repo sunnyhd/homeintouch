@@ -175,7 +175,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var value = btnClicked.data('value');
 
         this.flipSwitch(value);
-        this.updateDimmerDetail((value === Number(this.model.get('on_value'))) ? 100 : 0); // FIXME: It needs to be the configured number, not 100!
+        //this.updateDimmerDetail((value === Number(this.model.get('on_value'))) ? 100 : 0); // FIXME: It needs to be the configured number, not 100!
     },
 
     dimmerChanged: function(e){
@@ -254,9 +254,9 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
             stop: onSliderStop
         });
 
-        value = this.readDimmer.get("value");
-        this.updateDimmerSlider(value);
-        this.updateDimmerDetail(value);
+        //value = this.readDimmer.get("value");
+        //this.updateDimmerSlider(value);
+        //this.updateDimmerDetail(value);
     }
 });
 
