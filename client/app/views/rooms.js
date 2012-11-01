@@ -175,7 +175,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
         var value = btnClicked.data('value');
 
         this.flipSwitch(value);
-        //this.updateDimmerDetail((value === Number(this.model.get('on_value'))) ? 100 : 0); // FIXME: It needs to be the configured number, not 100!
+        this.updateDimmerDetail( (this.isSwitchOn()) ? 100 : 0 );
     },
 
     dimmerChanged: function(e){
@@ -202,21 +202,22 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
     selectSwitch: function(value){
         $('a', this.$el).removeClass('selected');
-        $('a[data-value="' + ((this.isSwitchOn(value)) ? 1 : 0) + '"]', this.$el).addClass('selected');
+        $('a[data-value="' + ((value > 0) ? 1 : 0) + '"]', this.$el).addClass('selected');
         this.refreshIcon(value);
     },
 
-    isSwitchOn: function(value) {
-        return (value !== Number(this.model.get('off_value')));
+    isSwitchOn: function() {
+        // The comparation is with the data-value that is always 1 or 0. It is not related to the Dpt value.
+        return (this.$('.selected').data('value') === 1);
     },
 
-    refreshIcon: function(value) {
-        this.updateIconColor(this.isSwitchOn(value));
+    refreshIcon: function() {
+        this.updateIconColor(this.isSwitchOn());
     },
 
-    updateIconColor: function(value) {
+    updateIconColor: function(on) {
         var $widget = $('.hit-icon', this.$el);
-        if (value === Number(this.model.get('on_value'))) {
+        if (on) {
             app.changeIconState($widget, '#FF9522');
         } else {
             app.changeIconState($widget, 'gray');
