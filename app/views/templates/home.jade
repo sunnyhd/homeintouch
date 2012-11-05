@@ -65,16 +65,15 @@ script(id="dashboard-home", type="text/template")
               .end
   .row-fluid
     .span6.clearfix
-      .hit-widget.clearfix.scrollable-x#plugins
-        .hit-title.violet Plugins
+      .hit-widget.clearfix.scrollable-x#time-wheater
+        .hit-title Time and Wheater - <span id="jdigiclock-currentDay">Loading...</span>
+          ul.nav.pull-right
+            li
+              a#editClockSettings.pull-right(href="#")
+                i.icon-cog.icon-white
         .hit-icon-container.viewport
           .overview
-            .hit-icon.violet(data-hit-icon-type="plugins.youtube")
-              span YouTube
-            .hit-icon.violet(data-hit-icon-type="plugins.news")
-              span News
-            .hit-icon.violet(data-hit-icon-type="plugins.games")
-              span Games
+            #digiclock.hit-clock
         .scrollbar
           .track
             .thumb

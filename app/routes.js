@@ -4,6 +4,8 @@ var controllers = helpers.autoload(__dirname + '/controllers');
 module.exports = function(app) {
     app.get('/', controllers.main.index);
 
+    app.get('/api/jdigiclock/proxy', controllers.jdigiclock.proxy);
+
     app.put('/api/homes/:home', controllers.homes.update);
     app.del('/api/homes/:home', controllers.homes.destroy);
 

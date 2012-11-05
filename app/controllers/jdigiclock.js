@@ -1,0 +1,3 @@
+exports.proxy = function(req, res, next) {
+    res.json( {"city":"Bourgas","curr_temp":13,"curr_text":"Clear","curr_icon":33,"forecast":[{"day_date":"11\/03\/2012","day_text":"Mostly sunny and pleasant","day_icon":2,"day_htemp":23,"day_ltemp":12},{"day_date":"11\/04\/2012","day_text":"Areas of morning fog","day_icon":4,"day_htemp":20,"day_ltemp":13},{"day_date":"11\/05\/2012","day_text":"Fog in the a.m.; partly sunny","day_icon":3,"day_htemp":21,"day_ltemp":15},{"day_date":"11\/06\/2012","day_text":"Turning cloudy; warm","day_icon":6,"day_htemp":22,"day_ltemp":13},{"day_date":"11\/07\/2012","day_text":"Cloudy, rain possible; cooler","day_icon":18,"day_htemp":15,"day_ltemp":8}]} );
+};

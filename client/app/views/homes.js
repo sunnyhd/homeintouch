@@ -138,8 +138,12 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         } else {
             app.loadIcons('#my-library');    
         }
+
+        if (this.model.has('timeWheaterConfiguration')) {
+            var timeWheaterModel = this.model.get('timeWheaterConfiguration');
+            this.applyStyle('timeWheaterConfiguration');
+        }
         
-        app.loadIcons('#plugins');
         this.initScrollBar();
     },
 
@@ -171,7 +175,25 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         });
     },
 
+    displayCurrentDate: function(date) {
+        $('#jdigiclock-currentDay').html(date);
+    },
+
+    refreshTimeWeatherStyles: function() {
+        if (this.model.has('timeWheaterConfiguration')) {
+            var timeWheaterModel = this.model.get('timeWheaterConfiguration');
+            this.applyStyle('timeWheaterConfiguration');
+        }
+    },
+
     onRender: function() {
+
+        $('#digiclock', this.$el).jdigiclock({
+            proxyUrl: 'api/jdigiclock/proxy',
+            dayCallback: $.proxy(this.displayCurrentDate, this),
+            loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this)
+        });
+
         this.setScrollbarOverview();
     }
 });
@@ -274,6 +296,7 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
         this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
         this.addStyleValues(data.myHomeFields, this.model.get("myHomeConfiguration"));
         this.addStyleValues(data.myLibraryFields, this.model.get("myLibraryConfiguration"));
+        this.addStyleValues(data.timeWheaterFields, this.model.get("timeWheaterConfiguration"));
 
         return data;
     },
@@ -349,7 +372,6 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
                     that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
                     that.updateStyleConfiguration(data, that.model.myLibraryPrefix, that.model.myLibrarySelector, "myLibraryConfiguration");
                     that.updateStyleConfiguration(data, that.model.myHomePrefix, that.model.myHomeSelector, "myHomeConfiguration");
-                    
 
                     that.result = {
                         status: "OK"
