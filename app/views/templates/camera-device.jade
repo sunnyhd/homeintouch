@@ -1,6 +1,6 @@
 script(id="device-list-camera-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="camera", id!="device-camera-<%= id %>", data-model-id!="<%=id%>")
-    span.widget-title <%= name %>
+    span.widget-title.device-name <%= name %>
     <% if (cameraType === 'img') { %>
     img(src!="<%= url %>")
     <% } else if (cameraType === 'video') { %>
@@ -18,7 +18,7 @@ script(id="device-list-camera-optional-buttons-template", type="text/template")
 
 script(id="device-add-camera-template", type="text/template")
   .modal-header
-    h2 Add A New <%= name %>
+    h2 <%= formTitle %>
   .modal-body
     form.form-horizontal
       .tabbable
@@ -36,85 +36,93 @@ script(id="device-add-camera-template", type="text/template")
             .control-group
               label(for="name").control-label Name
               .controls
-                input(id="name", type="text", placeHolder="Office camera")
+                input(id="name", type="text", placeHolder="Office camera", value!="<%= getValue('name') %>")
             .control-group
               label(for="cameraType").control-label Type
               .controls
                 select(id="cameraType")
+                  <% if ('video' === getValue('cameraType')) { %>
+                  option(value="video", selected="selected") Video
+                  <% } else { %>
                   option(value="video") Video
+                  <% } %>
+                  <% if ('img' === getValue('cameraType')) { %>
+                  option(value="img", selected="selected") Image
+                  <% } else { %>
                   option(value="img") Image
+                  <% } %>                  
             .control-group
               label(for="url").control-label Url
               .controls
-                input(id="url", type="text", placeHolder="Camera source URL")
+                input(id="url", type="text", placeHolder="Camera source URL", value!="<%= getValue('url') %>")
             .control-group#refreshGroup
               label(for="refresh").control-label Refresh
               .controls
-                input(id="refresh", type="number", placeHolder="Refresh Ms")
+                input(id="refresh", type="number", placeHolder="Refresh Ms", value!="<%= getValue('refresh') %>")
             .control-group#autoPlayGroup
               label(for="autoPlay").control-label Auto Play
               .controls
-                input(id="autoPlay", type="checkbox")
+                input(id="autoPlay", type="checkbox", value!="<%= getValue('autoPlay') %>")
           .tab-pane#camera-form-tab2
             .control-group
               label(for="cmd_opt1_btn_name").control-label Button Name
               .controls
-                input(id="cmd_opt1_btn_name", type="text", placeHolder="UI Friendly Name")
+                input(id="cmd_opt1_btn_name", type="text", placeHolder="UI Friendly Name", value!="<%= getValue('cmd_opt1_btn_name') %>")
                 span.help-inline(rel="tooltip", data-placement="left", title="The text of the button displayed in the UI.")
                   i.icon-question-sign
             .control-group
               label(for="cmd_opt1_cmd").control-label Command
               .controls
-                input(id="cmd_opt1_cmd", type="text", placeHolder="Command")
+                input(id="cmd_opt1_cmd", type="text", placeHolder="Command", value!="<%= getValue('cmd_opt1_cmd') %>")
                 span.help-inline(rel="tooltip", data-placement="left", title="The command sent to the HIT server. Example: hitbot_send mobotix picture")
                   i.icon-question-sign
             .control-group
               label(for="cmd_opt1_read_address").control-label Trigger Address
               .controls
-                input(id="cmd_opt1_read_address", type="text", placeHolder="#/#/#")
+                input(id="cmd_opt1_read_address", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('cmd_opt1_read_address') %>")
                 span.help-inline(rel="tooltip", data-placement="left", title="Optional. When this address receives the value '1', the command is sent to the HIT server.")
                   i.icon-question-sign
           .tab-pane#camera-form-tab3
             .control-group
               label(for="cmd_opt2_btn_name").control-label Button Name
               .controls
-                input(id="cmd_opt2_btn_name", type="text", placeHolder="UI Friendly Name")
+                input(id="cmd_opt2_btn_name", type="text", placeHolder="UI Friendly Name", value!="<%= getValue('cmd_opt2_btn_name') %>")
                 span.help-inline(rel="tooltip", data-placement="left", title="The text of the button displayed in the UI.")
                   i.icon-question-sign
             .control-group
               label(for="cmd_opt2_cmd").control-label Command
               .controls
-                input(id="cmd_opt2_cmd", type="text", placeHolder="Command")
+                input(id="cmd_opt2_cmd", type="text", placeHolder="Command", value!="<% getValue('cmd_opt2_cmd') %>")
                 span.help-inline(rel="tooltip", data-placement="left", title="The command sent to the HIT server. Example: hitbot_send mobotix picture")
                   i.icon-question-sign
             .control-group
               label(for="cmd_opt2_read_address").control-label Trigger Address
               .controls
-                input(id="cmd_opt2_read_address", type="text", placeHolder="#/#/#")
+                input(id="cmd_opt2_read_address", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('cmd_opt2_read_address') %>")
                 span.help-inline(rel="tooltip", data-placement="left", title="Optional. When this address receives the value '1', the command is sent to the HIT server.")
                   i.icon-question-sign
           .tab-pane#camera-form-tab4
             .control-group
               label(for="cmd_opt3_btn_name").control-label Button Name
               .controls
-                input(id="cmd_opt3_btn_name", type="text", placeHolder="UI Friendly Name")
+                input(id="cmd_opt3_btn_name", type="text", placeHolder="UI Friendly Name", value!="<%= getValue('cmd_opt3_btn_name') %>")
                 span.help-inline(rel="tooltip", data-placement="left", title="The text of the button displayed in the UI.")
                   i.icon-question-sign
             .control-group
               label(for="cmd_opt3_cmd").control-label Command
               .controls
-                input(id="cmd_opt3_cmd", type="text", placeHolder="Command")
+                input(id="cmd_opt3_cmd", type="text", placeHolder="Command", value!="<%= getValue('cmd_opt3_cmd') %>")
                 span.help-inline(rel="tooltip", data-placement="left", title="The command sent to the HIT server. Example: hitbot_send mobotix picture")
                   i.icon-question-sign
             .control-group
               label(for="cmd_opt3_read_address").control-label Trigger Address
               .controls
-                input(id="cmd_opt3_read_address", type="text", placeHolder="#/#/#")
+                input(id="cmd_opt3_read_address", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('cmd_opt3_read_address') %>")
                 span.help-inline(rel="tooltip", data-placement="left", title="Optional. When this address receives the value '1', the command is sent to the HIT server.")
                   i.icon-question-sign
   .modal-footer
     a(href="#").cancel.btn Cancel
-    a(href="#").add.btn.btn-primary Add
+    a(href="#").add.btn.btn-primary <%= primaryBtnText %>
 
 script(id="device-view-camera-template", type="text/template")
   .modal-header
@@ -136,5 +144,10 @@ script(id="device-view-camera-template", type="text/template")
       .span3
         <%= refresh %>
   .modal-footer
-    a(href="#").delete.btn.pull-left Delete
+    a(href="#").delete.btn.pull-left
+      i.icon-trash 
+      \ Delete
+    a(href="#").edit.btn.pull-left
+      i.icon-edit
+      \ Edit
     a(href="#").cancel.btn.btn-primary Close

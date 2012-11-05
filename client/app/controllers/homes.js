@@ -42,7 +42,8 @@ exports.saveCurrentHome = function(){
 
 exports.save = function(home){
     home.save(home.attributes, {success: function(model, response){
-            model.parseInnerData();    
+            model.parseInnerData();
+            app.vent.trigger("home:saved", model);
         }
     });
 };

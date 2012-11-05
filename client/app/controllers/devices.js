@@ -1,6 +1,7 @@
 var app = require('app');
 var deviceTypesController = require('controllers/device_types');
 var homesController = require('controllers/homes');
+var roomsController = require('controllers/rooms');
 var deviceViews = require('views/devices');
 
 // View -> Device Type Registrations
@@ -41,7 +42,17 @@ var showDeviceViewForm = function(device){
     var deviceType = device.get("type");
     var FormType = deviceTypeViewForm[deviceType];
 
-    var form = new FormType({ model: device });
+    var form = new FormType({ model: device, mode: "view" });
+    app.modal.show(form);
+
+    return form;
+};
+
+var showDeviceEditForm = function(device){
+    var deviceType = device.get("type");
+    var FormType = deviceTypeAddForm[deviceType];
+
+    var form = new FormType({ model: device, mode: "edit" });
     app.modal.show(form);
 
     return form;
@@ -88,6 +99,16 @@ var addDeviceWorkflows = {
         });
     },
 
+    editDevice: function(device){
+        var that = this;
+
+        var editDeviceForm = showDeviceEditForm(device);
+
+        editDeviceForm.on("close", function(){
+            that.editDeviceFormClosed(editDeviceForm.result);
+        });
+    },
+
     getAddGroupViewModel: function(room){
         // create a view model with all our data
         var roomData = room.toJSON();
@@ -113,6 +134,13 @@ var addDeviceWorkflows = {
             if (room.deviceGroups.length === 1) {
                 room.collection.select(room);
             }
+        }
+    },
+
+    editDeviceFormClosed: function(result){
+        if (result.status === "OK"){
+            homesController.saveCurrentHome();
+            roomsController.showCurrent();
         }
     },
 
@@ -180,6 +208,12 @@ app.vent.on("device:selected", function(device){
     var form = showDeviceViewForm(device);
     form.on("device:deleted", function(){
         homesController.saveCurrentHome();
+    });
+
+    form.on("close", function(){
+        if (form.result.status === "EDIT") {
+            addDeviceWorkflows.editDevice(form.result.device);
+        }
     });
 });
 

@@ -1,30 +1,34 @@
 script(id="device-list-scenes-item-template", type="text/template")
   .hit-icon.device-widget.selectable(data-widget-type="scenes", data-hit-icon-type!="<%=scenesIcon%>", data-model-id!="<%=id%>")
-    span <%= name %>
+    span.device-name <%= name %>
 
 script(id="device-add-scenes-template", type="text/template")
   .modal-header
-    h2 Add A New <%= name %>
+    h2 <%= formTitle %>
   .modal-body
     form.form-horizontal
       .control-group
         label(for="name").control-label Name
         .controls
-          input(id="name", type="text", placeHolder="Dinner")
+          input(id="name", type="text", placeHolder="Dinner", value!="<%= getValue('name') %>")
       .control-group
         label(for="write_scenes").control-label Write Address
         .controls
-          input(id="write_scenes", type="text", placeHolder="#/#/#")
+          input(id="write_scenes", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_scenes') %>")
       .control-group
         label(for="scenes_icon").control-label Icon
         .controls
           select(id="icon")
             <% _.each(_.keys(icons), function(icon) { %>
+            <% if (('devices.scenes.' + icon) === getValue('scenesIcon')) { %>
+            option(value!="<%= ('devices.scenes.' + icon) %>", selected="selected") <%= icon %>
+            <% } else { %>
             option(value!="<%= ('devices.scenes.' + icon) %>") <%= icon %>
+            <% } %>
             <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
-    a(href="#").add.btn.btn-primary Add
+    a(href="#").add.btn.btn-primary <%= primaryBtnText %>
 
 script(id="device-view-scenes-template", type="text/template")
   .modal-header
@@ -40,6 +44,16 @@ script(id="device-view-scenes-template", type="text/template")
         label(for="write_scenes").pull-right Write Address
       .span3
         <%= getAddress('write_scenes').address %>
+    .row
+      .span2
+        label(for="scenes_icon").pull-right Icon
+      .span3
+        <%= scenesIcon %>
   .modal-footer
-    a(href="#").delete.btn.pull-left Delete
+    a(href="#").delete.btn.pull-left
+      i.icon-trash 
+      \ Delete
+    a(href="#").edit.btn.pull-left
+      i.icon-edit
+      \ Edit
     a(href="#").cancel.btn.btn-primary Close

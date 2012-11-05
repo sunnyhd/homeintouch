@@ -61,14 +61,10 @@
   height: 10px;
 }
 
-.device .device-name {
-  font-size: 12pt;
-  font-weight: bold;
+span.device-name {
   padding-bottom: 10px;
-}
-
-.device-name a, .device-name a:hover, .device-name a:active, .device-name a:visited {
-  color: #008CD8
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .device-control {

@@ -1,6 +1,6 @@
 script(id="device-list-door-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="door", data-hit-icon-type="devices.doorClose", data-model-id!="<%=id%>")
-    span <%= name %>
+    span.device-name <%= name %>
     .widget-opts
       ul.device-btn-group.clearfix
         li.device-btn
@@ -8,28 +8,28 @@ script(id="device-list-door-item-template", type="text/template")
 
 script(id="device-add-door-template", type="text/template")
   .modal-header
-    h2 Add A New <%= name %>
+    h2 <%= formTitle %>
   .modal-body
     form.form-horizontal
       .control-group
         label(for="name").control-label Name
         .controls
-          input(id="name", type="text", placeHolder="Front Door")
+          input(id="name", type="text", placeHolder="Front Door", value!="<%= getValue('name') %>")
       .control-group
         label(for="read_door").control-label Read Address
         .controls
-          input(id="read_door", type="text", placeHolder="#/#/#")
+          input(id="read_door", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_door') %>")
       .control-group
         label(for="open_value").control-label Open Value
         .controls
-          input(id="open_value", type="text", placeHolder="1")
+          input(id="open_value", type="text", placeHolder="1", value!="<%= getValue('open_value') %>")
       .control-group
         label(for="close_value").control-label Close Value
         .controls
-          input(id="close_value", type="text", placeHolder="0")
+          input(id="close_value", type="text", placeHolder="0", value!="<%= getValue('close_value') %>")
   .modal-footer
     a(href="#").cancel.btn Cancel
-    a(href="#").add.btn.btn-primary Add
+    a(href="#").add.btn.btn-primary <%= primaryBtnText %>
 
 script(id="device-view-door-template", type="text/template")
   .modal-header
@@ -45,6 +45,21 @@ script(id="device-view-door-template", type="text/template")
         label(for="read_door").pull-right Read Address
       .span3
         <%= getAddress('read_door').address %>
+    .row
+      .span2
+        label(for="open_value").pull-right Open Value
+      .span3
+        <%= open_value %>
+    .row
+      .span2
+        label(for="close_value").pull-right Close Value
+      .span3
+        <%= close_value %>
   .modal-footer
-    a(href="#").delete.btn.pull-left Delete
+    a(href="#").delete.btn.pull-left
+      i.icon-trash 
+      \ Delete
+    a(href="#").edit.btn.pull-left
+      i.icon-edit
+      \ Edit
     a(href="#").cancel.btn.btn-primary Close

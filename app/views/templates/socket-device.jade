@@ -1,6 +1,6 @@
 script(id="device-list-socket-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="socket", data-hit-icon-type="devices.socket", data-model-id!="<%=id%>")
-    span <%= name %>
+    span.device-name <%= name %>
     .widget-opts
       ul.device-btn-group.two.clearfix
         li.device-btn
@@ -10,32 +10,32 @@ script(id="device-list-socket-item-template", type="text/template")
 
 script(id="device-add-socket-template", type="text/template")
   .modal-header
-    h2 Add A New <%= name %>
+    h2 <%= formTitle %>
   .modal-body
     form.form-horizontal
       .control-group
         label(for="name").control-label Name
         .controls
-          input(id="name", type="text", placeHolder="Office Socket")
+          input(id="name", type="text", placeHolder="Office Socket", value!="<%= getValue('name') %>")
       .control-group
         label(for="read_socket").control-label Read Address
         .controls
-          input(id="read_socket", type="text", placeHolder="#/#/#")
+          input(id="read_socket", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_socket') %>")
       .control-group
         label(for="write_socket").control-label Write Address
         .controls
-          input(id="write_socket", type="text", placeHolder="#/#/#")
+          input(id="write_socket", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_socket') %>")
       .control-group
         label(for="on_value").control-label On Value
         .controls
-          input(id="on_value", type="text", placeHolder="1")
+          input(id="on_value", type="text", placeHolder="1", value!="<%= getValue('on_value') %>")
       .control-group
         label(for="off_value").control-label Off Value
         .controls
-          input(id="off_value", type="text", placeHolder="0")
+          input(id="off_value", type="text", placeHolder="0", value!="<%= getValue('off_value') %>")
   .modal-footer
     a(href="#").cancel.btn Cancel
-    a(href="#").add.btn.btn-primary Add
+    a(href="#").add.btn.btn-primary <%= primaryBtnText %>
 
 script(id="device-view-socket-template", type="text/template")
   .modal-header
@@ -56,6 +56,21 @@ script(id="device-view-socket-template", type="text/template")
         label(for="write_address").pull-right Write Address
       .span3
         <%= getAddress('write_socket').address %>
+    .row
+      .span2
+        label(for="on_value").pull-right On Value
+      .span3
+        <%= on_value %>
+    .row
+      .span2
+        label(for="off_value").pull-right Off Value
+      .span3
+        <%= off_value %>
   .modal-footer
-    a(href="#").delete.btn.pull-left Delete
+    a(href="#").delete.btn.pull-left
+      i.icon-trash 
+      \ Delete
+    a(href="#").edit.btn.pull-left
+      i.icon-edit
+      \ Edit
     a(href="#").cancel.btn.btn-primary Close

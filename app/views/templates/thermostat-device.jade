@@ -1,6 +1,6 @@
 script(id="device-list-thermostat-item-template", type="text/template")
   .hit-icon.device-widget.blue(data-widget-type="thermostat", data-hit-icon-type="devices.thermostatWidget", data-model-id!="<%=id%>")
-    span <%= name %>
+    span.device-name <%= name %>
     .thermostat-detail
       span.temperature 0&nbsp;
       span.measure C&deg;
@@ -31,75 +31,85 @@ script(id="device-list-thermostat-item-template", type="text/template")
 
 script(id="device-add-thermostat-template", type="text/template")
   .modal-header
-    h2 Add A New <%= name %>
+    h2 <%= formTitle %>
   .modal-body
     form.form-horizontal
       .control-group
         label(for="name").control-label Name
         .controls
-          input(id="name", type="text", placeHolder="Living Room")
+          input(id="name", type="text", placeHolder="Living Room", value!="<%= getValue('name') %>")
       .control-group
         label(for="write_mode").control-label Write Mode Address
         .controls
-          input(id="write_mode", type="text", placeHolder="#/#/#")
+          input(id="write_mode", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_mode') %>")
       .control-group
         label(for="read_mode").control-label Read Mode Address
         .controls
-          input(id="read_mode", type="text", placeHolder="#/#/#")
+          input(id="read_mode", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_mode') %>")
       .control-group
         label(for="read_temperature_actual").control-label Read Temp Address
         .controls
-          input(id="read_temperature_actual", type="text", placeHolder="#/#/#")
+          input(id="read_temperature_actual", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_temperature_actual') %>")
       .control-group
         label(for="read_temperature_set").control-label Read Temp Setpoint Address
         .controls
-          input(id="read_temperature_set", type="text", placeHolder="#/#/#")
+          input(id="read_temperature_set", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_temperature_set') %>")
       .control-group
-        label(for="write_temperature_set").control-label Write Temp Setpont Address
+        label(for="write_temperature_set").control-label Write Temp Setpoint Address
         .controls
-          input(id="write_temperature_set", type="text", placeHolder="#/#/#")
+          input(id="write_temperature_set", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_temperature_set') %>")
       .control-group
         label(for="step").control-label Increase/Decrease Step
         .controls
-          input(id="step", type="text", placeHolder="0.5")
+          input(id="step", type="text", placeHolder="0.5", value!="<%= getValue('step') %>")
   .modal-footer
     a(href="#").cancel.btn Cancel
-    a(href="#").add.btn.btn-primary Add
+    a(href="#").add.btn.btn-primary <%= primaryBtnText %>
 
 script(id="device-view-thermostat-template", type="text/template")
   .modal-header
     h2 <%= name %>
   .modal-body
     .row
-      .span3
+      .span2
         label(for="name").pull-right Name
       .span3
         <%= name %>
     .row
-      .span3
+      .span2
         label(for="write_mode").pull-right Write Mode Address
       .span3
         <%= getAddress('write_mode').address %>
     .row
-      .span3
+      .span2
         label(for="read_mode").pull-right Read Mode Address
       .span3
         <%= getAddress('read_mode').address %>
     .row
-      .span3
+      .span2
         label(for="read_temperature_actual").pull-right Read Temp Address
       .span3
         <%= getAddress('read_temperature_actual').address %>
     .row
-      .span3
+      .span2
         label(for="read_temperature_set").pull-right Read Temp Setpoint Address
       .span3
         <%= getAddress('read_temperature_set').address %>
     .row
-      .span3
+      .span2
         label(for="write_temperature_set").pull-right Write Temp Setpont Address
       .span3
         <%= getAddress('write_temperature_set').address %>
+    .row
+      .span2
+        label(for="step").pull-right Increase/Decrease Step
+      .span3
+        <%= step %>
   .modal-footer
-    a(href="#").delete.btn.pull-left Delete
+    a(href="#").delete.btn.pull-left
+      i.icon-trash 
+      \ Delete
+    a(href="#").edit.btn.pull-left
+      i.icon-edit
+      \ Edit
     a(href="#").cancel.btn.btn-primary Close

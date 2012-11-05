@@ -25,7 +25,7 @@ app.vent.on("floor:add", function(){
     form.on("save", function(floor){
         home.addFloor(floor);
         homesController.save(home);
-        app.vent.trigger('home:selected', home);
+        app.vent.trigger('home:selected', home);        
     });
 });
 
@@ -57,6 +57,11 @@ app.vent.on("floor:editStyle", function(homeView) {
     });
 
     app.modal.show(editStyleForm);
+});
+
+app.vent.on("home:saved", function(newCurrentHome){
+    // Updates the floor reference
+    exports.currentFloor = homesController.currentHome.floors.get(exports.currentFloor.id);
 });
 
 // Helper Methods

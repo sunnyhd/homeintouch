@@ -59,7 +59,7 @@ exports.DeviceView = Backbone.Marionette.ItemView.extend({
 
     events: function(){
         var events = {
-            "click .device-name a": "deviceClicked"
+            "click .device-name": "deviceClicked"
         };
         return _.extend(events, this.formEvents);
     },
@@ -78,6 +78,7 @@ exports.DeviceView = Backbone.Marionette.ItemView.extend({
     deviceClicked: function(e){
         e.preventDefault();
         app.vent.trigger("device:selected", this.model);
+        return false;
     },
 
     refreshIcon: function() {
@@ -143,6 +144,7 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     onRender: function(){
         var value = this.readAddress.get("value");
         this.selectSwitch(null, value);
+        this.refreshIcon();
     }
 
 });
@@ -443,6 +445,7 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         this.bindTo(this.readMode, "change:value", this.showMode, this);
         this.bindTo(this.readSetPoint, "change:value", this.showSetPoint, this);
         this.bindTo(this.readTemperature, "change:value", this.showTemperature, this);
+        this.readSetPoint.on("change", this.updateSetPoint, this);
     },
 
     modeClicked: function(e){
@@ -494,6 +497,10 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         this.$(".setpoint").html(setPoint.toFixed(2) + "&nbsp;");
     },
 
+    updateSetPoint: function(address){
+      this.$(".setpoint").html(address.get("value").toFixed(2) + "&nbsp;");  
+    },
+
     showTemperature: function(address, temperature){
         this.$(".temperature").html(temperature.toFixed(2) + "&nbsp;");
     },
@@ -518,6 +525,11 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         this.showTemperature(null, temperature);
 
         this.updateIconColor();
+    },
+
+    close: function() {
+        Backbone.Marionette.ItemView.prototype.close.apply(this);
+        this.readSetPoint.off();
     }
 });
 
@@ -1092,11 +1104,11 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     initScrollBar: function() {
         var opts = { axis: 'x', invertscroll: app.isTouchDevice() };
-        this.$(this.getViewId()).tinyscrollbar(opts);
+        $(this.getViewId()).tinyscrollbar(opts);
     },
 
     updateScrollBar: function() {
-        this.$(this.getViewId()).tinyscrollbar_update();
+        $(this.getViewId()).tinyscrollbar_update();
     },
 
     setScrollbarOverview: function() {
