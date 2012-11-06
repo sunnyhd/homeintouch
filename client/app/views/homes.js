@@ -72,7 +72,8 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
     events: {
         "click .floor-item-list": "floorClicked",
-        "click a.add-floor": "addFloorHandler"
+        "click a.add-floor": "addFloorHandler",
+        "click #editTimeWeatherSettings": "timeWeatherSettingsHandler"
     },
 
     initialize: function() {
@@ -82,6 +83,12 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
     close: function() {
         $(window).off("resize", this.resizeHandler);  
+    },
+
+    timeWeatherSettingsHandler: function(e) {
+        e.preventDefault();
+        app.vent.trigger("home:editTimeWeather", this.model );
+        return false;
     },
 
     floorClicked: function(e){
@@ -175,6 +182,7 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         });
     },
 
+    // TIME & WEATHER METHODS
     displayCurrentDate: function(date) {
         $('#jdigiclock-currentDay').html(date);
     },
@@ -188,10 +196,13 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
     onRender: function() {
 
+        var location = this.model.get('timeWheaterConfiguration').get('location');
+
         $('#digiclock', this.$el).jdigiclock({
             proxyUrl: 'api/jdigiclock/proxy',
             dayCallback: $.proxy(this.displayCurrentDate, this),
-            loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this)
+            loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
+            weatherLocationCode: location
         });
 
         this.setScrollbarOverview();
@@ -401,6 +412,90 @@ exports.EditStyleHomeForm = Backbone.Marionette.ItemView.extend({
             status: "CANCEL"
         }
 
+        this.close();
+    }
+});
+
+exports.EditTimeWeatherForm = Backbone.Marionette.ItemView.extend({
+
+    template: "#edit-time-weather-settings-template",
+
+    events: {
+        "click .cancel.btn": "cancelClicked",
+        "click .edit.btn": "editClicked"
+    },
+
+    serializeData: function(){
+        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
+        data.type = 'Home';
+        data.timeWheaterFields = this.model.get("timeWheaterFields");
+        // this.addStyleValues(data.timeWheaterFields, this.model.get("timeWheaterConfiguration"));
+        return data;
+/*
+        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
+
+        data.type = 'Room';
+        data.bodyFields = this.model.get("bodyFields");
+
+        this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
+
+        return data;*/
+    },
+
+    onRender: function() {
+        var $autocompleteEl = $('#location-label', this.$el);
+        $autocompleteEl.autocomplete({
+            minLength: 2,
+            source: cities,
+            focus: function( e, ui ) {
+                $("#location-label").val( ui.item.label );
+                return false;
+            },
+            select: function( e, ui ) {
+                $("#location-label").val( ui.item.label );
+                $("#location").val( ui.item.value );
+                return false;
+            }
+        });
+
+        $autocompleteEl.data("autocomplete")._renderItem = function(ul, item) {
+            return $( "<li>" )
+                .data( "item.autocomplete", item )
+                .append( "<a>" + item.label + "</a>" )
+                .appendTo( ul );
+        };
+
+        $autocompleteEl.data("autocomplete")._renderMenu = function(ul, items) {
+            var self = this;
+            var subItems = _.first(items, 15);
+            $.each(subItems, function(index, item) {
+                self._renderItem(ul, item);
+            });
+            
+            $("<li class='ui-menu-item'></li>")
+            .append("<span class='ui-autocomplete-result-item'>Showing <b>" + subItems.length + "</b> of <b>" + items.length + "</b> results</span>")
+            .appendTo(ul);
+        };
+    },
+
+    editClicked: function(e){
+        e.preventDefault();
+
+        var formFields = _.union(_.pluck(this.model.get("timeWheaterFields"), 'id'));
+
+        var data = Backbone.FormHelpers.getFormData(this, formFields);           
+
+        this.result = {
+            status: "OK"
+        };
+        this.close();
+    },
+
+    cancelClicked: function(e){
+        e.preventDefault();
+        this.result = {
+            status: "CANCEL"
+        }
         this.close();
     }
 });

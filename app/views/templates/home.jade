@@ -69,7 +69,7 @@ script(id="dashboard-home", type="text/template")
         .hit-title Time and Wheater - <span id="jdigiclock-currentDay">Loading...</span>
           ul.nav.pull-right
             li
-              a#editClockSettings.pull-right(href="#")
+              a#editTimeWeatherSettings.pull-right(href="#")
                 i.icon-cog.icon-white
         .hit-icon-container.viewport
           .overview
@@ -100,3 +100,26 @@ script(id="context-menu-home-opts", type="text/template")
     a(href="#") Settings
   li
     a#editStyle(href="#") Edit Styles
+
+script(id="edit-time-weather-settings-template", type="text/template")
+  .modal-header
+    h2 Edit Time & Weather Settings
+  .modal-body
+    .tabbable
+      ul.nav.nav-tabs
+        li.active
+          a(href="#tab1", data-toggle="tab") Timezone 
+        li
+          a(href="#tab2", data-toggle="tab") Styles
+      .tab-content
+        .tab-pane.active#tab1
+          form.form-horizontal
+            .control-group
+              label(for="location").control-label Location
+              .controls
+                input(id="location-label", type="text", placeHolder="")
+                input(id="location", type="hidden")
+        .tab-pane#tab2
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").edit.btn.btn-primary Save

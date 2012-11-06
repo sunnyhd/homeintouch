@@ -126,3 +126,17 @@ app.vent.on("home:editStyle", function(homeView) {
 
     app.modal.show(editStyleForm);
 });
+
+app.vent.on("home:editTimeWeather", function(home) {
+
+    var editForm = new homeViews.EditTimeWeatherForm( {model: home} );
+
+    editForm.on("close", function(){
+        if (editForm.result.status === "OK") {
+            exports.saveCurrentHome();
+            exports.showCurrent();
+        }
+    });
+
+    app.modal.show(editForm);
+});
