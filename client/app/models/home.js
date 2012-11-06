@@ -49,9 +49,11 @@ module.exports = BaseModel.extend({
     timeWheaterFields: [
         {name: "Text Color", id: "time-wheater-color"}, 
         {name: "Background Color", id: "time-wheater-class-background-color", type: "class-list", options: app.colorClasses}, 
-        {name: "Opacity", id: "time-wheater-opacity"}
+        {name: "Opacity", id: "time-wheater-opacity"},
+        {name: "Location", id: "location"}
     ],
     timeWheaterDefaultStyle: { 'class-background-image': 'blue' },
+    timeWheaterDefaults: {'location': 'EUR|DE|GM003|BERLIN'},
     
     initialize: function() {
         this.parseInnerData();
@@ -96,6 +98,7 @@ module.exports = BaseModel.extend({
         }            
         timeWheaterConfiguration.set('selector', this.timeWheaterSelector);
         timeWheaterConfiguration.set('defaultStyle', this.timeWheaterDefaultStyle);
+        timeWheaterConfiguration.set('location', this.timeWheaterDefaults['location']);
         this.set("timeWheaterConfiguration", timeWheaterConfiguration);
 
 

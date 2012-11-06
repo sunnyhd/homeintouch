@@ -1134,7 +1134,7 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
 
     editDeviceGroupClicked: function(e){
         e.preventDefault();
-        app.vent.trigger("room:editDeviceGroup", this);
+        app.vent.trigger("room:editDeviceGroup", this.model);
     },
 
     appendHtml: function(cv, iv){

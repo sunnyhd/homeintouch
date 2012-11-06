@@ -1,3 +1,46 @@
+var http = require('http');
+var xml2js = require('xml2js');
+
 exports.proxy = function(req, res, next) {
-    res.json( {"city":"Bourgas","curr_temp":13,"curr_text":"Clear","curr_icon":33,"forecast":[{"day_date":"11\/03\/2012","day_text":"Mostly sunny and pleasant","day_icon":2,"day_htemp":23,"day_ltemp":12},{"day_date":"11\/04\/2012","day_text":"Areas of morning fog","day_icon":4,"day_htemp":20,"day_ltemp":13},{"day_date":"11\/05\/2012","day_text":"Fog in the a.m.; partly sunny","day_icon":3,"day_htemp":21,"day_ltemp":15},{"day_date":"11\/06\/2012","day_text":"Turning cloudy; warm","day_icon":6,"day_htemp":22,"day_ltemp":13},{"day_date":"11\/07\/2012","day_text":"Cloudy, rain possible; cooler","day_icon":18,"day_htemp":15,"day_ltemp":8}]} );
+
+	var location = req.query.location;
+	var metric = Number(req.query.metric);
+	var parser = new xml2js.Parser();
+	
+	var options = {
+	  host: 'wwwa.accuweather.com',
+	  port: 80,
+	  path: '/adcbin/forecastfox/weather_data.asp?location='+location+'&metric='+metric
+	};
+
+	http.get(options, function(response) {
+		var resBody = '';
+	  	response.on('data', function (chunk) {
+			resBody += chunk;
+	  	});
+	  	response.on('end', function () {
+
+	    	parser.parseString(resBody, function (err, result) {
+
+		        var xml = result['adc_database'];
+		        var weather = {};
+		    	weather['city']      = xml.local[0].city[0];
+				weather['curr_temp'] = Number(xml.currentconditions[0].temperature[0]);
+				weather['curr_text'] = xml.currentconditions[0].weathertext[0];
+				weather['curr_icon'] = Number(xml.currentconditions[0].weathericon[0]);
+				
+				var day = 5;
+				weather['forecast'] = [];
+				for (var i = 0; i < day; i++) {
+					weather['forecast'][i] = {};
+				    weather['forecast'][i]['day_date']  = xml.forecast[0].day[i].obsdate[0];
+				    weather['forecast'][i]['day_text']  = xml.forecast[0].day[i].daytime[0].txtshort[0];
+				    weather['forecast'][i]['day_icon']  = Number(xml.forecast[0].day[i].daytime[0].weathericon[0]);
+				    weather['forecast'][i]['day_htemp'] = Number(xml.forecast[0].day[i].daytime[0].hightemperature[0]);
+				    weather['forecast'][i]['day_ltemp'] = Number(xml.forecast[0].day[i].daytime[0].lowtemperature[0]);
+				}
+				res.json( weather );
+		    });
+	  	});
+	});
 };
