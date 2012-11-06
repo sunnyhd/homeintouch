@@ -11,6 +11,19 @@ script(id="add-home-template", type="text/template")
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary Add
 
+script(id="edit-home-template", type="text/template")
+  .modal-header
+    h2 Edit Home
+  .modal-body
+    form.form-horizontal
+      .control-group
+        label(for="name").control-label Name
+        .controls
+          input(id="name", type="text", placeHolder="Vacation", value!="<%= name %>")
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").save.btn.btn-primary Save
+
 script(id="view-home-template", type="text/template")
   .modal-header
     h2 <%= name %>
@@ -97,6 +110,6 @@ script(id="context-menu-home-opts", type="text/template")
   li
     a.add-floor(href="#") Add Floor
   li
-    a(href="#") Settings
+    a#home-settings(href="#") Settings
   li
     a#editStyle(href="#") Edit Styles

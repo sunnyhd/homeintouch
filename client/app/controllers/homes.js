@@ -114,6 +114,19 @@ app.vent.on("home:switch", function(home) {
     app.modal.show(switchView);
 });
 
+app.vent.on("home:edit", function(home) {
+    var form = new homeViews.EditHomeForm({model: home});
+
+    form.on("close", function() {
+        if (form.status === "OK") {
+            exports.saveCurrentHome();
+            exports.showCurrent();    
+        }        
+    }); 
+
+    app.modal.show(form);
+});
+
 app.vent.on("home:editStyle", function(homeView) {
     
     var editStyleForm = new homeViews.EditStyleHomeForm({model: exports.currentHome});

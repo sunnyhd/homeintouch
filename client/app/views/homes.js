@@ -8,12 +8,18 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
 
     events: {
         'click a.add-floor': 'addFloorHandler',
+        'click a#home-settings' : 'editHomeHandler',
         'click a#editStyle': 'editStyle'
     },
 
     addFloorHandler: function(e) {
         e.preventDefault();
         app.vent.trigger("floor:add");
+    },
+
+    editHomeHandler: function(e) {
+        app.vent.trigger("home:edit", homesController.currentHome);
+        return false;
     },
 
     editStyle: function() {
@@ -212,6 +218,30 @@ exports.AddHomeForm = Backbone.Marionette.ItemView.extend({
         var name = this.$("#home-name").val();
         this.trigger("save", name);
         this.close();
+    },
+
+    cancelClicked: function(e){
+        e.preventDefault();
+        this.close();
+    }
+
+});
+
+exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
+
+    template: "#edit-home-template",
+
+    events: {
+        "click .save": "saveClicked",
+        "click .cancel": "cancelClicked"
+    },
+
+    saveClicked: function(e) {
+        var name = this.$("#name").val();
+        this.model.set("name", name);
+        this.status = "OK";
+        this.close();
+        return false;
     },
 
     cancelClicked: function(e){

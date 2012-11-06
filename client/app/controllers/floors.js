@@ -62,7 +62,9 @@ app.vent.on("floor:editStyle", function(homeView) {
 app.vent.on("home:saved", function(newCurrentHome){
     // Updates the floor reference
     exports.floors = homesController.currentHome.floors;
-    exports.currentFloor = homesController.currentHome.floors.get(exports.currentFloor.id);
+    if (exports.currentFloor) {
+        exports.currentFloor = homesController.currentHome.floors.get(exports.currentFloor.id);    
+    }    
 });
 
 // Helper Methods
