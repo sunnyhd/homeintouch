@@ -33,6 +33,11 @@ module.exports = BaseModel.extend({
         }
     },
 
+    editAddress: function(type, addr) {
+        var address = this.getAddressByType(type);
+        address.set("address", addr);
+    },
+
     toJSON: function(){
         var json = BaseModel.prototype.toJSON.call(this);
 

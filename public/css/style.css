@@ -328,16 +328,6 @@ ul.device-list li:last-child .device {
   height: 10px;
 }
 
-.device .device-name {
-  font-size: 12pt;
-  font-weight: bold;
-  padding-bottom: 10px;
-}
-
-.device-name a, .device-name a:hover, .device-name a:active, .device-name a:visited {
-  color: #008CD8
-}
-
 .device-control {
   margin: 0px 0px 0px 10px;
 }

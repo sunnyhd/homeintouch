@@ -287,7 +287,23 @@ var viewHelpers = {
             return addr.type == addressType
         });
         return address;
-    }    
+    },
+
+    getAddressValue: function(addressType){
+        var address = _.find(this.addresses, function(addr){
+            return addr.type == addressType
+        });
+
+        if (address) {
+            return _.has(address, "address") ? address.address : "";
+        } else {
+            return "";
+        }
+    },
+
+    getValue: function(attribute) {
+        return _.has(this, attribute) ? this[attribute] : "";
+    }
 };
 
 // apply all view helpers to the base item view's serialize data

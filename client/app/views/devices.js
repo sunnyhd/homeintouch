@@ -157,10 +157,29 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
         var events = {
             "click .cancel.btn": "cancelClicked",
             "click .add.btn": "addClicked",
-            "click .delete.btn": "deleteClicked"
+            "click .delete.btn": "deleteClicked",
+            "click .edit.btn": "editClicked"
         }
         _.extend(events, this.formEvents);
         return events;
+    },
+
+    initialize: function() {
+        this.mode = this.options.mode;
+    },
+
+    serializeData: function(){
+
+        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
+
+        data.primaryBtnText = (this.mode === "edit") ? "Save" : "Add";
+        data.formTitle = (this.mode === "edit") ? "Update this " + this.model.get("type") : "Add A New " + this.model.get("name");
+
+        if (this.mode !== "edit" && this.mode !== "view") {
+            data.name = "";
+        }
+
+        return data;
     },
 
     deleteClicked: function(e){
@@ -170,13 +189,30 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
         this.close();
     },
 
+    editClicked: function(e){
+        e.preventDefault();
+
+        this.result = {
+            status: "EDIT",
+            device: this.model
+        }
+
+        this.close();
+    },
+
     addClicked: function(e){
         e.preventDefault();
 
         var data = Backbone.FormHelpers.getFormData(this);
-        data.type = this.model.get("type");
+        var device;
 
-        var device = this.buildDevice(data);
+        if (this.mode !== "edit") {
+            data.type = this.model.get("type");
+            device = this.buildDevice(data);
+        } else {
+            this.updateDevice(data);
+            device = this.model;
+        }
 
         this.result = {
             status: "OK",
@@ -194,7 +230,7 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
         }
 
         this.close();
-    }
+    },
 
 });
 
@@ -216,6 +252,16 @@ exports.AddSwitchDeviceForm = exports.AddEditDeviceTypeForm.extend({
         device.addAddress("write_switch", data.write_switch, '1.001');
 
         return device;
+    },
+
+    updateDevice: function(data){
+
+        this.model.set("name", data.name);
+        this.model.set("on_value", data.on_value);
+        this.model.set("off_value", data.off_value);
+
+        this.model.editAddress("read_switch", data.read_switch);
+        this.model.editAddress("write_switch", data.write_switch);
     }
 
 });
@@ -246,6 +292,17 @@ exports.AddShutterDeviceForm = exports.AddEditDeviceTypeForm.extend({
         device.addAddress("write_switch", data.write_switch, '1.008');
 
         return device;
+    },
+
+    updateDevice: function(data) {
+        this.model.set("name", data.name);
+        this.model.set("max_value", data.max_value);
+        this.model.set("min_value", data.min_value);
+
+        this.model.editAddress("read_position", data.read_position);
+        this.model.editAddress("write_stop", data.write_stop);
+        this.model.editAddress("write_position", data.write_position);
+        this.model.editAddress("write_switch", data.write_switch);
     }
 
 });
@@ -276,6 +333,18 @@ exports.AddThermostatDeviceForm = exports.AddEditDeviceTypeForm.extend({
         device.addAddress("read_temperature_actual", data.read_temperature_actual, '9.001');
 
         return device;
+    },
+
+    updateDevice: function(data) {
+
+        this.model.set("name", data.name);
+        this.model.set("step", data.step);
+        
+        this.model.editAddress("read_mode", data.read_mode);
+        this.model.editAddress("write_mode", data.write_mode);
+        this.model.editAddress("read_temperature_set", data.read_temperature_set);
+        this.model.editAddress("write_temperature_set", data.write_temperature_set);
+        this.model.editAddress("read_temperature_actual", data.read_temperature_actual);
     }
 
 });
@@ -306,8 +375,18 @@ exports.AddDimmerDeviceForm = exports.AddEditDeviceTypeForm.extend({
         device.addAddress("write_dimmer",data.write_dimmer, '5.001');
 
         return device;
-    }
+    },
 
+    updateDevice: function(data) {
+        this.model.set("name", data.name);
+        this.model.set("on_value", data.on_value);
+        this.model.set("off_value", data.off_value);
+
+        this.model.editAddress("read_switch", data.read_switch);
+        this.model.editAddress("write_switch", data.write_switch);
+        this.model.editAddress("read_dimmer", data.read_dimmer);
+        this.model.editAddress("write_dimmer", data.write_dimmer);
+    }
 });
 
 exports.ViewDimmerDeviceForm = exports.AddEditDeviceTypeForm.extend({
@@ -332,6 +411,14 @@ exports.AddDoorDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
         device.addAddress("read_door", data.read_door, '1.009');
         return device;
+    },
+
+    updateDevice: function(data) {
+        this.model.set("name", data.name);
+        this.model.set("open_value", data.open_value);
+        this.model.set("close_value", data.close_value);
+
+        this.model.editAddress("read_door", data.read_door);
     }
 });
 
@@ -355,6 +442,14 @@ exports.AddWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
         device.addAddress("read_window", data.read_window, '1.009');
         return device;
+    },
+
+    updateDevice: function(data) {
+        this.model.set("name", data.name);
+        this.model.set("open_value", data.open_value);
+        this.model.set("close_value", data.close_value);
+
+        this.model.editAddress("read_window", data.read_window);
     }
 });
 
@@ -377,9 +472,18 @@ exports.AddSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
         });
 
         device.addAddress("read_socket", data.read_socket, '1.001');
-        device.addAddress("write_socket",data.write_socket, '1.001');
+        device.addAddress("write_socket", data.write_socket, '1.001');
 
         return device;
+    },
+
+    updateDevice: function(data) {
+        this.model.set("name", data.name);
+        this.model.set("on_value", data.on_value);
+        this.model.set("off_value", data.off_value);
+
+        this.model.editAddress("read_socket", data.read_socket);
+        this.model.editAddress("write_socket", data.write_socket);
     }
 
 });
@@ -426,6 +530,29 @@ exports.AddCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
         return device;
     },
 
+    updateDevice: function(data) {
+        this.model.set({
+            name: data.name,
+            cameraType: data.cameraType,
+            url: data.url,
+            refresh: data.refresh,
+            autoPlay: data.autoPlay,
+            cmd_opt1_btn_name: data["cmd_opt1_btn_name"], 
+            cmd_opt1_cmd: data["cmd_opt1_cmd"], 
+            cmd_opt1_read_address: data["cmd_opt1_read_address"], 
+            cmd_opt2_btn_name: data["cmd_opt2_btn_name"], 
+            cmd_opt2_cmd: data["cmd_opt2_cmd"], 
+            cmd_opt2_read_address: data["cmd_opt2_read_address"], 
+            cmd_opt3_btn_name: data["cmd_opt3_btn_name"], 
+            cmd_opt3_cmd: data["cmd_opt3_cmd"], 
+            cmd_opt3_read_address: data["cmd_opt3_read_address"]
+        });
+
+        this.model.editAddress("cmd_opt1_read_address",data.cmd_opt1_read_address);
+        this.model.editAddress("cmd_opt2_read_address",data.cmd_opt2_read_address);
+        this.model.editAddress("cmd_opt3_read_address",data.cmd_opt3_read_address);
+    },
+
     cameraTypeChanged: function(e) {
         var value = $('#cameraType', this.$el).val();
 
@@ -457,7 +584,7 @@ exports.AddScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
     formFields: ["name", "write_scenes", "icon"],
 
     serializeData: function(){
-        var data = Backbone.Marionette.CompositeView.prototype.serializeData.apply(this, arguments);
+        var data = exports.AddEditDeviceTypeForm.prototype.serializeData.apply(this, arguments);
 
         data.icons = icons.devices.scenes;
 
@@ -471,9 +598,16 @@ exports.AddScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
             scenesIcon: data.icon
         });
 
-        device.addAddress("write_scenes",data.write_scenes, '1.001');
+        device.addAddress("write_scenes", data.write_scenes, '1.001');
 
         return device;
+    },
+
+    updateDevice: function(data) {
+        this.model.set("name", data.name);
+        this.model.set("scenesIcon", data.icon);
+
+        this.model.editAddress("write_scenes", data.write_scenes);
     }
 
 });
@@ -499,6 +633,14 @@ exports.AddMotionDeviceForm = exports.AddEditDeviceTypeForm.extend({
         device.addAddress("read_motion", data.read_motion, '1.011');
 
         return device;
+    },
+
+    updateDevice: function(data) {
+        this.model.set("name", data.name);
+        this.model.set("on_value", data.on_value);
+        this.model.set("off_value", data.off_value);
+
+        this.model.editAddress("read_motion", data.read_motion);
     }
 
 });
@@ -533,6 +675,22 @@ exports.AddRgbDeviceForm = exports.AddEditDeviceTypeForm.extend({
         device.addAddress("write_brightness", data.write_brightness);
 
         return device;
+    },
+
+    updateDevice: function(data) {
+        this.model.set("name", data.name);
+
+        this.model.editAddress("read_red_color", data.read_red_color);
+        this.model.editAddress("write_red_color", data.write_red_color);
+
+        this.model.editAddress("read_green_color", data.read_green_color);
+        this.model.editAddress("write_green_color", data.write_green_color);
+
+        this.model.editAddress("read_blue_color", data.read_blue_color);
+        this.model.editAddress("write_blue_color", data.write_blue_color);
+
+        this.model.editAddress("read_brightness", data.read_brightness);
+        this.model.editAddress("write_brightness", data.write_brightness);
     }
 
 });

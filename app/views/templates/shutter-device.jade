@@ -1,6 +1,6 @@
 script(id="device-list-shutter-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="shutter", data-hit-icon-type="devices.shutterOpen0")
-    span <%= name %>
+    span.device-name <%= name %>
     .slider-vertical(data-sliding="false")
     .widget-opts
       .shutter-detail 0% 
@@ -17,70 +17,85 @@ script(id="device-list-shutter-item-template", type="text/template")
 
 script(id="device-add-shutter-template", type="text/template")
   .modal-header
-    h2 Add A New <%= name %>
+    h2 <%= formTitle %>
   .modal-body
     form.form-horizontal
       .control-group
         label(for="name").control-label Name
         .controls
-          input(id="name", type="text", placeHolder="Fireplace")
+          input(id="name", type="text", placeHolder="Fireplace", value!="<%= getValue('name') %>")
       .control-group
         label(for="read_position").control-label Read Position Address
         .controls
-          input(id="read_position", type="text", placeHolder="#/#/#")
+          input(id="read_position", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_position') %>")
       .control-group
         label(for="write_stop").control-label Write Stop Address
         .controls
-          input(id="write_stop", type="text", placeHolder="#/#/#")
+          input(id="write_stop", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_stop') %>")
       .control-group
         label(for="write_switch").control-label Write Switch Address
         .controls
-          input(id="write_switch", type="text", placeHolder="#/#/#")
+          input(id="write_switch", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_switch') %>")
       .control-group
         label(for="write_position").control-label Write Position Address
         .controls
-          input(id="write_position", type="text", placeHolder="#/#/#")
+          input(id="write_position", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_position') %>")
       .control-group
         label(for="max_value").control-label Max Value
         .controls
-          input(id="max_value", type="text", placeHolder="100")
+          input(id="max_value", type="text", placeHolder="100", value!="<%= getValue('max_value') %>")
       .control-group
         label(for="min_value").control-label Min Value
         .controls
-          input(id="min_value", type="text", placeHolder="0")
+          input(id="min_value", type="text", placeHolder="0", value!="<%= getValue('min_value') %>")
   .modal-footer
     a(href="#").cancel.btn Cancel
-    a(href="#").add.btn.btn-primary Add
+    a(href="#").add.btn.btn-primary <%= primaryBtnText %>
 
 script(id="device-view-shutter-template", type="text/template")
   .modal-header
     h2 <%= name %>
   .modal-body
     .row
-      .span3
+      .span2
         label(for="name").pull-right Name
       .span3
         <%= name %>
     .row
-      .span3
+      .span2
         label(for="read_position").pull-right Read Position Address
       .span3
         <%= getAddress('read_position').address %>
     .row
-      .span3
+      .span2
         label(for="write_stop").pull-right Write Stop Address
       .span3
         <%= getAddress('write_stop').address %>
     .row
-      .span3
+      .span2
         label(for="write_switch").pull-right Write Switch Address
       .span3
         <%= getAddress('write_switch').address %>
     .row
-      .span3
+      .span2
         label(for="write_position").pull-right Write Position Address
       .span3
         <%= getAddress('write_position').address %>
+    .row
+      .span2
+        label(for="min_value").pull-right Min Value
+      .span3
+        <%= min_value %>
+    .row 
+      .span2
+        label(for="max_value").pull-right Max Value
+      .span3
+        <%= max_value %>
   .modal-footer
-    a(href="#").delete.btn.pull-left Delete
+    a(href="#").delete.btn.pull-left
+      i.icon-trash 
+      \ Delete
+    a(href="#").edit.btn.pull-left
+      i.icon-edit
+      \ Edit
     a(href="#").cancel.btn.btn-primary Close

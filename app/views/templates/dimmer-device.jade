@@ -1,6 +1,6 @@
 script(id="device-list-dimmer-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="dimmer", data-hit-icon-type="devices.lightDimmer", data-model-id!="<%=id%>")
-    span <%= name %>
+    span.device-name <%= name %>
     .dimmer-detail 0%
     .widget-opts
       .slider-horizontal(data-sliding="false")
@@ -12,40 +12,40 @@ script(id="device-list-dimmer-item-template", type="text/template")
 
 script(id="device-add-dimmer-template", type="text/template")
   .modal-header
-    h2 Add A New <%= name %>
+    h2 <%= formTitle %>
   .modal-body
     .form.form-horizontal
       .control-group
         label(for="name").control-label Name
         .controls
-          input(id="name", type="text", placeHolder="Ceiling Fan")
+          input(id="name", type="text", placeHolder="Ceiling Fan", value!="<%= getValue('name') %>")
       .control-group
         label(for="read_switch").control-label Read Switch Address
         .controls
-          input(id="read_switch", type="text", placeHolder="#/#/#")
+          input(id="read_switch", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_switch') %>")
       .control-group
           label(for="write_switch").control-label Write Switch Address
           .controls
-            input(id="write_switch", type="text", placeHolder="#/#/#")
+            input(id="write_switch", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_switch') %>")
       .control-group
           label(for="read_dimmer").control-label Read Dimmer Address
           .controls
-            input(id="read_dimmer", type="text", placeHolder="#/#/#")
+            input(id="read_dimmer", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_dimmer') %>")
       .control-group
           label(for="write_dimmer").control-label Write Dimmer Address
           .controls
-            input(id="write_dimmer", type="text", placeHolder="#/#/#")
+            input(id="write_dimmer", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_dimmer') %>")
       .control-group
         label(for="on_value").control-label On Value
         .controls
-          input(id="on_value", type="text", value="1")
+          input(id="on_value", type="text", value!="<%= getValue('on_value') %>")
       .control-group
         label(for="off_value").control-label Off Value
         .controls
-          input(id="off_value", type="text", value="0")
+          input(id="off_value", type="text", value!="<%= getValue('off_value') %>")
   .modal-footer
     a(href="#").cancel.btn Cancel
-    a(href="#").add.btn.btn-primary Add
+    a(href="#").add.btn.btn-primary <%= primaryBtnText %>
 
 script(id="device-view-dimmer-template", type="text/template")
   .modal-header
@@ -54,28 +54,43 @@ script(id="device-view-dimmer-template", type="text/template")
     .row
       .span3
         label(for="name").pull-right Name
-      .span3
+      .span2
         <%= name %>
     .row
       .span3
         label(for="read_address").pull-right Read Switch Address
-      .span3
+      .span2
         <%= getAddress('read_switch').address %>
     .row
       .span3
         label(for="write_address").pull-right Write Switch Address
-      .span3
+      .span2
         <%= getAddress('write_switch').address %>
     .row
       .span3
         label(for="read_address").pull-right Read Dimmer Value Address
-      .span3
+      .span2
         <%= getAddress('read_dimmer').address %>
     .row
       .span3
         label(for="write_address").pull-right Write Dimmer Value Address
-      .span3
+      .span2
         <%= getAddress('write_dimmer').address %>
+    .row
+      .span3
+        label(for="on_value").pull-right On Value
+      .span2
+        <%= on_value %>
+    .row
+      .span3
+        label(for="off_value").pull-right Off Value
+      .span2
+        <%= off_value %>
   .modal-footer
-    a(href="#").delete.btn.pull-left Delete
+    a(href="#").delete.btn.pull-left
+      i.icon-trash 
+      \ Delete
+    a(href="#").edit.btn.pull-left
+      i.icon-edit
+      \ Edit
     a(href="#").cancel.btn.btn-primary Close

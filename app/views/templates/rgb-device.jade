@@ -1,6 +1,6 @@
 script(id="device-list-rgb-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="rgb", data-model-id!="<%=id%>")
-    span <%= name %>
+    span.device-name <%= name %>
     .rgb-canvas
       canvas(id="picker", var="5", width="150", height="150")
     .widget-opts
@@ -14,98 +14,103 @@ script(id="device-list-rgb-item-template", type="text/template")
 
 script(id="device-add-rgb-template", type="text/template")
   .modal-header
-    h2 Add A New <%= name %>
+    h2 <%= formTitle %>
   .modal-body
     .form.form-horizontal
       .control-group
         label(for="name").control-label Name
         .controls
-          input(id="name", type="text", placeHolder="RGB Device")
+          input(id="name", type="text", placeHolder="RGB Device", value!="<%= getValue('name') %>")
       .control-group
         label(for="read_red_color").control-label Read Red Color Address
         .controls
-          input(id="read_red_color", type="text", placeHolder="#/#/#")
+          input(id="read_red_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_red_color') %>")
       .control-group
         label(for="write_red_color").control-label Write Red Color Address
         .controls
-          input(id="write_red_color", type="text", placeHolder="#/#/#")
+          input(id="write_red_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_red_color') %>")
       .control-group
         label(for="read_green_color").control-label Read Green Color Address
         .controls
-          input(id="read_green_color", type="text", placeHolder="#/#/#")
+          input(id="read_green_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_green_color') %>")
       .control-group
         label(for="write_green_color").control-label Write Green Color Address
         .controls
-          input(id="write_green_color", type="text", placeHolder="#/#/#")
+          input(id="write_green_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_green_color') %>")
       .control-group
         label(for="read_blue_color").control-label Read Blue Color Address
         .controls
-          input(id="read_blue_color", type="text", placeHolder="#/#/#")
+          input(id="read_blue_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_blue_color') %>")
       .control-group
         label(for="write_blue_color").control-label Write Blue Color Address
         .controls
-          input(id="write_blue_color", type="text", placeHolder="#/#/#")
+          input(id="write_blue_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_blue_color') %>")
       .control-group
         label(for="read_brightness").control-label Read Brightness Address
         .controls
-          input(id="read_brightness", type="text", placeHolder="#/#/#")
+          input(id="read_brightness", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_brightness') %>")
       .control-group
         label(for="write_brightness").control-label Write Brightness Address
         .controls
-          input(id="write_brightness", type="text", placeHolder="#/#/#")
+          input(id="write_brightness", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_brightness') %>")
   .modal-footer
     a(href="#").cancel.btn Cancel
-    a(href="#").add.btn.btn-primary Add
+    a(href="#").add.btn.btn-primary <%= primaryBtnText %>
 
 script(id="device-view-rgb-template", type="text/template")
   .modal-header
     h2 <%= name %>
   .modal-body
     .row
-      .span3
+      .span2
         label(for="name").pull-right Name
       .span3
         <%= name %>
     .row
-      .span3
+      .span2
         label.pull-right Read Red Color Address
       .span3
         <%= getAddress('read_red_color').address %>
     .row
-      .span3
+      .span2
         label.pull-right Write Red Color Address
       .span3
         <%= getAddress('write_red_color').address %>
     .row
-      .span3
+      .span2
         label.pull-right Read Green Color Address
       .span3
         <%= getAddress('read_green_color').address %>
     .row
-      .span3
+      .span2
         label.pull-right Write Green Color Address
       .span3
         <%= getAddress('write_green_color').address %>
     .row
-      .span3
+      .span2
         label.pull-right Read Blue Color Address
       .span3
         <%= getAddress('read_blue_color').address %>
     .row
-      .span3
+      .span2
         label.pull-right Write Blue Color Address
       .span3
         <%= getAddress('write_blue_color').address %>
     .row
-      .span3
+      .span2
         label.pull-right Read Brightness Address
       .span3
         <%= getAddress('read_brightness_color').address %>
     .row
-      .span3
+      .span2
         label.pull-right Write Brightness Address
       .span3
         <%= getAddress('write_brightness_color').address %>
   .modal-footer
-    a(href="#").delete.btn.pull-left Delete
+    a(href="#").delete.btn.pull-left
+      i.icon-trash 
+      \ Delete
+    a(href="#").edit.btn.pull-left
+      i.icon-edit
+      \ Edit
     a(href="#").cancel.btn.btn-primary Close
