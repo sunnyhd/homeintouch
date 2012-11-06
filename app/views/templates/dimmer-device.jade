@@ -38,11 +38,11 @@ script(id="device-add-dimmer-template", type="text/template")
       .control-group
         label(for="on_value").control-label On Value
         .controls
-          input(id="on_value", type="text", value!="<%= getValue('on_value') %>")
+          input(id="on_value", type="text", placeholder="1", value!="<%= getValue('on_value') %>")
       .control-group
         label(for="off_value").control-label Off Value
         .controls
-          input(id="off_value", type="text", value!="<%= getValue('off_value') %>")
+          input(id="off_value", type="text", placeholder="0", value!="<%= getValue('off_value') %>")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary <%= primaryBtnText %>

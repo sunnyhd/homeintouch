@@ -16,7 +16,7 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
 
     addDeviceTypeHandler: function(e) {
         e.preventDefault();
-        app.vent.trigger("room:addDeviceGroup", this.model);
+        app.vent.trigger("room:addDeviceGroup", roomsController.currentRoom);
     },
 
     editRoomHandler: function(e) {
@@ -42,7 +42,7 @@ exports.RoomMoreOptionsView = Backbone.Marionette.ItemView.extend({
 
     addDeviceTypeClicked: function(e){
         e.preventDefault();
-        app.vent.trigger("room:addDeviceGroup", this.model);
+        app.vent.trigger("room:addDeviceGroup", roomsController.currentRoom);
     }
 });
 

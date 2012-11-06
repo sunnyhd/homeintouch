@@ -119,7 +119,7 @@ app.vent.on("room:add", function() {
     form.on("save", function(room) {
         floor.addRoom(room);
         homesController.saveCurrentHome();
-        app.vent.trigger("room:selected", room);
+        exports.addedRoom = room;        
     });
 });
 
@@ -150,4 +150,16 @@ app.vent.on("room:editStyle", function(roomView) {
     });
 
     app.modal.show(editStyleForm);
+});
+
+app.vent.on("home:saved", function(newCurrentHome){
+    if (exports.addedRoom) {
+        app.vent.trigger("room:selected", exports.addedRoom);
+        exports.addedRoom = null;
+    } else {
+        var currentFloor = homesController.currentHome.floors.get(exports.currentRoom.collection.parentFloor.id);
+        exports.currentRoom = currentFloor.rooms.get(exports.currentRoom.id);
+
+        exports.showRoom(currentFloor, exports.currentRoom);
+    }
 });

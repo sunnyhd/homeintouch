@@ -135,6 +135,11 @@ script(id="device-view-camera-template", type="text/template")
         <%= name %>
     .row
       .span2
+        label(for="name").pull-right Type
+      .span3
+        <%= cameraType %>
+    .row
+      .span2
         label(for="url").pull-right Url
       .span3
         <%= url %>
