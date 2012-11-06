@@ -461,28 +461,19 @@ exports.EditTimeWeatherForm = Backbone.Marionette.ItemView.extend({
         data.timeWheaterFields = this.model.get("timeWheaterFields");
         // this.addStyleValues(data.timeWheaterFields, this.model.get("timeWheaterConfiguration"));
         return data;
-/*
-        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
-
-        data.type = 'Room';
-        data.bodyFields = this.model.get("bodyFields");
-
-        this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
-
-        return data;*/
     },
 
     onRender: function() {
-        var $autocompleteEl = $('#location-label', this.$el);
+        var $autocompleteEl = $('#locationLabel', this.$el);
         $autocompleteEl.autocomplete({
             minLength: 2,
             source: cities,
             focus: function( e, ui ) {
-                $("#location-label").val( ui.item.label );
+                $("#locationLabel").val( ui.item.label );
                 return false;
             },
             select: function( e, ui ) {
-                $("#location-label").val( ui.item.label );
+                $("#locationLabel").val( ui.item.label );
                 $("#location").val( ui.item.value );
                 return false;
             }
@@ -512,8 +503,13 @@ exports.EditTimeWeatherForm = Backbone.Marionette.ItemView.extend({
         e.preventDefault();
 
         var formFields = _.union(_.pluck(this.model.get("timeWheaterFields"), 'id'));
+        formFields.push('location');
+        formFields.push('locationLabel');
 
-        var data = Backbone.FormHelpers.getFormData(this, formFields);           
+        var data = Backbone.FormHelpers.getFormData(this, formFields);
+
+        this.model.get("timeWheaterConfiguration").set('location', data.location);
+        this.model.get("timeWheaterConfiguration").set('locationLabel', data.locationLabel);
 
         this.result = {
             status: "OK"

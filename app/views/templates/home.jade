@@ -130,8 +130,8 @@ script(id="edit-time-weather-settings-template", type="text/template")
             .control-group
               label(for="location").control-label Location
               .controls
-                input(id="location-label", type="text", placeHolder="")
-                input(id="location", type="hidden")
+                input(id="locationLabel", type="text", placeHolder="", value!="<%= timeWheaterConfiguration.locationLabel %>")
+                input(id="location", type="hidden", value!="<%= timeWheaterConfiguration.location %>")
         .tab-pane#tab2
   .modal-footer
     a(href="#").cancel.btn Cancel

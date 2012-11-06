@@ -53,7 +53,7 @@ module.exports = BaseModel.extend({
         {name: "Location", id: "location"}
     ],
     timeWheaterDefaultStyle: { 'class-background-image': 'blue' },
-    timeWheaterDefaults: {'location': 'EUR|DE|GM003|BERLIN'},
+    timeWheaterDefaults: {'location': 'EUR|DE|GM003|BERLIN', 'locationLabel': 'Berlin, DE'},
     
     initialize: function() {
         this.parseInnerData();
@@ -98,9 +98,15 @@ module.exports = BaseModel.extend({
         }            
         timeWheaterConfiguration.set('selector', this.timeWheaterSelector);
         timeWheaterConfiguration.set('defaultStyle', this.timeWheaterDefaultStyle);
-        timeWheaterConfiguration.set('location', this.timeWheaterDefaults['location']);
-        this.set("timeWheaterConfiguration", timeWheaterConfiguration);
+        
+        if (!timeWheaterConfiguration.has('location')) {
+            timeWheaterConfiguration.set('location', this.timeWheaterDefaults['location']);
+        }
 
+        if (!timeWheaterConfiguration.has('locationLabel')) {
+            timeWheaterConfiguration.set('locationLabel', this.timeWheaterDefaults['locationLabel']);
+        }        
+        this.set("timeWheaterConfiguration", timeWheaterConfiguration);
 
         this.set("bodyFields", _.clone(this.bodyFields));  
         this.set("myHomeFields", _.clone(this.myHomeFields));
@@ -141,9 +147,14 @@ module.exports = BaseModel.extend({
             json.myLibraryConfiguration = this.get("myLibraryConfiguration").toJSON();
         }
 
+        if (this.has("timeWheaterConfiguration")) {
+            json.timeWheaterConfiguration = this.get("timeWheaterConfiguration").toJSON();
+        }
+
         delete json.bodyFields;
         delete json.myHomeFields;
         delete json.myLibraryFields;
+        delete json.timeWheaterFields;
 
         return json;
     }
