@@ -1300,6 +1300,10 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         deviceGroupView.close();
     },
 
+    close: function() {
+        roomsController.currentRoom = null;
+    },
+
     initializeUIEffects: function() {
 
         // Initialize the scroll bar component for the device groups
