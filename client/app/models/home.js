@@ -49,8 +49,7 @@ module.exports = BaseModel.extend({
     timeWheaterFields: [
         {name: "Text Color", id: "time-wheater-color"}, 
         {name: "Background Color", id: "time-wheater-class-background-color", type: "class-list", options: app.colorClasses}, 
-        {name: "Opacity", id: "time-wheater-opacity"},
-        {name: "Location", id: "location"}
+        {name: "Opacity", id: "time-wheater-opacity"}
     ],
     timeWheaterDefaultStyle: { 'class-background-image': 'blue' },
     timeWheaterDefaults: {'location': 'EUR|DE|GM003|BERLIN', 'locationLabel': 'Berlin, DE'},

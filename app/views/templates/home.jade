@@ -133,6 +133,26 @@ script(id="edit-time-weather-settings-template", type="text/template")
                 input(id="locationLabel", type="text", placeHolder="", value!="<%= timeWheaterConfiguration.locationLabel %>")
                 input(id="location", type="hidden", value!="<%= timeWheaterConfiguration.location %>")
         .tab-pane#tab2
+          form.form-horizontal
+            <% _.each(timeWheaterFields, function(field){ %>
+            .control-group.
+              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
+              <div class="controls">
+                <% if (field.type !== 'class-list') { %>
+                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
+                <% } else { %>
+                <select id="<%= field.id %>">
+                  <% _.each(field.options, function(option) { %>
+                  <% if (option.value === field.value) { %>
+                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
+                  <% } else { %>
+                  <option value="<%= option.value %>"> <%= option.label %> </option>
+                  <% } %>
+                  <% }) %> 
+                </select>
+              <% } %>
+              </div>
+            <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").edit.btn.btn-primary Save

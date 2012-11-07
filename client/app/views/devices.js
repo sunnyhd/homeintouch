@@ -1,6 +1,7 @@
 var Device = require('models/device');
 var Configuration = require('models/configuration');
 var roomsController = require('controllers/rooms');
+var StyleConfigurationView = require('views/settings/style_settings');
 
 exports.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
 
@@ -35,7 +36,7 @@ exports.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
 
 });
 
-exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
+exports.EditDeviceGroupOfRoomForm = StyleConfigurationView.extend({
 
     template: "#edit-group-of-room-template",
 
@@ -46,7 +47,7 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
 
     serializeData: function(){
 
-        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
+        var data = StyleConfigurationView.prototype.serializeData.apply(this);
 
         data.titleFields = this.model.get("titleFields");
         data.bodyFields = this.model.get("bodyFields");
@@ -55,53 +56,6 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
         this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
 
         return data;
-    },
-
-    addStyleValues: function(fields, configuration){
-        _.each(fields, function(field) {
-            if (configuration != null) {
-                field.value = configuration.getStyleAttribute(field.id);
-            } else {
-                field.value = '';
-            }
-        });
-    },
-
-    extractStyle: function(formData, prefix, selector){
-
-        var styleKeys = _.keys(formData);
-        var styleNames = _.filter(styleKeys, function(styleName) {
-            return styleName.indexOf(prefix) == 0;
-        }, this);
-
-        var styleData = _.pick(formData, styleNames);
-        var newStyleData = {};
-        _.each(styleData, function(value, key){
-            if (value != null && value != '') {
-                newStyleData[key.substr(prefix.length)] = value;
-            }
-        }, this);
-
-        newStyleData['selector'] = selector;
-        newStyleData['prefix'] = prefix;
-
-        return newStyleData;
-    },
-
-    updateStyleConfiguration: function(formData, prefix, selector, attributeName) {
-
-        var configurationAttributes = this.extractStyle(formData, prefix, selector);
-
-        var configuration = this.model.get(attributeName);
-
-        if (configuration == null) {
-            configuration = new Configuration();
-            this.model.set(attributeName, configuration);
-        }
-
-        configuration.resetAttributes();
-
-        configuration.set(configurationAttributes);
     },
 
     editClicked: function(e){
@@ -129,16 +83,6 @@ exports.EditDeviceGroupOfRoomForm = Backbone.Marionette.ItemView.extend({
         this.close();
 
         roomsController.showCurrent();
-    },
-
-    cancelClicked: function(e){
-        e.preventDefault();
-
-        this.result = {
-            status: "CANCEL"
-        }
-
-        this.close();
     },
 
     onRender: function() {
