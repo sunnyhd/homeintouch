@@ -423,10 +423,10 @@ exports.EditTimeWeatherForm = StyleConfigurationView.extend({
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
+        this.updateStyleConfiguration(data, this.model.timeWheaterPrefix, this.model.timeWheaterSelector, "timeWheaterConfiguration");
+
         this.model.get("timeWheaterConfiguration").set('location', data.location);
         this.model.get("timeWheaterConfiguration").set('locationLabel', data.locationLabel);
-
-        this.updateStyleConfiguration(data, this.model.timeWheaterPrefix, this.model.timeWheaterSelector, "timeWheaterConfiguration");
 
         this.result = {
             status: "OK"
