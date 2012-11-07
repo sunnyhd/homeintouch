@@ -87,7 +87,7 @@ script(id="edit-group-of-room-template", type="text/template")
               </div>
             <% }) %>
         .tab-pane#tab3
-          label Set the wdigets order with drag & drop
+          label Set the widgets order with drag & drop
           ul.nav.nav-tabs.nav-stacked#device-widgets-sortable
             <% _.each(devices, function(device) { %>
             li(data-model-id!="<%= device.id %>")
