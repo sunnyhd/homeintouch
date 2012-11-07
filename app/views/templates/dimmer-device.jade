@@ -20,6 +20,14 @@ script(id="device-add-dimmer-template", type="text/template")
         .controls
           input(id="name", type="text", placeHolder="Ceiling Fan", value!="<%= getValue('name') %>")
       .control-group
+        label(for="isFavorite").control-label Favorite
+        .controls
+          <% if (isChecked('isFavorite')) { %>
+          input(id="isFavorite", type="checkbox", checked="checked")
+          <% } else { %>
+          input(id="isFavorite", type="checkbox")
+          <% } %>
+      .control-group
         label(for="read_switch").control-label Read Switch Address
         .controls
           input(id="read_switch", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_switch') %>")
@@ -56,6 +64,11 @@ script(id="device-view-dimmer-template", type="text/template")
         label(for="name").pull-right Name
       .span2
         <%= name %>
+    .row
+      .span3
+        label(for="isFavorite").pull-right Favorite
+      .span2
+        <%= isCheckedFriendly('isFavorite') %>
     .row
       .span3
         label(for="read_address").pull-right Read Switch Address

@@ -39,6 +39,14 @@ script(id="device-add-thermostat-template", type="text/template")
         .controls
           input(id="name", type="text", placeHolder="Living Room", value!="<%= getValue('name') %>")
       .control-group
+        label(for="isFavorite").control-label Favorite
+        .controls
+          <% if (isChecked('isFavorite')) { %>
+          input(id="isFavorite", type="checkbox", checked="checked")
+          <% } else { %>
+          input(id="isFavorite", type="checkbox")
+          <% } %>
+      .control-group
         label(for="write_mode").control-label Write Mode Address
         .controls
           input(id="write_mode", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_mode') %>")
@@ -75,6 +83,11 @@ script(id="device-view-thermostat-template", type="text/template")
         label(for="name").pull-right Name
       .span3
         <%= name %>
+    .row
+      .span2
+        label(for="isFavorite").pull-right Favorite
+      .span3
+        <%= isCheckedFriendly('isFavorite') %>
     .row
       .span2
         label(for="write_mode").pull-right Write Mode Address

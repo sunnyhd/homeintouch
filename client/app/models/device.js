@@ -9,6 +9,10 @@ module.exports = BaseModel.extend({
         this.addresses.parent = this;
     },
 
+    isFavorite: function() {
+        return ( (this.get('isFavorite')) ? true : false );
+    },
+
     getAddressByType: function(type){
         var addr = this.addresses.find(function(address){
             return address.get("type") === type;

@@ -18,6 +18,14 @@ script(id="device-add-socket-template", type="text/template")
         .controls
           input(id="name", type="text", placeHolder="Office Socket", value!="<%= getValue('name') %>")
       .control-group
+        label(for="isFavorite").control-label Favorite
+        .controls
+          <% if (isChecked('isFavorite')) { %>
+          input(id="isFavorite", type="checkbox", checked="checked")
+          <% } else { %>
+          input(id="isFavorite", type="checkbox")
+          <% } %>
+      .control-group
         label(for="read_socket").control-label Read Address
         .controls
           input(id="read_socket", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_socket') %>")
@@ -46,6 +54,11 @@ script(id="device-view-socket-template", type="text/template")
         label(for="name").pull-right Name
       .span3
         <%= name %>
+    .row
+      .span2
+        label(for="isFavorite").pull-right Favorite
+      .span3
+        <%= isCheckedFriendly('isFavorite') %>
     .row
       .span2
         label(for="read_address").pull-right Read Address

@@ -303,6 +303,14 @@ var viewHelpers = {
 
     getValue: function(attribute) {
         return _.has(this, attribute) ? this[attribute] : "";
+    },
+
+    isChecked: function(attribute) {
+        return ( _.has(this, attribute) && this[attribute] );
+    },
+
+    isCheckedFriendly: function(attribute) {
+        return ( (_.has(this, attribute) && this[attribute]) ? 'Yes' : 'No' );
     }
 };
 

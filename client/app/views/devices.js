@@ -147,7 +147,9 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
     addClicked: function(e){
         e.preventDefault();
 
-        var data = Backbone.FormHelpers.getFormData(this);
+        var formFields = _.union( ["isFavorite"], this.formFields );
+
+        var data = Backbone.FormHelpers.getFormData(this, formFields);
         var device;
 
         if (this.mode !== "edit") {
@@ -186,10 +188,12 @@ exports.AddSwitchDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type,
             on_value: data.on_value,
-            off_value: data.off_value
+            off_value: data.off_value,
+            isFavorite: data.isFavorite
         });
 
         device.addAddress("read_switch", data.read_switch, '1.001');
@@ -200,6 +204,7 @@ exports.AddSwitchDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     updateDevice: function(data){
 
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
         this.model.set("on_value", data.on_value);
         this.model.set("off_value", data.off_value);
@@ -224,6 +229,7 @@ exports.AddShutterDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type,
             max_value: data.max_value,
@@ -239,6 +245,7 @@ exports.AddShutterDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     updateDevice: function(data) {
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
         this.model.set("max_value", data.max_value);
         this.model.set("min_value", data.min_value);
@@ -265,6 +272,7 @@ exports.AddThermostatDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type,
             step: data.step
@@ -281,6 +289,7 @@ exports.AddThermostatDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     updateDevice: function(data) {
 
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
         this.model.set("step", data.step);
         
@@ -307,6 +316,7 @@ exports.AddDimmerDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type,
             on_value: data.on_value,
@@ -322,6 +332,7 @@ exports.AddDimmerDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     updateDevice: function(data) {
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
         this.model.set("on_value", data.on_value);
         this.model.set("off_value", data.off_value);
@@ -347,6 +358,7 @@ exports.AddDoorDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type,
             open_value: data.open_value,
@@ -358,6 +370,7 @@ exports.AddDoorDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     updateDevice: function(data) {
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
         this.model.set("open_value", data.open_value);
         this.model.set("close_value", data.close_value);
@@ -378,6 +391,7 @@ exports.AddWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type,
             open_value: data.open_value,
@@ -389,6 +403,7 @@ exports.AddWindowDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     updateDevice: function(data) {
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
         this.model.set("open_value", data.open_value);
         this.model.set("close_value", data.close_value);
@@ -409,6 +424,7 @@ exports.AddSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type,
             on_value: data.on_value,
@@ -422,6 +438,7 @@ exports.AddSocketDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     updateDevice: function(data) {
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
         this.model.set("on_value", data.on_value);
         this.model.set("off_value", data.off_value);
@@ -450,6 +467,7 @@ exports.AddCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data) {
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             cameraType: data.cameraType,
             url: data.url,
@@ -475,6 +493,7 @@ exports.AddCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     updateDevice: function(data) {
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set({
             name: data.name,
             cameraType: data.cameraType,
@@ -537,6 +556,7 @@ exports.AddScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type,
             scenesIcon: data.icon
@@ -548,6 +568,7 @@ exports.AddScenesDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     updateDevice: function(data) {
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
         this.model.set("scenesIcon", data.icon);
 
@@ -568,6 +589,7 @@ exports.AddMotionDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type,
             on_value: data.on_value,
@@ -580,6 +602,7 @@ exports.AddMotionDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     updateDevice: function(data) {
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
         this.model.set("on_value", data.on_value);
         this.model.set("off_value", data.off_value);
@@ -602,6 +625,7 @@ exports.AddRgbDeviceForm = exports.AddEditDeviceTypeForm.extend({
 
     buildDevice: function(data){
         var device = new Device({
+            isFavorite: data.isFavorite,
             name: data.name,
             type: data.type
         });
@@ -622,6 +646,7 @@ exports.AddRgbDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     updateDevice: function(data) {
+        this.model.set("isFavorite", data.isFavorite);
         this.model.set("name", data.name);
 
         this.model.editAddress("read_red_color", data.read_red_color);
