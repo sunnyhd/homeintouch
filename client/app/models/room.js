@@ -36,18 +36,26 @@ module.exports = BaseModel.extend({
         this.parseInnerData();
     },
 
-    findOrCreateGroup: function(deviceType){
+    findOrCreateGroup: function(deviceTypeName){
         var deviceGroup;
 
         deviceGroup = this.deviceGroups.find(function(dg){ 
-            return dg.deviceType.get("type") == deviceType; 
+            return dg.deviceType.get("type") == deviceTypeName;
         });
-
         if (!deviceGroup){
-            deviceGroup = new DeviceGroup({ type: deviceType });
+            deviceGroup = new DeviceGroup({ type: deviceTypeName });
         }
-
         return deviceGroup;
+    },
+
+    createGroup: function(deviceTypeName) {
+        return new DeviceGroup({ type: deviceTypeName });
+    },
+
+    findGroup: function(deviceTypeName) {
+        return this.deviceGroups.find(function(dg){ 
+            return dg.deviceType.get("type") == deviceTypeName; 
+        });
     },
 
     parseInnerData: function() {

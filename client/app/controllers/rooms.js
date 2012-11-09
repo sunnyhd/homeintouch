@@ -62,6 +62,53 @@ exports.showRoom = function(floor, room) {
     return room;
 };
 
+exports.showFavorites = function(home) {
+
+    var room = home.getFavorites();
+
+    if (room.deviceGroups.length > 0) {
+        var roomLayoutView = new roomViews.FavoriteRoomLayout({
+            model: room,
+            collection: room.deviceGroups
+        });
+        app.main.show(roomLayoutView);
+        exports.currentDashboard = roomLayoutView;
+
+        // After the elements are added to the DOM:
+        // start the tinyscroll.js to insert scroll bars to the device groups
+        roomLayoutView.initializeUIEffects();
+        roomLayoutView.applyStyles();
+
+    } else {
+        var noDeviceGroupsView = new roomViews.FavoriteNoDeviceGroupView();
+        app.main.show(noDeviceGroupsView);
+    }
+
+    
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor', // Workaround to display the 'Favorites' button
+        name: 'Favorites', 
+        handler: function(e) {
+            e.preventDefault();
+            app.vent.trigger("home:selected", home);
+        }
+    });
+
+    app.updateTouchNav({
+        name: 'Favorites', 
+        previous: home.get('name'),
+        handler: function(e) {
+            e.preventDefault();
+            app.vent.trigger("home:selected", home);
+        }
+    });
+    
+    app.touchTopOpts.show(new roomViews.OptionsFavoriteContextMenuView());
+    app.desktopTopOpts.show(new roomViews.OptionsFavoriteContextMenuView());
+
+    return home;
+};
+
 // Helper Functions
 // ----------------
 
@@ -164,4 +211,9 @@ app.vent.on("home:saved", function(newCurrentHome){
             exports.showRoom(currentFloor, exports.currentRoom);    
         }
     }
+});
+
+app.vent.on("custom-page:favorites", function(home) {
+    console.log('home: ' + home.id);
+    exports.showFavorites(home);
 });

@@ -1313,6 +1313,54 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
     }
 });
 
+// FAVORITE VIEWS
+
+exports.OptionsFavoriteContextMenuView = Backbone.Marionette.ItemView.extend({
+    template: "#context-menu-favorite-opts",
+
+    events: {
+        
+    }
+});
+
+exports.FavoriteDeviceGroupView = exports.DeviceGroupView.extend({
+
+    events: {},
+
+    appendHtml: function(cv, iv) {
+        exports.DeviceGroupView.prototype.appendHtml.apply(this, arguments);
+        iv.events = function () {
+            return this.formEvents;
+        };
+        iv.delegateEvents();
+    },
+
+    onRender: function() {
+        exports.DeviceGroupView.prototype.onRender.apply(this, arguments);
+        $('ul.nav.pull-right', this.$el).hide();
+    }
+});
+
+exports.FavoriteRoomLayout = exports.RoomLayout.extend({
+
+    itemView: exports.FavoriteDeviceGroupView,
+
+    serializeData: function(){
+        var data = Backbone.Marionette.CompositeView.prototype.serializeData.apply(this, arguments);
+        var home = this.model.parentHome;
+
+        data.home = home.get("name");
+
+        return data;
+    }
+});
+
+exports.FavoriteNoDeviceGroupView = Backbone.Marionette.ItemView.extend({
+    template: "#favorite-no-device-group-template",
+});
+
+// FORMS
+
 exports.AddRoomForm = Backbone.Marionette.ItemView.extend({
     template: "#room-add-template",
     formFields: ["name", "icon"],

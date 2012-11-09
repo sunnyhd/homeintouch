@@ -107,6 +107,8 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
     customItemClicked: function(e) {
         e.preventDefault();
+        var page = ($(e.currentTarget).data('item-id'));
+        app.vent.trigger("custom-page:" + page, this.model);
     },
 
     addFloorHandler: function(e) {
