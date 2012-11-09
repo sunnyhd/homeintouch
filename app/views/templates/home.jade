@@ -88,6 +88,8 @@ script(id="dashboard-home", type="text/template")
             .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", data-hit-icon-type!="<%= floor.icon %>")
               span <%= floor.name %>
             <% }) %>
+            .hit-icon.custom-item-list(data-item-id="favorites", data-hit-icon-type="floors.favorite")
+              span Favorites
           <% } %>
         .scrollbar
           .track

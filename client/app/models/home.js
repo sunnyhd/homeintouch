@@ -1,5 +1,6 @@
 var app = require('app');
 var BaseModel = require('models/base');
+var Room = require('models/room');
 var Floors = require('collections/floors');
 var Configuration = require('models/configuration');
 
@@ -125,6 +126,36 @@ module.exports = BaseModel.extend({
         this.floors.add(floor);
         this.trigger("change:floors", this.floors);
         this.trigger("change:floor:add", floor);
+    },
+
+    getFavorites: function() {
+        var favRoom = new Room();
+        favRoom.parentHome = this;
+
+        _.each(this.floors.models, function (floor) {
+            _.each(floor.rooms.models, function (room) {
+                _.each(room.deviceGroups.models, function (deviceGroup) {
+
+                    var type = deviceGroup.deviceType.get('type');
+                    var favDeviceGrp = favRoom.findGroup(type);
+                    if (!favDeviceGrp) {
+                        favDeviceGrp = favRoom.createGroup(type);
+                    }
+                    var favDevices = _.filter(deviceGroup.devices.models, function(device) {
+                        return device.isFavorite();
+                    });
+
+                    if (favDevices.length > 0) {
+                        // Adds the favorite devices to the device group
+                        favDeviceGrp.devices.add(favDevices);
+                        favRoom.deviceGroups.add(favDeviceGrp);
+                    }
+
+                }, this);
+            }, this);
+        }, this);
+
+        return favRoom;
     },
 
     toJSON: function(){

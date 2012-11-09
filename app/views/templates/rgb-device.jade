@@ -22,6 +22,14 @@ script(id="device-add-rgb-template", type="text/template")
         .controls
           input(id="name", type="text", placeHolder="RGB Device", value!="<%= getValue('name') %>")
       .control-group
+        label(for="isFavorite").control-label Favorite
+        .controls
+          <% if (isChecked('isFavorite')) { %>
+          input(id="isFavorite", type="checkbox", checked="checked")
+          <% } else { %>
+          input(id="isFavorite", type="checkbox")
+          <% } %>
+      .control-group
         label(for="read_red_color").control-label Read Red Color Address
         .controls
           input(id="read_red_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_red_color') %>")
@@ -66,6 +74,11 @@ script(id="device-view-rgb-template", type="text/template")
         label(for="name").pull-right Name
       .span3
         <%= name %>
+    .row
+      .span2
+        label(for="isFavorite").pull-right Favorite
+      .span3
+        <%= isCheckedFriendly('isFavorite') %>
     .row
       .span2
         label.pull-right Read Red Color Address

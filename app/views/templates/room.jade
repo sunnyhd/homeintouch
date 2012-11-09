@@ -121,6 +121,13 @@ script(id="no-device-group-template", type="text/template")
           b.show No Devices To Display
           | Please add a device to this room
 
+script(id="favorite-no-device-group-template", type="text/template")
+  .no-rooms.container-fluid
+    .row-fluid
+      div.alert.alert-info.span9
+        span
+          b.show No Favorite Devices To Display
+
 script(id="room-more-options-template", type="text/template")
   a.dropdown-toggle.clearfix(href='#', data-toggle='dropdown')
     i.icon-plus.icon-white
@@ -135,6 +142,9 @@ script(id="context-menu-room-opts", type="text/template")
     a#room-settings(href="#") Room Settings
   li
     a#editStyle(href="#") Edit Styles
+
+script(id="context-menu-favorite-opts", type="text/template")
+  li
 
 script(id="room-add-template", type="text/template")
   .modal-header

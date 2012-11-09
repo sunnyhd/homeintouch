@@ -16,6 +16,14 @@ script(id="device-add-window-template", type="text/template")
         .controls
           input(id="name", type="text", placeHolder="Bathroom Window", value!="<%= getValue('name') %>")
       .control-group
+        label(for="isFavorite").control-label Favorite
+        .controls
+          <% if (isChecked('isFavorite')) { %>
+          input(id="isFavorite", type="checkbox", checked="checked")
+          <% } else { %>
+          input(id="isFavorite", type="checkbox")
+          <% } %>
+      .control-group
         label(for="read_window").control-label Read Address
         .controls
           input(id="read_window", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_window') %>")
@@ -40,6 +48,11 @@ script(id="device-view-window-template", type="text/template")
         label(for="name").pull-right Name
       .span3
         <%= name %>
+    .row
+      .span2
+        label(for="isFavorite").pull-right Favorite
+      .span3
+        <%= isCheckedFriendly('isFavorite') %>
     .row
       .span2
         label(for="read_window").pull-right Read Address

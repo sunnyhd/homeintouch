@@ -12,6 +12,14 @@ script(id="device-add-scenes-template", type="text/template")
         .controls
           input(id="name", type="text", placeHolder="Dinner", value!="<%= getValue('name') %>")
       .control-group
+        label(for="isFavorite").control-label Favorite
+        .controls
+          <% if (isChecked('isFavorite')) { %>
+          input(id="isFavorite", type="checkbox", checked="checked")
+          <% } else { %>
+          input(id="isFavorite", type="checkbox")
+          <% } %>
+      .control-group
         label(for="write_scenes").control-label Write Address
         .controls
           input(id="write_scenes", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_scenes') %>")
@@ -39,6 +47,11 @@ script(id="device-view-scenes-template", type="text/template")
         label(for="name").pull-right Name
       .span3
         <%= name %>
+    .row
+      .span2
+        label(for="isFavorite").pull-right Favorite
+      .span3
+        <%= isCheckedFriendly('isFavorite') %>
     .row
       .span2
         label(for="write_scenes").pull-right Write Address

@@ -80,6 +80,7 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
     events: {
         "click .floor-item-list": "floorClicked",
+        "click .custom-item-list": "customItemClicked",
         "click a.add-floor": "addFloorHandler",
         "click #editTimeWeatherSettings": "timeWeatherSettingsHandler"
     },
@@ -103,6 +104,12 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         e.preventDefault();
         var floorId = ($(e.currentTarget).data('item-id'));
         app.vent.trigger("floor:selected", this.model.getFloorById(floorId));
+    },
+
+    customItemClicked: function(e) {
+        e.preventDefault();
+        var page = ($(e.currentTarget).data('item-id'));
+        app.vent.trigger("custom-page:" + page, this.model);
     },
 
     addFloorHandler: function(e) {
