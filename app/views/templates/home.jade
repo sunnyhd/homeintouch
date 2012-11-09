@@ -15,11 +15,45 @@ script(id="edit-home-template", type="text/template")
   .modal-header
     h2 Edit Home
   .modal-body
-    form.form-horizontal
-      .control-group
-        label(for="name").control-label Name
-        .controls
-          input(id="name", type="text", placeHolder="Vacation", value!="<%= name %>")
+     .tabbable
+      ul.nav.nav-tabs
+        li.active
+          a(href="#tab1", data-toggle="tab") Home 
+        li
+          a(href="#tab2", data-toggle="tab") Active Sections
+      .tab-content
+        .tab-pane.active#tab1
+          form.form-horizontal
+            .control-group
+              label(for="name").control-label Name
+              .controls
+                input(id="name", type="text", placeHolder="Vacation", value!="<%= name %>")
+        .tab-pane#tab2
+          form.form-horizontal
+            .control-group
+              label(for="my-house").control-label My House
+              .controls
+                <% if (visibilityConfiguration['my-house']) {%>
+                input(id="my-house", type="checkbox", checked="checked")
+                <% } else { %>
+                input(id="my-house", type="checkbox")
+                <% } %>
+            .control-group
+              label(for="my-library").control-label My Library
+              .controls
+                <% if (visibilityConfiguration['my-library']) {%>
+                input(id="my-library", type="checkbox", checked="checked")
+                <% } else { %>
+                input(id="my-library", type="checkbox")
+                <% } %>
+            .control-group
+              label(for="time-wheater").control-label Time Wheater
+              .controls
+                <% if (visibilityConfiguration['time-wheater']) {%>
+                input(id="time-wheater", type="checkbox", checked="checked")
+                <% } else { %>
+                input(id="time-wheater", type="checkbox")
+                <% } %>
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").save.btn.btn-primary Save

@@ -1,5 +1,6 @@
 var app = require('app');
 var homesController = require('controllers/homes');
+var playersController = require('controllers/players');
 var Home = require('models/home');
 var Configuration = require('models/configuration');
 var StyleConfigurationView = require('views/settings/style_settings');
@@ -137,6 +138,17 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
         this.applyStyle('bodyConfiguration', true);
 
+        if (this.model.has('visibilityConfiguration')) {
+            _.each(this.model.get('visibilityConfiguration'), function(value, key){
+                if (value) {
+                    this.$('#' + key).show();    
+                } else {
+                    this.$('#' + key).hide();
+                }
+                
+            }, this);
+        }
+
         if (this.model.has('myHomeConfiguration')) {
             var myHomeModel = this.model.get('myHomeConfiguration');
             this.applyStyle('myHomeConfiguration');
@@ -248,9 +260,30 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
         "click .cancel": "cancelClicked"
     },
 
+    serializeData: function() {
+        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
+        if (!this.model.has('visibilityConfiguration')) {
+            data.visibilityConfiguration = {};
+            data.visibilityConfiguration['my-house'] = true;
+            data.visibilityConfiguration['my-library'] = true;
+            data.visibilityConfiguration['time-wheater'] = true;
+        }
+
+        return data;
+    },
+
     saveClicked: function(e) {
         var name = this.$("#name").val();
         this.model.set("name", name);
+
+        var visibilityConfiguration = {};
+
+        visibilityConfiguration['my-house'] = this.$('#my-house').is(':checked');
+        visibilityConfiguration['my-library'] = this.$('#my-library').is(':checked');
+        visibilityConfiguration['time-wheater'] = this.$('#time-wheater').is(':checked');
+
+        this.model.set('visibilityConfiguration', visibilityConfiguration);
+
         this.status = "OK";
         this.close();
         return false;
