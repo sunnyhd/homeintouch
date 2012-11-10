@@ -72,17 +72,315 @@ exports.SwitchSelectedHomeView = Backbone.Marionette.ItemView.extend({
     }
 });
 
+exports.HouseWidgetView = Backbone.Marionette.ItemView.extend({
+
+    className: "room-device-group span6 clearfix",
+
+    events: {
+        "click a#editWidgetStyle": "editWidgetClicked"
+    },
+
+    editWidgetClicked: function() {
+        app.vent.trigger("home:editWidget", this);
+        return false;
+    },
+
+    serializeData: function() {
+        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
+        data.floors = this.model.collection.parentHome.floors.toJSON();
+
+        return data;
+    },
+
+    onRender: function() {
+        this.applyStyles();
+    },
+
+    refreshIcon: function() {
+
+        var context = this.model.getViewId();
+        var styleConfigurationName = 'bodyConfiguration';
+
+        if (this.model.has(styleConfigurationName)) {
+            var configuration = this.model.get(styleConfigurationName);
+            app.loadIcons(context, configuration.getColor());    
+        } else {
+            app.loadIcons(context);
+        }
+    },
+
+    applyStyle: function(styleConfigurationName, context, applySelector, createStylesheet) {
+
+        if (this.model.has(styleConfigurationName)) {
+            var configuration = this.model.get(styleConfigurationName);
+            var selectorArray = configuration.getSelectors();
+            var that = this;
+            _.each(selectorArray, function(selector){
+                var fullSelector = selector;
+                if (context) {
+                    fullSelector = context + ' ' + selector;
+                }
+                that.$(fullSelector).removeAttr('style');
+                var className = configuration.getClassesToApply();
+                if (className !== '') {
+                    var classesToRemove = _.pluck(app.colorClasses, 'value').join(' ');
+                    that.$(fullSelector).removeClass(classesToRemove).addClass(className);
+                }
+                if (createStylesheet) {
+                    var stylesheet = app.generateStylesheet(fullSelector, configuration.getStyleAttributes());
+                    app.addStyleTag(stylesheet);
+                } else {
+                    $(fullSelector).css(configuration.getStyleAttributes());    
+                }
+            });            
+        }
+    },
+
+    applyStyles: function() {
+
+        this.applyStyle('bodyConfiguration', this.model.getViewId(), true);
+        this.applyStyle('titleConfiguration', this.model.getViewId(), true);
+
+        this.refreshIcon();
+    },
+
+    updateStyles: function() {
+        this.applyStyles();
+    }
+});
+
+exports.TimeWheaterWidgetView = exports.HouseWidgetView.extend({
+
+    displayCurrentDate: function(date) {
+        $('#jdigiclock-currentDay').html(date);
+    },
+
+    refreshTimeWeatherStyles: function() {
+        this.applyStyles();
+    },
+
+    onRender: function() {
+        
+        var location = this.model.collection.parentHome.get('timeWheaterConfiguration').get('location');
+
+        $('#digiclock', this.$el).jdigiclock({
+            proxyUrl: 'api/jdigiclock/proxy',
+            dayCallback: $.proxy(this.displayCurrentDate, this),
+            loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
+            weatherLocationCode: location
+        });
+
+        exports.HouseWidgetView.prototype.onRender.apply(this);
+    },
+
+    updateStyles: function() {
+        this.render();
+    }
+});
+
+var widgetViews = {
+    "my-house": exports.HouseWidgetView,
+    "my-library": exports.HouseWidgetView,
+    "time-wheater": exports.TimeWheaterWidgetView
+};
+
+exports.EditStyleHomeForm = StyleConfigurationView.extend({
+
+    template: "#edit-home-style-template",
+
+    events: {
+        "click .cancel.btn": "cancelClicked",
+        "click .edit.btn": "editClicked",
+        "change #body-background-image" : "loadFile"
+    },
+
+    serializeData: function(){
+
+        var data = StyleConfigurationView.prototype.serializeData.apply(this);
+
+        data.type = 'Home';
+        data.bodyFields = this.model.get("bodyFields");
+
+        this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
+
+        return data;
+    },
+
+    editClicked: function(e){
+        e.preventDefault();
+
+        var formFields = _.pluck(this.model.get("bodyFields"), 'id');
+
+        var data = Backbone.FormHelpers.getFormData(this, formFields);
+
+        if (this.imageStream) {
+            var that = this;
+            $.ajax({
+                type: "POST",
+                url: "/api/images",
+                data: {
+                    fileName: that.imageFileName,
+                    fileStream: that.imageStream
+                },
+                success: function (response) {
+                    var imagePath = response.imagePath;
+                    data['body-background-image'] = 'url(' + imagePath + ')';
+                    that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
+
+                    that.result = {
+                        status: "OK"
+                    }
+
+                    that.close();
+                }
+            });      
+        } else {
+            this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
+
+            this.result = {
+                status: "OK"
+            }
+
+            this.close();
+        }
+    }
+});
+
+exports.EditStyleWidgetForm = StyleConfigurationView.extend({
+
+    template: "#edit-widget-style-template",
+
+    events: {
+        "click .cancel.btn": "cancelClicked",
+        "click .edit.btn": "editClicked"
+    },
+
+    serializeData: function(){
+
+        var data = StyleConfigurationView.prototype.serializeData.apply(this);
+
+        data.bodyFields = this.model.get("bodyFields");
+        data.titleFields = this.model.get("titleFields");
+
+        this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
+        this.addStyleValues(data.titleFields, this.model.get("titleConfiguration"));
+
+        return data;
+    },
+
+    getFormFields: function() {
+        return _.union(_.pluck(this.model.get("titleFields"), 'id'),
+                       _.pluck(this.model.get("bodyFields"), 'id'));
+    },
+
+    updateModel: function(data) {
+        this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
+        this.updateStyleConfiguration(data, this.model.titlePrefix, this.model.titleSelector, "titleConfiguration");
+    },
+
+    editClicked: function(e){
+        e.preventDefault();
+
+        var formFields = this.getFormFields();
+
+        var data = Backbone.FormHelpers.getFormData(this, formFields);
+
+        this.updateModel(data);
+
+        this.result = {
+            status: "OK"
+        }
+
+        this.close();
+    }
+});
+
+exports.EditTimeWeatherForm = exports.EditStyleWidgetForm.extend({
+
+    template: "#edit-time-weather-settings-template",
+
+    events: {
+        "click .cancel.btn": "cancelClicked",
+        "click .edit.btn": "editClicked"
+    },
+
+    initialize: function() {
+        this.homeModel = this.model.collection.parentHome;
+    },
+
+    serializeData: function(){
+        var data = exports.EditStyleWidgetForm.prototype.serializeData.apply(this);
+
+        data.timeWheaterFields = this.homeModel.get("timeWheaterFields");
+        data.timeWheaterConfiguration = this.homeModel.get("timeWheaterConfiguration").toJSON();
+
+        return data;
+    },
+
+    onRender: function() {
+        var $autocompleteEl = $('#locationLabel', this.$el);
+        $autocompleteEl.autocomplete({
+            minLength: 2,
+            source: cities,
+            focus: function( e, ui ) {
+                $("#locationLabel").val( ui.item.label );
+                return false;
+            },
+            select: function( e, ui ) {
+                $("#locationLabel").val( ui.item.label );
+                $("#location").val( ui.item.value );
+                return false;
+            }
+        });
+
+        $autocompleteEl.data("autocomplete")._renderItem = function(ul, item) {
+            return $( "<li>" )
+                .data( "item.autocomplete", item )
+                .append( "<a>" + item.label + "</a>" )
+                .appendTo( ul );
+        };
+
+        $autocompleteEl.data("autocomplete")._renderMenu = function(ul, items) {
+            var self = this;
+            var subItems = _.first(items, 15);
+            $.each(subItems, function(index, item) {
+                self._renderItem(ul, item);
+            });
+            
+            $("<li class='ui-menu-item'></li>")
+            .append("<span class='ui-autocomplete-result-item'>Showing <b>" + subItems.length + "</b> of <b>" + items.length + "</b> results</span>")
+            .appendTo(ul);
+        };
+    },
+
+    getFormFields: function() {
+        var formFields = exports.EditStyleWidgetForm.prototype.getFormFields.apply(this);
+        formFields = _.union(formFields, _.pluck(this.model.get("timeWheaterFields"), 'id'));
+        formFields.push('location');
+        formFields.push('locationLabel');
+
+        return formFields;
+    },
+
+    updateModel: function(data) {
+        exports.EditStyleWidgetForm.prototype.updateModel.apply(this, [data]);
+
+        this.homeModel.get("timeWheaterConfiguration").set('location', data.location);
+        this.homeModel.get("timeWheaterConfiguration").set('locationLabel', data.locationLabel);
+    }
+});
+
 /** 
  * Home dashboard view.
  * */
-exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
+exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
+    
     template: "#dashboard-home",
 
     events: {
         "click .floor-item-list": "floorClicked",
         "click .custom-item-list": "customItemClicked",
-        "click a.add-floor": "addFloorHandler",
-        "click #editTimeWeatherSettings": "timeWeatherSettingsHandler"
+        "click a.add-floor": "addFloorHandler"
     },
 
     initialize: function() {
@@ -92,12 +390,6 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
     close: function() {
         $(window).off("resize", this.resizeHandler);  
-    },
-
-    timeWeatherSettingsHandler: function(e) {
-        e.preventDefault();
-        app.vent.trigger("home:editTimeWeather", this.model );
-        return false;
     },
 
     floorClicked: function(e){
@@ -115,6 +407,38 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
     addFloorHandler: function(e) {
         e.preventDefault();
         app.vent.trigger("floor:add");
+    },
+
+        // Build an `itemView` for every model in the collection. 
+    buildItemView: function(item, ItemView){
+        var widgetItemView = widgetViews[item.get('type')];
+        var view = new widgetItemView({
+            model: item,
+            template: item.get('template')
+        });
+        return view;
+    },
+
+    appendHtml: function(cv, iv){
+
+        if (!iv.model.get('visible')) {
+            return;
+        }
+
+        var $rowContainer = null;
+        var $rows = cv.$(".row-fluid.home-widget-container");
+        _.each($rows, function(row) {
+            if ($('.hit-widget', row).length < 2) {
+                $rowContainer = $(row);
+            }
+        });
+
+        if (!$rowContainer) {
+            $container = $(cv.el);
+            $rowContainer = $('<div class="row-fluid home-widget-container">').appendTo($container);
+        }
+
+        $rowContainer.append(iv.el);
     },
 
     applyStyle: function(styleConfigurationName, createStylesheet) {
@@ -145,37 +469,9 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
 
         this.applyStyle('bodyConfiguration', true);
 
-        if (this.model.has('visibilityConfiguration')) {
-            _.each(this.model.get('visibilityConfiguration'), function(value, key){
-                if (value) {
-                    this.$('#' + key).show();    
-                } else {
-                    this.$('#' + key).hide();
-                }
-                
-            }, this);
-        }
-
-        if (this.model.has('myHomeConfiguration')) {
-            var myHomeModel = this.model.get('myHomeConfiguration');
-            this.applyStyle('myHomeConfiguration');
-            app.loadIcons(myHomeModel.getSelectorContext(), myHomeModel.getColor());
-        } else {
-            app.loadIcons('#my-house');
-        }
-        
-        if (this.model.has('myLibraryConfiguration')) {
-            var myLibraryModel = this.model.get('myLibraryConfiguration');
-            this.applyStyle('myLibraryConfiguration');
-            app.loadIcons(myLibraryModel.getSelectorContext(), myLibraryModel.getColor());
-        } else {
-            app.loadIcons('#my-library');    
-        }
-
-        if (this.model.has('timeWheaterConfiguration')) {
-            var timeWheaterModel = this.model.get('timeWheaterConfiguration');
-            this.applyStyle('timeWheaterConfiguration');
-        }
+        _.each(_.values(this.children), function(itemView){
+            itemView.refreshIcon();
+        });
         
         this.initScrollBar();
     },
@@ -208,33 +504,11 @@ exports.HomeDashboardView = Backbone.Marionette.ItemView.extend({
         });
     },
 
-    // TIME & WEATHER METHODS
-    displayCurrentDate: function(date) {
-        $('#jdigiclock-currentDay').html(date);
-    },
-
-    refreshTimeWeatherStyles: function() {
-        if (this.model.has('timeWheaterConfiguration')) {
-            var timeWheaterModel = this.model.get('timeWheaterConfiguration');
-            this.applyStyle('timeWheaterConfiguration');
-        }
-    },
-
     onRender: function() {
-
-        var location = this.model.get('timeWheaterConfiguration').get('location');
-
-        $('#digiclock', this.$el).jdigiclock({
-            proxyUrl: 'api/jdigiclock/proxy',
-            dayCallback: $.proxy(this.displayCurrentDate, this),
-            loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
-            weatherLocationCode: location
-        });
-
         this.setScrollbarOverview();
     }
 });
-   
+
 exports.AddHomeForm = Backbone.Marionette.ItemView.extend({
 
     template: "#add-home-template",
@@ -283,13 +557,21 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
         var name = this.$("#name").val();
         this.model.set("name", name);
 
-        var visibilityConfiguration = {};
+        var $lis = $('#widget-sortable li', this.$el);
+        _.each($lis, function(li, idx) {
+            var id = $(li).data('model-id');
+            var widget = this.model.widgets.get(id);
+            widget.set('order', idx);
+        }, this);
+        this.model.widgets.sort({silent: true});
 
-        visibilityConfiguration['my-house'] = this.$('#my-house').is(':checked');
-        visibilityConfiguration['my-library'] = this.$('#my-library').is(':checked');
-        visibilityConfiguration['time-wheater'] = this.$('#time-wheater').is(':checked');
-
-        this.model.set('visibilityConfiguration', visibilityConfiguration);
+        var $inputs = this.$('#widget-visibility input');
+        _.each($inputs, function(input, idx) {
+            var $input = $(input);
+            var id = $input.data('model-id');
+            var widget = this.model.widgets.get(id);
+            widget.set('visible', $input.is(':checked'));
+        }, this);
 
         this.status = "OK";
         this.close();
@@ -299,8 +581,12 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
     cancelClicked: function(e){
         e.preventDefault();
         this.close();
-    }
+    },
 
+    onRender: function() {
+        $('#widget-sortable', this.$el).sortable();
+        $('#widget-sortable', this.$el).disableSelection();
+    }
 });
 
 exports.ViewHomeForm = Backbone.Marionette.ItemView.extend({
@@ -326,154 +612,7 @@ exports.ViewHomeForm = Backbone.Marionette.ItemView.extend({
 
 });
 
-exports.EditStyleHomeForm = StyleConfigurationView.extend({
 
-    template: "#edit-home-style-template",
-
-    events: {
-        "click .cancel.btn": "cancelClicked",
-        "click .edit.btn": "editClicked",
-        "change #body-background-image" : "loadFile"
-    },
-
-    serializeData: function(){
-
-        var data = StyleConfigurationView.prototype.serializeData.apply(this);
-
-        data.type = 'Home';
-        data.bodyFields = this.model.get("bodyFields");
-        data.myHomeFields = this.model.get("myHomeFields");
-        data.myLibraryFields = this.model.get("myLibraryFields");
-
-        this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
-        this.addStyleValues(data.myHomeFields, this.model.get("myHomeConfiguration"));
-        this.addStyleValues(data.myLibraryFields, this.model.get("myLibraryConfiguration"));
-
-        return data;
-    },
-
-    editClicked: function(e){
-        e.preventDefault();
-
-        var formFields = _.union(_.pluck(this.model.get("myLibraryFields"), 'id'), 
-                                 _.pluck(this.model.get("myHomeFields"), 'id'), 
-                                 _.pluck(this.model.get("bodyFields"), 'id'));
-
-        var data = Backbone.FormHelpers.getFormData(this, formFields);
-
-        if (this.imageStream) {
-            var that = this;
-            $.ajax({
-                type: "POST",
-                url: "/api/images",
-                data: {
-                    fileName: that.imageFileName,
-                    fileStream: that.imageStream
-                },
-                success: function (response) {
-                    var imagePath = response.imagePath;
-                    data['body-background-image'] = 'url(' + imagePath + ')';
-                    that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
-                    that.updateStyleConfiguration(data, that.model.myLibraryPrefix, that.model.myLibrarySelector, "myLibraryConfiguration");
-                    that.updateStyleConfiguration(data, that.model.myHomePrefix, that.model.myHomeSelector, "myHomeConfiguration");
-
-                    that.result = {
-                        status: "OK"
-                    }
-
-                    that.close();
-                }
-            });      
-        } else {
-            this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
-            this.updateStyleConfiguration(data, this.model.myLibraryPrefix, this.model.myLibrarySelector, "myLibraryConfiguration");
-            this.updateStyleConfiguration(data, this.model.myHomePrefix, this.model.myHomeSelector, "myHomeConfiguration");
-            
-
-            this.result = {
-                status: "OK"
-            }
-
-            this.close();
-        }
-    }
-});
-
-exports.EditTimeWeatherForm = StyleConfigurationView.extend({
-
-    template: "#edit-time-weather-settings-template",
-
-    events: {
-        "click .cancel.btn": "cancelClicked",
-        "click .edit.btn": "editClicked"
-    },
-
-    serializeData: function(){
-        var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
-        data.type = 'Home';
-        data.timeWheaterFields = this.model.get("timeWheaterFields");
-
-        this.addStyleValues(data.timeWheaterFields, this.model.get("timeWheaterConfiguration"));
-
-        return data;
-    },
-
-    onRender: function() {
-        var $autocompleteEl = $('#locationLabel', this.$el);
-        $autocompleteEl.autocomplete({
-            minLength: 2,
-            source: cities,
-            focus: function( e, ui ) {
-                $("#locationLabel").val( ui.item.label );
-                return false;
-            },
-            select: function( e, ui ) {
-                $("#locationLabel").val( ui.item.label );
-                $("#location").val( ui.item.value );
-                return false;
-            }
-        });
-
-        $autocompleteEl.data("autocomplete")._renderItem = function(ul, item) {
-            return $( "<li>" )
-                .data( "item.autocomplete", item )
-                .append( "<a>" + item.label + "</a>" )
-                .appendTo( ul );
-        };
-
-        $autocompleteEl.data("autocomplete")._renderMenu = function(ul, items) {
-            var self = this;
-            var subItems = _.first(items, 15);
-            $.each(subItems, function(index, item) {
-                self._renderItem(ul, item);
-            });
-            
-            $("<li class='ui-menu-item'></li>")
-            .append("<span class='ui-autocomplete-result-item'>Showing <b>" + subItems.length + "</b> of <b>" + items.length + "</b> results</span>")
-            .appendTo(ul);
-        };
-    },
-
-    editClicked: function(e){
-        e.preventDefault();
-
-        var formFields = _.union(_.pluck(this.model.get("timeWheaterFields"), 'id'));
-        formFields.push('location');
-        formFields.push('locationLabel');
-
-        var data = Backbone.FormHelpers.getFormData(this, formFields);
-
-        this.updateStyleConfiguration(data, this.model.timeWheaterPrefix, this.model.timeWheaterSelector, "timeWheaterConfiguration");
-
-        this.model.get("timeWheaterConfiguration").set('location', data.location);
-        this.model.get("timeWheaterConfiguration").set('locationLabel', data.locationLabel);
-
-        this.result = {
-            status: "OK"
-        };
-        this.close();
-    }
-});
 
 // Helper Methods
 // --------------

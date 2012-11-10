@@ -21,6 +21,8 @@ script(id="edit-home-template", type="text/template")
           a(href="#tab1", data-toggle="tab") Home 
         li
           a(href="#tab2", data-toggle="tab") Active Sections
+        li
+          a(href="#tab3", data-toggle="tab") Widget Order
       .tab-content
         .tab-pane.active#tab1
           form.form-horizontal
@@ -29,31 +31,24 @@ script(id="edit-home-template", type="text/template")
               .controls
                 input(id="name", type="text", placeHolder="Vacation", value!="<%= name %>")
         .tab-pane#tab2
-          form.form-horizontal
+          form.form-horizontal#widget-visibility
+            <% _.each(_.sortBy(widgets,'id'), function(widget) { %>
             .control-group
-              label(for="my-house").control-label My House
+              label(for!="<%=widget.type%>").control-label <%=widget.name%>
               .controls
-                <% if (visibilityConfiguration['my-house']) {%>
-                input(id="my-house", type="checkbox", checked="checked")
+                <% if (widget.visible) {%>
+                input(id!="<%=widget.type%>", data-model-id!="<%= widget.id %>", type="checkbox", checked="checked")
                 <% } else { %>
-                input(id="my-house", type="checkbox")
+                input(id!="<%=widget.type%>", data-model-id!="<%= widget.id %>", type="checkbox")
                 <% } %>
-            .control-group
-              label(for="my-library").control-label My Library
-              .controls
-                <% if (visibilityConfiguration['my-library']) {%>
-                input(id="my-library", type="checkbox", checked="checked")
-                <% } else { %>
-                input(id="my-library", type="checkbox")
-                <% } %>
-            .control-group
-              label(for="time-wheater").control-label Time Wheater
-              .controls
-                <% if (visibilityConfiguration['time-wheater']) {%>
-                input(id="time-wheater", type="checkbox", checked="checked")
-                <% } else { %>
-                input(id="time-wheater", type="checkbox")
-                <% } %>
+            <% }) %>
+        .tab-pane#tab3
+          label Set the widget order with drag & drop
+          ul.nav.nav-tabs.nav-stacked#widget-sortable
+            <% _.each(widgets, function(widget) { %>
+            li(data-model-id!="<%= widget.id %>")
+              a(href="#") <%= widget.name %>
+            <% }) %>
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").save.btn.btn-primary Save
@@ -73,61 +68,70 @@ script(id="view-home-template", type="text/template")
     a(href="#").cancel.btn.btn-primary Close
 
 script(id="dashboard-home", type="text/template")
-  .row-fluid
-    .span6.clearfix
-      .hit-widget.clearfix.scrollable-x#my-house
-        .hit-title My House
-        .hit-icon-container.viewport
-          <% if(floors.length == 0) { %>
-          .overview
-          div.alert.alert-info
-            span There are no floors in this house.
-          <% } else { %>
-          .overview
-            <% _.each(floors, function(floor){ %>
-            .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", data-hit-icon-type!="<%= floor.icon %>")
-              span <%= floor.name %>
-            <% }) %>
-            .hit-icon.custom-item-list(data-item-id="favorites", data-hit-icon-type="floors.favorite")
-              span Favorites
-          <% } %>
-        .scrollbar
-          .track
-            .thumb
-              .end
-    .span6.clearfix
-      .hit-widget.clearfix.scrollable-x#my-library
-        .hit-title My Library
-        .hit-icon-container.viewport
-          .overview
-            .hit-icon(data-hit-icon-href="#movies", data-hit-icon-type="media.movies")
-              span Movies
-            .hit-icon(data-hit-icon-href="#artists", data-hit-icon-type="media.music")
-              span Music
-            .hit-icon(data-hit-icon-href="#pictures", data-hit-icon-type="media.photos")
-              span Photos
-            .hit-icon(data-hit-icon-href="#files", data-hit-icon-type="media.files")
-              span Files
-        .scrollbar
-          .track
-            .thumb
-              .end
-  .row-fluid
-    .span6.clearfix
-      .hit-widget.clearfix.scrollable-x#time-wheater
-        .hit-title Time and Weather - <span id="jdigiclock-currentDay">Loading...</span>
-          ul.nav.pull-right
-            li
-              a#editTimeWeatherSettings.pull-right(href="#")
-                i.icon-cog.icon-white
-        .hit-icon-container.viewport
-          .overview
-            #digiclock.hit-clock
-        .scrollbar
-          .track
-            .thumb
-              .end
-    .span6.clearfix
+  .row-fluid.home-widget-container
+
+script(id="my-house-template", type="text/template")
+  .hit-widget.clearfix.scrollable-x#my-house
+    .hit-title My House
+      ul.nav.pull-right
+        li
+          a#editWidgetStyle.pull-right(href="#")
+            i.icon-cog.icon-white
+    .hit-icon-container.viewport
+      <% if(floors.length == 0) { %>
+      .overview
+      div.alert.alert-info
+        span There are no floors in this house.
+      <% } else { %>
+      .overview
+        <% _.each(floors, function(floor){ %>
+        .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", data-hit-icon-type!="<%= floor.icon %>")
+          span <%= floor.name %>
+        <% }) %>
+        .hit-icon.custom-item-list(data-item-id="favorites", data-hit-icon-type="floors.favorite")
+          span Favorites
+      <% } %>
+    .scrollbar
+      .track
+        .thumb
+          .end
+
+script(id="my-library-template", type="text/template")
+  .hit-widget.clearfix.scrollable-x#my-library
+    .hit-title My Library
+      ul.nav.pull-right
+        li
+          a#editWidgetStyle.pull-right(href="#")
+            i.icon-cog.icon-white
+    .hit-icon-container.viewport
+      .overview
+        .hit-icon(data-hit-icon-href="#movies", data-hit-icon-type="media.movies")
+          span Movies
+        .hit-icon(data-hit-icon-href="#artists", data-hit-icon-type="media.music")
+          span Music
+        .hit-icon(data-hit-icon-href="#pictures", data-hit-icon-type="media.photos")
+          span Photos
+        .hit-icon(data-hit-icon-href="#files", data-hit-icon-type="media.files")
+          span Files
+    .scrollbar
+      .track
+        .thumb
+          .end
+
+script(id="time-wheater-template", type="text/template")
+  .hit-widget.clearfix.scrollable-x#time-wheater
+    .hit-title Time and Weather - <span id="jdigiclock-currentDay">Loading...</span>
+      ul.nav.pull-right
+        li
+          a.pull-right#editWidgetStyle(href="#")
+            i.icon-cog.icon-white
+    .hit-icon-container.viewport
+      .overview
+        #digiclock.hit-clock
+    .scrollbar
+      .track
+        .thumb
+          .end
 
 script(id="switch-selected-home-template", type="text/template")
   .modal-header
@@ -142,6 +146,63 @@ script(id="switch-selected-home-template", type="text/template")
     a(href="#").cancel.btn Cancel
     a(href="#").switch.btn.btn-primary Switch
 
+script(id="edit-widget-style-template", type="text/template")
+  .modal-header
+    h2 Edit <%= name %> Styles
+  .modal-body
+    .tabbable
+      ul.nav.nav-tabs
+        li.active
+          a(href="#tab1", data-toggle="tab") Title
+        li
+          a(href="#tab2", data-toggle="tab") Body
+      .tab-content
+        .tab-pane.active#tab1
+          form.form-horizontal
+            <% _.each(titleFields, function(field){ %>
+            .control-group.
+              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
+              <div class="controls">
+                <% if (field.type !== 'class-list') { %>
+                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
+                <% } else { %>
+                <select id="<%= field.id %>">
+                  <% _.each(field.options, function(option) { %>
+                  <% if (option.value === field.value) { %>
+                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
+                  <% } else { %>
+                  <option value="<%= option.value %>"> <%= option.label %> </option>
+                  <% } %>
+                  <% }) %> 
+                </select>
+              <% } %>
+              </div>
+            <% }) %>
+        .tab-pane#tab2
+          form.form-horizontal
+            <% _.each(bodyFields, function(field){ %>
+            .control-group.
+              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
+              <div class="controls">
+                <% if (field.type !== 'class-list') { %>
+                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
+                <% } else { %>
+                <select id="<%= field.id %>">
+                  <% _.each(field.options, function(option) { %>
+                  <% if (option.value === field.value) { %>
+                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
+                  <% } else { %>
+                  <option value="<%= option.value %>"> <%= option.label %> </option>
+                  <% } %>
+                  <% }) %> 
+                </select>
+              <% } %>
+              </div>
+            <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").edit.btn.btn-primary Save
+
 script(id="context-menu-home-opts", type="text/template")
   li
     a.add-floor(href="#") Add Floor
@@ -152,14 +213,16 @@ script(id="context-menu-home-opts", type="text/template")
 
 script(id="edit-time-weather-settings-template", type="text/template")
   .modal-header
-    h2 Edit Time & Weather Settings
+    h2 Edit <%= name %> Settings
   .modal-body
     .tabbable
       ul.nav.nav-tabs
         li.active
           a(href="#tab1", data-toggle="tab") Timezone 
         li
-          a(href="#tab2", data-toggle="tab") Styles
+          a(href="#tab2", data-toggle="tab") Title Style
+        li
+          a(href="#tab3", data-toggle="tab") Body Style
       .tab-content
         .tab-pane.active#tab1
           form.form-horizontal
@@ -170,7 +233,28 @@ script(id="edit-time-weather-settings-template", type="text/template")
                 input(id="location", type="hidden", value!="<%= timeWheaterConfiguration.location %>")
         .tab-pane#tab2
           form.form-horizontal
-            <% _.each(timeWheaterFields, function(field){ %>
+            <% _.each(titleFields, function(field){ %>
+            .control-group.
+              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
+              <div class="controls">
+                <% if (field.type !== 'class-list') { %>
+                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
+                <% } else { %>
+                <select id="<%= field.id %>">
+                  <% _.each(field.options, function(option) { %>
+                  <% if (option.value === field.value) { %>
+                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
+                  <% } else { %>
+                  <option value="<%= option.value %>"> <%= option.label %> </option>
+                  <% } %>
+                  <% }) %> 
+                </select>
+              <% } %>
+              </div>
+            <% }) %>
+        .tab-pane#tab3
+          form.form-horizontal
+            <% _.each(bodyFields, function(field){ %>
             .control-group.
               <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
               <div class="controls">

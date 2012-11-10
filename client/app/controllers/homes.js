@@ -7,6 +7,12 @@ var homeViews = require('views/homes');
 
 exports.homes = new Homes();
 
+var widgetEditViews = {
+    "my-house": homeViews.EditStyleWidgetForm,
+    "my-library": homeViews.EditStyleWidgetForm,
+    "time-wheater": homeViews.EditTimeWeatherForm
+};
+
 exports.showCurrent = function() {
     var home = exports.currentHome || exports.homes.defaultHome();
     return exports.showHome(home);
@@ -58,7 +64,8 @@ exports.destroy = function(home){
  exports.showDashboard = function(home) {
 
     var view = new homeViews.HomeDashboardView({
-        model: home
+        model: home,
+        collection: home.widgets
     });
     app.main.show(view);
 
@@ -127,6 +134,22 @@ app.vent.on("home:edit", function(home) {
     app.modal.show(form);
 });
 
+app.vent.on("home:editWidget", function(widgetView) {
+
+    var EditStyleView = widgetEditViews[widgetView.model.get('type')];
+
+    var editStyleForm = new EditStyleView({model: widgetView.model});
+
+    editStyleForm.on("close", function(){
+        if (editStyleForm.result.status === "OK") {
+            exports.saveCurrentHome();
+            widgetView.updateStyles();
+        }
+    });
+
+    app.modal.show(editStyleForm);
+});
+
 app.vent.on("home:editStyle", function(homeView) {
     
     var editStyleForm = new homeViews.EditStyleHomeForm({model: exports.currentHome});
@@ -141,16 +164,9 @@ app.vent.on("home:editStyle", function(homeView) {
     app.modal.show(editStyleForm);
 });
 
-app.vent.on("home:editTimeWeather", function(home) {
+app.vent.on("home:saved", function(newHome) {
 
-    var editForm = new homeViews.EditTimeWeatherForm( {model: home} );
-
-    editForm.on("close", function(){
-        if (editForm.result.status === "OK") {
-            exports.saveCurrentHome();
-            exports.showCurrent();
-        }
+    _.each(_.values(exports.currentDashboard.children), function(itemView){
+        itemView.model = exports.currentHome.widgets.get(itemView.model.id);
     });
-
-    app.modal.show(editForm);
 });

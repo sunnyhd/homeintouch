@@ -113,69 +113,17 @@ script(id="edit-home-style-template", type="text/template")
   .modal-header
     h2 Edit <%= type %> Styles
   .modal-body
-    .tabbable
-      ul.nav.nav-tabs
-        li.active
-          a(href="#tab1", data-toggle="tab") Body
-        li
-          a(href="#tab2", data-toggle="tab") My House
-        li
-          a(href="#tab3", data-toggle="tab") My Library
-      .tab-content
-        .tab-pane.active#tab1
-          form.form-horizontal
-            <% _.each(bodyFields, function(field){ %>
-            .control-group
-              label(for!="<%= field.id %>").control-label <%= field.name %>
-              .controls
-                input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>", type!="<%= field.type %>") 
-            <% }) %>
-            .control-group
-              label(for="holder").control-label Background Preview
-                .controls
-                  #holder
-        .tab-pane#tab2
-          form.form-horizontal
-            <% _.each(myHomeFields, function(field){ %>
-            .control-group.
-              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
-              <div class="controls">
-                <% if (field.type !== 'class-list') { %>
-                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
-                <% } else { %>
-                <select id="<%= field.id %>">
-                  <% _.each(field.options, function(option) { %>
-                  <% if (option.value === field.value) { %>
-                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
-                  <% } else { %>
-                  <option value="<%= option.value %>"> <%= option.label %> </option>
-                  <% } %>
-                  <% }) %> 
-                </select>
-              <% } %>
-              </div>
-            <% }) %>
-        .tab-pane#tab3
-          form.form-horizontal
-            <% _.each(myLibraryFields, function(field){ %>
-            .control-group.
-              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
-              <div class="controls">
-                <% if (field.type !== 'class-list') { %>
-                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
-                <% } else { %>
-                <select id="<%= field.id %>">
-                  <% _.each(field.options, function(option) { %>
-                  <% if (option.value === field.value) { %>
-                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
-                  <% } else { %>
-                  <option value="<%= option.value %>"> <%= option.label %> </option>
-                  <% } %>
-                  <% }) %> 
-                </select>
-              <% } %>
-              </div>
-            <% }) %>
+    form.form-horizontal
+      <% _.each(bodyFields, function(field){ %>
+      .control-group
+        label(for!="<%= field.id %>").control-label <%= field.name %>
+        .controls
+          input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>", type!="<%= field.type %>") 
+      <% }) %>
+      .control-group
+        label(for="holder").control-label Background Preview
+          .controls
+            #holder
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").edit.btn.btn-primary Save
