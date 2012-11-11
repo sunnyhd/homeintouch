@@ -1450,7 +1450,8 @@ exports.EditStyleRoomForm = StyleConfigurationView.extend({
     events: {
         "click .cancel.btn": "cancelClicked",
         "click .edit.btn": "editClicked",
-        "change #body-background-image" : "loadFile"
+        "change #body-background-image" : "loadFile",
+        "click a#clear-background" : "clearBackgroundClicked"
     },
 
     serializeData: function(){
@@ -1463,6 +1464,11 @@ exports.EditStyleRoomForm = StyleConfigurationView.extend({
         this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
 
         return data;
+    },
+
+    clearStyleModel: function() {
+        StyleConfigurationView.prototype.clearStyleModel.apply(this);
+        this.model.get('bodyConfiguration').unsetFileAttribute();
     },
 
     editClicked: function(e){

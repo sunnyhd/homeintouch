@@ -14,14 +14,56 @@ var widgetEditViews = {
     "recently-added": homeViews.EditStyleWidgetForm
 };
 
+exports.startPage = function() {
+    var home = exports.currentHome || exports.homes.defaultHome();
+    var startPage = home.get('startPage');
+    if (startPage !== null && !_.isUndefined(startPage)) {
+        var startPageArray = startPage.split('-');
+        var startPageType = startPageArray[0];
+        
+        if (startPageType === 'floor') {
+            var startPageId = startPageArray[1];
+            var floor = home.getFloorById(startPageId);
+            if (floor !== null && !_.isUndefined(floor)) {
+                exports.setHomeData(home);
+                app.vent.trigger('floor:selected', floor);
+            }    
+        } else if (startPageType === 'room') {
+            var floorId = startPageArray[1];
+            var floor = home.getFloorById(floorId);
+            if (floor !== null && !_.isUndefined(floor)) {
+                var startPageId = startPageArray[2];
+                var room = floor.getRoomById(startPageId);
+                if (room !== null && !_.isUndefined(room)) {
+                    exports.setHomeData(home);
+                    app.vent.trigger('floor:setData', floor);
+                    app.vent.trigger('room:selected', room);
+                }
+            }
+        }
+    } else {
+        exports.showCurrent();
+    }
+};
+
 exports.showCurrent = function() {
     var home = exports.currentHome || exports.homes.defaultHome();
-    return exports.showHome(home);
+    exports.showHome(home);    
 };
 
 exports.showHome = function(home) {
-    exports.currentHome = home;
+
+    exports.setHomeData(home);
     exports.showDashboard(home);
+
+    app.touchTopOpts.show(new homeViews.OptionsContextMenuView());
+    app.desktopTopOpts.show(new homeViews.OptionsContextMenuView());
+    
+    return home;
+};
+
+exports.setHomeData = function(home) {
+    exports.currentHome = home;
 
     $('#desktop-breadcrumb-nav').find('li span').html(''); // Removes previous link texts
     app.updateDesktopBreadcrumbNav( {
@@ -35,12 +77,7 @@ exports.showHome = function(home) {
 
     // Touch navigation
     $('#home-touch-title').html('&nbsp;' + home.get('name'));
-    $('#touch-top-nav').hide();
-
-    app.touchTopOpts.show(new homeViews.OptionsContextMenuView());
-    app.desktopTopOpts.show(new homeViews.OptionsContextMenuView());
-    
-    return home;
+    $('#touch-top-nav').hide();    
 };
 
 exports.saveCurrentHome = function(){

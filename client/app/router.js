@@ -1,7 +1,7 @@
 module.exports = Backbone.Router.extend({
     
     routes: {
-        '': 'home',
+        '': 'startPage',
         'home': 'home',
         'players': 'players',
         'playlists': 'playlists',
@@ -20,6 +20,11 @@ module.exports = Backbone.Router.extend({
     },
 
     handlers: {
+
+        startPage: function() {
+            this.app.controller('homes').startPage();
+        },
+
         home: function() {
             var home = this.app.controller('homes').showCurrent();
             //this.app.controller('homes').showDashboard(home);

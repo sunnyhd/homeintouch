@@ -414,3 +414,15 @@ app.colorClasses = [{label: "Blue", value: "blue"}, {label: "Dark Blue", value: 
                     {label: "Violet", value: "violet"}, {label: "Dark Violet", value: "dark-violet"}, 
                     {label: "Green", value: "green"}, {label: "Dark Green", value: "dark-green"},
                     {label: "Gray", value: "gray"}, {label: "Dark Gray", value: "dark-gray"} ];
+
+app.backgroundPatterns = [{label: "None", value: "none"},
+                          {label: "AZ Subtle", value: "url(img/bkg-pattern/az_subtle.png)"},
+                          {label: "Billie Holiday", value: "url(img/bkg-pattern/billie_holiday.png)"},
+                          {label: "Cream Paper", value: "url(img/bkg-pattern/creampaper.png)"},
+                          {label: "Debut Dark", value: "url(img/bkg-pattern/debut_dark.png)"},
+                          {label: "Debut Light", value: "url(img/bkg-pattern/debut_light.png)"},
+                          {label: "Diagonal Waves", value: "url(img/bkg-pattern/diagonal_waves.png)"},
+                          {label: "Nasty Fabric", value: "url(img/bkg-pattern/nasty_fabric.png)"},
+                          {label: "Otis Redding", value: "url(img/bkg-pattern/otis_redding.png)"},
+                          {label: "Twinkle Twinkle", value: "url(img/bkg-pattern/twinkle_twinkle.png)"},
+                          {label: "Wild Oliva", value: "url(img/bkg-pattern/wild_oliva.png)"}];

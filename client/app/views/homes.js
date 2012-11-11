@@ -254,7 +254,9 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
     events: {
         "click .cancel.btn": "cancelClicked",
         "click .edit.btn": "editClicked",
-        "change #body-background-image" : "loadFile"
+        "change #body-background-image" : "loadFile",
+        "change #pattern-background-image": "processBackgroundPattern",
+        "click a#clear-background" : "clearBackgroundClicked"
     },
 
     serializeData: function(){
@@ -263,16 +265,72 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
 
         data.type = 'Home';
         data.bodyFields = this.model.get("bodyFields");
+        data.bodyPatternFields = this.model.get("bodyPatternFields");
 
         this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
+        this.addStyleValues(data.bodyPatternFields, this.model.get("bodyPatternConfiguration"));
 
         return data;
+    },
+
+    onRender: function() {
+        StyleConfigurationView.prototype.onRender.apply(this);
+        this.setFileUploadSettings();
+    },
+
+    loadFile: function(event) {
+        StyleConfigurationView.prototype.loadFile.apply(this, [event]);
+        this.hideBackgroundPatternInput();
+    },
+
+    hideBackgroundPatternInput: function() {
+        this.$('#pattern-background-image').parents('.control-group').hide();
+    },
+
+    showBackgroundPatternInput: function() {
+        this.$('#pattern-background-image').parents('.control-group').show();
+    },
+
+    clearBackgroundClicked: function() {
+        StyleConfigurationView.prototype.clearBackgroundClicked.apply(this);
+        this.showBackgroundPatternInput();
+    },
+
+    setFileUploadSettings: function() {
+        var url = this.$('#pattern-background-image').val();
+        if (url === 'none') {
+            this.resetPreviewHolder();
+            this.showBackgroundFileInput();
+            this.previewLoadedImage();
+        } else {
+            this.hideBackgroundFileInput();
+            this.previewUrl(url);
+        }
+    },
+
+    processBackgroundPattern: function (event) {
+        this.setFileUploadSettings();
+    },
+
+    updateModelData: function(data) {
+        this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
+        this.updateStyleConfiguration(data, this.model.bodyPatternPrefix, this.model.bodyPatternSelector, "bodyPatternConfiguration");
+
+        if (this.model.get('bodyPatternConfiguration').hasStyleAttributes()) {
+            this.model.get('bodyConfiguration').unsetFileAttribute();
+        }
+    },
+
+    clearStyleModel: function() {
+        StyleConfigurationView.prototype.clearStyleModel.apply(this);
+        this.model.get('bodyConfiguration').unsetFileAttribute();
     },
 
     editClicked: function(e){
         e.preventDefault();
 
-        var formFields = _.pluck(this.model.get("bodyFields"), 'id');
+        var formFields = _.union(_.pluck(this.model.get("bodyFields"), 'id'),
+                                 _.pluck(this.model.get("bodyPatternFields"), 'id'));
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
@@ -289,6 +347,7 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
                     var imagePath = response.imagePath;
                     data['body-background-image'] = 'url(' + imagePath + ')';
                     that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
+                    that.updateStyleConfiguration(data, that.model.bodyPatternPrefix, that.model.bodyPatternSelector, "bodyPatternConfiguration");
 
                     that.result = {
                         status: "OK"
@@ -298,7 +357,8 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
                 }
             });      
         } else {
-            this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
+
+            this.updateModelData(data);
 
             this.result = {
                 status: "OK"
@@ -531,6 +591,7 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
         app.hitIcons(this.$el);
 
         this.applyStyle('bodyConfiguration', true);
+        this.applyStyle('bodyPatternConfiguration');
 
         _.each(_.values(this.children), function(itemView){
             itemView.refreshIcon();
@@ -613,12 +674,32 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
             data.visibilityConfiguration['time-wheater'] = true;
         }
 
+        var startPageList = [];
+        var startHome = {id: ('home-' + this.model.id), label: ('Home: ' + this.model.get('name'))};
+        var rooms = [];
+        startPageList.push(startHome);
+        _.each(this.model.floors.models, function(floor) {
+            startPageList.push({id: ('floor-' + floor.id), label: ('Floor: ' + floor.get('name'))});
+            rooms.push(floor.rooms.models);
+        });
+
+        rooms = _.flatten(rooms);
+
+        _.each(rooms, function(room) {
+            startPageList.push({id: ('room-' + room.collection.parentFloor.id + '-' + room.id), label: ('Room: ' + room.get('name'))});
+        });
+
+        data.startPageList = startPageList;
+
         return data;
     },
 
     saveClicked: function(e) {
         var name = this.$("#name").val();
         this.model.set("name", name);
+
+        var startPage = this.$("#startPage").val();
+        this.model.set("startPage", startPage);
 
         var $lis = $('#widget-sortable li', this.$el);
         _.each($lis, function(li, idx) {

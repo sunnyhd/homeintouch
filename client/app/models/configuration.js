@@ -10,6 +10,19 @@ module.exports = BaseModel.extend({
 
 	fileAttributes: ['background-image'],
 
+	hasStyleAttributes: function() {
+		var styleAttributes = this.getStyleAttributes();
+		if (_.isEmpty(styleAttributes)) {
+			return false;
+		} else {
+			styleAttributes = _.reject(styleAttributes, function(value, key) {
+				return (value === 'none');
+			});
+
+			return !_.isEmpty(styleAttributes);
+		}
+	},
+
 	getStyleAttributes: function() {
 		var styleKeys = this.getStyleKeys();
 		var styleAttributes = _.pick(this.attributes, styleKeys);
@@ -106,13 +119,20 @@ module.exports = BaseModel.extend({
         return classString;
 	},
 
+	unsetFileAttribute: function() {
+		var styleKeys = this.fileAttributes;
+
+		_.each(styleKeys, function(key){
+			this.unset(key, {silent: true});
+		}, this);
+	},
+
 	resetAttributes: function() {
 		var styleKeys = _.difference(_.keys(this.attributes), this.reservedAttributes, this.fileAttributes);
 
 		_.each(styleKeys, function(key){
 			this.unset(key, {silent: true});
 		}, this);
-		
 	},
 
 	getStyleReset: function() {

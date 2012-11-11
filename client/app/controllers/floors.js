@@ -18,6 +18,10 @@ app.vent.on("floor:selected", function(floor){
     showFloorList(homesController.currentHome, floor);
 });
 
+app.vent.on("floor:setData", function(floor){
+    exports.setFloorData(homesController.currentHome, floor);
+});
+
 app.vent.on("floor:add", function(){
     var home = homesController.currentHome;
     var form = showAddFloorForm(home);
@@ -71,29 +75,10 @@ app.vent.on("home:saved", function(newCurrentHome){
 // --------------
 
 var showFloorList = function(home, floor) {
-    exports.floors = home.floors;
-    exports.currentFloor = floor;
+
+    exports.setFloorData(home, floor);
 
     exports.showDashboard(floor);
-
-    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
-    app.updateDesktopBreadcrumbNav( { 
-        itemType: 'floor',
-        name: floor.get('name'), 
-        handler: function(e) {
-            e.preventDefault();
-            app.vent.trigger("floor:selected", floor);
-        }
-    });
-
-    app.updateTouchNav({
-        name: floor.get('name'), 
-        previous: home.get('name'),
-        handler: function(e) {
-            e.preventDefault();
-            app.vent.trigger("home:selected", home);
-        }
-    });
 
     app.touchTopOpts.show(new floorViews.OptionsContextMenuView());
     app.desktopTopOpts.show(new floorViews.OptionsContextMenuView());
@@ -133,3 +118,30 @@ var showEditFloorForm = function(floor){
     exports.currentDashboard = view;
     view.applyStyles();
  };
+
+
+exports.setFloorData = function(home, floor) {
+    exports.floors = home.floors;
+    exports.currentFloor = floor;
+
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor',
+        name: floor.get('name'), 
+        handler: function(e) {
+            e.preventDefault();
+            app.vent.trigger("floor:selected", floor);
+        }
+    });
+
+    app.updateTouchNav({
+        name: floor.get('name'), 
+        previous: home.get('name'),
+        handler: function(e) {
+            e.preventDefault();
+            app.vent.trigger("home:selected", home);
+        }
+    });
+
+    return floor;
+};

@@ -3,7 +3,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     events: {
         "click .cancel.btn": "cancelClicked",
         "click .edit.btn": "editClicked",
-        "change #body-background-image" : "loadFile"
+        "change #body-background-image" : "loadFile",
+        "click a#clear-background" : "clearBackgroundClicked"
     },
 
     loadFile: function(event){
@@ -20,17 +21,78 @@ module.exports = Backbone.Marionette.ItemView.extend({
         };
 
         reader.readAsBinaryString(imageFile);
+
+        this.showClearBackgroundBtn();
+    },
+
+    getBackgroundImageUrl: function() {
+        return this.$('#body-background-image').get()[0].getAttribute('value');
+    },
+
+    previewLoadedImage: function() {
+        var url = this.getBackgroundImageUrl();
+        if (url !== '') {
+            this.previewUrl(url);
+            this.showClearBackgroundBtn();
+        }
+    },
+
+    onRender: function() {
+        this.hideClearBackgroundBtn();
+        this.previewLoadedImage();
+    },
+
+    hideClearBackgroundBtn: function() {
+        this.$('#clear-background').hide();
+    },
+
+    showClearBackgroundBtn: function() {
+        this.$('#clear-background').show();
+    },
+
+    clearBackgroundFile: function() {
+        var backgroundFileElement = this.$('#body-background-image').get()[0]
+        backgroundFileElement.outerHTML = backgroundFileElement.outerHTML;
+        this.hideClearBackgroundBtn();
+        this.clearStyleModel();
+    },
+
+    clearStyleModel: function() {},
+
+    hideBackgroundFileInput: function() {
+        this.$('#body-background-image').parents('.control-group').hide();
+    },
+
+    showBackgroundFileInput: function() {
+        this.$('#body-background-image').parents('.control-group').show();
+    },
+
+    previewUrl: function(url) {
+
+        var parsedUrl = url;
+
+        if (url.indexOf('url(') === 0) {
+            parsedUrl = url.substr((url.lastIndexOf('(') + 1)).replace(')', '');
+        }
+
+        this.resetPreviewHolder(); 
+
+        var $image = $('<img>');
+        $image.attr('src', parsedUrl);
+        $image.attr('width', 150);
+        this.$('#holder').append($image);
+    },
+
+    resetPreviewHolder: function() {
+        this.$('#holder').children().remove();
     },
 
     previewFile: function(file) {
         
+        var that = this;
         var previewReader = new FileReader();
         previewReader.onload = function (event) {
-            $('#holder').children().remove();
-            var image = new Image();
-            image.src = event.target.result;
-            image.width = 150; // a fake resize
-            holder.appendChild(image);
+            that.previewUrl(event.target.result);
         };
 
         previewReader.readAsDataURL(file);        
@@ -81,6 +143,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
         configuration.resetAttributes();
 
         configuration.set(configurationAttributes);
+    },
+
+    clearBackgroundClicked: function() {
+        this.resetPreviewHolder();
+        this.imageStream = null;
+        this.clearBackgroundFile();
     },
 
     cancelClicked: function(e){
