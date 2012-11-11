@@ -6,6 +6,13 @@ module.exports = Backbone.Collection.extend({
 
     url: '/api/episodes',
 
+    initialize: function(opts) {
+    	opts || (opts = {});
+    	if (opts.lastN) {
+    		this.url = '/api/episodes/last/' + opts.lastN;
+    	}
+    },
+
     comparator: function(episode) {
         return [
             episode.get('showtitle'),

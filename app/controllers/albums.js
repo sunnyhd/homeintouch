@@ -1,5 +1,6 @@
 var Album = require('../models/album');
 var Song = require('../models/song');
+var q = require('../../lib/queries');
 
 exports.index = function(req, res, next) {
     Album.find(function(err, albums) {
@@ -21,5 +22,12 @@ exports.show = function(req, res, next) {
 
             res.json(album);
         });
+    });
+};
+
+exports.lastN = function(req, res, next) {
+    q.lastN(Album, req.params.n, function(err, albums) {
+        if (err) return next(err);
+        res.json(albums);
     });
 };

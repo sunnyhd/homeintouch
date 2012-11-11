@@ -1,9 +1,17 @@
 var app = require('app');
+
 var homesController = require('controllers/homes');
 var playersController = require('controllers/players');
+
 var Home = require('models/home');
 var Configuration = require('models/configuration');
+
+var Movies = require('collections/movies');
+var Episodes = require('collections/episodes');
+var Albums = require('collections/albums');
+
 var StyleConfigurationView = require('views/settings/style_settings');
+
 
 exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     template: "#context-menu-home-opts",
@@ -178,10 +186,65 @@ exports.TimeWheaterWidgetView = exports.HouseWidgetView.extend({
     }
 });
 
+exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
+
+    events: _.extend({}, exports.HouseWidgetView.prototype.events, {
+        "click a#showNewEpisodes": "showEpisodesClicked",
+        "click a#showNewMovies": "showMoviesClicked",
+        "click a#showNewMusic": "showMusicClicked"
+    }),
+
+    showEpisodesClicked: function() {
+        return false;
+    },
+
+    showMoviesClicked: function() {
+        return false;
+    },
+
+    showMusicClicked: function() {
+        return false;
+    },
+
+    onRender: function() {
+        exports.HouseWidgetView.prototype.onRender.apply(this);
+        this.refreshRecentlyAdded();
+    },
+
+    refreshRecentlyAdded: function() {
+        var $container = $('.hit-icon-container .overview', this.$el);
+        var $loading = $('.loading', this.$el);
+        $loading.show();
+
+        var collection = new Albums();
+        var loadingAlbums = collection.fetch();
+        var prx = this.prx;
+
+        loadingAlbums.done($.proxy(this.onDataLoaded, this));
+        loadingAlbums.fail($.proxy(this.onDataError, this));
+        loadingAlbums.always($.proxy(this.onDataFinally, this));
+    },
+
+    onDataLoaded: function(data) {
+        console.log('success: ' + data);
+    },
+
+    onDataError: function() {
+        console.log('error');  
+    },
+
+    onDataFinally: function() {
+        var $loading = $('.loading', this.$el);
+        $loading.hide();
+        exports.HouseWidgetView.prototype.onRender.apply(this);
+    }
+});
+
 var widgetViews = {
     "my-house": exports.HouseWidgetView,
     "my-library": exports.HouseWidgetView,
-    "time-wheater": exports.TimeWheaterWidgetView
+    "time-wheater": exports.TimeWheaterWidgetView,
+    "recently-added": exports.RecentlyAddedWidgetView
 };
 
 exports.EditStyleHomeForm = StyleConfigurationView.extend({

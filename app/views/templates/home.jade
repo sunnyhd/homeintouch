@@ -133,6 +133,26 @@ script(id="time-wheater-template", type="text/template")
         .thumb
           .end
 
+script(id="recently-added-template", type="text/template")
+  .hit-widget.clearfix.scrollable-x#recently-added
+    .hit-title Recently Added <span class="loading">- Loading...</span>
+      ul.nav.pull-right
+        li
+          a.pull-right#editWidgetStyle(href="#")
+            i.icon-cog.icon-white
+          a.pull-right#showNewEpisodes(href="#")
+            i.icon-film.icon-white
+          a.pull-right#showNewMovies(href="#")
+            i.icon-facetime-video.icon-white
+          a.pull-right#showNewMusic(href="#")
+            i.icon-music.icon-white
+    .hit-icon-container.viewport
+      .overview
+    .scrollbar
+      .track
+        .thumb
+          .end
+
 script(id="switch-selected-home-template", type="text/template")
   .modal-header
     h2 Switch Home

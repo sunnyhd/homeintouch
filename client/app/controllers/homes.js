@@ -10,7 +10,8 @@ exports.homes = new Homes();
 var widgetEditViews = {
     "my-house": homeViews.EditStyleWidgetForm,
     "my-library": homeViews.EditStyleWidgetForm,
-    "time-wheater": homeViews.EditTimeWeatherForm
+    "time-wheater": homeViews.EditTimeWeatherForm,
+    "recently-added": homeViews.EditStyleWidgetForm
 };
 
 exports.showCurrent = function() {
