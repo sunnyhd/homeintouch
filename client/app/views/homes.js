@@ -527,8 +527,6 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
 
         app.hitIcons(this.$el);
 
-        
-
         this.applyStyle('bodyConfiguration', true);
         this.applyStyle('bodyPatternConfiguration');
 
@@ -613,12 +611,32 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
             data.visibilityConfiguration['time-wheater'] = true;
         }
 
+        var startPageList = [];
+        var startHome = {id: ('home-' + this.model.id), label: ('Home: ' + this.model.get('name'))};
+        var rooms = [];
+        startPageList.push(startHome);
+        _.each(this.model.floors.models, function(floor) {
+            startPageList.push({id: ('floor-' + floor.id), label: ('Floor: ' + floor.get('name'))});
+            rooms.push(floor.rooms.models);
+        });
+
+        rooms = _.flatten(rooms);
+
+        _.each(rooms, function(room) {
+            startPageList.push({id: ('room-' + room.collection.parentFloor.id + '-' + room.id), label: ('Room: ' + room.get('name'))});
+        });
+
+        data.startPageList = startPageList;
+
         return data;
     },
 
     saveClicked: function(e) {
         var name = this.$("#name").val();
         this.model.set("name", name);
+
+        var startPage = this.$("#startPage").val();
+        this.model.set("startPage", startPage);
 
         var $lis = $('#widget-sortable li', this.$el);
         _.each($lis, function(li, idx) {

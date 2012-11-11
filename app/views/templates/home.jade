@@ -30,6 +30,13 @@ script(id="edit-home-template", type="text/template")
               label(for="name").control-label Name
               .controls
                 input(id="name", type="text", placeHolder="Vacation", value!="<%= name %>")
+            .control-group
+              label(for="startPage").control-label Start Page
+              .controls
+                select(id="startPage")
+                  <% _.each(startPageList, function(startPage) { %>
+                  option(value!="<%= startPage.id %>") <%= startPage.label %>
+                  <% }) %>
         .tab-pane#tab2
           form.form-horizontal#widget-visibility
             <% _.each(_.sortBy(widgets,'id'), function(widget) { %>
