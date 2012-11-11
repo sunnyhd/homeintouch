@@ -270,7 +270,8 @@ exports.EditStyleFloorForm = StyleConfigurationView.extend({
     events: {
         "click .cancel.btn": "cancelClicked",
         "click .edit.btn": "editClicked",
-        "change #body-background-image" : "loadFile"
+        "change #body-background-image" : "loadFile",
+        "click a#clear-background" : "clearBackgroundClicked"
     },
 
     serializeData: function(){
@@ -286,6 +287,11 @@ exports.EditStyleFloorForm = StyleConfigurationView.extend({
         this.addStyleValues(data.myRoomsFields, this.model.get("myRoomsConfiguration"));
 
         return data;
+    },
+
+    clearStyleModel: function() {
+        StyleConfigurationView.prototype.clearStyleModel.apply(this);
+        this.model.get('bodyConfiguration').unsetFileAttribute();
     },
 
     editClicked: function(e){

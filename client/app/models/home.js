@@ -25,6 +25,13 @@ module.exports = BaseModel.extend({
     bodyDefaultStyle: { 'background-image': 'none' },
     bodyFixedStyle: { 'background-image': {'background-size' : 'cover'} }, // Use to add a particular fixed style when a parameter is set.
 
+    // Body pattern
+    bodyPatternSelector: 'body',
+    bodyPatternPrefix: 'pattern-',
+    bodyPatternFields: [
+        {name: "Background Pattern", id: "pattern-background-image", type: "list", options: app.backgroundPatterns}
+    ],
+
     // Time and Weather
     timeWheaterDefaults: {'location': 'EUR|DE|GM003|BERLIN', 'locationLabel': 'Berlin, DE'},
     
@@ -54,6 +61,15 @@ module.exports = BaseModel.extend({
         bodyConfiguration.set('fixedStyle', this.bodyFixedStyle);
         this.set("bodyConfiguration", bodyConfiguration);
 
+        // Initialize Body Pattern Configuration
+        var bodyPatternConfiguration = new Configuration();
+        if (this.has("bodyPatternConfiguration")) {
+            bodyPatternConfiguration.set(this.get("bodyPatternConfiguration"));
+        }
+        bodyPatternConfiguration.set('selector', this.bodyPatternSelector);
+        //bodyPatternConfiguration.set('defaultStyle', this.bodyPatternDefaultStyle);
+        this.set("bodyPatternConfiguration", bodyPatternConfiguration);
+
         // Initialize Time and Weather Configuration
         var timeWheaterConfiguration = new Configuration();
         if (this.has("timeWheaterConfiguration")) {
@@ -69,7 +85,8 @@ module.exports = BaseModel.extend({
         }        
         this.set("timeWheaterConfiguration", timeWheaterConfiguration);
 
-        this.set("bodyFields", _.clone(this.bodyFields));  
+        this.set("bodyFields", _.clone(this.bodyFields));
+        this.set("bodyPatternFields", _.clone(this.bodyPatternFields));
         this.set("timeWheaterFields", _.clone(this.timeWheaterFields));
     },
 
@@ -146,11 +163,16 @@ module.exports = BaseModel.extend({
             json.bodyConfiguration = this.get("bodyConfiguration").toJSON();
         }
 
+        if (this.has("bodyPatternConfiguration")) {
+            json.bodyPatternConfiguration = this.get("bodyPatternConfiguration").toJSON();
+        }
+
         if (this.has("timeWheaterConfiguration")) {
             json.timeWheaterConfiguration = this.get("timeWheaterConfiguration").toJSON();
         }
 
         delete json.bodyFields;
+        delete json.bodyPatternFields;
         delete json.timeWheaterDefaults;
 
         return json;
