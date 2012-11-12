@@ -459,12 +459,16 @@ exports.EditTimeWeatherForm = exports.EditStyleWidgetForm.extend({
             minLength: 2,
             source: cities,
             focus: function( e, ui ) {
-                $("#locationLabel").val( ui.item.label );
+                if (ui.item) {
+                    $("#locationLabel").val( ui.item.label );
+                }
                 return false;
             },
             select: function( e, ui ) {
-                $("#locationLabel").val( ui.item.label );
-                $("#location").val( ui.item.value );
+                if (ui.item) {
+                    $("#locationLabel").val( ui.item.label );
+                    $("#location").val( ui.item.value );
+                }
                 return false;
             }
         });
