@@ -18,6 +18,7 @@ exports.showCurrent = function() {
 exports.showRoom = function(floor, room) {
     var rooms = floor.rooms;
     exports.currentRoom = room;
+    exports.showingFavorites = false;
     
     if (room.deviceGroups.length > 0) {
         var roomLayoutView = new roomViews.RoomLayout({
@@ -65,6 +66,7 @@ exports.showRoom = function(floor, room) {
 exports.showFavorites = function(home) {
 
     var room = home.getFavorites();
+    exports.showingFavorites = true;
 
     if (room.deviceGroups.length > 0) {
         var roomLayoutView = new roomViews.FavoriteRoomLayout({
@@ -83,7 +85,6 @@ exports.showFavorites = function(home) {
         var noDeviceGroupsView = new roomViews.FavoriteNoDeviceGroupView();
         app.main.show(noDeviceGroupsView);
     }
-
     
     app.updateDesktopBreadcrumbNav( { 
         itemType: 'floor', // Workaround to display the 'Favorites' button
@@ -103,8 +104,8 @@ exports.showFavorites = function(home) {
         }
     });
     
-    app.touchTopOpts.show(new roomViews.OptionsFavoriteContextMenuView());
-    app.desktopTopOpts.show(new roomViews.OptionsFavoriteContextMenuView());
+    app.touchTopOpts.show(new roomViews.OptionsFavoriteContextMenuView({model: room}));
+    app.desktopTopOpts.show(new roomViews.OptionsFavoriteContextMenuView({model: room}));
 
     return home;
 };
@@ -209,6 +210,8 @@ app.vent.on("home:saved", function(newCurrentHome){
             exports.currentRoom = currentFloor.rooms.get(exports.currentRoom.id);
 
             exports.showRoom(currentFloor, exports.currentRoom);    
+        } else if (exports.showingFavorites) {
+            app.vent.trigger("custom-page:favorites", homesController.currentHome);
         }
     }
 });
@@ -216,4 +219,18 @@ app.vent.on("home:saved", function(newCurrentHome){
 app.vent.on("custom-page:favorites", function(home) {
     console.log('home: ' + home.id);
     exports.showFavorites(home);
+});
+
+app.vent.on("favorites:editStyle", function(room) {
+    
+    var editStyleForm = new roomViews.EditStyleFavoriteForm({model: homesController.currentHome, room: room});
+
+    editStyleForm.on("close", function(){
+        if (editStyleForm.result.status === "OK") {
+            homesController.saveCurrentHome();
+            exports.showFavorites(homesController.currentHome);
+        }
+    });
+
+    app.modal.show(editStyleForm);
 });

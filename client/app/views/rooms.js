@@ -1319,7 +1319,11 @@ exports.OptionsFavoriteContextMenuView = Backbone.Marionette.ItemView.extend({
     template: "#context-menu-favorite-opts",
 
     events: {
-        
+        'click a#editStyle': 'editStyle'
+    },
+
+    editStyle: function() {
+        app.vent.trigger("favorites:editStyle", this.model);
     }
 });
 
@@ -1345,6 +1349,25 @@ exports.FavoriteRoomLayout = exports.RoomLayout.extend({
 
     itemView: exports.FavoriteDeviceGroupView,
 
+    initialize: function() {
+        exports.RoomLayout.prototype.initialize.apply(this);
+        if (this.model.parentHome.has('favoritesWidgetOrder')) {
+            this.collection.favOrder = this.model.parentHome.get('favoritesWidgetOrder');
+            this.collection.comparator = function(deviceGroup1, deviceGroup2) {
+                var order1 = _.indexOf(this.favOrder, deviceGroup1.get('type'));
+                var order2 = _.indexOf(this.favOrder, deviceGroup2.get('type'));
+                if (order1 < order2) {
+                    return -1;
+                } else if (order1 > order2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            };
+            this.collection.sort({silent : true});
+        }
+    },
+
     serializeData: function(){
         var data = Backbone.Marionette.CompositeView.prototype.serializeData.apply(this, arguments);
         var home = this.model.parentHome;
@@ -1352,11 +1375,178 @@ exports.FavoriteRoomLayout = exports.RoomLayout.extend({
         data.home = home.get("name");
 
         return data;
+    },
+
+    applyStyles: function() {
+        var currentModel = this.model;
+        this.model = this.model.parentHome;
+        exports.RoomLayout.prototype.applyStyle.apply(this, ['favoritesConfiguration', true]);
+        exports.RoomLayout.prototype.applyStyle.apply(this, ['favoritesPatternConfiguration']);
+
+        this.model = currentModel;
     }
 });
 
 exports.FavoriteNoDeviceGroupView = Backbone.Marionette.ItemView.extend({
     template: "#favorite-no-device-group-template",
+});
+
+exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
+
+    template: "#edit-favorite-style-template",
+
+    events: {
+        "click .cancel.btn": "cancelClicked",
+        "click .edit.btn": "editClicked",
+        "change #body-background-image" : "loadFile",
+        "change #pattern-background-image": "processBackgroundPattern",
+        "click a#clear-background" : "clearBackgroundClicked",
+        "show a[data-toggle='tab'][href='#tab1']" : 'showStyleTab',
+        "show a[data-toggle='tab'][href='#tab2']" : 'showOrderTab'
+    },
+
+    initialize: function() {
+        StyleConfigurationView.prototype.initialize.apply(this);
+        this.room = this.options.room;
+    },
+
+    serializeData: function(){
+
+        var data = StyleConfigurationView.prototype.serializeData.apply(this);
+
+        data.type = 'Favorites';
+        data.bodyFields = this.model.get("favoritesFields");
+        data.bodyPatternFields = this.model.get("favoritesPatternFields");
+
+        this.addStyleValues(data.bodyFields, this.model.get("favoritesConfiguration"));
+        this.addStyleValues(data.bodyPatternFields, this.model.get("favoritesPatternConfiguration"));
+
+        data.widgets = this.room.deviceGroups.toJSON();
+
+        return data;
+    },
+
+    showOrderTab: function() {
+        this.hideClearBackgroundBtn();
+    },
+
+    showStyleTab: function() {
+        this.setFileUploadSettings();
+    },
+
+    onRender: function() {
+        StyleConfigurationView.prototype.onRender.apply(this);
+        this.setFileUploadSettings();
+
+        $('#widget-sortable', this.$el).sortable();
+        $('#widget-sortable', this.$el).disableSelection();
+    },
+
+    loadFile: function(event) {
+        StyleConfigurationView.prototype.loadFile.apply(this, [event]);
+        this.hideBackgroundPatternInput();
+    },
+
+    hideBackgroundPatternInput: function() {
+        this.$('#pattern-background-image').parents('.control-group').hide();
+    },
+
+    showBackgroundPatternInput: function() {
+        this.$('#pattern-background-image').parents('.control-group').show();
+    },
+
+    clearBackgroundClicked: function() {
+        StyleConfigurationView.prototype.clearBackgroundClicked.apply(this);
+        this.showBackgroundPatternInput();
+    },
+
+    setFileUploadSettings: function() {
+        var url = this.$('#pattern-background-image').val();
+        if (url === 'none') {
+            this.resetPreviewHolder();
+            this.showBackgroundFileInput();
+            this.previewLoadedImage();
+        } else {
+            if (!_.isUndefined(url)) {
+                this.hideBackgroundFileInput();
+                this.previewUrl(url);    
+            }
+        }
+    },
+
+    processBackgroundPattern: function (event) {
+        this.setFileUploadSettings();
+    },
+
+    updateModelData: function(data) {
+        this.updateStyleConfiguration(data, this.model.favoritesPrefix, this.model.favoritesSelector, "favoritesConfiguration");
+        this.updateStyleConfiguration(data, this.model.favoritesPatternPrefix, this.model.favoritesPatternSelector, "favoritesPatternConfiguration");
+
+        if (this.model.get('favoritesPatternConfiguration').hasStyleAttributes()) {
+            this.model.get('favoritesConfiguration').unsetFileAttribute();
+        }
+
+        this.updateOrderData();
+    },
+
+    updateOrderData: function() {
+        var widgetOrder = [];
+        var $lis = $('#widget-sortable li', this.$el);
+        _.each($lis, function(li, idx) {
+            var id = $(li).data('model-id');
+            widgetOrder.push(id);
+        }, this);
+        this.model.set('favoritesWidgetOrder', widgetOrder);
+    },
+
+    clearStyleModel: function() {
+        StyleConfigurationView.prototype.clearStyleModel.apply(this);
+        this.model.get('favoritesConfiguration').unsetFileAttribute();
+    },
+
+    editClicked: function(e){
+        e.preventDefault();
+
+        var formFields = _.union(_.pluck(this.model.get("favoritesFields"), 'id'),
+                                 _.pluck(this.model.get("favoritesPatternFields"), 'id'));
+
+        var data = Backbone.FormHelpers.getFormData(this, formFields);
+
+        if (this.imageStream) {
+            var that = this;
+            $.ajax({
+                type: "POST",
+                url: "/api/images",
+                data: {
+                    fileName: that.imageFileName,
+                    fileStream: that.imageStream
+                },
+                success: function (response) {
+                    var imagePath = response.imagePath;
+                    data['body-background-image'] = 'url(' + imagePath + ')';
+                    that.updateStyleConfiguration(data, that.model.favoritesPrefix, that.model.favoritesSelector, "favoritesConfiguration");
+                    that.updateStyleConfiguration(data, that.model.favoritesPatternPrefix, that.model.favoritesPatternSelector, "favoritesPatternConfiguration");
+
+                    that.updateOrderData();
+
+                    that.result = {
+                        status: "OK"
+                    }
+
+                    that.close();
+                }
+            });      
+        } else {
+
+            this.updateModelData(data);
+
+            this.result = {
+                status: "OK"
+            }
+
+            this.close();
+        }
+    }
 });
 
 // FORMS

@@ -33,6 +33,25 @@ module.exports = BaseModel.extend({
         {name: "Background Pattern", id: "pattern-background-image", type: "list", options: app.backgroundPatterns}
     ],
 
+    // Favorites Body
+    favoritesSelector: 'body:before',
+    favoritesPrefix: 'body-',
+    favoritesFields: [
+        {name: "Background Color", id: "body-background-color", type: "text"}, 
+        {name: "Text Color", id: "body-color", type: "text"}, 
+        {name: "Opacity", id: "body-opacity", type: "text"},
+        {name: "Background Image", id: "body-background-image", type: "file"}
+    ],
+    favoritesDefaultStyle: { 'background-image': 'none' },
+    favoritesFixedStyle: { 'background-image': {'background-size' : 'cover'} }, // Use to add a particular fixed style when a parameter is set.
+
+    // Favorites Body pattern
+    favoritesPatternSelector: 'body',
+    favoritesPatternPrefix: 'pattern-',
+    favoritesPatternFields: [
+        {name: "Background Pattern", id: "pattern-background-image", type: "list", options: app.backgroundPatterns}
+    ],
+
     // Time and Weather
     timeWheaterDefaults: {'location': 'EUR|DE|GM003|BERLIN', 'locationLabel': 'Berlin, DE'},
     
@@ -68,7 +87,6 @@ module.exports = BaseModel.extend({
             bodyPatternConfiguration.set(this.get("bodyPatternConfiguration"));
         }
         bodyPatternConfiguration.set('selector', this.bodyPatternSelector);
-        //bodyPatternConfiguration.set('defaultStyle', this.bodyPatternDefaultStyle);
         this.set("bodyPatternConfiguration", bodyPatternConfiguration);
 
         // Initialize Time and Weather Configuration
@@ -86,6 +104,24 @@ module.exports = BaseModel.extend({
         }        
         this.set("timeWheaterConfiguration", timeWheaterConfiguration);
 
+        // Initialize Favorites Body Configuration
+        var favoritesConfiguration = new Configuration();
+        if (this.has("favoritesConfiguration")) {
+            favoritesConfiguration.set(this.get("favoritesConfiguration"));
+        }
+        favoritesConfiguration.set('selector', this.favoritesSelector);
+        favoritesConfiguration.set('defaultStyle', this.favoritesDefaultStyle);
+        favoritesConfiguration.set('fixedStyle', this.favoritesFixedStyle);
+        this.set("favoritesConfiguration", favoritesConfiguration);
+
+        // Initialize Body Pattern Configuration
+        var favoritesPatternConfiguration = new Configuration();
+        if (this.has("favoritesPatternConfiguration")) {
+            favoritesPatternConfiguration.set(this.get("favoritesPatternConfiguration"));
+        }
+        favoritesPatternConfiguration.set('selector', this.favoritesPatternSelector);
+        this.set("favoritesPatternConfiguration", favoritesPatternConfiguration);
+
         // Initialize Start Page Configuration
         if (!this.has('startPage')) {
             this.set('startPage', ('home-' + this.id));
@@ -94,6 +130,8 @@ module.exports = BaseModel.extend({
         this.set("bodyFields", _.clone(this.bodyFields));
         this.set("bodyPatternFields", _.clone(this.bodyPatternFields));
         this.set("timeWheaterFields", _.clone(this.timeWheaterFields));
+        this.set("favoritesFields", _.clone(this.favoritesFields));
+        this.set("favoritesPatternFields", _.clone(this.favoritesPatternFields));
     },
 
     initializeWidgets: function() {
@@ -179,9 +217,19 @@ module.exports = BaseModel.extend({
             json.timeWheaterConfiguration = this.get("timeWheaterConfiguration").toJSON();
         }
 
+        if (this.has("favoritesConfiguration")) {
+            json.favoritesConfiguration = this.get("favoritesConfiguration").toJSON();
+        }
+
+        if (this.has("favoritesPatternConfiguration")) {
+            json.favoritesPatternConfiguration = this.get("favoritesPatternConfiguration").toJSON();
+        }
+
         delete json.bodyFields;
         delete json.bodyPatternFields;
         delete json.timeWheaterDefaults;
+        delete json.favoritesFields;
+        delete json.favoritesPatternFields;
 
         return json;
     }
