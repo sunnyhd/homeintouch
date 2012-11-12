@@ -105,6 +105,16 @@ exports.destroy = function(home){
         model: home,
         collection: home.widgets
     });
+    
+    app.vent.on("home:dashboard:reset-scrollbars", function($widget) {
+        if ($widget) {
+            view.setWidgetScrollbarOverview($widget);
+        } else {
+            view.setScrollbarOverview();
+        }
+        view.updateScrollBar();
+    });
+
     app.main.show(view);
 
     exports.currentDashboard = view;

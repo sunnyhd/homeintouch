@@ -160,6 +160,32 @@ script(id="recently-added-template", type="text/template")
         .thumb
           .end
 
+script(id="album-recently-added", type="text/template")
+  .hit-icon.albumWidget(data-hit-icon-href="#", data-hit-icon-type="media.recently.albums")
+    span.albumArtist <%=data.artist%>
+    span.albumLabel <%=data.label%>
+
+script(id="movie-recently-added", type="text/template")
+  <% if (!_.isUndefined(data.thumbnailid)) { %>
+  .hit-icon.movieWidget(data-hit-icon-href="#")
+    img(src!="<%= 'api/images/' + data.thumbnailid %>")
+  <% } else { %>
+  .hit-icon.movieWidget(data-hit-icon-href="#", data-hit-icon-type="media.recently.movies")
+    span.movieLabel <%=data.label%>
+  <% } %>
+
+script(id="episode-recently-added", type="text/template")
+  <% if (!_.isUndefined(data.thumbnailid)) { %>
+  .hit-icon.episodeWidget(data-hit-icon-href="#")
+    span.episodeLabel <%=data.showtitle + ' - ' + data.season%>
+    img(src!="<%= 'api/images/' + data.thumbnailid %>")
+    span.episodeTitle <%=data.label%>
+  <% } else { %>
+  .hit-icon.episodeWidget(data-hit-icon-href="#", data-hit-icon-type="media.recently.episodes")
+    span.episodeLabel <%=data.showtitle%>
+    span.episodeTitle <%=data.label%>
+  <% } %>
+
 script(id="switch-selected-home-template", type="text/template")
   .modal-header
     h2 Switch Home
