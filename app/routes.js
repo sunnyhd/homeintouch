@@ -14,17 +14,20 @@ module.exports = function(app) {
     app.get('/api/volume', controllers.volume.show);
 
     app.get('/api/movies', controllers.movies.index);
+    app.get('/api/movies/last/:n', controllers.movies.lastN);
 
     app.get('/api/tvshows', controllers.tvshows.index);
     app.get('/api/tvshows/:tvshow', controllers.tvshows.show);
 
     app.get('/api/episodes', controllers.episodes.index);
+    app.get('/api/episodes/last/:n', controllers.episodes.lastN);
 
     app.get('/api/artists', controllers.artists.index);
     app.get('/api/artists/:artist', controllers.artists.show);
 
     app.get('/api/albums', controllers.albums.index);
     app.get('/api/albums/:album', controllers.albums.show);
+    app.get('/api/albums/last/:n', controllers.albums.lastN);
 
     app.get('/api/songs', controllers.songs.index);
 

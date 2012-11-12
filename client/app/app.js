@@ -332,6 +332,10 @@ var viewHelpers = {
         }
     },
 
+    isDefined: function(attribute) {
+        return (!_.isUndefined(attribute));
+    },
+
     getValue: function(attribute) {
         return _.has(this, attribute) ? this[attribute] : "";
     },

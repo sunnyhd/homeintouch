@@ -102,10 +102,12 @@ module.exports = BaseModel.extend({
         var myHouse = {order: 0, visible: true, name: 'My House', type: 'my-house', template: '#my-house-template'};
         var myLibrary = {order: 1, visible: true, name: 'My Library', type: 'my-library', template: '#my-library-template'};
         var timeWheater = {order: 2, visible: true, name: 'Time & Wheater', type: 'time-wheater', template: '#time-wheater-template'};
+        var recentlyAdded = {order: 3, visible: true, name: 'Recently Added', type: 'recently-added', template: '#recently-added-template'};
 
         houseWidgets.add(myHouse);
         houseWidgets.add(myLibrary);
         houseWidgets.add(timeWheater);
+        houseWidgets.add(recentlyAdded);
 
         this.widgets = houseWidgets;
     },

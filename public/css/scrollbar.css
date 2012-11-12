@@ -1,4 +1,4 @@
-.scrollable-x .viewport { height: 110px; overflow: hidden; position: relative; }
+.scrollable-x .viewport { height: 110px; /*overflow: hidden;*/ position: relative; }
 .scrollable-x .overview { list-style: none; width: 200px; padding: 0; margin: 0; position: absolute; left: 0; top: 0;  }
 .scrollable-x .scrollbar{ 
 	background-color: #333;

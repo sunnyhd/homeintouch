@@ -1,9 +1,17 @@
 var app = require('app');
+
 var homesController = require('controllers/homes');
 var playersController = require('controllers/players');
+
 var Home = require('models/home');
 var Configuration = require('models/configuration');
+
+var Movies = require('collections/movies');
+var Episodes = require('collections/episodes');
+var Albums = require('collections/albums');
+
 var StyleConfigurationView = require('views/settings/style_settings');
+
 
 exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     template: "#context-menu-home-opts",
@@ -178,10 +186,78 @@ exports.TimeWheaterWidgetView = exports.HouseWidgetView.extend({
     }
 });
 
+exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
+
+    events: _.extend({}, exports.HouseWidgetView.prototype.events, {
+        "click a#showNewEpisodes": "showEpisodesClicked",
+        "click a#showNewMovies": "showMoviesClicked",
+        "click a#showNewMusic": "showMusicClicked"
+    }),
+
+    showEpisodesClicked: function() {
+        this.collection = new Episodes( {lastN: 25} );
+        this.collection.comparator = null;
+        this.collectionTemplate = '#episode-recently-added';
+        this.refreshRecentlyAdded();
+        return false;
+    },
+
+    showMoviesClicked: function() {
+        this.collection = new Movies( {lastN: 25} );
+        this.collection.comparator = null;
+        this.collectionTemplate = '#movie-recently-added';
+        this.refreshRecentlyAdded();
+        return false;
+    },
+
+    showMusicClicked: function() {
+        this.collection = new Albums( {lastN: 25} );
+        this.collection.comparator = null;
+        this.collectionTemplate = '#album-recently-added';
+        this.refreshRecentlyAdded();
+        return false;
+    },
+
+    onRender: function() {
+        exports.HouseWidgetView.prototype.onRender.apply(this);
+        this.showMusicClicked();
+    },
+
+    refreshRecentlyAdded: function() {
+        $('.loading', this.$el).show();
+        $('.hit-icon', this.$el).remove();
+        
+        var loadingAlbums = this.collection.fetch();
+        loadingAlbums.done($.proxy(this.onDataLoaded, this));
+        loadingAlbums.fail($.proxy(this.onDataError, this));
+        loadingAlbums.always($.proxy(this.onDataFinally, this));
+    },
+
+    onDataLoaded: function() {
+        var $container = $('.hit-icon-container .overview', this.$el);
+        var tmp = $(this.collectionTemplate).html();
+        _.each(this.collection.models, function(model) {
+            $container.append( _.template(tmp, {data: model.attributes, _: _ } ));
+        });
+    },
+
+    onDataError: function() {
+        console.error('Error fetching the data from the server');
+    },
+
+    onDataFinally: function() {
+        $('.loading', this.$el).hide();
+        var $widget = $('#recently-added', this.$el);
+        app.vent.trigger("home:dashboard:reset-scrollbars", $widget);
+        exports.HouseWidgetView.prototype.onRender.apply(this);
+    }
+});
+
 var widgetViews = {
     "my-house": exports.HouseWidgetView,
     "my-library": exports.HouseWidgetView,
-    "time-wheater": exports.TimeWheaterWidgetView
+    "time-wheater": exports.TimeWheaterWidgetView,
+    "recently-added": exports.RecentlyAddedWidgetView
 };
 
 exports.EditStyleHomeForm = StyleConfigurationView.extend({
@@ -549,20 +625,29 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
         });
     },
 
+    /**
+     * Sets all the scrollbar containers.
+     */
     setScrollbarOverview: function() {
         var $scrollableContainers = this.$el.find('.scrollable-x');
 
         // For each scrollable container, sets the overview width
         _.each($scrollableContainers, function(container) {
             var $widget = $(container);
-            var $icons = $('.hit-icon', $widget);
-            var width = 102;
-            if ($widget.hasClass('large')) { width = 192; }
-            else if ($widget.hasClass('medium')) { width = 147; } 
-            else if ($widget.hasClass('small')) { width = 122; } 
-            
-            $('.overview', $widget).setPixels('width', $icons.length * width);
-        });
+            this.setWidgetScrollbarOverview($widget);
+        }, this);
+    },
+
+    /**
+     * Sets an specific scrollbar container.
+     */
+    setWidgetScrollbarOverview: function($widget) {
+        var $icons = $('.hit-icon', $widget);
+        var width = 102;
+        if ($widget.hasClass('large')) { width = 192; }
+        else if ($widget.hasClass('medium')) { width = 147; } 
+        else if ($widget.hasClass('small')) { width = 122; } 
+        $('.overview', $widget).setPixels('width', $icons.length * width);
     },
 
     onRender: function() {

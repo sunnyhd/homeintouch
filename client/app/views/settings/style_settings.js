@@ -26,7 +26,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     getBackgroundImageUrl: function() {
-        return this.$('#body-background-image').get()[0].getAttribute('value');
+        var img = this.$('#body-background-image').get()[0];
+        var url = '';
+        if (img) {
+            url = img.getAttribute('value');
+        }
+        return url;
     },
 
     previewLoadedImage: function() {
