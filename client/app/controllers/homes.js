@@ -40,7 +40,17 @@ exports.startPage = function() {
                     app.vent.trigger('room:selected', room);
                 }
             }
+        } else if (startPageType === 'home') {
+            exports.showCurrent();    
         }
+
+        // Start Page Timeout (expressed in seconds).
+        var startPageTimeout = home.get('startPageTimeout');
+
+        if (startPageTimeout !== null) {
+            app.setStartPageTimeout(startPageTimeout);
+        }
+
     } else {
         exports.showCurrent();
     }
@@ -52,7 +62,6 @@ exports.showCurrent = function() {
 };
 
 exports.showHome = function(home) {
-
     exports.setHomeData(home);
     exports.showDashboard(home);
 
@@ -217,4 +226,14 @@ app.vent.on("home:saved", function(newHome) {
     _.each(_.values(exports.currentDashboard.children), function(itemView){
         itemView.model = exports.currentHome.widgets.get(itemView.model.id);
     });
+
+    var newStartPageTimeout = newHome.get('startPageTimeout');
+
+    if (app.startPageInterval !== newStartPageTimeout) {
+        app.resetStartPageTimeout(newStartPageTimeout);
+    }
+});
+
+app.vent.on('home:showStartPage', function() {
+    exports.startPage();
 });
