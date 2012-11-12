@@ -628,6 +628,8 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
 
         data.startPageList = startPageList;
 
+        data.startPageTimeout = this.model.get('startPageTimeout') / 1000;
+
         return data;
     },
 
@@ -637,6 +639,10 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
 
         var startPage = this.$("#startPage").val();
         this.model.set("startPage", startPage);
+
+        var startPageTimeout = this.$("#startPageTimeout").val();
+        // Multiply the timeout by 1000 to save seconds.
+        this.model.set("startPageTimeout", startPageTimeout * 1000);
 
         var $lis = $('#widget-sortable li', this.$el);
         _.each($lis, function(li, idx) {

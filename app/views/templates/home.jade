@@ -34,9 +34,19 @@ script(id="edit-home-template", type="text/template")
               label(for="startPage").control-label Start Page
               .controls
                 select(id="startPage")
-                  <% _.each(startPageList, function(startPage) { %>
-                  option(value!="<%= startPage.id %>") <%= startPage.label %>
+                  <% _.each(startPageList, function(startPageOption) { %>
+                  <% if(startPageOption.id === startPage) { %>
+                  option(value!="<%= startPageOption.id %>", selected="selected") <%= startPageOption.label %>
+                  <% } else {%>
+                  option(value!="<%= startPageOption.id %>") <%= startPageOption.label %>
+                  <% } %>
                   <% }) %>
+            .control-group
+              label(for="startPageTimeout").control-label Start Page Timeout
+              .controls
+                input(id="startPageTimeout", type="number", value!="<%= startPageTimeout %>")
+                span.help-inline(rel="tooltip", data-placement="left", title="Time waited to show the start page (in seconds). If the timeout is 0 the start page is only showed when the application starts.")
+                  i.icon-question-sign
         .tab-pane#tab2
           form.form-horizontal#widget-visibility
             <% _.each(_.sortBy(widgets,'id'), function(widget) { %>

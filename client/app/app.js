@@ -142,6 +142,31 @@ app.changeIconState = function($icon, color) {
     }
 };
 
+// Start Page functions
+app.setStartPageTimeout = function(timeout) {
+
+    app.startPageInterval = timeout;
+    if (timeout > 0) {
+        app.startPageTimeoutId = setTimeout(function(){
+            console.log('Start Page Timeout');
+            app.router.navigate('');
+            app.vent.trigger('home:showStartPage');
+        }, timeout);    
+    }
+};
+
+app.resetStartPageTimeout = function(timeout) {
+    this.clearStartPageTimeout();
+    app.startPageInterval = (timeout !== null) ? timeout : app.startPageInterval;
+    app.setStartPageTimeout(app.startPageInterval);
+};
+
+app.clearStartPageTimeout = function() {
+    if (app.startPageTimeoutId !== null) {
+        clearTimeout(app.startPageTimeoutId);    
+    }
+}
+
 app.vent.on('device:read', function(address){
     socket.emit('eib:get', address);
 });
@@ -238,10 +263,16 @@ app.addInitializer(function() {
         }
     });
 
+    $(document).on('click', function(e) {
+        app.resetStartPageTimeout();
+    });
+
     // Start router
     app.router = new Router({ app: app });
     Backbone.history.start();
 });
+
+
 
 // Handlebars
 // ---------------

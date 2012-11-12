@@ -9,6 +9,7 @@ module.exports = BaseModel.extend({
 
     defaults: {
         "addNew": "Add Home...",
+        'startPageTimeout': '0'
     },
   
     urlRoot: '/api/homes',
@@ -84,6 +85,11 @@ module.exports = BaseModel.extend({
             timeWheaterConfiguration.set('locationLabel', this.timeWheaterDefaults['locationLabel']);
         }        
         this.set("timeWheaterConfiguration", timeWheaterConfiguration);
+
+        // Initialize Start Page Configuration
+        if (!this.has('startPage')) {
+            this.set('startPage', ('home-' + this.id));
+        }
 
         this.set("bodyFields", _.clone(this.bodyFields));
         this.set("bodyPatternFields", _.clone(this.bodyPatternFields));
