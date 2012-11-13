@@ -316,8 +316,10 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
             this.showBackgroundFileInput();
             this.previewLoadedImage();
         } else {
-            this.hideBackgroundFileInput();
-            this.previewUrl(url);
+            if (!_.isUndefined(url)) {
+                this.hideBackgroundFileInput();
+                this.previewUrl(url);
+            }
         }
     },
 

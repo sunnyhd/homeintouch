@@ -18,7 +18,7 @@ exports.showCurrent = function() {
 exports.showRoom = function(floor, room) {
     var rooms = floor.rooms;
     exports.currentRoom = room;
-    exports.showingFavorites = false;
+    app.showingFavorites = false;
     
     if (room.deviceGroups.length > 0) {
         var roomLayoutView = new roomViews.RoomLayout({
@@ -66,7 +66,7 @@ exports.showRoom = function(floor, room) {
 exports.showFavorites = function(home) {
 
     var room = home.getFavorites();
-    exports.showingFavorites = true;
+    app.showingFavorites = true;
 
     if (room.deviceGroups.length > 0) {
         var roomLayoutView = new roomViews.FavoriteRoomLayout({
@@ -210,7 +210,7 @@ app.vent.on("home:saved", function(newCurrentHome){
             exports.currentRoom = currentFloor.rooms.get(exports.currentRoom.id);
 
             exports.showRoom(currentFloor, exports.currentRoom);    
-        } else if (exports.showingFavorites) {
+        } else if (app.showingFavorites) {
             app.vent.trigger("custom-page:favorites", homesController.currentHome);
         }
     }

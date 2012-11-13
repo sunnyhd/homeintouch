@@ -114,6 +114,8 @@ exports.destroy = function(home){
         model: home,
         collection: home.widgets
     });
+
+    app.showingFavorites = false;
     
     app.vent.on("home:dashboard:reset-scrollbars", function($widget) {
         if ($widget) {
