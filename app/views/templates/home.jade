@@ -151,7 +151,7 @@ script(id="time-wheater-template", type="text/template")
           .end
 
 script(id="recently-added-template", type="text/template")
-  .hit-widget.clearfix.scrollable-x#recently-added
+  .hit-widget.medium.clearfix.scrollable-x#recently-added
     .hit-title Recently Added <span class="loading">- Loading...</span>
       ul.nav.pull-right
         li
@@ -171,29 +171,48 @@ script(id="recently-added-template", type="text/template")
           .end
 
 script(id="album-recently-added", type="text/template")
-  .hit-icon.albumWidget(data-hit-icon-href="#", data-hit-icon-type="media.recently.albums")
-    span.albumArtist <%=data.artist%>
-    span.albumLabel <%=data.label%>
+  <% if (!_.isUndefined(data.thumbnailid)) { %>
+  .hit-icon.mediaWidget(data-hit-icon-href="#")
+    span.mediaTitle <%=data.artist%>
+    .mediaThumbnail
+      img(src!="<%= 'api/images/' + data.thumbnailid %>")
+    span.mediaSubtitle <%=data.label%>
+  <% } else { %>
+  .hit-icon.mediaWidget(data-hit-icon-href="#")
+    span.mediaTitle <%=data.artist%>
+    .mediaThumbnail
+      img(src="img/svg/media/recently/albums.svg")
+    span.mediaSubtitle <%=data.label%>
+  <% } %>
 
 script(id="movie-recently-added", type="text/template")
   <% if (!_.isUndefined(data.thumbnailid)) { %>
-  .hit-icon.movieWidget(data-hit-icon-href="#")
-    img(src!="<%= 'api/images/' + data.thumbnailid %>")
+  .hit-icon.mediaWidget(data-hit-icon-href="#")
+    span.mediaTitle <%=data.label%>
+    .mediaThumbnail
+      img(src!="<%= 'api/images/' + data.thumbnailid %>")
+    span.mediaSubtitle <%=data.genre%>
   <% } else { %>
-  .hit-icon.movieWidget(data-hit-icon-href="#", data-hit-icon-type="media.recently.movies")
-    span.movieLabel <%=data.label%>
+  .hit-icon.mediaWidget(data-hit-icon-href="#")
+    span.mediaTitle <%=data.label%>
+    .mediaThumbnail
+      img(src="img/svg/media/recently/movies.svg")
+    span.mediaSubtitle <%=data.genre%>
   <% } %>
 
 script(id="episode-recently-added", type="text/template")
   <% if (!_.isUndefined(data.thumbnailid)) { %>
-  .hit-icon.episodeWidget(data-hit-icon-href="#")
-    span.episodeLabel <%=data.showtitle + ' - ' + data.season%>
-    img(src!="<%= 'api/images/' + data.thumbnailid %>")
-    span.episodeTitle <%=data.label%>
+  .hit-icon.mediaWidget(data-hit-icon-href="#")
+    span.mediaTitle <%=data.showtitle + ' - ' + data.season%>
+    .mediaThumbnail
+      img(src!="<%= 'api/images/' + data.thumbnailid %>")
+    span.mediaSubtitle <%=data.label%>
   <% } else { %>
-  .hit-icon.episodeWidget(data-hit-icon-href="#", data-hit-icon-type="media.recently.episodes")
-    span.episodeLabel <%=data.showtitle%>
-    span.episodeTitle <%=data.label%>
+  .hit-icon.mediaWidget(data-hit-icon-href="#")
+    span.mediaTitle <%=data.showtitle + ' - ' + data.season%>
+    .mediaThumbnail
+      img(src="img/svg/media/recently/episodes.svg")
+    span.mediaSubtitle <%=data.label%>
   <% } %>
 
 script(id="switch-selected-home-template", type="text/template")
