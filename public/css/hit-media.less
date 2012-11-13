@@ -8,35 +8,31 @@
 
 /** DASHBOARD WIDGETS **/
 
-.albumWidget {
-	.albumLabel, .albumArtist {
-		width: 100%;
-		text-overflow: ellipsis;
-		float: left;
-	}
-	.albumArtist {
-		top: 0px;
-		white-space: nowrap;
+.mediaWidget {
+	span {
+		width: 125px;
 		margin: 0px 5px;
-		width: 80px;
-		text-overflow: ellipsis;
-	}
-	.albumLabel {
-		font-size: 0.8em;
-		top: 50px;
-	}
-}
-
-.episodeWidget {
-	.episodeLabel {
-		top: 0px;
 		white-space: nowrap;
-		margin: 0px 5px;
-		width: 80px;
 		text-overflow: ellipsis;
+		overflow: hidden;
+		display: block;
 	}
-	.episodeTitle {
+	.mediaTitle {
+		top: 0px;
+	}
+	.mediaSubtitle {
 		font-size: 0.8em;
 		position: initial;
+	}
+	.mediaThumbnail {
+		height: 100px;
+		width: 135px; // WARNING! If the medium class change, this value has to be updated
+		vertical-align: middle;
+		display: table-cell;
+
+		img {
+			max-width: 100px;
+			max-height: 100px;
+		}
 	}
 }
