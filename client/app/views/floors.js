@@ -130,7 +130,11 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
     },
 
     updateScrollBar: function() {
-        this.$el.find('#my-rooms').tinyscrollbar_update();
+        var $myRooms = this.$el.find('#my-rooms');
+        var tsb = $myRooms.data('tsb');
+        if ( $myRooms.length > 0 && tsb ) {
+            $myRooms.tinyscrollbar_update();
+        }
     },
 
     setScrollbarOverview: function() {

@@ -1109,7 +1109,11 @@ exports.DeviceGroupView = Backbone.Marionette.CompositeView.extend({
     },
 
     updateScrollBar: function() {
-        $(this.getViewId()).tinyscrollbar_update();
+        var $view = $(this.getViewId());
+        var tsb = $view.data('tsb');
+        if ( $view.length > 0 && tsb ) {
+            $view.tinyscrollbar_update();
+        }
     },
 
     setScrollbarOverview: function() {

@@ -230,7 +230,6 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
         var loadingAlbums = this.collection.fetch();
         loadingAlbums.done($.proxy(this.onDataLoaded, this));
         loadingAlbums.fail($.proxy(this.onDataError, this));
-        loadingAlbums.always($.proxy(this.onDataFinally, this));
     },
 
     onDataLoaded: function() {
@@ -239,17 +238,20 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
         _.each(this.collection.models, function(model) {
             $container.append( _.template(tmp, {data: model.attributes, _: _ } ));
         });
+        this.onDataFinally();
     },
 
     onDataError: function() {
         console.error('Error fetching the data from the server');
+        this.onDataFinally();
     },
 
     onDataFinally: function() {
+        exports.HouseWidgetView.prototype.onRender.apply(this);
+        
         $('.loading', this.$el).hide();
         var $widget = $('#recently-added', this.$el);
         app.vent.trigger("home:dashboard:reset-scrollbars", $widget);
-        exports.HouseWidgetView.prototype.onRender.apply(this);
     }
 });
 
@@ -627,7 +629,10 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
     updateScrollBar: function() {
         var $containers = this.$el.find('.scrollable-x');
         _.each($containers, function(c) {
-            $(c).tinyscrollbar_update();
+            var tsb = $(c).data('tsb');
+            if ( $(c).length > 0 && tsb ) {
+                $(c).tinyscrollbar_update();
+            }
         });
     },
 
