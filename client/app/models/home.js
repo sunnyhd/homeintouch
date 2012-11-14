@@ -191,18 +191,20 @@ module.exports = BaseModel.extend({
             }, this);
         }, this);
 
-
+        // Sort device groups within the Favorites Page.
         if (this.has('favoritesWidgetOrder')) {
             favRoom.deviceGroups.favOrder = this.get('favoritesWidgetOrder');
             favRoom.deviceGroups.comparator = function(deviceGroup1, deviceGroup2) {
                 var order1 = _.indexOf(this.favOrder, deviceGroup1.get('type'));
                 var order2 = _.indexOf(this.favOrder, deviceGroup2.get('type'));
+                
                 if (order1 === -1) {
                     return 1;
                 }
                 if (order2 === -1) {
                     return -1;
                 }
+                
                 if (order1 < order2) {
                     return -1;
                 } else if (order1 > order2) {
@@ -213,6 +215,35 @@ module.exports = BaseModel.extend({
             };
             favRoom.deviceGroups.sort({silent : true});
         }
+
+        // Sort devices within each Device Group.
+        _.each(favRoom.deviceGroups.models, function(deviceGroup) {
+            var sortKey = 'sort-' + deviceGroup.get('type');
+            if (this.has(sortKey)) {
+                deviceGroup.devices.favOrder = this.get(sortKey);
+                deviceGroup.devices.comparator = function(device1, device2) {
+                    var order1 = _.indexOf(this.favOrder, device1.id);
+                    var order2 = _.indexOf(this.favOrder, device2.id);
+                    
+                    if (order1 === -1) {
+                        return 1;
+                    }
+                    if (order2 === -1) {
+                        return -1;
+                    }
+                    
+                    if (order1 < order2) {
+                        return -1;
+                    } else if (order1 > order2) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                };
+
+                deviceGroup.devices.sort({silent : true});
+            }
+        }, this);
 
         return favRoom;
     },

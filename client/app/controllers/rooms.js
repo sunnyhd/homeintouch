@@ -234,3 +234,16 @@ app.vent.on("favorites:editStyle", function(room) {
 
     app.modal.show(editStyleForm);
 });
+
+app.vent.on("favorites:editDeviceGroup", function(deviceGroupView) {
+    var editStyleForm = new roomViews.EditStyleFavoriteGroupForm({model: homesController.currentHome, deviceGroup: deviceGroupView.model});
+
+    editStyleForm.on("close", function(){
+        if (editStyleForm.result.status === "OK") {
+            homesController.saveCurrentHome();
+            exports.showFavorites(homesController.currentHome);
+        }
+    });
+
+    app.modal.show(editStyleForm); 
+});

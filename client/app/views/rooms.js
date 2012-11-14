@@ -1336,7 +1336,15 @@ exports.OptionsFavoriteContextMenuView = Backbone.Marionette.ItemView.extend({
 
 exports.FavoriteDeviceGroupView = exports.DeviceGroupView.extend({
 
-    events: {},
+    events: {
+        "click a#editDeviceGroupStyle": "editDeviceGroupClicked"
+    },
+
+    editDeviceGroupClicked: function() {
+
+        app.vent.trigger("favorites:editDeviceGroup", this);
+        return false;
+    },
 
     appendHtml: function(cv, iv) {
         exports.DeviceGroupView.prototype.appendHtml.apply(this, arguments);
@@ -1348,7 +1356,60 @@ exports.FavoriteDeviceGroupView = exports.DeviceGroupView.extend({
 
     onRender: function() {
         exports.DeviceGroupView.prototype.onRender.apply(this, arguments);
-        $('ul.nav.pull-right', this.$el).hide();
+        //$('ul.nav.pull-right', this.$el).hide();
+    }
+});
+
+exports.EditStyleFavoriteGroupForm = StyleConfigurationView.extend({
+
+    template: "#edit-group-of-favorite-template",
+
+    events: {
+        "click .cancel.btn": "cancelClicked",
+        "click .edit.btn": "editClicked"
+    },
+
+    initialize: function() {
+        StyleConfigurationView.prototype.initialize.apply(this);
+        this.deviceGroup = this.options.deviceGroup;
+    },
+
+    serializeData: function(){
+
+        var data = StyleConfigurationView.prototype.serializeData.apply(this);
+
+        data.deviceGroup = this.deviceGroup.toJSON();
+
+        return data;
+    },
+
+    editClicked: function(e){
+        this.updateOrderData();
+
+        this.result = {
+            status: "OK"
+        }
+
+        this.close();
+
+        return false;
+    },
+
+    updateOrderData: function() {
+
+        var sortKey = 'sort-' + this.deviceGroup.get('type');
+        var widgetOrder = [];
+        var $lis = $('#favorite-widgets-sortable li', this.$el);
+        _.each($lis, function(li, idx) {
+            var id = $(li).data('model-id');
+            widgetOrder.push(id);
+        }, this);
+        this.model.set(sortKey, widgetOrder);
+    },
+
+    onRender: function() {
+        $('#favorite-widgets-sortable', this.$el).sortable();
+        $('#favorite-widgets-sortable', this.$el).disableSelection();
     }
 });
 

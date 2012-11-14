@@ -97,6 +97,20 @@ script(id="edit-group-of-room-template", type="text/template")
     a(href="#").cancel.btn Cancel
     a(href="#").edit.btn.btn-primary Save
 
+script(id="edit-group-of-favorite-template", type="text/template")
+  .modal-header
+    h2 Edit Device Group Styles
+  .modal-body
+    label Set the widgets order with drag & drop
+    ul.nav.nav-tabs.nav-stacked#favorite-widgets-sortable
+      <% _.each(deviceGroup.devices, function(device) { %>
+      li(data-model-id!="<%= device.id %>")
+        a(href="#") <%= device.name %>
+      <% }) %>
+  .modal-footer
+    a(href="#").cancel.btn Cancel
+    a(href="#").edit.btn.btn-primary Save
+
 script(id="no-floors-template", type="text/template")
   .no-rooms.container-fluid
     .row-fluid
