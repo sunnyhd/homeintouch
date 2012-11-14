@@ -350,14 +350,17 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     showPosition: function(address, value){
-        var actualValue = this.calculateShutterValue(value);
-        this.$el.find('.slider-vertical').slider("value", actualValue);
-        this.updateShutterDetails(actualValue);
+        $sliderEl = this.$el.find('.slider-vertical');
+
+        if ( $sliderEl.length > 0 && $sliderEl.slider() ) {
+            var actualValue = this.calculateShutterValue(value);
+            this.$el.find('.slider-vertical').slider("value", actualValue);
+            this.updateShutterDetails(actualValue);
+        }
     },
 
     updateShutterDetails: function(shutterValue) {
         this.refreshIcon(shutterValue);
-
         this.$('.shutter-detail').html(Math.ceil(shutterValue) + '%');
     },
 
