@@ -191,6 +191,29 @@ module.exports = BaseModel.extend({
             }, this);
         }, this);
 
+
+        if (this.has('favoritesWidgetOrder')) {
+            favRoom.deviceGroups.favOrder = this.get('favoritesWidgetOrder');
+            favRoom.deviceGroups.comparator = function(deviceGroup1, deviceGroup2) {
+                var order1 = _.indexOf(this.favOrder, deviceGroup1.get('type'));
+                var order2 = _.indexOf(this.favOrder, deviceGroup2.get('type'));
+                if (order1 === -1) {
+                    return 1;
+                }
+                if (order2 === -1) {
+                    return -1;
+                }
+                if (order1 < order2) {
+                    return -1;
+                } else if (order1 > order2) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            };
+            favRoom.deviceGroups.sort({silent : true});
+        }
+
         return favRoom;
     },
 

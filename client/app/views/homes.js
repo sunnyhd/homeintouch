@@ -700,12 +700,6 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
 
     serializeData: function() {
         var data = Backbone.Marionette.ItemView.prototype.serializeData.apply(this);
-        if (!this.model.has('visibilityConfiguration')) {
-            data.visibilityConfiguration = {};
-            data.visibilityConfiguration['my-house'] = true;
-            data.visibilityConfiguration['my-library'] = true;
-            data.visibilityConfiguration['time-wheater'] = true;
-        }
 
         var startPageList = [];
         var startHome = {id: ('home-' + this.model.id), label: ('Home: ' + this.model.get('name'))};

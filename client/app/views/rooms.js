@@ -1353,25 +1353,6 @@ exports.FavoriteRoomLayout = exports.RoomLayout.extend({
 
     itemView: exports.FavoriteDeviceGroupView,
 
-    initialize: function() {
-        exports.RoomLayout.prototype.initialize.apply(this);
-        if (this.model.parentHome.has('favoritesWidgetOrder')) {
-            this.collection.favOrder = this.model.parentHome.get('favoritesWidgetOrder');
-            this.collection.comparator = function(deviceGroup1, deviceGroup2) {
-                var order1 = _.indexOf(this.favOrder, deviceGroup1.get('type'));
-                var order2 = _.indexOf(this.favOrder, deviceGroup2.get('type'));
-                if (order1 < order2) {
-                    return -1;
-                } else if (order1 > order2) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            };
-            this.collection.sort({silent : true});
-        }
-    },
-
     serializeData: function(){
         var data = Backbone.Marionette.CompositeView.prototype.serializeData.apply(this, arguments);
         var home = this.model.parentHome;
