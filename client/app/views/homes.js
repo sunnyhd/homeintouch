@@ -724,7 +724,8 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
 
         data.startPageList = startPageList;
 
-        data.startPageTimeout = this.model.get('startPageTimeout') / 1000;
+        data.startPage = app.getLocalItem('startPage');
+        data.startPageTimeout = app.getLocalItem('startPageTimeout') / 1000;
 
         return data;
     },

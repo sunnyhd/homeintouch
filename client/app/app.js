@@ -165,7 +165,16 @@ app.clearStartPageTimeout = function() {
     if (app.startPageTimeoutId !== null) {
         clearTimeout(app.startPageTimeoutId);    
     }
-}
+};
+
+// Local Storage functions
+app.getLocalItem = function(key) {
+    return localStorage.getItem(key);
+};
+
+app.setLocalItem = function(key, value) {
+    localStorage.setItem(key, value);
+};
 
 app.vent.on('device:read', function(address){
     socket.emit('eib:get', address);

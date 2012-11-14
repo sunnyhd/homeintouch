@@ -16,7 +16,7 @@ var widgetEditViews = {
 
 exports.startPage = function() {
     var home = exports.currentHome || exports.homes.defaultHome();
-    var startPage = home.get('startPage');
+    var startPage = app.getLocalItem('startPage');
     if (startPage !== null && !_.isUndefined(startPage)) {
         var startPageArray = startPage.split('-');
         var startPageType = startPageArray[0];
@@ -45,7 +45,7 @@ exports.startPage = function() {
         }
 
         // Start Page Timeout (expressed in seconds).
-        var startPageTimeout = home.get('startPageTimeout');
+        var startPageTimeout = app.getLocalItem('startPageTimeout');
 
         if (startPageTimeout !== null) {
             app.setStartPageTimeout(startPageTimeout);
@@ -185,6 +185,12 @@ app.vent.on("home:edit", function(home) {
 
     form.on("close", function() {
         if (form.status === "OK") {
+            // Save Start Page Data
+            app.setLocalItem('startPage', form.model.get('startPage'));
+            app.setLocalItem('startPageTimeout', form.model.get('startPageTimeout'));
+            form.model.unset('startPage');
+            form.model.unset('startPageTimeout');
+            
             exports.saveCurrentHome();
             exports.showCurrent();    
         }        
@@ -229,7 +235,7 @@ app.vent.on("home:saved", function(newHome) {
         itemView.model = exports.currentHome.widgets.get(itemView.model.id);
     });
 
-    var newStartPageTimeout = newHome.get('startPageTimeout');
+    var newStartPageTimeout = app.getLocalItem('startPageTimeout');
 
     if (app.startPageInterval !== newStartPageTimeout) {
         app.resetStartPageTimeout(newStartPageTimeout);
