@@ -157,7 +157,7 @@ app.setStartPageTimeout = function(timeout) {
 
 app.resetStartPageTimeout = function(timeout) {
     this.clearStartPageTimeout();
-    app.startPageInterval = (timeout !== null) ? timeout : app.startPageInterval;
+    app.startPageInterval = ((timeout !== null) && !_.isUndefined(timeout)) ? timeout : app.startPageInterval;
     app.setStartPageTimeout(app.startPageInterval);
 };
 
