@@ -8,6 +8,26 @@ var playlistsController = require('controllers/playlists');
 exports.movies = new Movies();
 
 exports.showMovieList = function() {
+
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor',
+        name: 'Movies', 
+        handler: function(e) {
+            app.router.navigate('#movies', {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: 'Movies', 
+        previous: 'Home',
+        handler: function(e) {
+            app.router.navigate('', {trigger: true});
+            return false;
+        }
+    });
+
     var view = new MovieListView({ collection: exports.movies });
     app.main.show(view);
 };

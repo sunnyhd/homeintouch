@@ -9,6 +9,26 @@ var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 
 exports.showTVShowList = function() {
+
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor',
+        name: 'TV Shows', 
+        handler: function(e) {
+            app.router.navigate('#tvshows', {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: 'TV Shows', 
+        previous: 'Home',
+        handler: function(e) {
+            app.router.navigate('', {trigger: true});
+            return false;
+        }
+    });
+
     var shows = new TVShows();
     var view = new TVShowListView({ collection: shows });
     app.main.show(view);
@@ -23,6 +43,26 @@ exports.showTVShowEpisodeList = function(tvshowid) {
 };
 
 exports.showEpisodeList = function() {
+
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor',
+        name: 'TV Shows', 
+        handler: function(e) {
+            app.router.navigate('#tvshows', {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: 'TV Shows', 
+        previous: 'Home',
+        handler: function(e) {
+            app.router.navigate('', {trigger: true});
+            return false;
+        }
+    });
+
     var episodes = new Episodes();
     var view = new EpisodeListView({ collection: episodes });
     app.main.show(view);

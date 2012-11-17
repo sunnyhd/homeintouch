@@ -12,6 +12,26 @@ var ArtistAlbumListView = require('views/music/artist_album_list');
 var playlistsController = require('controllers/playlists');
 
 exports.showArtistList = function() {
+
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor',
+        name: 'Music', 
+        handler: function(e) {
+            app.router.navigate('#artists', {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: 'Music', 
+        previous: 'Home',
+        handler: function(e) {
+            app.router.navigate('', {trigger: true});
+            return false;
+        }
+    });
+
     var artists = new Artists();
     var view = new ArtistListView({ collection: artists });
     app.main.show(view);
