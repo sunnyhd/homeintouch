@@ -79,8 +79,13 @@ exports.setHomeData = function(home) {
         clear: true,
         name: home.get('name'), 
         handler: function(e) {
-            e.preventDefault();
-            app.vent.trigger("home:selected", home);
+            if (location.hash === '' || location.hash === '#') {
+                app.vent.trigger("home:selected", home);    
+            } else {
+                app.router.navigate('', {trigger: true});
+            }
+            
+            return false;
         }
     });
 
