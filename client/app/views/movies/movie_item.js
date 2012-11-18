@@ -11,7 +11,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     template: require('templates/movies/movie_item'),
 
     events: {
-        'click a.show': 'show'
+        'click .movieContainer': 'show'
     },
 
     show: function() {

@@ -1,9 +1,11 @@
-<a class="show" href="#">
+<div class="movieContainer">
     {{#if thumbnail}}
         <img src="{{ thumbnail }}">
+    {{else}}
+    	<label>No hay imagen</label>
     {{/if}}
 
-    <br>
-    
-    {{ label }}
-</a>
+    <div class="movie-caption">
+    	<span>{{ label }}</span>
+    </div>
+</div>

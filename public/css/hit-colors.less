@@ -132,3 +132,8 @@ a.dark-yellow {
 		.with-color-disabled (@darkYellow);
 	}
 }
+
+.with-border-color (@color) {
+	background-color: @color;
+	border-color: lighten(@color, 10%) darken(@color, 10%) darken(@color, 10%) lighten(@color, 10%);
+}

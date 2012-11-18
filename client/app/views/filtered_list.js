@@ -2,7 +2,9 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     events: {
         'change input[name=search]': 'search',
-        'click .clear': 'clear'
+        'click .search': 'search',
+        'click .clear': 'clear',
+        'click .dropdown-menu a': 'filterChanged'
     },
 
     initialize: function() {
@@ -37,6 +39,13 @@ module.exports = Backbone.Marionette.CompositeView.extend({
         }
 
         return true;
+    },
+
+    filterChanged: function(e) {
+        var $filter = $('#current-filter');
+        var $newFilter = $(e.currentTarget);
+        $filter.find('#filter-name').html($newFilter.html());
+        $filter.data('filter', $newFilter.data('filter'));
     },
 
     matchers: function(model) {
