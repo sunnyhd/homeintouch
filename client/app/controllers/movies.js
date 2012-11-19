@@ -2,32 +2,20 @@ var app = require('app');
 var Movies = require('collections/movies');
 var Player = require('models/player');
 var MovieListView = require('views/movies/movie_list');
+var MovieCoverView = require('views/movies/movie_cover_list');
 var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 
 exports.movies = new Movies();
 
-exports.showMovieList = function() {
+exports.showMovieCoverView = function() {
+    updateNavs();
+    var view = new MovieCoverView({ collection: exports.movies });
+    app.main.show(view);
+};
 
-    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
-    app.updateDesktopBreadcrumbNav( { 
-        itemType: 'floor',
-        name: 'Movies', 
-        handler: function(e) {
-            app.router.navigate('#movies', {trigger: true});
-            return false;
-        }
-    });
-
-    app.updateTouchNav({
-        name: 'Movies', 
-        previous: 'Home',
-        handler: function(e) {
-            app.router.navigate('', {trigger: true});
-            return false;
-        }
-    });
-
+exports.showMovieListView = function() {
+    updateNavs();
     var view = new MovieListView({ collection: exports.movies });
     app.main.show(view);
 };
@@ -49,3 +37,24 @@ exports.resume = function(movie) {
 exports.addToPlaylist = function(movie) {
     playlistsController.addToPlaylist('video', { item: { movieid: movie.id }});
 };
+
+function updateNavs() {
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor',
+        name: 'Movies', 
+        handler: function(e) {
+            app.router.navigate('#movies', {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: 'Movies', 
+        previous: 'Home',
+        handler: function(e) {
+            app.router.navigate('', {trigger: true});
+            return false;
+        }
+    });
+}

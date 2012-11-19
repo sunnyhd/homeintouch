@@ -1,0 +1,11 @@
+<div class="movieContainer">
+    {{#if thumbnail}}
+        <img src="{{ thumbnail }}">
+    {{else}}
+    	<label>No hay imagen</label>
+    {{/if}}
+
+    <div class="movie-caption">
+    	<span>{{ label }}</span>
+    </div>
+</div>

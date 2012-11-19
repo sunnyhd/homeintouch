@@ -6,6 +6,8 @@ module.exports = Backbone.Router.extend({
         'players': 'players',
         'playlists': 'playlists',
         'movies': 'movies',
+        'movies/cover-view': 'movies',
+        'movies/list-view': 'moviesListView',
         'artists': 'artists',
         'albums': 'albums',
         'songs': 'songs',
@@ -38,7 +40,12 @@ module.exports = Backbone.Router.extend({
         },
         
         movies: function() {
-            this.app.controller('movies').showMovieList();
+            this.app.controller('movies').showMovieCoverView();
+            this.app.controller('movies').movies.fetch();
+        },
+
+        moviesListView: function() {
+            this.app.controller('movies').showMovieListView();
             this.app.controller('movies').movies.fetch();
         },
 

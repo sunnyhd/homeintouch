@@ -1,12 +1,12 @@
 var app = require('app');
-var MovieItemView = require('views/movies/movie_item');
+var MovieItemCoverView = require('views/movies/movie_cover_item');
 var FilteredListView = require('views/filtered_list');
 
 module.exports = FilteredListView.extend({
     
-    template: require('templates/movies/movie_list'),
+    template: require('templates/movies/movie_cover_list'),
     
-    itemView: MovieItemView,
+    itemView: MovieItemCoverView,
 
     events: {
 		'click .movies-header-option button': 'listViewClicked'
