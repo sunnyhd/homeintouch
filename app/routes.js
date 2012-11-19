@@ -18,6 +18,7 @@ module.exports = function(app) {
 
     app.get('/api/tvshows', controllers.tvshows.index);
     app.get('/api/tvshows/:tvshow', controllers.tvshows.show);
+    app.get('/api/genres/tvshows', controllers.tvshows.genres);
 
     app.get('/api/episodes', controllers.episodes.index);
     app.get('/api/episodes/last/:n', controllers.episodes.lastN);

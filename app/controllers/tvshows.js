@@ -2,7 +2,7 @@ var Episode = require('../models/episode');
 var TVShow = require('../models/tvshow');
 
 exports.index = function(req, res, next) {
-    TVShow.find(function(err, shows) {
+    TVShow.find(req.query, function(err, shows) {
         if (err) return next(err);
         res.json(shows);
     });
@@ -23,3 +23,16 @@ exports.show = function(req, res, next) {
         });
     });
 };
+
+exports.genres = function(req, res, next) {
+    TVShow.find({}, ['genre'], function(err, shows) {
+        if (err) return next(err);
+        var genres = [];
+
+        for (var i = 0; i < shows.length; i++) {
+            genres.push(shows[i].genre);
+        };
+
+        res.json(genres);
+    });  
+}

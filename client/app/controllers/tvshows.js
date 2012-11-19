@@ -3,7 +3,7 @@ var Episodes = require('collections/episodes');
 var TVShows = require('collections/tvshows');
 var TVShow = require('models/tvshow');
 var EpisodeListView = require('views/tvshows/episode_list');
-var TVShowListView = require('views/tvshows/tvshow_list');
+var TVShowContainerView = require('views/tvshows/tvshow_container');
 var TVShowEpisodeListView = require('views/tvshows/tvshow_episode_list');
 var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
@@ -30,8 +30,9 @@ exports.showTVShowList = function() {
     });
 
     var shows = new TVShows();
-    var view = new TVShowListView({ collection: shows });
+    var view = new TVShowContainerView({ collection: shows });
     app.main.show(view);
+
     return shows;
 };
 
