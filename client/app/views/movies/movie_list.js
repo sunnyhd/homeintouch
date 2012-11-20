@@ -8,21 +8,12 @@ module.exports = FilteredListView.extend({
     
     itemView: MovieItemView,
 
-    events: {
-		'click .movies-header-option button': 'listViewClicked'
-    },
-    
     appendHtml: function(cv, iv) {
         this.$('.movies').append(iv.el);
     },
 
     matchers: function(movie) {
         return movie.get('label');
-    },
-
-    listViewClicked: function(e) {
-    	var $btn = $(e.currentTarget);
-    	app.router.navigate($btn.attr('href'), {trigger: true});
     }
     
 });

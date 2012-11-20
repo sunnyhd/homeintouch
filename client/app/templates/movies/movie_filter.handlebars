@@ -1,0 +1,32 @@
+<div class="span12 movies-header">
+    <div id="view-mode-group" class="btn-group movies-header-option">
+      <button class="btn active" href="#movies/cover-view"><i class="icon-th-large"></i></button>
+      <button class="btn" href="#movies/list-view"><i class="icon-th-list"></i></button>
+    </div>
+    <div class="input-append movies-header-option">
+      <input class="span2" type="text" name="search" value="{{ term }}" placeholder="Search movies...">
+      <div class="btn-group">
+      {{#if term}}
+        <button class="btn clear" href="#"><i class="icon-remove"></i></button>
+      {{else}}
+        <button class="btn search" href="#"><i class="icon-search"></i></button>
+      {{/if}}
+        <button id="current-filter" class="btn dropdown-toggle" data-toggle="dropdown"><span id="filter-name">All Movies</span> <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a data-filter="all" href="#">All Movies</a></li>
+          <li><a data-filter="recently-added" href="#">Recently Added</a></li>
+          <li><a data-filter="recently-viewed" href="#">Recently Viewed</a></li>
+          <li><a data-filter="unwatched" href="#">Unwatched</a></li>
+          <!-- <li><a data-filter="genre" href="#">By Genre</a></li>
+          <li><a data-filter="year" href="#">By Year</a></li> -->
+        </ul>
+      </div><!-- /btn-group -->
+    </div>
+    <div class="pull-right">
+      <div class="btn-group">
+        <a href="#" data-filter="genre" class="btn">Genre: All</a>
+        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+        <ul id="movie-genre-list" class="dropdown-menu"></ul>
+      </div>
+    </div>
+</div>

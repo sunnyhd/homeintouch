@@ -270,6 +270,8 @@ app.addInitializer(function() {
         if ($(this).attr('href') === '#') {
             e.preventDefault();
         }
+
+        return false;
     });
 
     $(document).on('click', function(e) {

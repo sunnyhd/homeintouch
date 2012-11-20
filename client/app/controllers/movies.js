@@ -1,8 +1,7 @@
 var app = require('app');
 var Movies = require('collections/movies');
 var Player = require('models/player');
-var MovieListView = require('views/movies/movie_list');
-var MovieCoverView = require('views/movies/movie_cover_list');
+var MovieContainerView = require('views/movies/movie_container');
 var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 
@@ -10,13 +9,15 @@ exports.movies = new Movies();
 
 exports.showMovieCoverView = function() {
     updateNavs();
-    var view = new MovieCoverView({ collection: exports.movies });
+
+    var movies = exports.movies;
+    var view = new MovieContainerView({ collection: movies, mode: 'cover' });
     app.main.show(view);
 };
 
 exports.showMovieListView = function() {
     updateNavs();
-    var view = new MovieListView({ collection: exports.movies });
+    var view = new MovieContainerView({ collection: exports.movies, mode: 'list' });
     app.main.show(view);
 };
 

@@ -13,6 +13,14 @@ var Movies = module.exports = Backbone.Collection.extend({
     	}
     },
 
+    setLastN: function(amount) {
+        this.url = '/api/movies/last/' + amount;
+    },
+
+    clearLastN: function() {
+        this.url = '/api/movies';
+    },
+
     comparator: function(movie) {
         return movie.get('label');
     }
