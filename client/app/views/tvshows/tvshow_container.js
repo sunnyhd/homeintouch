@@ -15,10 +15,16 @@ module.exports = Backbone.Marionette.Layout.extend({
 
     onRender: function() {
         
-        var listView = new TVShowListView({ collection: this.collection });
-        var filterView = new TVShowFilterView({ collection: this.collection });
+        this.listView = new TVShowListView({ collection: this.collection });
+        this.filterView = new TVShowFilterView({ collection: this.collection });
 
-        this.filter.show(filterView);
-        this.list.show(listView);
+        this.filterView.on('searchFired', this.performSearch, this);
+
+        this.filter.show(this.filterView);
+        this.list.show(this.listView);
+    },
+
+    performSearch: function(filterModel) {
+        this.listView.model.set(filterModel.attributes);
     }
 });

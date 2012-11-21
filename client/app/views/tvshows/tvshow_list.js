@@ -1,6 +1,7 @@
 var TVShowItemView = require('views/tvshows/tvshow_item');
+var FilteredListView = require('views/filtered_list');
 
-module.exports = Backbone.Marionette.CompositeView.extend({
+module.exports = FilteredListView.extend({
 
     template: require('templates/tvshows/tvshow_list'),
     
@@ -8,5 +9,9 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     appendHtml: function(cv, iv) {
         this.$('.tvshows').append(iv.el);
+    },
+
+    matchers: function(movie) {
+        return movie.get('label');
     }
 });
