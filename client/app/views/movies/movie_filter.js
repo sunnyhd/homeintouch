@@ -4,7 +4,7 @@ var FilterPanelView = require('views/filtered_panel');
 module.exports = FilterPanelView.extend({
 
 	events: {
-		'click a[data-filter]' : 'filterMovies',
+		'click .movie-state-filter a[data-filter]' : 'filterMovies',
         'click #view-mode-group button': 'listViewClicked',
         'click #movie-genre-list li a' : 'filterByGenre',
         'click #movie-year-list li a' : 'filterByYear',
@@ -15,9 +15,9 @@ module.exports = FilterPanelView.extend({
 
     template: require('templates/movies/movie_filter'),
     
-    AllGenres: 'All',
+    AllGenres: 'All Genres',
 
-    AllYears: 'All',
+    AllYears: 'All Years',
 
     filter: {},
 
@@ -91,9 +91,9 @@ module.exports = FilterPanelView.extend({
     		this.filter['genre'] = genre;
     	}
 
-        var $filterBtn = this.$('[data-filter="genre"]');
+        var $filterBtn = this.$el.find('[data-filter="genre"]');
 
-        $filterBtn.html('Genre: ' + genre);
+        $filterBtn.find('.current-genre').html(genre);
         $filterBtn.parent().removeClass('open');
 
     	this.listMovies();        
@@ -109,9 +109,9 @@ module.exports = FilterPanelView.extend({
             this.filter['year'] = year;
         }
 
-        var $filterBtn = this.$('[data-filter="year"]');
+        var $filterBtn = this.$el.find('[data-filter="year"]');
 
-        $filterBtn.html('Year: ' + year);
+        $filterBtn.find('.current-year').html(year);
         $filterBtn.parent().removeClass('open');
 
         this.listMovies();        
