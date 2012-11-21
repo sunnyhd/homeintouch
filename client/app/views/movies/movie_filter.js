@@ -23,9 +23,6 @@ module.exports = FilterPanelView.extend({
 
     filterFields: ['playcount', 'lastN'],
 
-    yearList: ['1950-1959', '1960-1969', '1970-1979', '1980-1989', '1990-1999', '2000', '2001', '2002', '2003', '2004',
-    '2005'],
-
     // Avoid rendering when the series collection is reseted.
     initialEvents: function() {},
 
@@ -39,6 +36,11 @@ module.exports = FilterPanelView.extend({
     	.done(function(data) {
     		that.loadGenres(data);
     	});
+
+        $.get('/api/years/movies')
+        .done(function(data) {
+            that.loadYears(data);
+        });
     },
 
     setListBtnActive: function() {
@@ -91,8 +93,7 @@ module.exports = FilterPanelView.extend({
     		this.filter['genre'] = genre;
     	}
 
-        var $filterBtn = this.$el.find('[data-filter="genre"]');
-
+        var $filterBtn = this.$('#genre-filter');
         $filterBtn.find('.current-genre').html(genre);
         $filterBtn.parent().removeClass('open');
 
@@ -109,8 +110,7 @@ module.exports = FilterPanelView.extend({
             this.filter['year'] = year;
         }
 
-        var $filterBtn = this.$el.find('[data-filter="year"]');
-
+        var $filterBtn = this.$('#year-filter');
         $filterBtn.find('.current-year').html(year);
         $filterBtn.parent().removeClass('open');
 
