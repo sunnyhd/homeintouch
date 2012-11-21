@@ -30,7 +30,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     onRender: function() {
-
         var $noImgContainer = this.$el.find('.no-img');
         if ($noImgContainer.length > 0) {
             app.applyBackgroundIcon($noImgContainer, this.iconNoImg);

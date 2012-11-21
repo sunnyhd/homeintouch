@@ -35,9 +35,14 @@
 	  	height: 245px;
 	  	width: 170px;
 
-	  	img {
+	  	img, .no-img {
 		  	width: 150px;
 		  	margin: 10px;
+		}
+		.no-img {
+			height: 225px;
+			background-repeat: no-repeat;
+			background-position: center;
 		}
 
 		.movie-caption {
@@ -89,7 +94,7 @@
 			  	margin: 10px;
 			}
 			.no-img {
-				background-repeat: none;
+				background-repeat: no-repeat;
 				background-position: center;
 			}
 	  	}
@@ -100,16 +105,6 @@
 			max-height: 145px;
 			overflow: hidden;
 			color: white;
-
-			.rating-star-container {
-				float: right;
-				height: ;
-				width: ;
-				text-align: center;
-				background-repeat: none;
-				background-position: center;
-				color: black;
-			}
 
 			div {
 				font-size: 0.9em;

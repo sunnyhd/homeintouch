@@ -10,6 +10,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     template: require('templates/movies/movie_cover_item'),
 
+    iconNoImg: app.getBackgroundIcon('icons.media.defaultMovie', '#333'),
+
     events: {
         'click .movieContainer': 'show'
     },
@@ -17,6 +19,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
     show: function() {
         var view = new MovieDetailView({ model: this.model });
         app.modal.show(view);
+    },
+
+    onRender: function() {
+        var $noImgContainer = this.$el.find('.no-img');
+        if ($noImgContainer.length > 0) {
+            app.applyBackgroundIcon($noImgContainer, this.iconNoImg);
+        }
     }
     
 });
