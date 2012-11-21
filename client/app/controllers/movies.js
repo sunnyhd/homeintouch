@@ -9,9 +9,7 @@ exports.movies = new Movies();
 
 exports.showMovieCoverView = function() {
     updateNavs();
-
-    var movies = exports.movies;
-    var view = new MovieContainerView({ collection: movies, mode: 'cover' });
+    var view = new MovieContainerView({ collection: exports.movies, mode: 'cover' });
     app.main.show(view);
 };
 

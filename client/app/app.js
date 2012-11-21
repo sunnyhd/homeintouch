@@ -142,6 +142,19 @@ app.changeIconState = function($icon, color) {
     }
 };
 
+
+/** To load only one time the icons */
+app.getBackgroundIcon = function(iconPath, color) {
+    var svgIcon = eval(iconPath).replace(/#000000/g, color);
+    if (svgIcon != '') {
+        return "url(\"data:image/svg+xml;utf8,"+svgIcon+"\")";
+    }
+    return '';
+};
+app.applyBackgroundIcon = function($container, iconStr) {
+    $container.css('background-image', iconStr);
+};
+
 // Start Page functions
 app.setStartPageTimeout = function(timeout) {
 

@@ -1,11 +1,16 @@
-<div class="movieContainer">
-    {{#if thumbnail}}
+<div class="movieContainer clearfix">
+	<div class="movie-image">
+		{{#if thumbnail}}
         <img src="{{ thumbnail }}">
-    {{else}}
-    	<label>No hay imagen</label>
-    {{/if}}
+    	{{else}}
+    	<div class="no-img"></div>
+    	{{/if}}
+	</div>
 
-    <div class="movie-caption">
-    	<span>{{ label }}</span>
+    <div class="movie-info">
+    	<div class="movie-title">{{ label }}</div>
+    	<div><span class="info-key">Year: </span> {{ year }}</div>
+    	<div><span class="info-key">Rating: </span> {{ parsedRating }}</div>
+    	<div><span class="info-key">Plot: </span> {{ plot }}</div>
     </div>
 </div>

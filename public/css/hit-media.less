@@ -16,43 +16,112 @@
 
 .movies.coverView {
 	margin: 0px;
-	
-	li {
+
+	li.movie {
 		float: left;
 		margin: 5px;
 		list-style: none;
+	  	position: relative;
+
+	  	.with-border-color(@gray);
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+
+	  	height: 245px;
+	  	width: 170px;
+
+	  	img {
+		  	width: 150px;
+		  	margin: 10px;
+		}
+
+		.movie-caption {
+			width: 100%;
+			position: absolute;
+			right: 0;
+			bottom: 10px;
+			left: 0;
+			background: #333;
+			background: rgba(0, 0, 0, 0.75);
+			color: white;
+			span {
+				padding: 5px 10px;
+				display: block;
+			}
+		}
 	}
 }
 
-.movie {
-  	position: relative;
+.movies.listView {
+	margin: 0px;
 
-  	img {
-	  	width: 150px;
-	  	margin: 10px;
+	li.movie:nth-child(odd) {
+		.with-border-color(@gray);
+	}
+	li.movie:nth-child(even) {
+		.with-border-color(@darkGray);
 	}
 
-	.movie-caption {
-		width: 100%;
-		position: absolute;
-		right: 0;
-		bottom: 10px;
-		left: 0;
-		background: #333;
-		background: rgba(0, 0, 0, 0.75);
-		color: white;
-		span {
-			padding: 5px 10px;
-			display: block;
+	li.movie {
+		margin: 5px;
+		list-style: none;
+		display: block;
+
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+	  	
+	  	height: 165px;
+
+	  	.movie-image {
+	  		float: left;
+	  		height: 100%;
+	  		width: 120px;
+
+		  	img, .no-img {
+			  	height: 145px;
+			  	width: 100px;
+			  	margin: 10px;
+			}
+			.no-img {
+				background-repeat: none;
+				background-position: center;
+			}
+	  	}
+
+		.movie-info {
+			margin-left: 120px;
+			margin: 10px;
+			max-height: 145px;
+			overflow: hidden;
+			color: white;
+
+			.rating-star-container {
+				float: right;
+				height: ;
+				width: ;
+				text-align: center;
+				background-repeat: none;
+				background-position: center;
+				color: black;
+			}
+
+			div {
+				font-size: 0.9em;
+				color: darken(white, 20%);
+			}
+			.info-key {
+				font-weight: bold;
+			}
+
+			div.movie-title {
+				font-size: 1.2em;
+				color: @yellow;
+				font-weight: bold;
+			}
 		}
 	}
-
-	.with-border-color(@gray);
-	border-style: solid;
-  	border-width: 1px;
-  	border-radius: 5px;
-  	height: 245px;
-  	width: 170px;
 }
 
 /** DASHBOARD WIDGETS **/
