@@ -1,30 +1,54 @@
 var app = require('app');
+var FilterPanelView = require('views/filtered_panel');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+module.exports = FilterPanelView.extend({
 
 	events: {
 		'click a[data-filter]' : 'filterMovies',
-		'click #movie-genre-list li a' : 'filterByGenre',
-        'click #view-mode-group button': 'listViewClicked'
+        'click #view-mode-group button': 'listViewClicked',
+        'click #movie-genre-list li a' : 'filterByGenre',
+        'click #movie-year-list li a' : 'filterByYear',
+        'change input[name=search]': 'search',
+        'click .search': 'search',
+        'click .clear': 'clear'
 	},
 
     template: require('templates/movies/movie_filter'),
     
     AllGenres: 'All',
 
+    AllYears: 'All',
+
     filter: {},
 
     filterFields: ['playcount', 'lastN'],
+
+    yearList: ['1950-1959', '1960-1969', '1970-1979', '1980-1989', '1990-1999', '2000', '2001', '2002', '2003', '2004',
+    '2005'],
 
     // Avoid rendering when the series collection is reseted.
     initialEvents: function() {},
 
     onRender: function() {
+
+        this.$('button.clear').hide();
+        this.$('button.search').show();
+
     	var that = this;
     	$.get('/api/genres/movies')
     	.done(function(data) {
     		that.loadGenres(data);
     	});
+    },
+
+    setListBtnActive: function() {
+        this.$('#view-mode-group button').removeClass('active');
+        this.$('#view-mode-group button[href="#movies/list-view"]').addClass('active');
+    },
+    
+    setCoverBtnActive: function() {
+        this.$('#view-mode-group button').removeClass('active');
+        this.$('#view-mode-group button[href="#movies/cover-view"]').addClass('active');
     },
 
     loadGenres: function(genreList) {
@@ -39,9 +63,22 @@ module.exports = Backbone.Marionette.ItemView.extend({
     	};
     },
 
+    loadYears: function(yearList) {
+
+        var allListItem = $('<li><a href="#" data-year="' + this.AllYears + '">' + this.AllYears + '</a></li>');
+        this.$('#movie-year-list').append(allListItem);
+
+        for (var i = 0; i < yearList.length; i++) {
+            var year = yearList[i];
+            var listItem = $('<li><a href="#" data-year="' + year + '">' + year + '</a></li>');
+            this.$('#movie-year-list').append(listItem);
+        };
+    },
+
     listViewClicked: function(e) {
         var $btn = $(e.currentTarget);
         app.router.navigate($btn.attr('href'), {trigger: true});
+        
         return false;
     },
 
@@ -60,6 +97,24 @@ module.exports = Backbone.Marionette.ItemView.extend({
         $filterBtn.parent().removeClass('open');
 
     	this.listMovies();        
+        return false;
+    },
+
+    filterByYear: function(event) {
+        var $element = $(event.currentTarget);
+        var year = $element.data('year');
+        if (year === this.AllYears) {
+            delete this.filter.year;
+        } else {
+            this.filter['year'] = year;
+        }
+
+        var $filterBtn = this.$('[data-filter="year"]');
+
+        $filterBtn.html('Year: ' + year);
+        $filterBtn.parent().removeClass('open');
+
+        this.listMovies();        
         return false;
     },
 

@@ -16,17 +16,23 @@ module.exports = Backbone.Marionette.Layout.extend({
 
     onRender: function() {
 
-        var filterView = new MovieFilterView({ collection: this.collection });
-        
-        var listView;
+        this.filterView = new MovieFilterView({ collection: this.collection });
+        this.filterView.on('searchFired', this.performSearch, this);
 
+        this.filter.show(this.filterView);
+        
         if (this.options.mode === 'cover') {
-            listView = new MovieCoverView({ collection: this.collection });
+            this.filterView.setCoverBtnActive();
+            this.listView = new MovieCoverView({ collection: this.collection });
         } else {
-            listView = new MovieListView({ collection: this.collection });            
+            this.filterView.setListBtnActive();
+            this.listView = new MovieListView({ collection: this.collection });            
         }
 
-        this.filter.show(filterView);
-        this.list.show(listView);
+        this.list.show(this.listView);
+    },
+
+    performSearch: function(filterModel) {
+        this.listView.model.set(filterModel.attributes);
     }
 });

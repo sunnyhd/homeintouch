@@ -3,10 +3,16 @@ var q = require('../../lib/queries');
 var _ = require('underscore');
 
 exports.index = function(req, res, next) {
-    Movie.find(req.query, function(err, movies) {
+	var queryCallback = function(err, movies) {
         if (err) return next(err);
         res.json(movies);
-    });
+    };
+
+	if (req.query.genre) {
+		Movie.find().where('genre').regex(req.query.genre).exec(queryCallback);
+	} else {
+		Movie.find(req.query, queryCallback);
+	}
 };
 
 exports.lastN = function(req, res, next) {
