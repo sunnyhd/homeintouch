@@ -12,6 +12,13 @@ module.exports = FilteredListView.extend({
     },
 
     matchers: function(movie) {
-        return movie.get('label');
+    	var matchList = [movie.get('label')];
+    	if (movie.has('episodes')) {
+    		_.each(movie.get('episodes').models, function(episode){
+	    		matchList.push(episode.get('label'));
+	    	});	
+    	}
+    	
+        return matchList;
     }
 });

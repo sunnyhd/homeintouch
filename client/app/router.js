@@ -78,7 +78,8 @@ module.exports = Backbone.Router.extend({
         },
 
         tvshows: function() {
-            this.app.controller('tvshows').showTVShowList().fetch();
+
+            this.app.controller('tvshows').showTVShowList();
         },
 
         tvshowEpisodes: function(episodeid) {
