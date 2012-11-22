@@ -10,28 +10,24 @@ var playlistsController = require('controllers/playlists');
 
 exports.showTVShowList = function() {
 
-    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
-    app.updateDesktopBreadcrumbNav( { 
-        itemType: 'floor',
-        name: 'TV Shows', 
-        handler: function(e) {
-            app.router.navigate('#tvshows', {trigger: true});
-            return false;
-        }
-    });
-
-    app.updateTouchNav({
-        name: 'TV Shows', 
-        previous: 'Home',
-        handler: function(e) {
-            app.router.navigate('', {trigger: true});
-            return false;
-        }
-    });
+    updateNavs();
 
     var shows = new TVShows();
     var view = new TVShowContainerView({ collection: shows });
-    app.main.show(view);
+    var that = this;
+
+    var successCallback = function(collection) {
+        _.each(collection.models, function(model) {
+            model.set('episodes', new Episodes(that.data[model.get('tvshowid')]));
+        });
+    };
+    
+    $.get('/api/episodes/label')
+    .done(function(data) {
+        that.data = data;
+        shows.fetch({success: successCallback});
+        app.main.show(view);
+    });
 
     return shows;
 };
@@ -45,24 +41,7 @@ exports.showTVShowEpisodeList = function(tvshowid) {
 
 exports.showEpisodeList = function() {
 
-    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
-    app.updateDesktopBreadcrumbNav( { 
-        itemType: 'floor',
-        name: 'TV Shows', 
-        handler: function(e) {
-            app.router.navigate('#tvshows', {trigger: true});
-            return false;
-        }
-    });
-
-    app.updateTouchNav({
-        name: 'TV Shows', 
-        previous: 'Home',
-        handler: function(e) {
-            app.router.navigate('', {trigger: true});
-            return false;
-        }
-    });
+    updateNavs();   
 
     var episodes = new Episodes();
     var view = new EpisodeListView({ collection: episodes });
@@ -82,3 +61,24 @@ exports.resume = function(episode) {
 exports.addToPlaylist = function(episode) {
     playlistsController.addToPlaylist('video', { item: { episodeid: episode.id }});
 };
+
+function updateNavs () {
+     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor',
+        name: 'TV Shows', 
+        handler: function(e) {
+            app.router.navigate('#tvshows', {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: 'TV Shows', 
+        previous: 'Home',
+        handler: function(e) {
+            app.router.navigate('', {trigger: true});
+            return false;
+        }
+    });
+}

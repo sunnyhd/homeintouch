@@ -1,9 +1,13 @@
-module.exports = Backbone.Marionette.ItemView.extend({
+var FilterPanelView = require('views/filtered_panel');
+
+module.exports = FilterPanelView.extend({
 
 	events: {
-		'click [data-filter="unwatched"]' : 'filterUnwatched',
-		'click [data-filter="all"]' : 'listAll',
-		'click #tvshow-genre-list li a' : 'filterByGenre'
+        'click a[data-filter]' : 'filterTvShows',
+        'click #tvshow-genre-list li a' : 'filterByGenre',
+        'change input[name=search]': 'search',
+        'click .search': 'search',
+        'click .clear': 'clear'
 	},
 
     template: require('templates/tvshows/tvshow_filter'),
@@ -18,6 +22,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
     initialEvents: function() {},
 
     onRender: function() {
+        
+        this.$('button.clear').hide();
+        this.$('button.search').show();
+
     	var that = this;
     	$.get('/api/genres/tvshows')
     	.done(function(data) {
@@ -28,12 +36,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
     loadGenres: function(genreList) {
 
     	var allListItem = $('<li><a href="#" data-genre="' + this.AllGenres + '">' + this.AllGenres + '</a></li>');
-    	this.$('.dropdown-menu').append(allListItem);
+    	this.$('#tvshow-genre-list').append(allListItem);
 
     	for (var i = 0; i < genreList.length; i++) {
     		var genre = genreList[i];
     		var listItem = $('<li><a href="#" data-genre="' + genre + '">' + genre + '</a></li>');
-    		this.$('.dropdown-menu').append(listItem);
+    		this.$('#tvshow-genre-list').append(listItem);
     	};
     },
 
@@ -51,26 +59,40 @@ module.exports = Backbone.Marionette.ItemView.extend({
     	this.listTvShows();
     },
 
-    listAll: function() {
+    filterTvShows: function(event) {
 
-    	for (var i = 0; i < this.filterFields.length; i++) {
-    		delete this.filter[this.filterFields[i]];
-    	}
+        var $element = $(event.currentTarget);
+        var filter = $element.data('filter');
 
-    	this.$('div.btn-group a[data-filter]').removeClass('active');
-    	this.$('.all').addClass('active');
-    	this.listTvShows();
+        if (filter === "all") {
+            this.filter = this.getListAllFilter();
+        } else if (filter === "unwatched") {
+            this.filter = this.getUnwatchedFilter();
+        }
+
+        this.listTvShows();
+        this.setCurrentFilterName($element.html());
+
+        this.$('button[data-toggle="dropdown"]').parent().removeClass('open');
+
+        return false;
+
     },
 
-    filterUnwatched: function() {
-    	this.filter['playcount'] = 0;
-    	this.$('div.btn-group a[data-filter]').removeClass('active');
-    	this.$('.unwatched').addClass('active');
-    	this.listTvShows();
+    getListAllFilter: function() {
+        return {};
+    },
+
+    getUnwatchedFilter: function() {
+        return {playcount : 0};
     },
 
     listTvShows: function() {
     	this.collection.fetch({data: this.filter});
+    },
+
+    setCurrentFilterName: function(filterName) {
+        this.$('#filter-name').text(filterName);
     }
     
 });

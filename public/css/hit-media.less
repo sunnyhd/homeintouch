@@ -122,6 +122,68 @@
 	}
 }
 
+.tvshows {
+	margin: 0px;
+
+	li.tvshow:nth-child(odd) {
+		.with-border-color(@gray);
+	}
+	li.tvshow:nth-child(even) {
+		.with-border-color(@darkGray);
+	}
+
+	li.tvshow {
+		margin: 5px;
+		list-style: none;
+		display: block;
+
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+	  	
+	  	height: 165px;
+
+	  	.tvshow-image {
+	  		float: left;
+	  		height: 100%;
+	  		width: 195px;
+
+		  	img, .no-img {
+			  	height: 145px;
+			  	width: 175px;
+			  	margin: 10px;
+			}
+			.no-img {
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+	  	}
+
+		.tvshow-info {
+			margin-left: 120px;
+			margin: 10px;
+			max-height: 145px;
+			overflow: hidden;
+			color: white;
+
+			div {
+				font-size: 0.9em;
+				color: darken(white, 30%);
+			}
+			.info-key {
+				font-weight: bold;
+				color: white;
+			}
+
+			div.tvshow-title {
+				font-size: 1.2em;
+				color: @yellow;
+				font-weight: bold;
+			}
+		}
+	}
+}
+
 /** DASHBOARD WIDGETS **/
 
 .mediaWidget {
