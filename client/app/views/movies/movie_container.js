@@ -1,8 +1,14 @@
+var app = require('app');
 var MovieListView = require('views/movies/movie_list');
 var MovieCoverView = require('views/movies/movie_cover_list');
 var MovieFilterView = require('views/movies/movie_filter');
+var MovieSelectorListView = require('views/movies/movie_selector_list');
 
 module.exports = Backbone.Marionette.Layout.extend({
+
+    events: {
+        'click .mobile-search-menu': 'onToggleSearchComponent'
+    },
 
     template: require('templates/movies/movie_container'),
 
@@ -15,6 +21,10 @@ module.exports = Backbone.Marionette.Layout.extend({
     initialEvents: function() {},
 
     onRender: function() {
+
+        var listSelectorView = new MovieSelectorListView();
+        app.touchBottomContent.show(listSelectorView);
+        listSelectorView.select(this.options.mode);
 
         this.filterView = new MovieFilterView({ collection: this.collection });
         this.filterView.on('searchFired', this.performSearch, this);
@@ -34,5 +44,10 @@ module.exports = Backbone.Marionette.Layout.extend({
 
     performSearch: function(filterModel) {
         this.listView.model.set(filterModel.attributes);
+    },
+
+    onToggleSearchComponent: function() {
+        var $search = this.$el.find('.movies-header');
+        $search.toggle( 'slide', {}, 500 );
     }
 });

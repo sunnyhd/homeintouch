@@ -23,4 +23,17 @@
 		position: fixed;
 		margin: 0px;
 	}
+
+	/** Nav-bar bottom styles **/
+	.navbar-inner .container {
+		position: relative;
+	}
+	.navbar-inner .container #navbar-bottom-middle-content {
+		position: absolute;
+		width: 100%;
+		text-align: center;
+	}
+	.navbar-inner .container #navbar-bottom-middle-content #navbar-bottom-content {
+		display: inline-block;
+	}
 }

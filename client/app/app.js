@@ -24,6 +24,7 @@ app.addRegions({
     desktopTopSwitch: '#desktop-top-switch',
 
     // Touch device (tablets & phones) regions
+    touchBottomContent: '#navbar-bottom-content',
     touchBottomConfig: '#touch-bottom-config',
     touchTopOpts: '#touch-top-opts ul.dropdown-menu',
     touchTopSwitch: '#touch-top-switch',
@@ -39,6 +40,7 @@ app.closeRegions = function() {
     app.desktopTopConfig.close();
     app.desktopTopOpts.close();
     app.desktopTopSwitch.close();
+    app.touchBottomContent.close();
     app.touchBottomConfig.close();
     app.touchTopOpts.close();
     app.touchTopSwitch.close();

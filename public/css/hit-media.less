@@ -1,3 +1,18 @@
+/* SEARCH FILTERS STYLES */
+
+.mobile-search-menu {
+	display: none;
+	.with-border-color(@gray);
+	padding: 10px 10px;
+	border-style: solid;
+  	border-width: 1px;
+  	border-radius: 0px 5px 5px 0px;
+  	position: fixed;
+  	left: 0;
+  	z-index: 10;
+  	cursor: pointer;
+}
+
 .movies-header {
 	.with-border-color(@gray);
 	padding: 5px 10px;
@@ -17,6 +32,33 @@
   		margin-left: 10px;
   	}
 }
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	#movie-filter .movies-header {
+		display: none;
+		position: fixed;
+		z-index: 10;
+		#view-mode-group {
+			display: none;
+		}
+		.search-grp-1 {
+
+		}
+		.search-grp-2 {
+			float: left;
+		}
+		.search-grp-2:nth-child(0) {
+			margin-left: 0px;
+		}
+	}
+	.mobile-search-menu {
+		display: block;
+	}
+}
+
+
+/** MOVIES LIST VIEW */
 
 .movies.listView {
 	margin: 0px;
