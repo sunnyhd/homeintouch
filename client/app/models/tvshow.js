@@ -25,9 +25,18 @@ module.exports = Backbone.Model.extend({
         }
     },
 
+    fanartImage: function() {
+        var id = this.get('fanartid');
+
+        if (id) {
+            return '/api/images/' + this.get('fanartid');
+        }
+    },
+
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         data.thumbnail = this.thumbnail();
+        data.fanartImage = this.fanartImage();
         return data;
     },
 

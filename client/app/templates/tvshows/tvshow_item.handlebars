@@ -1,1 +1,15 @@
-<a href="#" class="show">{{ label }}</a>
+<div class="tvshowContainer show clearfix">
+	<div class="tvshow-image">
+		{{#if fanartImage}}
+        <img src="{{ fanartImage }}">
+    	{{else}}
+    	<div class="no-img"></div>
+    	{{/if}}
+	</div>
+
+    <div class="tvshow-info">
+    	<div class="tvshow-title">{{ label }}</div>
+    	<div><span class="info-key">Rating: </span> {{ parsedRating }}</div>
+    	<div><span class="info-key">Plot: </span> {{ plot }}</div>
+    </div>
+</div>
