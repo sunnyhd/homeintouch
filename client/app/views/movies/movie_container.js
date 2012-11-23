@@ -47,7 +47,17 @@ module.exports = Backbone.Marionette.Layout.extend({
     },
 
     onToggleSearchComponent: function() {
+        var $btnShowMenu = this.$el.find('.mobile-search-menu');
         var $search = this.$el.find('.movies-header');
-        $search.toggle( 'slide', {}, 500 );
+
+        if ($search.css('display') === 'block') {
+            $search.hide( 'slide', {}, 500 );
+            $search.removeClass('mobile-showed');
+            $btnShowMenu.removeClass('open');
+        } else {
+            $search.show( 'slide', {}, 500 );
+            $search.addClass('mobile-showed');
+            $btnShowMenu.addClass('open');
+        }        
     }
 });

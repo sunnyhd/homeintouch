@@ -13,12 +13,13 @@
   	cursor: pointer;
 }
 
-.movies-header {
+#movie-filter .movies-header {
 	.with-border-color(@gray);
 	padding: 5px 10px;
 	border-style: solid;
   	border-width: 1px;
   	border-radius: 5px;
+  	display: block;
 
   	.movies-header-option {
   		display: inline;
@@ -34,26 +35,57 @@
 }
 
 /* Landscape phone to portrait tablet */
-@media (max-width: 767px) {
+@media (max-width: 979px) {
 	#movie-filter .movies-header {
 		display: none;
 		position: fixed;
-		z-index: 10;
+		z-index: 5;
+		padding: 5px;
+
+		&.mobile-showed {
+			left: 35px;
+			border-top-left-radius: 0px;
+		}
+
 		#view-mode-group {
 			display: none;
 		}
-		.search-grp-1 {
 
-		}
-		.search-grp-2 {
-			float: left;
-		}
-		.search-grp-2:nth-child(0) {
+		.movies-header-option~.movies-header-option {
 			margin-left: 0px;
+		}
+		.btn-group ~ .btn-group {
+	  		margin-left: 5px;
+	  	}
+		.search-grp-1 {
+			display: block;
+			&:after {
+			    content: " ";
+			    display: block;
+			    height: 0;
+			    clear: both;
+			}
+			margin: 0px 0px 5px 0px;
+		}
+		.search-grp-2.btn-group, .search-grp-3 {
+			float: left;
+			margin: 0px;
+			& > .dropdown-menu { right: initial; }
 		}
 	}
 	.mobile-search-menu {
 		display: block;
+		&.open {
+			border-radius: 0px;
+			border-right-color: @gray;
+		}
+	}
+}
+
+/* Portrait phones */
+@media (max-width: 320px) {
+	input.movie-search {
+		width: 110px;
 	}
 }
 
