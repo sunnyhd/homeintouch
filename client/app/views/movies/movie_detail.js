@@ -4,6 +4,8 @@ var IframeModalView = require('views/movies/iframe_modal');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
+    className: 'movie-detail',
+
     template: require('templates/movies/movie_detail'),
 
     events: {
@@ -18,6 +20,21 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
         this.bindTo(this.model, 'change', this.render, this);
+    },
+
+    onRender: function() {
+        var fanArt = this.model.get('fanartid');
+        var src = 'img/cinema-background.jpg';
+
+        if (fanArt && fanArt !== '') {
+            src = 'api/images/' + fanArt;
+        }
+
+        app.setBackgroundImg( src );
+    },
+
+    close: function() {
+        app.removeBackgroundImg();
     },
 
     play: function() {

@@ -49,6 +49,20 @@ app.closeRegions = function() {
     app.modal.close();
 };
 
+app.setBackgroundImg = function(img) {
+    var data = {
+        'background-image': 'url(' + img + ')',
+        'background-size': 'cover',
+        'opacity': '0.75'
+    };
+    var stylesheet = app.generateStylesheet('body:before', data);
+    app.addStyleTag(stylesheet);
+},
+
+app.removeBackgroundImg = function() {
+    $('#body-style').remove();
+}
+
 /**
  * Updates the desktop top navigation.
  * opts: {itemType, name, handler}

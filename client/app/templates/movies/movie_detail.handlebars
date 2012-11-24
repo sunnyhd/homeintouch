@@ -1,34 +1,76 @@
-<div class="modal-header">
-    <a class="close" href="#">x</a>
-    <h2>{{ label }}</h2>
-</div>
+<div class="visible-desktop">
+    <div class="m-header">
+        <h2>{{ label }}</h2>
+    </div>
+    <div class="m-data">
+        <div class="m-img-container">
+            {{#if thumbnail}}
+                <img src="{{ thumbnail }}" class="cover pull-left">
+            {{else}}
+                <img src="img/svg/media/defaultMovie.svg" class="cover pull-left no-img">
+            {{/if}}
+        </div>
+        <div class="m-data-container">
+            <ul>
+                <li><strong>Year</strong>: {{ year }}</li>
+                <li><strong>Genre</strong>: {{ genre }}</li>
+                <li><strong>Duration</strong>: {{ runtime }} minutes</li>
+                <li><strong>Director</strong>: {{ director }}</li>
+                <li><strong>Studio</strong>: {{ studio }}</li>
+                <li><strong>Rating</strong>: {{ toFixed rating 2 }}</li>
+                <li><strong>Parental Rating</strong>: {{ mpaa }}</li>
+                <li><strong>Plot</strong>: {{ plot }}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="m-actions">
+        <a class="playlist btn" href="#">Add to Playlist</a>
+        <a class="play btn" href="#">Play Movie</a>
 
-<div class="modal-body">
-    <img src="{{ thumbnail }}" class="cover pull-left">
-    <ul>
-        <li><strong>Year</strong>: {{ year }}</li>
-        <li><strong>Genre</strong>: {{ genre }}</li>
-        <li><strong>Duration</strong>: {{ runtime }} minutes</li>
-        <li><strong>Director</strong>: {{ director }}</li>
-        <li><strong>Studio</strong>: {{ studio }}</li>
-        <li><strong>Rating</strong>: {{ toFixed rating 2 }}</li>
-        <li><strong>Parental Rating</strong>: {{ mpaa }}</li>
-        <li><strong>Plot</strong>: {{ plot }}</li>
-    </ul>
-</div>
+        {{#if resume}}
+            <a class="resume btn">Resume ({{ resumeTime }})</a>
+        {{/if}}
 
-<div class="modal-footer">
-    <a class="playlist btn" href="#">Add to Playlist</a>
-    <a class="play btn" href="#">Play Movie</a>
+        {{#if trailer}}
+            <a class="play-trailer btn" href="#">Play Trailer</a>
+            <a class="watch-trailer btn" href="#">Watch Trailer</a>
+        {{/if}}
 
-    {{#if resume}}
-        <a class="resume btn">Resume ({{ resumeTime }})</a>
-    {{/if}}
+        <a class="imdb btn" href="#">IMDB</a>
+    </div>
+<div>
 
-    {{#if trailer}}
-        <a class="play-trailer btn" href="#">Play Trailer</a>
-        <a class="watch-trailer btn" href="#">Watch Trailer</a>
-    {{/if}}
+<div class="hidden-desktop">
+    <div class="m-data">
+        <div class="m-img-container">
+            <img src="{{ thumbnail }}" class="cover pull-left">
+        </div>
+        <div class="m-data-container">
+            <ul>
+                <li><strong>Year</strong>: {{ year }}</li>
+                <li><strong>Genre</strong>: {{ genre }}</li>
+                <li><strong>Duration</strong>: {{ runtime }} minutes</li>
+                <li><strong>Director</strong>: {{ director }}</li>
+                <li><strong>Studio</strong>: {{ studio }}</li>
+                <li><strong>Rating</strong>: {{ toFixed rating 2 }}</li>
+                <li><strong>Parental Rating</strong>: {{ mpaa }}</li>
+                <li><strong>Plot</strong>: {{ plot }}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="m-actions">
+        <a class="playlist btn" href="#">Add to Playlist</a>
+        <a class="play btn" href="#">Play Movie</a>
 
-    <a class="imdb btn" href="#">IMDB</a>
-</div>
+        {{#if resume}}
+            <a class="resume btn">Resume ({{ resumeTime }})</a>
+        {{/if}}
+
+        {{#if trailer}}
+            <a class="play-trailer btn" href="#">Play Trailer</a>
+            <a class="watch-trailer btn" href="#">Watch Trailer</a>
+        {{/if}}
+
+        <a class="imdb btn" href="#">IMDB</a>
+    </div>
+<div>
