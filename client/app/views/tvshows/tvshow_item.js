@@ -13,7 +13,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
         'click .show': 'show'
     },
 
-    // Event Handlers
+    serializeData: function() {
+        var number = new Number(this.model.get('rating'));
+        var parsedRating = (isNaN(number)) ? '-' : number.toFixed(1);
+
+        var data = _.extend( {}, {parsedRating: parsedRating}, this.model.toJSON() );
+        return data;
+    },
 
     show: function() {
         var view = new TVShowDetailView({ model: this.model });
