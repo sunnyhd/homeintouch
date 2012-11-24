@@ -61,3 +61,143 @@
 		}
 	}
 }
+
+#tvshow-filter .tvshow-header {
+	.with-border-color(@gray);
+	padding: 5px 10px;
+	border-style: solid;
+  	border-width: 1px;
+  	border-radius: 5px;
+  	display: block;
+
+  	.tvshow-header-option {
+  		display: inline;
+  		margin: 5px 0px;
+  	}
+  	.tvshow-header-option~.tvshow-header-option {
+  		margin-left: 5px;
+  	}
+
+  	.btn-group ~ .btn-group {
+  		margin-left: 10px;
+  	}
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 979px) {
+	#tvshow-filter .tvshow-header {
+		display: none;
+		position: fixed;
+		z-index: 5;
+		padding: 5px;
+
+		&.mobile-showed {
+			left: 35px;
+			border-top-left-radius: 0px;
+		}
+
+		#view-mode-group {
+			display: none;
+		}
+
+		.tvshow-header-option~.tvshow-header-option {
+			margin-left: 0px;
+		}
+		.btn-group ~ .btn-group {
+	  		margin-left: 5px;
+	  	}
+		.search-grp-1 {
+			display: block;
+			&:after {
+			    content: " ";
+			    display: block;
+			    height: 0;
+			    clear: both;
+			}
+			margin: 0px 0px 5px 0px;
+		}
+		.search-grp-2.btn-group, .search-grp-3 {
+			float: left;
+			margin: 0px;
+			& > .dropdown-menu { right: initial; }
+		}
+	}
+	.mobile-search-menu {
+		display: block;
+		&.open {
+			border-radius: 0px;
+			border-right-color: @gray;
+		}
+	}
+}
+
+/* Portrait phones */
+@media (max-width: 320px) {
+	input.tvshow-search {
+		width: 110px;
+	}
+}
+
+// EPISODES
+
+.episodes {
+	margin: 0px;
+
+	li.episode:nth-child(odd) {
+		.with-border-color(@gray);
+	}
+	li.episode:nth-child(even) {
+		.with-border-color(@darkGray);
+	}
+
+	li.episode {
+		margin: 5px;
+		list-style: none;
+		display: block;
+
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+	  	
+	  	height: 165px;
+
+	  	.episode-image {
+	  		float: left;
+	  		height: 100%;
+	  		width: 195px;
+
+		  	img, .no-img {
+			  	height: 145px;
+			  	width: 175px;
+			  	margin: 10px;
+			}
+			.no-img {
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+	  	}
+
+		.episode-info {
+			margin-left: 120px;
+			margin: 10px;
+			max-height: 145px;
+			overflow: hidden;
+			color: white;
+
+			div {
+				font-size: 0.9em;
+				color: darken(white, 30%);
+			}
+			.info-key {
+				font-weight: bold;
+				color: white;
+			}
+
+			span.episode-title {
+				font-size: 1.2em;
+				color: @yellow;
+				font-weight: bold;
+			}
+		}
+	}
+}

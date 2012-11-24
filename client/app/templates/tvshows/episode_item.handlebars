@@ -1,3 +1,20 @@
-<a href="#tvshows/{{ tvshowid }}">{{ showtitle }}</a>
-&mdash;
-<a href="#" class="details">{{ season }}x{{ episode }} {{ label }}</a>
+<div class="episodeContainer show clearfix">
+	<div class="episode-image">
+		{{#if thumbnailImage}}
+        <img src="{{ thumbnailImage }}">
+    	{{else}}
+    	<div class="no-img"></div>
+    	{{/if}}
+	</div>
+
+    <div class="episode-info">
+    	<div><span class="episode-title">{{ season }}x{{ episode }} {{ label }}</span> 
+    		 <span class="pull-right">
+    		 	<a href="#" class="play btn btn-inverse"><i class="icon-play icon-white"/> <span class="visible-desktop">Play</span></a>
+    		 	<a href="#" class="playlist btn btn-inverse"><i class="icon-plus icon-white"/> <span class="visible-desktop">Add to Playlist</span></a>
+    		 </span>
+    	</div>
+    	<div><span class="info-key">Rating: </span> {{ parsedRating }}</div>
+    	<div><span class="info-key">Plot: </span> {{ plot }}</div>
+    </div>
+</div>
