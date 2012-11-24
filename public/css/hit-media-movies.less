@@ -2,19 +2,6 @@
 
 /* SEARCH FILTERS STYLES */
 
-.mobile-search-menu {
-	display: none;
-	.with-border-color(@gray);
-	padding: 10px 10px;
-	border-style: solid;
-  	border-width: 1px;
-  	border-radius: 0px 5px 5px 0px;
-  	position: fixed;
-  	left: 0;
-  	z-index: 10;
-  	cursor: pointer;
-}
-
 #movie-filter .movies-header {
 	.with-border-color(@gray);
 	padding: 5px 10px;
@@ -73,13 +60,6 @@
 			float: left;
 			margin: 0px;
 			& > .dropdown-menu { right: initial; }
-		}
-	}
-	.mobile-search-menu {
-		display: block;
-		&.open {
-			border-radius: 0px;
-			border-right-color: @gray;
 		}
 	}
 }
