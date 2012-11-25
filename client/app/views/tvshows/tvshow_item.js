@@ -1,5 +1,6 @@
 var app = require('app');
-var TVShowDetailView = require('views/tvshows/tvshow_detail');
+var tvShowController = require('controllers/tvshows');
+var TVShowDetailView = require('views/tvshows/tvshow_episode_list');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -22,8 +23,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     show: function() {
-        var view = new TVShowDetailView({ model: this.model });
-        app.modal.show(view);
+        app.router.navigate(('#tvshows/' + this.model.get('tvshowid')), {trigger: true});
     }
     
 });

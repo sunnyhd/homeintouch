@@ -19,8 +19,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     serializeData: function() {
         var number = new Number(this.model.get('rating'));
         var parsedRating = (isNaN(number)) ? '-' : number.toFixed(1);
+        var episodeNumber = this.model.getEpisodeNumber();
 
-        var data = _.extend( {}, {parsedRating: parsedRating}, this.model.toJSON() );
+        var data = _.extend( {}, {parsedRating: parsedRating, episodeNumber: episodeNumber}, this.model.toJSON() );
         return data;
     },
 

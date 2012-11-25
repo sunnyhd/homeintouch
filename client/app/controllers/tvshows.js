@@ -34,8 +34,15 @@ exports.showTVShowList = function() {
 
 exports.showTVShowEpisodeList = function(tvshowid) {
     var tvshow = new TVShow({ tvshowid: tvshowid });
-    var view = new TVShowEpisodeListView({ model: tvshow });
-    app.main.show(view);
+
+    var successCallback = function(model) {
+        updateTvShowNavs(model.get('tvshowid'), model.get('label'));
+        var view = new TVShowEpisodeListView({ model: tvshow });
+        app.main.show(view);
+    }
+
+    tvshow.fetch({success: successCallback});
+    
     return tvshow;
 };
 
@@ -78,6 +85,27 @@ function updateNavs () {
         previous: 'Home',
         handler: function(e) {
             app.router.navigate('', {trigger: true});
+            return false;
+        }
+    });
+};
+
+function updateTvShowNavs (tvShowId, tvShowName) {
+     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'room',
+        name: tvShowName, 
+        handler: function(e) {
+            app.router.navigate(('#tvshows/' + tvShowId), {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: tvShowName, 
+        previous: 'TV Shows',
+        handler: function(e) {
+            app.router.navigate('#tvshows', {trigger: true});
             return false;
         }
     });

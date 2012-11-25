@@ -14,10 +14,11 @@ module.exports = Backbone.Collection.extend({
     },
 
     comparator: function(episode) {
+
         return [
             episode.get('showtitle'),
             episode.get('season'),
-            episode.get('episode')
+            episode.getEpisodeNumber()
         ].join(' - ');
     }
 

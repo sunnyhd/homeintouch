@@ -1,5 +1,6 @@
 var Episode = require('../models/episode');
 var TVShow = require('../models/tvshow');
+var _ = require('underscore');
 
 exports.index = function(req, res, next) {
     TVShow.find(req.query, function(err, shows) {
@@ -34,5 +35,15 @@ exports.genres = function(req, res, next) {
         };
 
         res.json(genres);
+    });  
+};
+
+exports.saveAll = function(req, res, next) {
+  TVShow.find(req.query, function(err, shows) {
+        if (err) return next(err);
+        _.each(shows, function(show){
+            show.save();
+        });
+        res.json('{ok: true}');
     });  
 }
