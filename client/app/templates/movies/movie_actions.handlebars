@@ -1,0 +1,15 @@
+<div class="btn-group">
+  <button class="btn" data-action="add-to-playlist"><i class="icon-plus"></i></button>
+  <button class="btn" data-action="play"><i class="icon-play"></i></button>
+
+  {{#if resume}}
+  <button class="btn" data-action="resume"><i class="icon-play"></i></button>
+  {{/if}}
+
+  {{#if trailer}}  
+  <button class="btn" data-action="play-trailer"><i class="icon-play"></i></button>
+  <button class="btn" data-action="watch-trailer"><i class="icon-play"></i></button>
+  {{/if}}
+
+  <button class="btn imdb" data-action="imdb"><img class="imdb" src="img/imdb.png"></button>
+</div>

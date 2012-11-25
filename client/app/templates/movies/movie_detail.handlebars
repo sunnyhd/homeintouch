@@ -42,37 +42,28 @@
 
 <div class="hidden-desktop">
     <div class="m-data">
+        <div class="m-data-header">
+            <div class="m-title">{{ label }}</div>
+            <div class="m-rating">
+                <div class="m-rating-title">RATING</div>
+                <div class="m-rating-value">{{ toFixed rating 1 }}</div>
+            </div>
+        </div>
         <div class="m-data-container">
             <ul>
-                <li><strong>Year</strong>: {{ year }}</li>
-                <li><strong>Genre</strong>: {{ genre }}</li>
-                <li><strong>Duration</strong>: {{ runtime }} minutes</li>
-                <li><strong>Director</strong>: {{ director }}</li>
-                <li><strong>Studio</strong>: {{ studio }}</li>
-                <li><strong>Rating</strong>: {{ toFixed rating 2 }}</li>
-                <li><strong>Parental Rating</strong>: {{ mpaa }}</li>
-                <li><strong>Plot</strong>: {{ plot }}</li>
+                <li><strong>Genre:</strong> {{ genre }}</li>
+                <li><strong>Year:</strong> {{ year }}</li>
+                <li><strong>Duration:</strong> {{ runtime }} minutes</li>
+                <li><strong>Director:</strong> {{ director }}</li>
+                <li><strong>Studio:</strong> {{ studio }}</li>
+                <li><strong>Parental Rating:</strong> {{ mpaa }}</li>
             </ul>
         </div>
-        <div class="m-img-container">
+        <div class="m-plot-container">
             {{#if thumbnail}}
-                <img src="{{ thumbnail }}" class="cover pull-left">
+            <img src="{{ thumbnail }}" class="cover pull-left">
             {{/if}}
+            <p><strong>Plot:</strong> {{ plot }}</p>
         </div>
-    </div>
-    <div class="m-actions">
-        <a class="playlist btn" href="#">Add to Playlist</a>
-        <a class="play btn" href="#">Play Movie</a>
-
-        {{#if resume}}
-            <a class="resume btn">Resume ({{ resumeTime }})</a>
-        {{/if}}
-
-        {{#if trailer}}
-            <a class="play-trailer btn" href="#">Play Trailer</a>
-            <a class="watch-trailer btn" href="#">Watch Trailer</a>
-        {{/if}}
-
-        <a class="imdb btn" href="#">IMDB</a>
     </div>
 </div>

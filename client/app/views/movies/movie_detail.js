@@ -1,6 +1,7 @@
 var app = require('app');
 var moviesController = require('controllers/movies');
 var IframeModalView = require('views/movies/iframe_modal');
+var MovieActionsView = require('views/movies/movie_actions');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -23,14 +24,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     onRender: function() {
+
+        // Fanart background
         var fanArt = this.model.get('fanartid');
         var src = 'img/cinema-background.jpg';
-
         if (fanArt && fanArt !== '') {
             src = 'api/images/' + fanArt;
         }
-
         app.setBackgroundImg( src );
+
+        // Actions icons for mobile devices
+        var actionsView = new MovieActionsView( {model: this.model} );
+        app.touchBottomContent.show(actionsView);
     },
 
     close: function() {
