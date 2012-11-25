@@ -1,5 +1,6 @@
 var app = require('app');
 var Movies = require('collections/movies');
+var Movie = require('models/movie');
 var Player = require('models/player');
 var MovieContainerView = require('views/movies/movie_container');
 var playersController = require('controllers/players');
@@ -25,11 +26,29 @@ exports.showMovieListView = function() {
 
 exports.showMovieDetailView = function(id) {
 
-    var movie = exports.movies.get(id);
-    updateNavForMovie(movie);
-    
-    var view = new MovieDetailView({ model: movie });
-    app.main.show(view);
+    var movie = null;
+    var def = new $.Deferred();
+    var loadingMovie = def.promise();
+
+    // When the movie instace is loaded, displays its data
+    loadingMovie.done(function() {
+        updateNavForMovie(movie);
+        var view = new MovieDetailView({ model: movie });
+        app.main.show(view);
+    });
+
+    // If the collection is loaded
+    if (!_.isUndefined(exports.movies) && exports.movies.models.length > 0) {
+        movie = exports.movies.get(id);
+        def.resolve();
+
+    // If not, loads the movie isntance
+    } else {
+        movie = new Movie ( { 'movieid': id } );
+        movie.fetch().done(function() {
+            def.resolve();
+        });
+    }
 };
 
 

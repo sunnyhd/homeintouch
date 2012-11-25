@@ -13,8 +13,9 @@ module.exports = function(app) {
 
     app.get('/api/volume', controllers.volume.show);
 
-    app.get('/api/movies', controllers.movies.index);
+    app.get('/api/movies', controllers.movies.index);    
     app.get('/api/movies/last/:n', controllers.movies.lastN);
+    app.get('/api/movies/:movieid', controllers.movies.get);
     app.get('/api/genres/movies', controllers.movies.genres);
     app.get('/api/years/movies', controllers.movies.years);
 

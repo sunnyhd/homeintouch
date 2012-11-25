@@ -38,13 +38,10 @@
 
         <a class="imdb btn" href="#">IMDB</a>
     </div>
-<div>
+</div>
 
 <div class="hidden-desktop">
     <div class="m-data">
-        <div class="m-img-container">
-            <img src="{{ thumbnail }}" class="cover pull-left">
-        </div>
         <div class="m-data-container">
             <ul>
                 <li><strong>Year</strong>: {{ year }}</li>
@@ -56,6 +53,11 @@
                 <li><strong>Parental Rating</strong>: {{ mpaa }}</li>
                 <li><strong>Plot</strong>: {{ plot }}</li>
             </ul>
+        </div>
+        <div class="m-img-container">
+            {{#if thumbnail}}
+                <img src="{{ thumbnail }}" class="cover pull-left">
+            {{/if}}
         </div>
     </div>
     <div class="m-actions">
@@ -73,4 +75,4 @@
 
         <a class="imdb btn" href="#">IMDB</a>
     </div>
-<div>
+</div>

@@ -23,6 +23,14 @@ exports.index = function(req, res, next) {
 	}
 };
 
+exports.get = function(req, res, next) {
+	Movie.findOne( { movieid: req.params.movieid }, function(err, movie) {
+        if (err) return next(err);
+        if (!movie) return next(new Error('No such movie'));
+        res.json(movie);
+    });
+};
+
 exports.lastN = function(req, res, next) {
 	q.lastN(Movie, req.params.n, function(err, movies) {
         if (err) return next(err);

@@ -7,6 +7,10 @@ var Movie = module.exports = Backbone.Model.extend({
 
     idAttribute: 'movieid',
 
+    url: function() {
+        return '/api/movies/' + this.get('movieid');
+    },
+
     playTrailer: function() {
         var playable = new Playable({ item: { file: this.get('trailer') }});
         return playable.save();
