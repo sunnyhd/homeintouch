@@ -33,6 +33,9 @@
 		width: 100%;
 		text-align: center;
 	}
+	.navbar-inner .container #navbar-bottom-middle-content .dropdown-menu {
+		text-align: left;
+	}
 	.navbar-inner .container #navbar-bottom-middle-content #navbar-bottom-content {
 		display: inline-block;
 	}
