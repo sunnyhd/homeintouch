@@ -92,7 +92,7 @@ module.exports = Backbone.Router.extend({
         },
 
         tvshowEpisodes: function(tvshowid) {
-            this.app.controller('tvshows').showTVShowEpisodeList(tvshowid).fetch();
+            this.app.controller('tvshows').showTVShowEpisodeList(tvshowid);
         },
 
         episodes: function() {

@@ -13,6 +13,19 @@ var Episode = module.exports = Backbone.Model.extend({
         }
     },
 
+    getEpisodeNumber: function() {
+
+        var episodeString = '';
+        if (this.has('episode')) {
+            episodeString = this.get('episode').toString();
+            if (episodeString.length < 2) {
+                episodeString = '0' + episodeString;
+            }
+        }
+        
+        return episodeString;
+    },
+
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         _.extend(data, this.resumeData());
