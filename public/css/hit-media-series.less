@@ -62,6 +62,12 @@
 	}
 }
 
+span.tvshow-main-title {
+	font-size: 1.2em;
+	color: @yellow;
+	font-weight: bold;
+}
+
 #tvshow-filter .tvshow-header {
 	.with-border-color(@gray);
 	padding: 5px 10px;
@@ -164,12 +170,13 @@
 	  	.episode-image {
 	  		float: left;
 	  		height: 100%;
-	  		width: 195px;
+	  		width: 170px;
 
 		  	img, .no-img {
-			  	height: 145px;
-			  	width: 175px;
+			  	height: 135px;
+			  	width: 150px;
 			  	margin: 10px;
+			  	margin-top: 15px;
 			}
 			.no-img {
 				background-repeat: no-repeat;
@@ -199,5 +206,26 @@
 				font-weight: bold;
 			}
 		}
+	}
+}
+
+@media (max-width: 480px) {
+
+	.episodes li.episode {
+		height: 145px;
+	}
+
+	.episodes li.episode .episode-info {
+		max-height: 125px;
+	}
+
+	.episodes li.episode .episode-image {
+		width: 150px;
+	}
+	
+	.episodes li.episode .episode-image img {
+		height: 115px;
+		width: 130px;
+		margin-top: 15px;
 	}
 }
