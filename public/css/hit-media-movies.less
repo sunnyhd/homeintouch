@@ -224,7 +224,9 @@
 	.visible-desktop {
 		@imgContainerWidth: 270px;
 		.m-header {
+			.clearfix;
 			h2 {
+				float: left;
 				color: @yellow;
 			}
 		}
@@ -248,15 +250,40 @@
 					width: 250px;
 				}
 			}
+			.m-actions {
+				.watermark-background;
+				width: @imgContainerWidth;
+				clear: left;
+				float: left;
+				margin-top: 10px;
+				margin-right: 10px;
+				div {
+					margin: 10px;
+					.btn-block {
+						display: block;
+					}
+					a ~ a, a ~ div {
+						margin-top: 10px;
+					}
+				}
+			}
 			.m-data-container {
 				.watermark-background;
 				margin-left: @imgContainerWidth + 10px;
 
 				.m-rating {
 					margin: 10px;
+					position: absolute;
+					right: 20px;
+				}
+				.m-more-actions {
+					position: absolute;
+					right: 80px;
+					margin-top: 10px;
+					margin-left: 10px;
 				}
 
-				ul {
+				& > ul {
 					margin: 0px;
 					padding: 10px;
 					li {
@@ -270,23 +297,6 @@
 					p.plot {
 						text-align: justify;
 					}
-				}
-			}
-		}
-		.m-actions {
-			.watermark-background;
-			.clearfix;
-			width: @imgContainerWidth;
-			float: left;
-			margin-top: 10px;
-			margin-right: 10px;
-			div {
-				margin: 10px;
-				.btn-block {
-					display: block;
-				}
-				a ~ a, a ~ div {
-					margin-top: 10px;
 				}
 			}
 		}
