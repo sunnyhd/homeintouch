@@ -248,12 +248,31 @@
 					width: 250px;
 				}
 			}
+			.m-actions {
+				.watermark-background;
+				width: @imgContainerWidth;
+				clear: left;
+				float: left;
+				margin-top: 10px;
+				margin-right: 10px;
+				div {
+					margin: 10px;
+					.btn-block {
+						display: block;
+					}
+					a ~ a, a ~ div {
+						margin-top: 10px;
+					}
+				}
+			}
 			.m-data-container {
 				.watermark-background;
 				margin-left: @imgContainerWidth + 10px;
 
 				.m-rating {
 					margin: 10px;
+					position: absolute;
+					right: 20px;
 				}
 
 				ul {
@@ -270,23 +289,6 @@
 					p.plot {
 						text-align: justify;
 					}
-				}
-			}
-		}
-		.m-actions {
-			.watermark-background;
-			.clearfix;
-			width: @imgContainerWidth;
-			float: left;
-			margin-top: 10px;
-			margin-right: 10px;
-			div {
-				margin: 10px;
-				.btn-block {
-					display: block;
-				}
-				a ~ a, a ~ div {
-					margin-top: 10px;
 				}
 			}
 		}
