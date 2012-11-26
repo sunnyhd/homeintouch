@@ -11,12 +11,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     events: {
         'click .close': 'close',
-        'click .play': 'play',
-        'click .playlist': 'playlist',
-        'click .resume': 'resume',
-        'click .play-trailer': 'playTrailer',
-        'click .watch-trailer': 'watchTrailer',
-        'click .imdb': 'imdb'
+        'click a[data-action="play"]': 'play',
+        'click a[data-action="add-to-playlist"]': 'playlist',
+        'click a[data-action="resume"]': 'resume',
+        'click a[data-action="play-trailer"]': 'playTrailer',
+        'click a[data-action="watch-trailer"]': 'watchTrailer',
+        'click a[data-action="imdb"]': 'imdb'
     },
 
     initialize: function() {
@@ -35,6 +35,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         // Actions icons for mobile devices
         var actionsView = new MovieActionsView( {model: this.model} );
+        actionsView.on('play', this.play, this);
+        actionsView.on('add-to-playlist', this.playlist, this);
+        actionsView.on('resume', this.resume, this);
+        actionsView.on('play-trailer', this.playTrailer, this);
+        actionsView.on('watch-trailer', this.watchTrailer, this);
+        actionsView.on('imdb', this.imdb, this);
         app.touchBottomContent.show(actionsView);
     },
 
@@ -44,27 +50,21 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     play: function() {
         moviesController.play(this.model);
-        this.close();
     },
 
     playlist: function() {
         moviesController.addToPlaylist(this.model);
-        this.close();
     },
 
     resume: function() {
         moviesController.resume(this.model);
-        this.close();
     },
 
     playTrailer: function() {
         this.model.playTrailer();
-        this.close();
     },
 
     watchTrailer: function() {
-        this.close();
-
         var view = new IframeModalView({
             label: this.model.get('label'),
             src: this.model.get('trailer'),
@@ -75,8 +75,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     imdb: function() {
-        this.close();
-
         var view = new IframeModalView({
             label: 'IMDB',
             src: 'http://www.imdb.com/title/' + this.model.get('imdbnumber')
