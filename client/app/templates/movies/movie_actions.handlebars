@@ -1,0 +1,22 @@
+<div class="btn-group dropup">
+	<button class="btn" data-toggle="dropdown">
+		<i class="icon-play"></i>&nbsp;<span class="caret"></span>
+	</button>
+
+	<ul class="dropdown-menu">
+		<li><a href="#" data-action="play">Play Movie</a></li>
+
+	  	{{#if resume}}
+	  	<li><a href="#" data-action="resume">Resume</a></li>
+	  	{{/if}}
+
+	  	{{#if trailer}}
+	  	<li class="divider"></li>
+	  	<li><a href="#" data-action="play-trailer">Play Trailer</a></li>
+	  	<li><a href="#" data-action="watch-trailer">Watch Trailer</a></li>
+	  	{{/if}}
+	</ul>
+
+	<button class="btn" data-action="add-to-playlist"><i class="icon-time"></i></button>
+	<button class="btn imdb" data-action="imdb"><img class="imdb" src="img/imdb.png"></button>
+</div>

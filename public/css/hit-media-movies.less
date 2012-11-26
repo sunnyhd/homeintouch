@@ -222,17 +222,18 @@
 /** MOVIE DETAILS */
 .movie-detail {
 	.visible-desktop {
+		@imgContainerWidth: 270px;
 		.m-header {
 			h2 {
 				color: @yellow;
 			}
 		}
 		.m-data {
-			color: white;
+			color: darken(white, 30%);
+			strong {
+				color: white;
+			}
 			.clearfix;
-
-			@imgContainerWidth: 270px;
-
 			.m-img-container {
 				.watermark-background;
 				.clearfix;
@@ -251,6 +252,10 @@
 				.watermark-background;
 				margin-left: @imgContainerWidth + 10px;
 
+				.m-rating {
+					margin: 10px;
+				}
+
 				ul {
 					margin: 0px;
 					padding: 10px;
@@ -260,18 +265,100 @@
 						list-style: none;
 					}
 				}
+				.plot-container {
+					margin-top: 10px;
+					p.plot {
+						text-align: justify;
+					}
+				}
 			}
 		}
 		.m-actions {
+			.watermark-background;
 			.clearfix;
+			width: @imgContainerWidth;
+			float: left;
+			margin-top: 10px;
+			margin-right: 10px;
+			div {
+				margin: 10px;
+				.btn-block {
+					display: block;
+				}
+				a ~ a, a ~ div {
+					margin-top: 10px;
+				}
+			}
 		}
 	}
 
 	.hidden-desktop {
 		.m-data {
-			.m-data-container {
+			.watermark-background;
+			.clearfix;
+			
+			color: darken(white, 30%);
+			strong {
+				color: white;
+			}
 
+			.m-data-header {
+				margin: 10px;
+				.m-title {
+					float: left;
+					color: @yellow;
+					font-size: 1.2em;
+					font-weight: bold;
+				}
+			}
+			.m-data-container {
+				clear: left;
+				margin: 10px;
+				ul {
+					margin: 0px;
+					padding: 0px;
+					li {
+						padding: 0px 0px;
+						margin: 0px;
+						list-style: none;
+					}
+				}
+			}
+			.m-plot-container {
+				margin: 10px;
+				img {
+					width: 100px;
+					margin-right: 10px;
+					margin-bottom: 10px;
+				}
+				p {
+					text-align: justify;
+				}
 			}
 		}
+	}
+}
+
+.m-rating {
+	float: right;
+	border: solid 1px white;
+	border-radius: 5px;
+	text-align: center;
+	color: white;
+	.m-rating-title {
+		font-size: 0.6em;
+		border-bottom: solid 1px;
+		padding: 0px 4px;
+	}
+	.m-rating-value {
+		font-weight: bold;
+		margin: 3px;
+	}
+}
+
+.btn.imdb {
+	padding: 2px 6px;
+	img.imdb {
+		width: 22px;
 	}
 }
