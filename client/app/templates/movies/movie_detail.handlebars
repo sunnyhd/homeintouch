@@ -12,20 +12,11 @@
         </div>
         <div class="m-actions">
             <div>
-                <a class="btn btn-success btn-block" href="#"><i class="icon-play icon-white"></i>&nbsp;Play Movie</a>
-                <a class="btn btn-primary btn-block" href="#"><i class="icon-time icon-white"></i>&nbsp;Add to Playlist</a>
-
-                <!-- {{#if resume}}
-                    <a class="btn">Resume ({{ resumeTime }})</a>
+                {{#if resume}}
+                <a class="btn btn-success btn-block" href="#" data-action="resume"><i class="icon-play icon-white"></i>&nbsp;Resume Movie</a>
                 {{/if}}
-
-                {{#if trailer}}
-                <div class="btn-group">
-                    <button class="btn">Play Trailer</button>
-                    <button class="btn">Watch Trailer</button>
-                </div>
-                {{/if}}
-                <a class="btn" href="#">IMDB</a> -->
+                <a class="btn btn-success btn-block" href="#" data-action="play"><i class="icon-play icon-white"></i>&nbsp;Play Movie</a>
+                <a class="btn btn-primary btn-block" href="#" data-action="add-to-playlist"><i class="icon-time icon-white"></i>&nbsp;Add to Playlist</a>
             </div>
         </div>
         <div class="m-data-container">
@@ -33,6 +24,21 @@
                 <div class="m-rating-title">RATING</div>
                 <div class="m-rating-value">{{ toFixed rating 1 }}</div>
             </div>
+            <div class="m-more-actions">
+                <div class="btn-group pull-right">
+                {{#if trailer}}
+                    <button class="btn" data-toggle="dropdown">
+                        <i class="icon-film"></i>&nbsp;Trailer&nbsp;<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-action="play-trailer">Play</a></li>
+                        <li><a href="#" data-action="watch-trailer">Watch</a></li>
+                    </ul>
+                {{/if}}
+                    <button class="btn imdb" data-action="imdb"><img class="imdb" src="img/imdb.png"></button>
+                </div>
+            </div>
+            
             <ul>
                 <li><strong>Year:</strong> {{ year }}</li>
                 <li><strong>Genre:</strong> {{ genre }}</li>
