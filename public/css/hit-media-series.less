@@ -62,10 +62,16 @@
 	}
 }
 
-span.tvshow-main-title {
-	font-size: 1.2em;
-	color: @yellow;
-	font-weight: bold;
+div.tvshow-banner {
+
+	margin: 0px 5px;
+
+  	img, .no-img {
+	}
+	.no-img {
+		background-repeat: no-repeat;
+		background-position: center;
+	}
 }
 
 #tvshow-filter .tvshow-header {
@@ -150,10 +156,10 @@ span.tvshow-main-title {
 	margin: 0px;
 
 	li.episode:nth-child(odd) {
-		.with-border-color(@gray);
+		.with-border-color-opacity(@gray, 75%);
 	}
 	li.episode:nth-child(even) {
-		.with-border-color(@darkGray);
+		.with-border-color-opacity(@darkGray, 75%);
 	}
 
 	li.episode {

@@ -5,12 +5,14 @@ var TVShow = require('models/tvshow');
 var EpisodeListView = require('views/tvshows/episode_list');
 var TVShowContainerView = require('views/tvshows/tvshow_container');
 var TVShowEpisodeListView = require('views/tvshows/tvshow_episode_list');
+var MediaConfigurationOptionsView = require('views/settings/media_configuration_options');
 var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 
 exports.showTVShowList = function() {
 
     updateNavs();
+    updateConfigurationOptions();
 
     var shows = new TVShows();
     var view = new TVShowContainerView({ collection: shows });
@@ -109,4 +111,9 @@ function updateTvShowNavs (tvShowId, tvShowName) {
             return false;
         }
     });
+};
+
+function updateConfigurationOptions () {
+    app.desktopTopConfig.show(new MediaConfigurationOptionsView());
+    app.touchBottomConfig.show(new MediaConfigurationOptionsView());
 }

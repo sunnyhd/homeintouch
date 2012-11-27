@@ -101,10 +101,11 @@ html(lang='en')
                 a(href="#")
                   span
             ul.nav.pull-right.visible-desktop
-              li#desktop-top-config
-                a.pull-right(href="#")
+              li.dropdown#desktop-top-config
+                a.pull-right(href="#", data-toggle="dropdown")
                   i.icon-cog.icon-white
                   span &nbsp;Settings
+                ul.dropdown-menu
               li.dropdown#desktop-top-opts
                 a.pull-right(href="#", data-toggle="dropdown")
                   i.icon-plus.icon-white
@@ -147,9 +148,10 @@ html(lang='en')
           #navbar-bottom
             img.hit-refresh(src="img/svg/hit-white.svg")
             ul.nav.pull-right
-              li#touch-bottom-config
-                a.pull-right(href="#")
+              li.dropdown#touch-bottom-config
+                a.pull-right(href="#", data-toggle="dropdown")
                   i.icon-cog.icon-white
+                ul.dropdown-menu
 
     // App Initialization
     script(src='/application.js')

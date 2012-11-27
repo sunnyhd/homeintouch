@@ -137,3 +137,8 @@ a.dark-yellow {
 	background-color: @color;
 	border-color: lighten(@color, 10%) darken(@color, 10%) darken(@color, 10%) lighten(@color, 10%);
 }
+
+.with-border-color-opacity (@color, @opacity) {
+	background-color: fade(@color, @opacity);
+	border-color: lighten(@color, 10%) darken(@color, 10%) darken(@color, 10%) lighten(@color, 10%);
+}

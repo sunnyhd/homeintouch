@@ -19,13 +19,13 @@ $('.hit-refresh').click(function() {
 app.addRegions({
 
     // Desktop regions
-    desktopTopConfig: '#desktop-top-config',
+    desktopTopConfig: '#desktop-top-config ul.dropdown-menu',
     desktopTopOpts: '#desktop-top-opts ul.dropdown-menu',
     desktopTopSwitch: '#desktop-top-switch',
 
     // Touch device (tablets & phones) regions
-    touchBottomContent: '#navbar-bottom-content',
-    touchBottomConfig: '#touch-bottom-config',
+    touchBottomContent: '#navbar-bottom-content ul.dropdown-menu',
+    touchBottomConfig: '#touch-bottom-config ul.dropdown-menu',
     touchTopOpts: '#touch-top-opts ul.dropdown-menu',
     touchTopSwitch: '#touch-top-switch',
 
@@ -56,6 +56,16 @@ app.setBackgroundImg = function(img) {
         'opacity': '0.75'
     };
     var stylesheet = app.generateStylesheet('body:before', data);
+    app.addStyleTag(stylesheet);
+},
+
+app.setRepeatBackgroundImg = function(img) {
+    var data = {
+        'background-image': 'url(' + img + ') !important',
+        'background-size': 'cover',
+        'background-attachment': 'fixed'
+    };
+    var stylesheet = app.generateStylesheet('body', data);
     app.addStyleTag(stylesheet);
 },
 
