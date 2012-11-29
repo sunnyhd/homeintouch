@@ -35,6 +35,9 @@ exports.showTVShowList = function() {
 };
 
 exports.showTVShowEpisodeList = function(tvshowid) {
+
+    updateConfigurationOptions();
+
     var tvshow = new TVShow({ tvshowid: tvshowid });
 
     var successCallback = function(model) {
@@ -50,7 +53,8 @@ exports.showTVShowEpisodeList = function(tvshowid) {
 
 exports.showEpisodeList = function() {
 
-    updateNavs();   
+    updateNavs();
+    updateConfigurationOptions();
 
     var episodes = new Episodes();
     var view = new EpisodeListView({ collection: episodes });

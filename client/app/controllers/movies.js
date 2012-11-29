@@ -6,6 +6,7 @@ var MovieContainerView = require('views/movies/movie_container');
 var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 var MovieDetailView = require('views/movies/movie_detail');
+var MediaConfigurationOptionsView = require('views/settings/media_configuration_options');
 
 exports.movies = new Movies();
 
@@ -14,12 +15,14 @@ exports.movies = new Movies();
 
 exports.showMovieCoverView = function() {
     updateNavs();
+    updateConfigurationOptions();
     var view = new MovieContainerView({ collection: exports.movies, mode: 'cover' });
     app.main.show(view);
 };
 
 exports.showMovieListView = function() {
     updateNavs();
+    updateConfigurationOptions();
     var view = new MovieContainerView({ collection: exports.movies, mode: 'list' });
     app.main.show(view);
 };
@@ -33,6 +36,7 @@ exports.showMovieDetailView = function(id) {
     // When the movie instace is loaded, displays its data
     loadingMovie.done(function() {
         updateNavForMovie(movie);
+        updateConfigurationOptions();
         var view = new MovieDetailView({ model: movie });
         app.main.show(view);
     });
@@ -119,4 +123,9 @@ function updateNavForMovie (movie) {
             return false;
         }
     });
+}
+
+function updateConfigurationOptions () {
+    app.desktopTopConfig.show(new MediaConfigurationOptionsView());
+    app.touchBottomConfig.show(new MediaConfigurationOptionsView());
 }

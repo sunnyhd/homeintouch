@@ -13,6 +13,11 @@ module.exports = function(app) {
 
     app.get('/api/volume', controllers.volume.show);
 
+    app.get('/api/media/config', controllers.mediaconfigs.list);
+    app.get('/api/media/config/:configid', controllers.mediaconfigs.get);
+    app.post('/api/media/config', controllers.mediaconfigs.create);
+    app.put('/api/media/config', controllers.mediaconfigs.save);
+
     app.get('/api/movies', controllers.movies.index);    
     app.get('/api/movies/last/:n', controllers.movies.lastN);
     app.get('/api/movies/:movieid', controllers.movies.get);

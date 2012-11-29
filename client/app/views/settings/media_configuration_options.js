@@ -14,6 +14,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         if (action === "edit-database") {
             settingsController.showDatabaseSettings();
+        } else if (action === "edit-order") {
+            settingsController.showSortSettings();
         }
     }
 });
