@@ -3,10 +3,13 @@
     <h2>{{ label }}</h2>
 </div>
 
-<div class="modal-body">
+<div class="modal-body content-centered">
     {{#if video}}
-        <video controls="controls" height="100%" width="100%">
+        <!-- <video controls="controls" height="100%" width="100%">
             <source src="{{ src }}">
+        </video> -->
+        <video class="video-js vjs-default-skin hit-video" controls preload="none" data-setup="{}">
+      		<source src="{{ src }}">
         </video>
     {{else}}
         <iframe src="{{ src }}" height="100%" width="100%"></iframe>
