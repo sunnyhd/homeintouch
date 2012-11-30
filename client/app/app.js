@@ -493,6 +493,11 @@ app.isTouchDevice = function() {
   }  
 }
 
+app.newTab = function(url) {
+    window.open(url, '_blank');
+    window.focus();
+}
+
 // Widget color classes
 app.colorClasses = [{label: "Blue", value: "blue"}, {label: "Dark Blue", value: "dark-blue"}, 
                     {label: "Yellow", value: "yellow"}, {label: "Dark Yellow", value: "dark-yellow"}, 

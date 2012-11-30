@@ -92,12 +92,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     imdb: function() {
-        var view = new IframeModalView({
-            label: 'IMDB',
-            src: 'http://www.imdb.com/title/' + this.model.get('imdbnumber')
-        });
+        // var view = new IframeModalView({
+        //     label: 'IMDB',
+        //     src: 'http://www.imdb.com/title/' + this.model.get('imdbnumber')
+        // });
+        // app.iframe.show(view);
 
-        app.iframe.show(view);
+        app.newTab( 'http://www.imdb.com/title/' + this.model.get('imdbnumber') );
     }
 
 });
