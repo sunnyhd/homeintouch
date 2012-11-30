@@ -33,6 +33,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
         if ($noImgContainer.length > 0) {
             app.applyBackgroundIcon($noImgContainer, this.iconNoImg);
         }
+        // $('.movie-info', this.$el).dotdotdot({
+        //     watch: 'window'
+        // });
     }
     
 });
