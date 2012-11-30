@@ -12,6 +12,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     serializeData: function() {
         return this.options;
-    }
+    }// ,
+
+    // onRender: function() {
+    //     this.$el.modal('hide');
+    // },
+
+    // initVideoPlayer: function() {
+    //     if ( !_.isUndefined(this.options.video) && !_.isUndefined(this.options.videoid) ) {
+    //         _V_(this.options.videoid);
+    //     }
+    // }
 
 });

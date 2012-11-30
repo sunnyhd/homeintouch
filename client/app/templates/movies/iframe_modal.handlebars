@@ -5,12 +5,12 @@
 
 <div class="modal-body content-centered">
     {{#if video}}
-        <!-- <video controls="controls" height="100%" width="100%">
-            <source src="{{ src }}">
-        </video> -->
-        <video class="video-js vjs-default-skin hit-video" controls preload="none" data-setup="{}">
+        <video id="{{ videoid }}" class="hit-video" controls>
       		<source src="{{ src }}">
         </video>
+        <!-- <video id="{{ videoid }}" class="video-js vjs-default-skin" controls preload="none">
+      		<source src="{{ src }}" type='video/mp4'>
+        </video> -->
     {{else}}
         <iframe src="{{ src }}" height="100%" width="100%"></iframe>
     {{/if}}

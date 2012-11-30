@@ -42,6 +42,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
         actionsView.on('watch-trailer', this.watchTrailer, this);
         actionsView.on('imdb', this.imdb, this);
         app.touchBottomContent.show(actionsView);
+
+        // // Adds the trailer video player to the HTML
+        // if (this.model.get('trailer')) {
+        //     this.videoPlayerView = new IframeModalView({
+        //         label: this.model.get('label'),
+        //         src: this.model.get('trailer'),
+        //         video: true,
+        //         videoid: 'trailer-video-' + this.model.id
+        //     });
+        //     app.iframe.show(this.videoPlayerView);
+        //     app.iframe.hideModal();
+        // }
     },
 
     close: function() {
@@ -64,13 +76,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
         this.model.playTrailer();
     },
 
+    // watchTrailer: function() {
+    //     this.videoPlayerView.initVideoPlayer();
+    //     app.iframe.showModal(this.videoPlayerView);
+    // },
+
     watchTrailer: function() {
         var view = new IframeModalView({
             label: this.model.get('label'),
             src: this.model.get('trailer'),
-            video: true
+            video: true,
+            videoid: 'trailer-video-' + this.model.id
         });
-
         app.iframe.show(view);
     },
 
