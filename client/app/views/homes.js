@@ -238,6 +238,12 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
         _.each(this.collection.models, function(model) {
             $container.append( _.template(tmp, {data: model.attributes, _: _ } ));
         });
+
+        // Adds the click handler on media widgets
+        $('.hit-icon-container .overview [data-media-action]', this.$el).click(function() {           
+            app.router.navigate('#' + $(this).data('media-action'), {trigger: true});
+        });
+
         this.onDataFinally();
     },
 
