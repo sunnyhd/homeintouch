@@ -267,6 +267,12 @@ app.addInitializer(function() {
     app.controller('movies');
     app.controller('music');
     app.controller('pictures');
+    app.controller('settings');
+});
+
+app.addInitializer(function() {
+    // Load settings
+    app.controller('settings').loadMediaSettings();
 });
 
 app.addInitializer(function(options) {

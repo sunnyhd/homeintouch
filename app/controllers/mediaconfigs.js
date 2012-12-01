@@ -30,7 +30,6 @@ exports.create = function(req, res, next) {
 exports.save = function(req, res) {
   MediaConfig.update({_id : req.body._id}, {$set: {sort: req.body.sort}}, function(err, config) {
         if (err) return next(err);
-        if (!config) return next(new Error('No such config'));
-        res.json(config);
+        res.json(req.body);
     });
 };

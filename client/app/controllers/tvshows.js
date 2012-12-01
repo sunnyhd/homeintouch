@@ -14,8 +14,8 @@ exports.showTVShowList = function() {
     updateNavs();
     updateConfigurationOptions();
 
-    var shows = new TVShows();
-    var view = new TVShowContainerView({ collection: shows });
+    exports.shows = new TVShows();
+    var view = new TVShowContainerView({ collection: exports.shows });
     var that = this;
 
     var successCallback = function(collection) {
@@ -27,11 +27,11 @@ exports.showTVShowList = function() {
     $.get('/api/episodes/label')
     .done(function(data) {
         that.data = data;
-        shows.fetch({success: successCallback});
+        exports.shows.fetch({success: successCallback});
         app.main.show(view);
     });
 
-    return shows;
+    return exports.shows;
 };
 
 exports.showTVShowEpisodeList = function(tvshowid) {
@@ -120,4 +120,8 @@ function updateTvShowNavs (tvShowId, tvShowName) {
 function updateConfigurationOptions () {
     app.desktopTopConfig.show(new MediaConfigurationOptionsView());
     app.touchBottomConfig.show(new MediaConfigurationOptionsView());
-}
+};
+
+app.vent.on('sort-media-collections', function(){
+    exports.shows.sort();
+});

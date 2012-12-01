@@ -1,10 +1,12 @@
+var app = require('app');
+
 module.exports = Backbone.Marionette.ItemView.extend({
 
     template: require('templates/settings/sort_settings'),
 
     events: {
-        'click .btn.save': 'save',
-        'click .btn.cancel': 'cancel',
+        'click [data-action="save"]': 'save',
+        'click [data-action="cancel"]': 'cancel',
         'click .close': 'cancel'
     },
 
@@ -22,10 +24,18 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         var that = this;
 
-        this.model.set('sort', sortConfiguration);
-        this.model.save({success: function(model) {
+        var saveOptions = {success: function(model) {
+            app.controller('settings').mediaSettings = model;
             that.close();
-        }});
+            app.vent.trigger('sort-media-collections');
+        }};
+
+        if (this.model.isNew()) {
+            this.model.save(sortConfiguration, saveOptions);
+        } else {
+            this.model.set('sort', sortConfiguration);
+            this.model.save(this.model.attributes, saveOptions);
+        }
     },
 
     cancel: function () {

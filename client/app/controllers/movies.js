@@ -129,3 +129,7 @@ function updateConfigurationOptions () {
     app.desktopTopConfig.show(new MediaConfigurationOptionsView());
     app.touchBottomConfig.show(new MediaConfigurationOptionsView());
 }
+
+app.vent.on('sort-media-collections', function(){
+    exports.movies.sort();
+});

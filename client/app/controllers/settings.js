@@ -6,6 +6,13 @@ var ImportView = require('views/settings/import');
 var DatabaseSettingsView = require('views/settings/database_settings');
 var SortSettingsView = require('views/settings/sort_settings');
 
+exports.loadMediaSettings = function() {
+	var collection = new MediaSettings();
+	collection.fetch({success: function(resultCollection) {
+		exports.mediaSettings = (resultCollection.length > 0) ? resultCollection.at(0) : new MediaSetting();
+	}});
+};
+
 exports.showImport = function() {
     var i = new Import();
 
@@ -21,11 +28,6 @@ exports.showDatabaseSettings = function() {
 };
 
 exports.showSortSettings = function() {
-	var collection = new MediaSettings();
-	collection.fetch({success: function(resultCollection) {
-
-		var model = (resultCollection.length > 0) ? resultCollection.at(0) : new MediaSetting();
-		var view = new SortSettingsView({model: resultCollection.at(0)});
-		app.modal.show(view);
-	}});
+	var view = new SortSettingsView({model: exports.mediaSettings});
+	app.modal.show(view);
 };
