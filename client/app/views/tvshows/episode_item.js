@@ -11,8 +11,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     template: require('templates/tvshows/episode_item'),
 
     events: {
-        'click .play': 'play',
-        'click .playlist': 'playlist',
+        'click [data-action="play"]': 'play',
+        'click [data-action="playlist"]': 'playlist',
         'click .details': 'details'
     },
 

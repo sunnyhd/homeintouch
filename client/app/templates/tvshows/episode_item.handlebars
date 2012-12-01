@@ -10,8 +10,8 @@
     <div class="episode-info">
     	<div><span class="episode-title">{{ season }}x{{ episodeNumber }} {{ label }}</span> 
     		 <span class="pull-right">
-    		 	<a href="#" class="play btn btn-inverse"><i class="icon-play icon-white"/> <span class="visible-desktop">Play</span></a>
-    		 	<a href="#" class="playlist btn btn-inverse"><i class="icon-plus icon-white"/> <span class="visible-desktop">Add to Playlist</span></a>
+    		 	<a href="#" data-action="play" class="btn btn-success btn-block"><i class="icon-play icon-white"/> <span class="visible-desktop">Play</span></a>
+    		 	<a href="#" data-action="playlist" class="btn btn-primary btn-block"><i class="icon-time icon-white"/> <span class="visible-desktop">Add to Playlist</span></a>
     		 </span>
     	</div>
     	<div><span class="info-key">Rating: </span> {{ parsedRating }}</div>
