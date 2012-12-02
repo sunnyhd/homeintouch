@@ -15,7 +15,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     show: function() {
-        app.router.navigate('#movies/details/' + this.model.id, {trigger: true});
+        app.router.navigate('#movies/details/' + this.model.get('movieid'), {trigger: true});
     }
     
 });

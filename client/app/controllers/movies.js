@@ -9,7 +9,12 @@ var MovieDetailView = require('views/movies/movie_detail');
 var MediaConfigurationOptionsView = require('views/settings/media_configuration_options');
 
 exports.movies = new Movies();
+exports.loading = null; // Holds the promise reference
 
+// Filter for movies
+exports.filters = {};
+exports.filters.years = null;
+exports.filters.genres = null;
 
 // Show views
 

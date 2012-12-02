@@ -46,12 +46,12 @@ module.exports = Backbone.Router.extend({
         
         movies: function() {
             this.app.controller('movies').showMovieCoverView();
-            this.app.controller('movies').movies.fetch();
+            // this.app.controller('movies').movies.fetch();
         },
 
         moviesListView: function() {
             this.app.controller('movies').showMovieListView();
-            this.app.controller('movies').movies.fetch();
+            // this.app.controller('movies').movies.fetch();
         },
 
         movieDetailView: function(movieid) {
