@@ -54,6 +54,7 @@ xbmc.on('notification', function(data) {
 
 importer.on('done', function(time) {
     console.log('importer:done', time);
+    io.sockets.emit('media:data-changed'); // Notifies the client that the media data has changed
 });
 
 importer.on('error', function(err) {

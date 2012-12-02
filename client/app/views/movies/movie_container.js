@@ -1,4 +1,5 @@
 var app = require('app');
+var Movies = require('collections/movies');
 var MovieListView = require('views/movies/movie_list');
 var MovieCoverView = require('views/movies/movie_cover_list');
 var MovieFilterView = require('views/movies/movie_filter');
@@ -26,17 +27,19 @@ module.exports = Backbone.Marionette.Layout.extend({
         app.touchBottomContent.show(listSelectorView);
         listSelectorView.select(this.options.mode);
 
-        this.filterView = new MovieFilterView({ collection: this.collection });
-        this.filterView.on('searchFired', this.performSearch, this);
+        // Clones the movie collection
+        this.filteredCollection = new Movies( _.map(this.collection.models, function(model) { return model.clone(); }) );
 
+        this.filterView = new MovieFilterView({ collection: this.filteredCollection });
+        this.filterView.on('searchFired', this.performSearch, this);
         this.filter.show(this.filterView);
         
         if (this.options.mode === 'cover') {
             this.filterView.setCoverBtnActive();
-            this.listView = new MovieCoverView({ collection: this.collection });
+            this.listView = new MovieCoverView({ collection: this.filteredCollection });
         } else {
             this.filterView.setListBtnActive();
-            this.listView = new MovieListView({ collection: this.collection });            
+            this.listView = new MovieListView({ collection: this.filteredCollection });            
         }
 
         this.list.show(this.listView);

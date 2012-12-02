@@ -280,6 +280,8 @@ app.addInitializer(function(options) {
     app.controller('device_types').deviceTypes.reset(options.deviceTypes);
     app.controller('homes').homes.reset(options.homes);
     app.controller('players').ids = options.players;
+
+    app.loadMediaData();
 });
 
 app.addInitializer(function() {
@@ -308,6 +310,11 @@ app.addInitializer(function() {
         var e = ['xbmc', method[0].toLowerCase(), method[1].toLowerCase()].join(':');
         app.vent.trigger(e, data.params.data);
     });
+
+    socket.on('media:data-changed', function() {
+        console.log('Media data changed on server.');
+        app.vent.trigger('media:data-changed');
+    });
 });
 
 app.addInitializer(function() {
@@ -328,7 +335,22 @@ app.addInitializer(function() {
     Backbone.history.start();
 });
 
+// Media data loader/updater
+// -------------------------
+app.loadMediaData = function() {
 
+    // Movies media data
+    var moviesController = app.controller('movies');
+
+    // Loads movie colletion, genres and years
+    moviesController.movies.fetch();
+    $.get('/api/genres/movies').done(function(data) { moviesController.filters.genres = data; });
+    $.get('/api/years/movies').done(function(data) { moviesController.filters.years = data; });
+}
+app.vent.on('media:data-changed', function(address, value){
+    app.loadMediaData();
+    console.log('Media data updated on client.');
+});
 
 // Handlebars
 // ---------------

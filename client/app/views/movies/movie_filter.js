@@ -1,5 +1,6 @@
 var app = require('app');
 var FilterPanelView = require('views/filtered_panel');
+var moviesController = app.controller('movies');
 
 module.exports = FilterPanelView.extend({
 
@@ -27,20 +28,10 @@ module.exports = FilterPanelView.extend({
     initialEvents: function() {},
 
     onRender: function() {
-
         this.$('button.clear').hide();
         this.$('button.search').show();
-
-    	var that = this;
-    	$.get('/api/genres/movies')
-    	.done(function(data) {
-    		that.loadGenres(data);
-    	});
-
-        $.get('/api/years/movies')
-        .done(function(data) {
-            that.loadYears(data);
-        });
+        this.loadGenres( moviesController.filters.genres );
+        this.loadYears( moviesController.filters.years );
     },
 
     setListBtnActive: function() {

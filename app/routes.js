@@ -13,6 +13,7 @@ module.exports = function(app) {
 
     app.get('/api/volume', controllers.volume.show);
 
+    app.get('/api/media/refresh', controllers.imports.refresh);
     app.get('/api/media/config', controllers.mediaconfigs.list);
     app.get('/api/media/config/:configid', controllers.mediaconfigs.get);
     app.post('/api/media/config', controllers.mediaconfigs.create);
