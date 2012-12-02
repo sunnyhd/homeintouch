@@ -23,8 +23,11 @@ exports.showImport = function() {
 };
 
 exports.showDatabaseSettings = function() {
-	var view = new DatabaseSettingsView();
-	app.modal.show(view);
+	$.get('/api/db/config')
+	.success(function(data){
+		var view = new DatabaseSettingsView({data: data});
+		app.modal.show(view);	
+	});
 };
 
 exports.showSortSettings = function() {

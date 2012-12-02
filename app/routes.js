@@ -19,6 +19,9 @@ module.exports = function(app) {
     app.post('/api/media/config', controllers.mediaconfigs.create);
     app.put('/api/media/config', controllers.mediaconfigs.save);
 
+    app.get('/api/db/config', controllers.settings.get);
+    app.post('/api/db/config', controllers.settings.save);
+
     app.get('/api/movies', controllers.movies.index);    
     app.get('/api/movies/last/:n', controllers.movies.lastN);
     app.get('/api/movies/:movieid', controllers.movies.get);

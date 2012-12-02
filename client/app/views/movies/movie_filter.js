@@ -49,11 +49,13 @@ module.exports = FilterPanelView.extend({
     	var allListItem = $('<li><a href="#" data-genre="' + this.AllGenres + '">' + this.AllGenres + '</a></li>');
     	this.$('#movie-genre-list').append(allListItem);
 
-    	for (var i = 0; i < genreList.length; i++) {
-    		var genre = genreList[i];
-    		var listItem = $('<li><a href="#" data-genre="' + genre + '">' + genre + '</a></li>');
-    		this.$('#movie-genre-list').append(listItem);
-    	};
+        if (genreList) {
+        	for (var i = 0; i < genreList.length; i++) {
+        		var genre = genreList[i];
+        		var listItem = $('<li><a href="#" data-genre="' + genre + '">' + genre + '</a></li>');
+        		this.$('#movie-genre-list').append(listItem);
+        	}
+        }
     },
 
     loadYears: function(yearList) {
@@ -61,11 +63,13 @@ module.exports = FilterPanelView.extend({
         var allListItem = $('<li><a href="#" data-year="' + this.AllYears + '">' + this.AllYears + '</a></li>');
         this.$('#movie-year-list').append(allListItem);
 
-        for (var i = 0; i < yearList.length; i++) {
-            var year = yearList[i];
-            var listItem = $('<li><a href="#" data-year="' + year + '">' + year + '</a></li>');
-            this.$('#movie-year-list').append(listItem);
-        };
+        if (yearList) {
+            for (var i = 0; i < yearList.length; i++) {
+                var year = yearList[i];
+                var listItem = $('<li><a href="#" data-year="' + year + '">' + year + '</a></li>');
+                this.$('#movie-year-list').append(listItem);
+            }
+        }
     },
 
     listViewClicked: function(e) {
