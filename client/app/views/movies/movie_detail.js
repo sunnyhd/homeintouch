@@ -21,15 +21,19 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
         this.bindTo(this.model, 'change', this.render, this);
+        app.vent.on('refresh-movie-views', this.render, this);
     },
 
     onRender: function() {
 
         // Fanart background
-        var fanArt = this.model.get('fanartid');
         var src = 'img/cinema-background.jpg';
-        if (fanArt && fanArt !== '') {
-            src = 'api/images/' + fanArt;
+        var movieStyleSettings = app.controller('settings').mediaSettings.getMovieStyleSettings();
+        if (movieStyleSettings.fanart_bkg) {
+            var fanArt = this.model.get('fanartid');
+            if (fanArt && fanArt !== '') {
+                src = 'api/images/' + fanArt;
+            }
         }
         app.setBackgroundImg( src );
 
@@ -58,6 +62,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     close: function() {
         app.removeBackgroundImg();
+        app.vent.off('refresh-movie-views', this.render, this);
     },
 
     play: function() {

@@ -33,7 +33,7 @@ module.exports = Backbone.Marionette.Layout.extend({
         this.filterView = new MovieFilterView({ collection: this.filteredCollection });
         this.filterView.on('searchFired', this.performSearch, this);
         this.filter.show(this.filterView);
-        
+
         if (this.options.mode === 'cover') {
             this.filterView.setCoverBtnActive();
             this.listView = new MovieCoverView({ collection: this.filteredCollection });
@@ -41,6 +41,9 @@ module.exports = Backbone.Marionette.Layout.extend({
             this.filterView.setListBtnActive();
             this.listView = new MovieListView({ collection: this.filteredCollection });            
         }
+
+        app.vent.off('refresh-movie-views');
+        app.vent.on('refresh-movie-views', this.render, this.listView);
 
         this.list.show(this.listView);
     },

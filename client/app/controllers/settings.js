@@ -5,6 +5,7 @@ var MediaSetting = require('models/media_setting');
 var ImportView = require('views/settings/import');
 var DatabaseSettingsView = require('views/settings/database_settings');
 var SortSettingsView = require('views/settings/sort_settings');
+var MovieStyleSettingsView = require('views/settings/movie_style_settings');
 
 exports.loadMediaSettings = function() {
 	var collection = new MediaSettings();
@@ -34,3 +35,8 @@ exports.showSortSettings = function() {
 	var view = new SortSettingsView({model: exports.mediaSettings});
 	app.modal.show(view);
 };
+
+exports.showMovieStyleSettings = function() {
+	var view = new MovieStyleSettingsView({model: exports.mediaSettings});
+	app.modal.show(view);	
+}

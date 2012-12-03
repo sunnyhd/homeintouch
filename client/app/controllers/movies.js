@@ -135,6 +135,6 @@ function updateConfigurationOptions () {
     app.touchBottomConfig.show(new MediaConfigurationOptionsView());
 }
 
-app.vent.on('sort-media-collections', function(){
+app.vent.on('sort-media-collections', function() {
     exports.movies.sort();
 });

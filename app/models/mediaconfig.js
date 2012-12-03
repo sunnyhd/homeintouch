@@ -5,6 +5,10 @@ var MediaConfig = new mongoose.Schema({
     sort: {
     	widget: String,
     	ascending: Boolean
+    },
+    movie_style: {
+    	styleSwitch: String,
+    	active: Boolean
     }
 });
 

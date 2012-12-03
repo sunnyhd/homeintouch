@@ -16,6 +16,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
             settingsController.showDatabaseSettings();
         } else if (action === "edit-order") {
             settingsController.showSortSettings();
+        } else if (action === "edit-movies-style") {
+            settingsController.showMovieStyleSettings();
         }
+
+        return false;
     }
 });

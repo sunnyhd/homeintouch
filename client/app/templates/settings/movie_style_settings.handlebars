@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <a class="close" href="#">x</a>
+    <h2>Movie Style Settings</h2>
+</div>
+
+<div class="modal-body">
+    <form class="form-horizontal">
+        <div class="control-group">
+            <label for="fanart_bkg" class="control-label">Use Fanart as Background</label>
+            <div class="controls">
+            {{#if movie_style.fanart_bkg}}
+                <input id="fanart_bkg" type="checkbox" checked="checked" />
+            {{else}}
+                <input id="fanart_bkg" type="checkbox" />
+            {{/if}}
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="hide_watched" class="control-label">Hide watched Movies</label>
+            <div class="controls">
+            {{#if movie_style.hide_watched}}
+                <input id="hide_watched" type="checkbox" checked="checked" />
+            {{else}}
+                <input id="hide_watched" type="checkbox" />
+            {{/if}}
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <a href="#" data-action="save" class="btn btn-primary">Save</a>
+    <a href="#" data-action="cancel" class="btn">Cancel</a>
+</div>
