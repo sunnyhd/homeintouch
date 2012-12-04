@@ -536,7 +536,6 @@ app.colorClasses = [{label: "Blue", value: "blue"}, {label: "Dark Blue", value: 
 app.backgroundPatterns = [{label: "None", value: "none"},
                           {label: "AZ Subtle", value: "url(img/bkg-pattern/az_subtle.png)"},
                           {label: "Billie Holiday", value: "url(img/bkg-pattern/billie_holiday.png)"},
-                          {label: "Bo Play", value: "url(img/bkg-pattern/bo_play.png)"},
                           {label: "Cream Paper", value: "url(img/bkg-pattern/creampaper.png)"},
                           {label: "Debut Dark", value: "url(img/bkg-pattern/debut_dark.png)"},
                           {label: "Debut Light", value: "url(img/bkg-pattern/debut_light.png)"},
