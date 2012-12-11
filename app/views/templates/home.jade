@@ -115,6 +115,10 @@ script(id="my-house-template", type="text/template")
         li
           a#editWidgetStyle.pull-right(href="#")
             i.icon-cog.icon-white
+    .hit-icon-container-desktop-options.visible-desktop
+      ul
+        li
+          i.icon-cog.icon-white
     .hit-icon-container.viewport
       <% if(floors.length == 0) { %>
       .overview
@@ -142,6 +146,10 @@ script(id="my-library-template", type="text/template")
         li
           a#editWidgetStyle.pull-right(href="#")
             i.icon-cog.icon-white
+    .hit-icon-container-desktop-options.visible-desktop
+      ul
+        li
+          i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview
         .hit-icon(data-hit-icon-href="#movies", data-hit-icon-type="media.movies")
@@ -188,6 +196,16 @@ script(id="recently-added-template", type="text/template")
             i.icon-film.icon-white
           a.pull-right#showNewMovies(href="#")
             i.icon-facetime-video.icon-white
+    .hit-icon-container-desktop-options.visible-desktop
+      ul
+        li
+          i.icon-facetime-video.icon-white
+        li
+          i.icon-film.icon-white
+        li
+          i.icon-music.icon-white
+        li
+          i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview
     .scrollbar
