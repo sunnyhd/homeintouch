@@ -82,7 +82,7 @@ exports.SwitchSelectedHomeView = Backbone.Marionette.ItemView.extend({
 
 exports.HouseWidgetView = Backbone.Marionette.ItemView.extend({
 
-    className: "room-device-group span6 clearfix",
+    className: "room-device-group span12 clearfix",
 
     events: {
         "click a#editWidgetStyle": "editWidgetClicked"
@@ -220,7 +220,7 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
 
     onRender: function() {
         exports.HouseWidgetView.prototype.onRender.apply(this);
-        this.showMusicClicked();
+        this.showMoviesClicked();
     },
 
     refreshRecentlyAdded: function() {
@@ -574,18 +574,12 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
         if (!iv.model.get('visible')) {
             return;
         }
+        $container = cv.$('.main-right-container .container-fluid');
+        $rowContainer = $('<div class="row-fluid">').appendTo($container);
 
-        var $rowContainer = null;
-        var $rows = cv.$(".row-fluid.home-widget-container");
-        _.each($rows, function(row) {
-            if ($('.hit-widget', row).length < 2) {
-                $rowContainer = $(row);
-            }
-        });
-
-        if (!$rowContainer) {
-            $container = $(cv.el);
-            $rowContainer = $('<div class="row-fluid home-widget-container">').appendTo($container);
+        // If the row entry is hidden on desktop, add the class to the row container
+        if ($('.hit-widget.hidden-desktop', $(iv.el)).length > 0) {
+            $rowContainer.addClass('hidden-desktop');
         }
 
         $rowContainer.append(iv.el);
@@ -669,6 +663,23 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
 
     onRender: function() {
         this.setScrollbarOverview();
+
+        var location = this.model.get('timeWheaterConfiguration').get('location');
+
+        $('#digiclock', this.$el).jdigiclock({
+            proxyUrl: 'api/jdigiclock/proxy',
+            dayCallback: $.proxy(this.displayCurrentDate, this),
+            loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
+            weatherLocationCode: location
+        });
+    },
+
+    displayCurrentDate: function(date) {
+        $('#jdigiclock-currentDay').html(date);
+    },
+
+    refreshTimeWeatherStyles: function() {
+        this.applyStyles();
     }
 });
 
