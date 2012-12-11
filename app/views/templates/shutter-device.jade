@@ -51,11 +51,11 @@ script(id="device-add-shutter-template", type="text/template")
       .control-group
         label(for="max_value").control-label Max Value
         .controls
-          input(id="max_value", type="text", placeHolder="100", value!="<%= getValue('max_value') %>")
+          input(id="max_value", type="number", placeHolder="100", min="0", max="100", value!="<%= getValue('max_value') %>")
       .control-group
         label(for="min_value").control-label Min Value
         .controls
-          input(id="min_value", type="text", placeHolder="0", value!="<%= getValue('min_value') %>")
+          input(id="min_value", type="number", placeHolder="0", min="0", max="100", value!="<%= getValue('min_value') %>")
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary <%= primaryBtnText %>

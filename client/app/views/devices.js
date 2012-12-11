@@ -152,6 +152,10 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
         var data = Backbone.FormHelpers.getFormData(this, formFields);
         var device;
 
+        if (!this.validateModel()) {
+            return false;
+        }
+
         if (this.mode !== "edit") {
             data.type = this.model.get("type");
             device = this.buildDevice(data);
@@ -177,6 +181,10 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
 
         this.close();
     },
+
+    validateModel: function() {
+        return true;
+    }
 
 });
 
@@ -254,6 +262,14 @@ exports.AddShutterDeviceForm = exports.AddEditDeviceTypeForm.extend({
         this.model.editAddress("write_stop", data.write_stop);
         this.model.editAddress("write_position", data.write_position);
         this.model.editAddress("write_switch", data.write_switch);
+    },
+
+    validateModel: function() {
+        var maxValue = parseInt(this.$("#max_value").val());
+        var minValue = parseInt(this.$("#min_value").val());
+
+        return (maxValue <= 100 && maxValue >= 0)
+        && (minValue <= 100 && minValue >= 0);
     }
 
 });
