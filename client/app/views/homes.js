@@ -666,7 +666,7 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
 
         var location = this.model.get('timeWheaterConfiguration').get('location');
 
-        $('#digiclock', this.$el).jdigiclock({
+        $('##digiclock-desktop', this.$el).jdigiclock({
             proxyUrl: 'api/jdigiclock/proxy',
             dayCallback: $.proxy(this.displayCurrentDate, this),
             loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
@@ -675,7 +675,7 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
     },
 
     displayCurrentDate: function(date) {
-        $('#jdigiclock-currentDay').html(date);
+        //$('#jdigiclock-currentDay').html(date);
     },
 
     refreshTimeWeatherStyles: function() {
