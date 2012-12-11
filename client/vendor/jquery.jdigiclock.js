@@ -297,7 +297,7 @@
             for (var i in data.forecast) {
                 var d_date = new Date(data.forecast[i].day_date);
                 var day_name = el.lang.dayNames[d_date.getDay()];
-                var forecast = '<div class="hit-icon">';
+                var forecast = (i === "0") ? '<div class="hit-icon hit-current-day">' : '<div class="hit-icon">';
                 forecast    += '<p>' + day_name + '</p>';
                 forecast    += '<img src="' + el.weatherImagesPath + data.forecast[i].day_icon + '.png" alt="' + data.forecast[i].day_text + '" title="' + data.forecast[i].day_text + '" />';
                 forecast    += '<p>' + data.forecast[i].day_htemp + '&deg;&nbsp;/&nbsp;' + data.forecast[i].day_ltemp + '&deg;</p>';

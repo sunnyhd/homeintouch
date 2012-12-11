@@ -56,12 +56,12 @@
 }
 
 .hit-clock-desktop {
-    width: 730px;
+    width: 100%;
 
     #plugin_container {
         background: none;
         width: initial;
-        height: 100px;
+        height: 400px;
 
         #digital_container {
             background: none;
@@ -79,10 +79,10 @@
                     top: -55px;
                 }
                 #hours {
-                    left: -55px;
+                    left: 40px;
                 }
                 #minutes {
-                    left: 40px;
+                    left: 135px;
                 }
             }
             #weather {
@@ -101,11 +101,30 @@
 
         /* WHEATER */
         #forecast_container {
-            left: 200px;
+            left: 0px;
+            top: 100px;
             height: 100px;
+            width: 100%;
             background-image: none;
-            img {
-                max-width: 95%;
+            .forecast-hit {
+                .hit-icon.hit-current-day {
+                    width: 100%;
+                    margin: 10px 0px;
+                    img {
+                        max-width: 60%;
+                    }
+                }
+                .hit-icon {
+                    text-align: center;
+                    border: none;
+                    width: 95px;
+                    img {
+                        max-width: 90%;
+                    }
+                }
+                .hit-icon~.hit-icon {
+                    margin: 0px;
+                }
             }
         }
     }
