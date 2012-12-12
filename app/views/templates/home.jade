@@ -108,16 +108,16 @@ script(id="dashboard-home", type="text/template")
     .container-fluid
 
 script(id="my-house-template", type="text/template")
-  .hit-widget.clearfix.scrollable-x#my-house
+  .hit-widget.hit-widget-desktop.clearfix.scrollable-x#my-house
     //- .hit-desktop-title.visible-desktop(style="background-image: url(img/separators/my-house.jpg)")
     .hit-title.hidden-desktop My House
       ul.nav.pull-right
         li
-          a#editWidgetStyle.pull-right(href="#")
+          a.editWidgetStyle.pull-right(href="#")
             i.icon-cog.icon-white
     .hit-icon-container-desktop-options.visible-desktop
       ul
-        li
+        li.editWidgetStyle
           i.icon-cog.icon-white
     .hit-icon-container.viewport
       <% if(floors.length == 0) { %>
@@ -139,16 +139,16 @@ script(id="my-house-template", type="text/template")
           .end
 
 script(id="my-library-template", type="text/template")
-  .hit-widget.clearfix.scrollable-x#my-library
+  .hit-widget.hit-widget-desktop.clearfix.scrollable-x#my-library
     //- .hit-desktop-title.visible-desktop(style="background-image: url(img/separators/my-library.jpg)")
     .hit-title.hidden-desktop My Library
       ul.nav.pull-right
         li
-          a#editWidgetStyle.pull-right(href="#")
+          a.editWidgetStyle.pull-right(href="#")
             i.icon-cog.icon-white
     .hit-icon-container-desktop-options.visible-desktop
       ul
-        li
+        li.editWidgetStyle
           i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview
@@ -172,7 +172,7 @@ script(id="time-wheater-template", type="text/template")
     .hit-title.hidden-desktop Time and Weather - <span id="jdigiclock-currentDay">Loading...</span>
       ul.nav.pull-right
         li
-          a.pull-right#editWidgetStyle(href="#")
+          a.pull-right.editWidgetStyle(href="#")
             i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview
@@ -183,28 +183,28 @@ script(id="time-wheater-template", type="text/template")
           .end
 
 script(id="recently-added-template", type="text/template")
-  .hit-widget.medium.clearfix.scrollable-x#recently-added
+  .hit-widget.hit-widget-desktop.medium.clearfix.scrollable-x#recently-added
     //- .hit-desktop-title.visible-desktop(style="background-image: url(img/separators/recently-added.png)")
     .hit-title.hidden-desktop Recently Added <span class="loading">- Loading...</span>
       ul.nav.pull-right
         li
-          a.pull-right#editWidgetStyle(href="#")
+          a.pull-right.editWidgetStyle(href="#")
             i.icon-cog.icon-white
-          a.pull-right#showNewMusic(href="#")
+          a.pull-right.showNewMusic(href="#")
             i.icon-music.icon-white
-          a.pull-right#showNewEpisodes(href="#")
+          a.pull-right.showNewEpisodes(href="#")
             i.icon-film.icon-white
-          a.pull-right#showNewMovies(href="#")
+          a.pull-right.showNewMovies(href="#")
             i.icon-facetime-video.icon-white
     .hit-icon-container-desktop-options.visible-desktop
       ul
-        li
+        li.showNewMovies
           i.icon-facetime-video.icon-white
-        li
+        li.showNewEpisodes
           i.icon-film.icon-white
-        li
+        li.showNewMusic
           i.icon-music.icon-white
-        li
+        li.editWidgetStyle
           i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview

@@ -85,7 +85,7 @@ exports.HouseWidgetView = Backbone.Marionette.ItemView.extend({
     className: "room-device-group span12 clearfix",
 
     events: {
-        "click a#editWidgetStyle": "editWidgetClicked"
+        "click .editWidgetStyle": "editWidgetClicked"
     },
 
     editWidgetClicked: function() {
@@ -189,9 +189,9 @@ exports.TimeWheaterWidgetView = exports.HouseWidgetView.extend({
 exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
 
     events: _.extend({}, exports.HouseWidgetView.prototype.events, {
-        "click a#showNewEpisodes": "showEpisodesClicked",
-        "click a#showNewMovies": "showMoviesClicked",
-        "click a#showNewMusic": "showMusicClicked"
+        "click .showNewEpisodes": "showEpisodesClicked",
+        "click .showNewMovies": "showMoviesClicked",
+        "click .showNewMusic": "showMusicClicked"
     }),
 
     showEpisodesClicked: function() {

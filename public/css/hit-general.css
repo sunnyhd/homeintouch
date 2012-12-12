@@ -81,7 +81,7 @@ ul.hit-nav-right li a:hover {
 
 /* Desktop */
 @media (min-width: 979px) {
-	.hit-widget {
+	.hit-widget.hit-widget-desktop {
 		background-color: rgba(0, 0, 0, 0.5);
 		border-radius: 10px;
 	}

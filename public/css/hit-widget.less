@@ -41,7 +41,6 @@
 	    list-style: none;
 	    li {
 	    	background-color: rgba(51, 51, 51, 0.7);
-		    border-radius: 5px;
 		    cursor: pointer;
 		    &:hover {
 		    	background-color: rgba(51, 51, 51, 1);
@@ -49,6 +48,17 @@
 		    i {
 		    	margin: 10px;
 		    }
+	    }
+	    li:first-child {
+			border-top-left-radius: 5px;
+   			border-top-right-radius: 5px;
+	    }
+	    li~li {
+	    	border-radius: 0px;
+	    }
+	    li:last-child {
+			border-bottom-left-radius: 5px;
+   			border-bottom-right-radius: 5px;
 	    }
 	}
 }
@@ -60,6 +70,20 @@
 .hit-icon-container {
 	margin: 10px;
 }
+/* Desktop */
+@media (min-width: 979px) {
+	.hit-icon-container {
+		margin-right: 50px;
+		overflow: hidden;
+	}
+}
+// /* Touchable */
+// @media (max-width: 979px) {
+// 	.hit-icon-container {
+// 		margin-right: -15px;
+// 	}
+// }
+
 
 /* Override slider styles to positionate the controls */
 .hit-icon-container .hit-slider-control { top: 18px; }
