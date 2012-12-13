@@ -379,6 +379,11 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
             } else if (value < 20 && value >= 0) {
                 value = 0;
             }
+            
+            if (this.model.get('max_value') < this.model.get('min_value')) {
+                value = this.model.get('min_value') - value;
+            }
+
             $widget.data('hit-icon-type', 'devices.shutterOpen' + value);
         }
 
