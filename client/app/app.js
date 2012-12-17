@@ -141,42 +141,63 @@ app.hitIcons = function($el) {
  */
 app.loadIcons = function(container, color) {
     var $container = $(container);
-    var appliedColor = "#FFFFFF";
+    var appliedColor = "FFFFFF";
     if (color) {
-        appliedColor = color;
+        if (color.indexOf('#') === 0) {
+            appliedColor = color.substring(1);
+        } else {
+             appliedColor = color;
+        }
     }
+
+    var urlRoot = '/api/svg/';
 
     $.each($('.hit-icon[data-hit-icon-type]', $container), function (idx, icon) {
         var iconType = $(icon).data('hit-icon-type');
-        var svgIcon = eval("icons." + iconType).replace(/#000000/g, appliedColor);
-        if (svgIcon != '') {
-            $(icon).css('background-image', "url(\"data:image/svg+xml;utf8,"+svgIcon+"\")");
-        }
+        var url = urlRoot + iconType + '?color=' + appliedColor;
+        $(icon).css('background-image', "url(\""+url+"\")");
     });
 };
 
 app.changeIconState = function($icon, color) {
 
+    var appliedColor = "FFFFFF";
+    if (color) {
+        if (color.indexOf('#') === 0) {
+            appliedColor = color.substring(1);
+        } else {
+             appliedColor = color;
+        }
+    }
+
+    var urlRoot = '/api/svg/';
+
     if ($icon.length) {
         var iconType = $icon.data('hit-icon-type');
         if (iconType) {
-            var svgIcon = eval("icons." + iconType).replace(/#000000/g, color);
-            if (svgIcon != '') {
-                $icon.css('background-image', "url(\"data:image/svg+xml;utf8,"+svgIcon+"\")");
-            }
+            var url = urlRoot + iconType + '?color=' + appliedColor;
+            $icon.css('background-image', "url(\""+url+"\")");
         }
     }
 };
 
-
 /** To load only one time the icons */
 app.getBackgroundIcon = function(iconPath, color) {
-    var svgIcon = eval(iconPath).replace(/#000000/g, color);
-    if (svgIcon != '') {
-        return "url(\"data:image/svg+xml;utf8,"+svgIcon+"\")";
+    var urlRoot = '/api/svg/';
+
+    var appliedColor = "FFFFFF";
+    if (color) {
+        if (color.indexOf('#') === 0) {
+            appliedColor = color.substring(1);
+        } else {
+             appliedColor = color;
+        }
     }
-    return '';
+
+    var url = urlRoot + iconPath + '?color=' + appliedColor;
+    return "url(\""+url+"\")";
 };
+
 app.applyBackgroundIcon = function($container, iconStr) {
     $container.css('background-image', iconStr);
 };
