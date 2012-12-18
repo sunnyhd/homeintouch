@@ -200,7 +200,13 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
         "click .showNewMusic": "showMusicClicked"
     }),
 
+    showLoading: function() {
+        this.loading = new $.Deferred();
+        app.showLoading(this.loading.promise());
+    },
+
     showEpisodesClicked: function() {
+        this.showLoading();
         this.collection = new Episodes( {lastN: 25} );
         this.collection.comparator = null;
         this.collectionTemplate = '#episode-recently-added';
@@ -209,6 +215,7 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
     },
 
     showMoviesClicked: function() {
+        this.showLoading();
         this.collection = new Movies( {lastN: 25} );
         this.collection.comparator = null;
         this.collectionTemplate = '#movie-recently-added';
@@ -217,6 +224,7 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
     },
 
     showMusicClicked: function() {
+        this.showLoading();
         this.collection = new Albums( {lastN: 25} );
         this.collection.comparator = null;
         this.collectionTemplate = '#album-recently-added';
@@ -264,6 +272,8 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
         $('.loading', this.$el).hide();
         var $widget = $('#recently-added', this.$el);
         app.vent.trigger("home:dashboard:reset-scrollbars", $widget);
+
+        this.loading.resolve();
     }
 });
 
