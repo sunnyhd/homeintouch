@@ -61,7 +61,7 @@ module.exports = function(app) {
 
     app.get('/api/images/:image', controllers.images.show);
     app.post('/api/images', controllers.images.create);
-    app.get('/api/svg/:image', controllers.images.svgGet);
+    app.get('/api/svg/:color/:image', controllers.images.svgGet);
 
     app.get('/api/files', controllers.files.index);
 };

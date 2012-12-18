@@ -158,7 +158,7 @@ app.loadIcons = function(container, color) {
 
     $.each($('.hit-icon[data-hit-icon-type]', $container), function (idx, icon) {
         var iconType = $(icon).data('hit-icon-type');
-        var url = urlRoot + iconType + '?color=' + appliedColor;
+        var url = urlRoot + appliedColor + '/' + iconType.replace(/\./g, '-') + '.svg';
         $(icon).css('background-image', "url(\""+url+"\")");
     });
 };
@@ -179,7 +179,7 @@ app.changeIconState = function($icon, color) {
     if ($icon.length) {
         var iconType = $icon.data('hit-icon-type');
         if (iconType) {
-            var url = urlRoot + iconType + '?color=' + appliedColor;
+            var url = urlRoot + appliedColor + '/' + iconType.replace(/\./g, '-') + '.svg';
             $icon.css('background-image', "url(\""+url+"\")");
         }
     }
@@ -198,7 +198,7 @@ app.getBackgroundIcon = function(iconPath, color) {
         }
     }
 
-    var url = urlRoot + iconPath + '?color=' + appliedColor;
+    var url = urlRoot + appliedColor + '/' + iconPath.replace(/\./g, '-') + '.svg';
     return "url(\""+url+"\")";
 };
 

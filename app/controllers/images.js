@@ -19,16 +19,15 @@ exports.create = function(req, res) {
 };
 
 exports.svgGet = function(req, res, next) {
-    console.log('Image path: ' + req.params.image);
+    var color = req.params.color;
+    var imgPath = req.params.image.replace(/-/g, '/');
+    imgPath = './public/img/svg/' + imgPath;
 
-    var imagePath = req.params.image.replace(/\./g, '/');
-    imagePath = './public/img/svg/' + imagePath + '.svg';
+    console.log('color: ' + color + ' - imgPath: ' + imgPath);
 
-    console.log('Full Image Path: ' + imagePath);
-
-    fs.readFile(imagePath, function(err, data) {
+    fs.readFile(imgPath, function(err, data) {
         if (err) return next(err);
-        var result = data.toString().replace(/#000000/g, req.query.color);
+        var result = data.toString().replace(/#000000/g, color);
         res.writeHead(200, { 'Content-Type': 'image/svg+xml' });
         res.end(result, 'binary');
     });
