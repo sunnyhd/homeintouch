@@ -145,10 +145,10 @@ app.hitIcons = function($el) {
  */
 app.loadIcons = function(container, color) {
     var $container = $(container);
-    var appliedColor = "FFFFFF";
+    var appliedColor = "0xFFFFFF";
     if (color) {
         if (color.indexOf('#') === 0) {
-            appliedColor = color.substring(1);
+            appliedColor = "0x" + color.substring(1);
         } else {
              appliedColor = color;
         }
@@ -165,10 +165,10 @@ app.loadIcons = function(container, color) {
 
 app.changeIconState = function($icon, color) {
 
-    var appliedColor = "FFFFFF";
+    var appliedColor = "0xFFFFFF";
     if (color) {
         if (color.indexOf('#') === 0) {
-            appliedColor = color.substring(1);
+            appliedColor = "0x" + color.substring(1);
         } else {
              appliedColor = color;
         }
@@ -189,10 +189,10 @@ app.changeIconState = function($icon, color) {
 app.getBackgroundIcon = function(iconPath, color) {
     var urlRoot = '/api/svg/';
 
-    var appliedColor = "FFFFFF";
+    var appliedColor = "0xFFFFFF";
     if (color) {
         if (color.indexOf('#') === 0) {
-            appliedColor = color.substring(1);
+            appliedColor = "0x" + color.substring(1);
         } else {
              appliedColor = color;
         }

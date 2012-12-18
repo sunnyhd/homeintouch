@@ -19,7 +19,7 @@ exports.create = function(req, res) {
 };
 
 exports.svgGet = function(req, res, next) {
-    var color = req.params.color;
+    var color = req.params.color.replace(/0x/g, '#');
     var imgPath = req.params.image.replace(/-/g, '/');
     imgPath = './public/img/svg/' + imgPath;
 
