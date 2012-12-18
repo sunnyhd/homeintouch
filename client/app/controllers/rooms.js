@@ -16,8 +16,8 @@ exports.showCurrent = function() {
 };
 
 exports.showRoom = function(floor, room) {
+
     var rooms = floor.rooms;
-    exports.currentRoom = room;
     app.showingFavorites = false;
     
     if (room.deviceGroups.length > 0) {
@@ -37,6 +37,8 @@ exports.showRoom = function(floor, room) {
         var noDeviceGroupsView = new roomViews.NoDeviceGroupView();
         app.main.show(noDeviceGroupsView);
     }
+
+    exports.currentRoom = room;
 
     app.updateDesktopBreadcrumbNav( { 
         itemType: 'room',
@@ -59,7 +61,7 @@ exports.showRoom = function(floor, room) {
     var menuOpts = {model: room};
     app.touchTopOpts.show(new roomViews.OptionsContextMenuView(menuOpts));
     app.desktopTopOpts.show(new roomViews.OptionsContextMenuView(menuOpts));
-    
+
     return room;
 };
 
