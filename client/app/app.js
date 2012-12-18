@@ -1,6 +1,7 @@
 var Router = require('router');
 var DPT_Transfomer = require('lib/dpt');
 var ModalManager = require('lib/modal_manager');
+var LoadingView = require('views/loading');
 
 var app = module.exports = new Backbone.Marionette.Application();
 var socket;
@@ -11,6 +12,7 @@ app.decimalToEibd = function (n){return n * 0x32 + 0x800 };
 
 var Modal = ModalManager.extend({ el: "#modal" });
 var Iframe = ModalManager.extend({ el: "#iframe" });
+var Loading = ModalManager.extend({ el: "#loading" });
 
 $('.hit-refresh').click(function() {
     window.location.reload();
@@ -33,6 +35,7 @@ app.addRegions({
     subnav: '#subnav', // FIXME delete this
     main: '#main-content',
     modal: Modal,
+    loading: Loading,
     iframe: Iframe
 });
 
@@ -47,6 +50,7 @@ app.closeRegions = function() {
     app.subnav.close(); // FIXME delete this
     app.main.close();
     app.modal.close();
+    app.loading.close();
 };
 
 app.setBackgroundImg = function(img) {
@@ -204,6 +208,18 @@ app.clearStartPageTimeout = function() {
     if (app.startPageTimeoutId !== null) {
         clearTimeout(app.startPageTimeoutId);    
     }
+};
+
+// Loading message
+app.showLoading = function(promise, title) {
+    title || (title = 'Loading...');
+
+    var view = new LoadingView({title: title});
+    app.loading.show(view);
+
+    promise.done(function() {
+        view.close();
+    });
 };
 
 // Local Storage functions

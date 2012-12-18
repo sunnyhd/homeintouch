@@ -104,3 +104,15 @@ ul.hit-nav-right li a:hover {
 	}
 }
 /************************ END New Layout ************************/
+
+.modal.loading-spinner {
+	background-color: initial;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -12px 0 0 -12px;
+	
+	width: 200px;
+	margin-left: -100px;
+	z-index: 1050;
+}

@@ -46,6 +46,8 @@ exports.showMovieDetailView = function(id) {
         app.main.show(view);
     });
 
+    app.showLoading(loadingMovie);
+
     // If the collection is loaded
     if (!_.isUndefined(exports.movies) && exports.movies.models.length > 0) {
         movie = exports.movies.get(id);

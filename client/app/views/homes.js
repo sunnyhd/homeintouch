@@ -159,12 +159,18 @@ exports.HouseWidgetView = Backbone.Marionette.ItemView.extend({
 
 exports.TimeWheaterWidgetView = exports.HouseWidgetView.extend({
 
+    initialize: function() {
+        this.loading = new $.Deferred();
+        app.showLoading(this.loading.promise());
+    },
+
     displayCurrentDate: function(date) {
         $('#jdigiclock-currentDay').html(date);
     },
 
     refreshTimeWeatherStyles: function() {
         this.applyStyles();
+        this.loading.resolve();
     },
 
     onRender: function() {
