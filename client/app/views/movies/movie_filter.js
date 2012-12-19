@@ -9,9 +9,15 @@ module.exports = FilterPanelView.extend({
         'click #view-mode-group button': 'listViewClicked',
         'click #movie-genre-list li a' : 'filterByGenre',
         'click #movie-year-list li a' : 'filterByYear',
+
         'change input[name=search]': 'search',
         'click .search': 'search',
-        'click .clear': 'clear'
+        'click .clear': 'clear',
+
+        // Touch events
+        'click .touch-movies-search': 'openMobileSearchDialog',
+        'click .touch-movies-filter': 'openMobileFilterDialog',
+        'click .touch-movies-refresh': 'clearMobile'
 	},
 
     template: require('templates/movies/movie_filter'),
@@ -159,6 +165,18 @@ module.exports = FilterPanelView.extend({
 
     setCurrentFilterName: function(filterName) {
         this.$('#filter-name').text(filterName);
+    },
+
+    // Touch event handlers
+    openMobileSearchDialog: function() {
+
+    },
+
+    openMobileFilterDialog: function() {
+
+    },
+
+    clearMobile: function() {
+        
     }
-    
 });

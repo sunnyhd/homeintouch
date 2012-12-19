@@ -1,37 +1,55 @@
 <div class="movies-header">
-    <div id="view-mode-group" class="btn-group movies-header-option">
-      <button class="btn" href="#movies/cover-view"><i class="icon-th-large"></i></button>
-      <button class="btn" href="#movies/list-view"><i class="icon-th-list"></i></button>
+
+    <!-- Desktop Filters -->
+    <div class="visible-desktop">
+
+      <div id="view-mode-group" class="btn-group movies-header-option">
+        <button class="btn" href="#movies/cover-view"><i class="icon-th-large"></i></button>
+        <button class="btn" href="#movies/list-view"><i class="icon-th-list"></i></button>
+      </div>
+
+      <div class="input-append movies-header-option">
+        <input class="movie-search" type="text" name="search" value="{{ term }}" placeholder="Search movies...">
+        <div class="btn-group">
+          <button class="btn clear" href="#"><i class="icon-remove"></i></button>
+          <button class="btn search" href="#"><i class="icon-search"></i></button>
+          <button id="current-filter" class="btn dropdown-toggle" data-toggle="dropdown"><span id="filter-name">All Movies</span> <span class="caret"></span></button>
+          <ul class="dropdown-menu movie-state-filter">
+            <li><a data-filter="all" href="#">All Movies</a></li>
+            <li><a data-filter="recently-added" href="#">Recently Added</a></li>
+            <li><a data-filter="recently-viewed" href="#">Recently Viewed</a></li>
+            <li><a data-filter="unwatched" href="#">Unwatched</a></li>
+          </ul>
+        </div><!-- /btn-group -->
+      </div>
+
+      <div class="btn-group pull-right search-grp-2">
+        <a href="#" id="genre-filter" class="btn dropdown-toggle" data-toggle="dropdown" data-filter="genre">
+          <span class="current-genre">All Genres</span>&nbsp;
+          <span class="caret"></span>
+        </a>
+        <ul id="movie-genre-list" class="dropdown-menu"></ul>
+      </div>
+
+      <div class="btn-group pull-right search-grp-3">
+        <a href="#" id="year-filter" class="btn dropdown-toggle" data-toggle="dropdown" data-filter="year">
+          <span class="current-year">All Years</span>&nbsp;
+          <span class="caret"></span>
+        </a>
+        <ul id="movie-year-list" class="dropdown-menu"></ul>
+      </div>
+
     </div>
 
-    <div class="input-append movies-header-option search-grp-1">
-      <input class="movie-search" type="text" name="search" value="{{ term }}" placeholder="Search movies...">
-      <div class="btn-group">
-        <button class="btn clear" href="#"><i class="icon-remove"></i></button>
-        <button class="btn search" href="#"><i class="icon-search"></i></button>
-        <button id="current-filter" class="btn dropdown-toggle" data-toggle="dropdown"><span id="filter-name">All Movies</span> <span class="caret"></span></button>
-        <ul class="dropdown-menu movie-state-filter">
-          <li><a data-filter="all" href="#">All Movies</a></li>
-          <li><a data-filter="recently-added" href="#">Recently Added</a></li>
-          <li><a data-filter="recently-viewed" href="#">Recently Viewed</a></li>
-          <li><a data-filter="unwatched" href="#">Unwatched</a></li>
-        </ul>
-      </div><!-- /btn-group -->
+    <!-- Desktop Filters -->
+    <div class="hidden-desktop">
+
+      <ul class="hit-nav-proportional three touch-movies-nav">
+        <li><i class="touch-movies-search icon-search icon-white"></i><span class="show">&nbsp;Search</span></li>
+        <li><i class="touch-movies-filter icon-glass icon-white"></i><span class="show">&nbsp;Filter</span></li>
+        <li><i class="touch-movies-default icon-refresh icon-white"></i><span class="show">&nbsp;Default</span></li>
+      </ul>
+
     </div>
 
-    <div class="btn-group pull-right search-grp-2">
-      <a href="#" id="genre-filter" class="btn dropdown-toggle" data-toggle="dropdown" data-filter="genre">
-        <span class="current-genre">All Genres</span>&nbsp;
-        <span class="caret"></span>
-      </a>
-      <ul id="movie-genre-list" class="dropdown-menu"></ul>
-    </div>
-
-    <div class="btn-group pull-right search-grp-3">
-      <a href="#" id="year-filter" class="btn dropdown-toggle" data-toggle="dropdown" data-filter="year">
-        <span class="current-year">All Years</span>&nbsp;
-        <span class="caret"></span>
-      </a>
-      <ul id="movie-year-list" class="dropdown-menu"></ul>
-    </div>
 </div>
