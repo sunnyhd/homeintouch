@@ -200,9 +200,17 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
         "click .showNewMusic": "showMusicClicked"
     }),
 
+    initialize: function() {
+        this.firstDisplay = true;
+    },
+
     showLoading: function() {
         this.loading = new $.Deferred();
-        app.showLoading(this.loading.promise());
+        if (!this.firstDisplay) {
+            app.showLoading(this.loading.promise());
+        } else {
+            this.firstDisplay = false;
+        }
     },
 
     showEpisodesClicked: function() {
