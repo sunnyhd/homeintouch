@@ -231,15 +231,12 @@ app.clearStartPageTimeout = function() {
     }
 };
 
-// Loading message
-app.showLoading = function(promise, title) {
-    title || (title = 'Loading...');
-
-    var view = new LoadingView({title: title});
-    app.loading.show(view);
-
+// Loading modal message
+app.showLoading = function(promise) {
+    var loadingView = new LoadingView({title: 'Loading...'});
+    app.loading.show(loadingView);
     promise.done(function() {
-        view.close();
+        loadingView.close();
     });
 };
 

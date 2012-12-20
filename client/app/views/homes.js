@@ -234,7 +234,8 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
 
     onRender: function() {
         exports.HouseWidgetView.prototype.onRender.apply(this);
-        this.showMoviesClicked();
+        // this.showMoviesClicked();
+        this.showMusicClicked();
     },
 
     refreshRecentlyAdded: function() {
@@ -254,8 +255,9 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
         });
 
         // Adds the click handler on media widgets
-        $('.hit-icon-container .overview [data-media-action]', this.$el).click(function() {           
+        $('.hit-icon-container .overview [data-media-action]', this.$el).click(function() {
             app.router.navigate('#' + $(this).data('media-action'), {trigger: true});
+            return false;
         });
 
         this.onDataFinally();

@@ -38,6 +38,9 @@ exports.showMovieDetailView = function(id) {
     var def = new $.Deferred();
     var loadingMovie = def.promise();
 
+    // Show the loading view
+    app.showLoading(loadingMovie);
+
     // When the movie instace is loaded, displays its data
     loadingMovie.done(function() {
         updateNavForMovie(movie);
@@ -45,8 +48,6 @@ exports.showMovieDetailView = function(id) {
         var view = new MovieDetailView({ model: movie });
         app.main.show(view);
     });
-
-    app.showLoading(loadingMovie);
 
     // If the collection is loaded
     if (!_.isUndefined(exports.movies) && exports.movies.models.length > 0) {

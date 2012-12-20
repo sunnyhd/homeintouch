@@ -31,5 +31,4 @@ var Movies = module.exports = Backbone.Collection.extend({
         var ascending = sortSettings['movies_order'];
         return result * (ascending ? 1 : (-1));
     }
-
 });
