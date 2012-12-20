@@ -108,8 +108,9 @@ script(id="dashboard-home", type="text/template")
     .container-fluid
 
 script(id="my-house-template", type="text/template")
+  .hit-desktop-title.visible-desktop
+      span My House
   .hit-widget.hit-widget-desktop.clearfix.scrollable-x#my-house
-    //- .hit-desktop-title.visible-desktop(style="background-image: url(img/separators/my-house.jpg)")
     .hit-title.hidden-desktop My House
       ul.nav.pull-right
         li
@@ -139,8 +140,9 @@ script(id="my-house-template", type="text/template")
           .end
 
 script(id="my-library-template", type="text/template")
+  .hit-desktop-title.visible-desktop
+      span My Library
   .hit-widget.hit-widget-desktop.clearfix.scrollable-x#my-library
-    //- .hit-desktop-title.visible-desktop(style="background-image: url(img/separators/my-library.jpg)")
     .hit-title.hidden-desktop My Library
       ul.nav.pull-right
         li
@@ -183,8 +185,9 @@ script(id="time-wheater-template", type="text/template")
           .end
 
 script(id="recently-added-template", type="text/template")
+  .hit-desktop-title.visible-desktop
+      span Recently Added
   .hit-widget.hit-widget-desktop.medium.clearfix.scrollable-x#recently-added
-    //- .hit-desktop-title.visible-desktop(style="background-image: url(img/separators/recently-added.png)")
     .hit-title.hidden-desktop Recently Added <span class="loading">- Loading...</span>
       ul.nav.pull-right
         li
