@@ -10,7 +10,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     template: require('templates/movies/movie_item'),
 
-    iconNoImg: app.getBackgroundIcon('icons.media.defaultMovie', '#333'),
+    iconNoImg: app.getBackgroundIcon('media.defaultMovie', '#333333'),
 
     events: {
         'click .movieContainer': 'show'
