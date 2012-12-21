@@ -1,5 +1,7 @@
 var app = require('app');
 var FilterPanelView = require('views/filtered_panel');
+var SearchModalView = require('views/movies/movie_mobile_search_modal');
+var FilterModalView = require('views/movies/movie_mobile_filter_modal');
 var moviesController = app.controller('movies');
 
 module.exports = FilterPanelView.extend({
@@ -17,7 +19,7 @@ module.exports = FilterPanelView.extend({
         // Touch events
         'click .touch-movies-search': 'openMobileSearchDialog',
         'click .touch-movies-filter': 'openMobileFilterDialog',
-        'click .touch-movies-refresh': 'clearMobile'
+        'click .touch-movies-default': 'clearMobile'
 	},
 
     template: require('templates/movies/movie_filter'),
@@ -36,8 +38,12 @@ module.exports = FilterPanelView.extend({
     onRender: function() {
         this.$('button.clear').hide();
         this.$('button.search').show();
-        this.loadGenres( moviesController.filters.genres );
-        this.loadYears( moviesController.filters.years );
+        
+        this.genres = _.compact(_.union([this.AllGenres], moviesController.filters.genres));
+        this.years = _.compact(_.union([this.AllYears], moviesController.filters.years));
+
+        this.renderGenres( this.genres );
+        this.renderYears( this.years );
     },
 
     setListBtnActive: function() {
@@ -50,32 +56,18 @@ module.exports = FilterPanelView.extend({
         this.$('#view-mode-group button[href="#movies/cover-view"]').addClass('active');
     },
 
-    loadGenres: function(genreList) {
-
-    	var allListItem = $('<li><a href="#" data-genre="' + this.AllGenres + '">' + this.AllGenres + '</a></li>');
-    	this.$('#movie-genre-list').append(allListItem);
-
-        if (genreList) {
-        	for (var i = 0; i < genreList.length; i++) {
-        		var genre = genreList[i];
-        		var listItem = $('<li><a href="#" data-genre="' + genre + '">' + genre + '</a></li>');
-        		this.$('#movie-genre-list').append(listItem);
-        	}
-        }
+    renderGenres: function(genreList) {
+        _.each(genreList, function(genre) {
+            var listItem = $('<li><a href="#" data-genre="' + genre + '">' + genre + '</a></li>');
+            this.$('#movie-genre-list').append(listItem);
+        }, this);
     },
 
-    loadYears: function(yearList) {
-
-        var allListItem = $('<li><a href="#" data-year="' + this.AllYears + '">' + this.AllYears + '</a></li>');
-        this.$('#movie-year-list').append(allListItem);
-
-        if (yearList) {
-            for (var i = 0; i < yearList.length; i++) {
-                var year = yearList[i];
-                var listItem = $('<li><a href="#" data-year="' + year + '">' + year + '</a></li>');
-                this.$('#movie-year-list').append(listItem);
-            }
-        }
+    renderYears: function(yearList) {
+        _.each(yearList, function(year) {
+            var listItem = $('<li><a href="#" data-year="' + year + '">' + year + '</a></li>');
+            this.$('#movie-year-list').append(listItem);
+        }, this);
     },
 
     listViewClicked: function(e) {
@@ -85,9 +77,28 @@ module.exports = FilterPanelView.extend({
         return false;
     },
 
+    filterByGenreAndYear: function(filters) {
+
+        if (filters.year === this.AllYears) {
+            delete this.filter.year;
+        } else {
+            this.filter['year'] = filters.year;
+        }
+
+        if (filters.genre === this.AllGenres) {
+            delete this.filter.genre;
+        } else {
+            this.filter['genre'] = filters.genre;
+        }
+
+        console.log('filterByGenreAndYear');
+        console.log(this.filter);
+        this.listMovies();
+    },
+
     filterByGenre: function(event) {
-    	var $element = $(event.currentTarget);
-    	var genre = $element.data('genre');
+        var $element = $(event.currentTarget);
+        var genre = $element.data('genre');
     	if (genre === this.AllGenres) {
     		delete this.filter.genre;
     	} else {
@@ -98,13 +109,14 @@ module.exports = FilterPanelView.extend({
         $filterBtn.find('.current-genre').html(genre);
         $filterBtn.parent().removeClass('open');
 
-    	this.listMovies();        
+    	this.listMovies();
         return false;
     },
 
     filterByYear: function(event) {
         var $element = $(event.currentTarget);
         var year = $element.data('year');
+
         if (year === this.AllYears) {
             delete this.filter.year;
         } else {
@@ -169,14 +181,32 @@ module.exports = FilterPanelView.extend({
 
     // Touch event handlers
     openMobileSearchDialog: function() {
+        var modal = new SearchModalView( { term: this.model.get('term') } );
+        modal.on('media-movies:search', function(criteria) {
+            this.search(criteria);
+        }, this);
 
+        app.modal.show(modal);
     },
 
     openMobileFilterDialog: function() {
+        var modal = new FilterModalView({
+            genres: this.genres,
+            years: this.years,
+            currentGenre: this.filter['genre'],
+            currentYear: this.filter['year']
+        });
+        modal.on('media-movies:filter', function(filters) {
+            console.log(filters);
+            this.filterByGenreAndYear(filters);
+        }, this);
 
+        app.modal.show(modal);
     },
 
     clearMobile: function() {
-        
+        this.filter = {};
+        this.search('');
+        this.collection.clearLastN();
     }
 });

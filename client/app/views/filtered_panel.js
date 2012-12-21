@@ -13,8 +13,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     // Event Handlers
 
-    search: function() {
-        var term = this.$('input[name=search]').val();
+    search: function(term) {
+
+        if (_.isUndefined(term)) {
+            term = this.$('input[name=search]').val();
+        }
+        
         this.model.set('term', term);
 
         this.$('button.clear').show();
