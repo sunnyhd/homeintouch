@@ -377,9 +377,12 @@ app.loadMediaData = function() {
     var moviesController = app.controller('movies');
 
     // Loads movie colletion, genres and years
-    moviesController.movies.fetch();
-    $.get('/api/genres/movies').done(function(data) { moviesController.filters.genres = data; });
-    $.get('/api/years/movies').done(function(data) { moviesController.filters.years = data; });
+    var loadingMovies = moviesController.movies.fetch();
+    var loadingGenres = $.get('/api/genres/movies').done(function(data) { moviesController.filters.genres = data; });
+    var loadingYears  = $.get('/api/years/movies').done(function(data) { moviesController.filters.years = data; });
+
+    // When the three sources was loaded
+    moviesController.loading = $.when(loadingMovies, loadingGenres, loadingYears);
 }
 app.vent.on('media:data-changed', function(address, value){
     app.loadMediaData();
