@@ -558,9 +558,23 @@ app.isTouchDevice = function() {
   }  
 }
 
+app.loadCss = function(filename) {
+  var fileref = document.createElement("link");
+  fileref.setAttribute("rel", "stylesheet");
+  fileref.setAttribute("type", "text/css");
+  fileref.setAttribute("href", filename);
+  if (typeof fileref!="undefined")
+    document.getElementsByTagName("head")[0].appendChild(fileref);
+}
+
 app.newTab = function(url) {
     window.open(url, '_blank');
     window.focus();
+}
+
+// Load touch specific styles
+if (app.isTouchDevice()) {
+    app.loadCss('/css/hit-touch-devices.css');
 }
 
 // Widget color classes

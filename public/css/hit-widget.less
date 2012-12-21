@@ -19,12 +19,31 @@
 }
 
 @media (min-width: 979px) {
+
+	.room-device-group:hover {
+		.hit-desktop-title {
+			background-color: rgba(31, 31, 31, 0.9);
+		}
+		.hit-icon-container-desktop-options {
+			opacity: 1;
+			// display: block;
+		}
+		// .hit-icon-container {
+		// 	margin-right: 50px;
+		// }
+	}
+
 	.hit-desktop-title {
 		text-align: left;
 		padding: 5px 10px;
 		color: white;
 		border-radius: 10px 10px 0px 0px;
-		background-color: rgba(31, 31, 31, 0.9);
+		
+		background-color: rgba(0, 0, 0, 0.5);
+		transition: background-color 1s;
+		-moz-transition: background-color 1s; /* Firefox 4 */
+		-webkit-transition: background-color 1s; /* Safari and Chrome */
+		-o-transition: background-color 1s; /* Opera */
 	}
 
 	.hit-widget.hit-widget-desktop {
@@ -35,10 +54,22 @@
 	/** Desktop options */
 	.hit-icon-container-desktop-options {
 		margin: 10px;
-		position: relative;
-		right: 0px;
 		float: right;
 		z-index: 10;
+
+		position: absolute;
+		right: 40px;
+
+		// position: relative;
+		// right: 0px;	
+
+		// display: none;
+		opacity: 0;
+		transition: opacity 1s;
+		-moz-transition: opacity 1s; /* Firefox 4 */
+		-webkit-transition: opacity 1s; /* Safari and Chrome */
+		-o-transition: opacity 1s; /* Opera */
+
 		ul {
 			width: 34px;
 		    margin: 0px;
@@ -66,6 +97,14 @@
 		    }
 		}
 	}
+
+	.hit-icon-container {
+		// margin-right: 10px;
+		overflow: hidden;
+	}
+	// :hover {
+	// 	margin-right: 50px;
+	// }
 }
 
 .hit-widget div.alert {
@@ -75,20 +114,6 @@
 .hit-icon-container {
 	margin: 10px;
 }
-/* Desktop */
-@media (min-width: 979px) {
-	.hit-icon-container {
-		margin-right: 50px;
-		overflow: hidden;
-	}
-}
-// /* Touchable */
-// @media (max-width: 979px) {
-// 	.hit-icon-container {
-// 		margin-right: -15px;
-// 	}
-// }
-
 
 /* Override slider styles to positionate the controls */
 .hit-icon-container .hit-slider-control { top: 18px; }
