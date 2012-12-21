@@ -692,16 +692,17 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
 
         var location = this.model.get('timeWheaterConfiguration').get('location');
 
-        $('##digiclock-desktop', this.$el).jdigiclock({
+        $('#digiclock-desktop', this.$el).jdigiclock({
             proxyUrl: 'api/jdigiclock/proxy',
             dayCallback: $.proxy(this.displayCurrentDate, this),
             loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
-            weatherLocationCode: location
+            weatherLocationCode: location,
+            jdigiclockType: 'big'
         });
     },
 
     displayCurrentDate: function(date) {
-        //$('#jdigiclock-currentDay').html(date);
+        // $('.hit-current-day p', this.$el).first().html(date);
     },
 
     refreshTimeWeatherStyles: function() {

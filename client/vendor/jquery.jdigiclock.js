@@ -28,12 +28,14 @@
                 proxyType: 'php',
                 proxyUrl: '',
                 dayCallback: null,
-                loadedCallback: null
+                loadedCallback: null,
+                jdigiclockType: 'small' // small | big
             };
 
             var regional = [];
             regional['en'] = {
                 monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                longMonthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                 dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
             }
 
@@ -55,7 +57,9 @@
                 $this.proxyUrl = o.proxyUrl;
                 $this.dayCallback = o.dayCallback;
                 $this.loadedCallback = o.loadedCallback;
+                $this.jdigiclockType = o.jdigiclockType;
                 $this.currDate = '';
+                $this.longCurrDate = '';
                 $this.timeUpdate = '';
 
 
@@ -120,6 +124,7 @@
         old_minutes = ((old_minutes <  10) ? "0" : "") + old_minutes;
         // date
         el.currDate = el.lang.dayNames[now.getDay()] + ',&nbsp;' + now.getDate() + '&nbsp;' + el.lang.monthNames[now.getMonth()];
+        el.longCurrDate = el.lang.dayNames[now.getDay()] + ',&nbsp;' + now.getDate() + '&nbsp;' + el.lang.longMonthNames[now.getMonth()];
         // time update
         el.timeUpdate = el.currDate + ',&nbsp;' + now_hours + ':' + now_minutes;
 
@@ -297,11 +302,27 @@
             for (var i in data.forecast) {
                 var d_date = new Date(data.forecast[i].day_date);
                 var day_name = el.lang.dayNames[d_date.getDay()];
-                var forecast = (i === "0") ? '<div class="hit-icon hit-current-day">' : '<div class="hit-icon">';
-                forecast    += '<p>' + day_name + '</p>';
+
+                var forecast = '';
+
+                // If is the first day on the collection
+                if (i === "0") {
+                    forecast = '<div class="hit-icon hit-current-day">';
+                } else {
+                    forecast = '<div class="hit-icon">';
+                }
+
+                // Big and first element
+                if (el.jdigiclockType === 'big' && i === "0") {
+                    forecast += '<p><b>' + data.city + '</b><br>' + el.longCurrDate + '</p>';
+                } else {
+                    forecast += '<p>' + day_name + '</p>';
+                }
+
                 forecast    += '<img src="' + el.weatherImagesPath + data.forecast[i].day_icon + '.png" alt="' + data.forecast[i].day_text + '" title="' + data.forecast[i].day_text + '" />';
                 forecast    += '<p>' + data.forecast[i].day_htemp + '&deg;&nbsp;/&nbsp;' + data.forecast[i].day_ltemp + '&deg;</p>';
                 forecast    += '</div>';
+
                 el.find('.forecast-hit').append(forecast);
             }
 
