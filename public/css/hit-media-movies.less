@@ -2,6 +2,22 @@
 
 /* SEARCH FILTERS STYLES */
 
+@media (max-width: 979px) {
+	#movie-filter.row-fluid {
+		position: fixed;
+		top: 50px;
+		left: 0px;
+		width: 100%;
+		z-index: 10;
+		.movies-header {
+  			border-radius: 5px;
+  		}
+	}
+	#movie-list {
+		margin-top: 50px;
+	}
+}
+
 #movie-filter .movies-header {
 	.with-border-color(@gray);
 	padding: 5px 10px;
