@@ -17,10 +17,10 @@ module.exports = FilteredListView.extend({
         } else {
             this.$('.movies').append(iv.el);
         }
-    },
+    }//,
 
-    matchers: function(movie) {
-        return movie.get('label');
-    }
+    // matchers: function(movie) {
+    //     return movie.get('label');
+    // }
     
 });
