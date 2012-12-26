@@ -381,10 +381,18 @@ app.loadMediaData = function() {
     var loadingGenres = $.get('/api/genres/movies').done(function(data) { moviesController.filters.genres = data; });
     var loadingYears  = $.get('/api/years/movies').done(function(data) { moviesController.filters.years = data; });
 
-    // When the three sources was loaded
+    // When the three sources were loaded
     moviesController.loading = $.when(loadingMovies, loadingGenres, loadingYears);
+
+    var tvShowsController = app.controller('tvshows');
+
+    var loadingSeriesGenres = $.get('/api/genres/tvshows').done(function(data) { tvShowsController.filters.genres = data; });
+    var loadingEpisodeNames = $.get('/api/episodes/label').done(function(data) { tvShowsController.filters.episodeLabels = data; });
+
+    tvShowsController.loading = $.when(loadingSeriesGenres, loadingEpisodeNames);
 }
-app.vent.on('media:data-changed', function(address, value){
+
+app.vent.on('media:data-changed', function(address, value) {
     app.loadMediaData();
     console.log('Media data updated on client.');
 });
