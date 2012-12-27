@@ -386,10 +386,11 @@ app.loadMediaData = function() {
 
     var tvShowsController = app.controller('tvshows');
 
+    var loadingSeries = tvShowsController.shows.fetch();
     var loadingSeriesGenres = $.get('/api/genres/tvshows').done(function(data) { tvShowsController.filters.genres = data; });
     var loadingEpisodeNames = $.get('/api/episodes/label').done(function(data) { tvShowsController.filters.episodeLabels = data; });
 
-    tvShowsController.loading = $.when(loadingSeriesGenres, loadingEpisodeNames);
+    tvShowsController.loading = $.when(loadingSeries, loadingSeriesGenres, loadingEpisodeNames);
 }
 
 app.vent.on('media:data-changed', function(address, value) {

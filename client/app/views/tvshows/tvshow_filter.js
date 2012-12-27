@@ -1,4 +1,5 @@
 var app = require('app');
+var TvShows = require('collections/tvshows');
 var FilterPanelView = require('views/filtered_panel');
 var SearchModalView = require('views/tvshows/tvshow_mobile_search_modal');
 var FilterModalView = require('views/tvshows/tvshow_mobile_filter_modal');
@@ -78,7 +79,21 @@ module.exports = FilterPanelView.extend({
         this.$('button[data-toggle="dropdown"]').parent().removeClass('open');
 
         return false;
+    },
 
+    refreshDisplayedTvShows: function() {
+        var opts = {};
+
+        opts = {
+            filters: {
+                genre: this.filter['genre']
+            },
+            criteria: this.model.get('term')
+        };
+
+        console.log(opts);
+        var originalCollection = new TvShows(this.collections.originalModels);
+        this.resetCollection( originalCollection.filterAndSortBy(opts) );
     },
 
     getListAllFilter: function() {
@@ -90,7 +105,7 @@ module.exports = FilterPanelView.extend({
     },
 
     listTvShows: function() {
-    	this.collection.fetch({data: this.filter});
+    	this.refreshDisplayedTvShows();
     },
 
     setCurrentFilterName: function(filterName) {
@@ -101,7 +116,8 @@ module.exports = FilterPanelView.extend({
     openMobileSearchDialog: function() {
         var modal = new SearchModalView( { term: this.model.get('term') } );
         modal.on('media-tvshow:search', function(criteria) {
-            this.search(criteria);
+            this.performSearch(criteria);
+            this.refreshDisplayedTvShows();
         }, this);
 
         app.modal.show(modal);
@@ -113,7 +129,6 @@ module.exports = FilterPanelView.extend({
             currentGenre: this.filter['genre']
         });
         modal.on('media-tvshow:filter', function(filters) {
-            console.log(filters);
             this.filterByGenre(filters);
         }, this);
 
@@ -122,7 +137,7 @@ module.exports = FilterPanelView.extend({
 
     clearMobile: function() {
         this.filter = {};
-        this.search('');
+        this.performSearch('');
+        this.refreshDisplayedTvShows();
     }
-    
 });

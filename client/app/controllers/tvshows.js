@@ -23,15 +23,9 @@ exports.showTVShowList = function() {
         updateNavs();
         updateConfigurationOptions();
 
-        var that = this;
-
-        var successCallback = function(collection) {
-            _.each(collection.models, function(model) {
-                model.set('episodes', new Episodes(exports.filters.episodeLabels[model.get('tvshowid')]));
-            });
-        };
-
-        exports.shows.fetch({success: successCallback});
+        _.each(exports.shows.models, function(model) {
+            model.set('episodes', new Episodes(exports.filters.episodeLabels[model.get('tvshowid')]));
+        });
 
         var view = new TVShowContainerView({ collection: exports.shows });
         app.main.show(view);

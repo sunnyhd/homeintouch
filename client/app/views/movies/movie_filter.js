@@ -102,6 +102,7 @@ module.exports = FilterPanelView.extend({
 
         this.refreshDisplayedMovies();
     },
+
     filterByGenre: function(event) {
         var $element = $(event.currentTarget);
         var genre = $element.data('genre');
@@ -113,6 +114,7 @@ module.exports = FilterPanelView.extend({
     	this.filterByGenreAndYear({genre: genre});
         return false;
     },
+    
     filterByYear: function(event) {
         var $element = $(event.currentTarget);
         var year = $element.data('year').toString();
@@ -134,10 +136,10 @@ module.exports = FilterPanelView.extend({
         this.$('button[data-toggle="dropdown"]').parent().removeClass('open');
         return false;
     },
+
     setCurrentMovieListType: function(filterName) {
         this.$('#filter-name').text(filterName);
     },
-
 
     refreshDisplayedMovies: function() {
         var opts = {};

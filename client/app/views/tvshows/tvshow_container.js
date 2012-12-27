@@ -1,3 +1,4 @@
+var TvShows = require('collections/tvshows');
 var TVShowListView = require('views/tvshows/tvshow_list');
 var TVShowFilterView = require('views/tvshows/tvshow_filter');
 
@@ -18,11 +19,12 @@ module.exports = Backbone.Marionette.Layout.extend({
     initialEvents: function() {},
 
     onRender: function() {
-        
-        this.listView = new TVShowListView({ collection: this.collection });
-        this.filterView = new TVShowFilterView({ collection: this.collection });
 
-        this.filterView.on('searchFired', this.performSearch, this);
+        // Clones the movie collection
+        this.filteredCollection = new TvShows( _.map(this.collection.models, function(model) { return model.clone(); }) );
+        
+        this.listView = new TVShowListView({ collection: this.filteredCollection });
+        this.filterView = new TVShowFilterView({ collection: this.filteredCollection });
 
         this.filter.show(this.filterView);
         this.list.show(this.listView);
