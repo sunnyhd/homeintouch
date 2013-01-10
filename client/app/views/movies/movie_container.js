@@ -7,10 +7,6 @@ var MovieSelectorListView = require('views/movies/movie_selector_list');
 
 module.exports = Backbone.Marionette.Layout.extend({
 
-    events: {
-        'click .mobile-search-menu': 'onToggleSearchComponent'
-    },
-
     template: require('templates/movies/movie_container'),
 
     regions: {
@@ -31,7 +27,7 @@ module.exports = Backbone.Marionette.Layout.extend({
         this.filteredCollection = new Movies( _.map(this.collection.models, function(model) { return model.clone(); }) );
 
         this.filterView = new MovieFilterView({ collection: this.filteredCollection });
-        this.filterView.on('searchFired', this.performSearch, this);
+        // this.filterView.on('searchFired', this.performSearch, this);
         this.filter.show(this.filterView);
 
         if (this.options.mode === 'cover') {
@@ -46,24 +42,5 @@ module.exports = Backbone.Marionette.Layout.extend({
         app.vent.on('refresh-movie-views', this.render, this.listView);
 
         this.list.show(this.listView);
-    },
-
-    performSearch: function(filterModel) {
-        this.listView.model.set(filterModel.attributes);
-    },
-
-    onToggleSearchComponent: function() {
-        var $btnShowMenu = this.$el.find('.mobile-search-menu');
-        var $search = this.$el.find('.movies-header');
-
-        if ($search.css('display') === 'block') {
-            $search.hide( 'slide', {}, 500 );
-            $search.removeClass('mobile-showed');
-            $btnShowMenu.removeClass('open');
-        } else {
-            $search.show( 'slide', {}, 500 );
-            $search.addClass('mobile-showed');
-            $btnShowMenu.addClass('open');
-        }        
     }
 });

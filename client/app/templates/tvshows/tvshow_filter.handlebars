@@ -1,21 +1,35 @@
 <div class="tvshow-header">
-    <div class="input-append tvshow-header-option search-grp-1">
-      <input class="tvshow-search" type="text" name="search" value="{{ term }}" placeholder="Search series...">
-      <div class="btn-group">
-        <button class="btn clear" href="#"><i class="icon-remove"></i></button>
-        <button class="btn search" href="#"><i class="icon-search"></i></button>
-        <button id="current-filter" class="btn dropdown-toggle" data-toggle="dropdown"><span id="filter-name">All Series</span> <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-          <li><a data-filter="all" href="#">All Series</a></li>
-          <li><a data-filter="unwatched" href="#">Unwatched</a></li>
-        </ul>
-      </div><!-- /btn-group -->
-    </div>
-    <div class="pull-right search-grp-2">
-      <div class="btn-group">
+    <!-- Desktop Filters -->
+    <div class="visible-desktop">
+
+      <div class="input-append tvshow-header-option">
+        <input class="tvshow-search" type="text" name="search" value="{{ term }}" placeholder="Search series...">
+        <div class="btn-group">
+          <button class="btn clear" href="#"><i class="icon-remove"></i></button>
+          <button class="btn search" href="#"><i class="icon-search"></i></button>
+          <button id="current-filter" class="btn dropdown-toggle" data-toggle="dropdown"><span id="filter-name">All Series</span> <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a data-filter="all" href="#">All Series</a></li>
+            <li><a data-filter="unwatched" href="#">Unwatched</a></li>
+          </ul>
+        </div><!-- /btn-group -->
+      </div>
+      <div class="btn-group pull-right search-grp-2">
         <a href="#" id="genre-filter" class="btn">Genre: All</a>
         <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
         <ul id="tvshow-genre-list" class="dropdown-menu"></ul>
       </div>
+
+    </div>
+
+    <!-- Desktop Filters -->
+    <div class="hidden-desktop">
+
+      <ul class="hit-nav-proportional three touch-tvshow-nav">
+        <li class="touch-tvshow-search"><i class="icon-search icon-white"></i><span class="show">&nbsp;Search</span></li>
+        <li class="touch-tvshow-filter"><i class="icon-glass icon-white"></i><span class="show">&nbsp;Filter</span></li>
+        <li class="touch-tvshow-default"><i class="icon-refresh icon-white"></i><span class="show">&nbsp;Default</span></li>
+      </ul>
+
     </div>
 </div>

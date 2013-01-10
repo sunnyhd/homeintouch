@@ -9,25 +9,25 @@ var MediaConfigurationOptionsView = require('views/settings/media_configuration_
 var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 
+exports.shows = new TVShows();
+exports.loading = null; // Holds the promise reference to the previous collection
+
+exports.filters = {};
+exports.filters.genres = null;
+exports.filters.episodeLabels = null;
+
 exports.showTVShowList = function() {
 
-    updateNavs();
-    updateConfigurationOptions();
+    exports.loading.done(function() {
 
-    exports.shows = new TVShows();
-    var view = new TVShowContainerView({ collection: exports.shows });
-    var that = this;
+        updateNavs();
+        updateConfigurationOptions();
 
-    var successCallback = function(collection) {
-        _.each(collection.models, function(model) {
-            model.set('episodes', new Episodes(that.data[model.get('tvshowid')]));
+        _.each(exports.shows.models, function(model) {
+            model.set('episodes', new Episodes(exports.filters.episodeLabels[model.get('tvshowid')]));
         });
-    };
-    
-    $.get('/api/episodes/label')
-    .done(function(data) {
-        that.data = data;
-        exports.shows.fetch({success: successCallback});
+
+        var view = new TVShowContainerView({ collection: exports.shows });
         app.main.show(view);
     });
 

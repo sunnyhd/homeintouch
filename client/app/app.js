@@ -1,6 +1,7 @@
 var Router = require('router');
 var DPT_Transfomer = require('lib/dpt');
 var ModalManager = require('lib/modal_manager');
+var LoadingView = require('views/loading');
 
 var app = module.exports = new Backbone.Marionette.Application();
 var socket;
@@ -11,6 +12,7 @@ app.decimalToEibd = function (n){return n * 0x32 + 0x800 };
 
 var Modal = ModalManager.extend({ el: "#modal" });
 var Iframe = ModalManager.extend({ el: "#iframe" });
+var Loading = ModalManager.extend({ el: "#loading" });
 
 $('.hit-refresh').click(function() {
     window.location.reload();
@@ -33,6 +35,7 @@ app.addRegions({
     subnav: '#subnav', // FIXME delete this
     main: '#main-content',
     modal: Modal,
+    loading: Loading,
     iframe: Iframe
 });
 
@@ -47,6 +50,7 @@ app.closeRegions = function() {
     app.subnav.close(); // FIXME delete this
     app.main.close();
     app.modal.close();
+    app.loading.close();
 };
 
 app.setBackgroundImg = function(img) {
@@ -141,42 +145,63 @@ app.hitIcons = function($el) {
  */
 app.loadIcons = function(container, color) {
     var $container = $(container);
-    var appliedColor = "#FFFFFF";
+    var appliedColor = "0xFFFFFF";
     if (color) {
-        appliedColor = color;
+        if (color.indexOf('#') === 0) {
+            appliedColor = "0x" + color.substring(1);
+        } else {
+             appliedColor = color;
+        }
     }
+
+    var urlRoot = '/api/svg/';
 
     $.each($('.hit-icon[data-hit-icon-type]', $container), function (idx, icon) {
         var iconType = $(icon).data('hit-icon-type');
-        var svgIcon = eval("icons." + iconType).replace(/#000000/g, appliedColor);
-        if (svgIcon != '') {
-            $(icon).css('background-image', "url(\"data:image/svg+xml;utf8,"+svgIcon+"\")");
-        }
+        var url = urlRoot + appliedColor + '/' + iconType.replace(/\./g, '-') + '.svg';
+        $(icon).css('background-image', "url(\""+url+"\")");
     });
 };
 
 app.changeIconState = function($icon, color) {
 
+    var appliedColor = "0xFFFFFF";
+    if (color) {
+        if (color.indexOf('#') === 0) {
+            appliedColor = "0x" + color.substring(1);
+        } else {
+             appliedColor = color;
+        }
+    }
+
+    var urlRoot = '/api/svg/';
+
     if ($icon.length) {
         var iconType = $icon.data('hit-icon-type');
         if (iconType) {
-            var svgIcon = eval("icons." + iconType).replace(/#000000/g, color);
-            if (svgIcon != '') {
-                $icon.css('background-image', "url(\"data:image/svg+xml;utf8,"+svgIcon+"\")");
-            }
+            var url = urlRoot + appliedColor + '/' + iconType.replace(/\./g, '-') + '.svg';
+            $icon.css('background-image', "url(\""+url+"\")");
         }
     }
 };
 
-
 /** To load only one time the icons */
 app.getBackgroundIcon = function(iconPath, color) {
-    var svgIcon = eval(iconPath).replace(/#000000/g, color);
-    if (svgIcon != '') {
-        return "url(\"data:image/svg+xml;utf8,"+svgIcon+"\")";
+    var urlRoot = '/api/svg/';
+
+    var appliedColor = "0xFFFFFF";
+    if (color) {
+        if (color.indexOf('#') === 0) {
+            appliedColor = "0x" + color.substring(1);
+        } else {
+             appliedColor = color;
+        }
     }
-    return '';
+
+    var url = urlRoot + appliedColor + '/' + iconPath.replace(/\./g, '-') + '.svg';
+    return "url(\""+url+"\")";
 };
+
 app.applyBackgroundIcon = function($container, iconStr) {
     $container.css('background-image', iconStr);
 };
@@ -204,6 +229,15 @@ app.clearStartPageTimeout = function() {
     if (app.startPageTimeoutId !== null) {
         clearTimeout(app.startPageTimeoutId);    
     }
+};
+
+// Loading modal message
+app.showLoading = function(promise) {
+    var loadingView = new LoadingView({title: 'Loading...'});
+    app.loading.show(loadingView);
+    promise.done(function() {
+        loadingView.close();
+    });
 };
 
 // Local Storage functions
@@ -343,11 +377,23 @@ app.loadMediaData = function() {
     var moviesController = app.controller('movies');
 
     // Loads movie colletion, genres and years
-    moviesController.movies.fetch();
-    $.get('/api/genres/movies').done(function(data) { moviesController.filters.genres = data; });
-    $.get('/api/years/movies').done(function(data) { moviesController.filters.years = data; });
+    var loadingMovies = moviesController.movies.fetch();
+    var loadingGenres = $.get('/api/genres/movies').done(function(data) { moviesController.filters.genres = data; });
+    var loadingYears  = $.get('/api/years/movies').done(function(data) { moviesController.filters.years = data; });
+
+    // When the three sources were loaded
+    moviesController.loading = $.when(loadingMovies, loadingGenres, loadingYears);
+
+    var tvShowsController = app.controller('tvshows');
+
+    var loadingSeries = tvShowsController.shows.fetch();
+    var loadingSeriesGenres = $.get('/api/genres/tvshows').done(function(data) { tvShowsController.filters.genres = data; });
+    var loadingEpisodeNames = $.get('/api/episodes/label').done(function(data) { tvShowsController.filters.episodeLabels = data; });
+
+    tvShowsController.loading = $.when(loadingSeries, loadingSeriesGenres, loadingEpisodeNames);
 }
-app.vent.on('media:data-changed', function(address, value){
+
+app.vent.on('media:data-changed', function(address, value) {
     app.loadMediaData();
     console.log('Media data updated on client.');
 });
@@ -521,9 +567,23 @@ app.isTouchDevice = function() {
   }  
 }
 
+app.loadCss = function(filename) {
+  var fileref = document.createElement("link");
+  fileref.setAttribute("rel", "stylesheet");
+  fileref.setAttribute("type", "text/css");
+  fileref.setAttribute("href", filename);
+  if (typeof fileref!="undefined")
+    document.getElementsByTagName("head")[0].appendChild(fileref);
+}
+
 app.newTab = function(url) {
     window.open(url, '_blank');
     window.focus();
+}
+
+// Load touch specific styles
+if (app.isTouchDevice()) {
+    app.loadCss('/css/hit-touch-devices.css');
 }
 
 // Widget color classes

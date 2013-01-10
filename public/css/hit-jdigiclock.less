@@ -2,34 +2,34 @@
 .hit-clock {
     width: 730px;
 
-    #plugin_container {
+    .jdigiclock_plugin_container {
         background: none;
-        width: initial;
+        width: inherit;
         height: 100px;
 
-        #digital_container {
+        .jdigiclock_digital_container {
             background: none;
             width: initial;
             height: initial;
             top: 0px;
-            #clock {
+            .jdigiclock_clock {
                 float: none;
                 margin: 0px;
-                #hours, #minutes {
+                .jdigiclock_hours, .jdigiclock_minutes {
                     transform: scale(0.5);
                     -webkit-transform: scale(0.5);
                     float: none;
                     position: absolute;
                     top: -55px;
                 }
-                #hours {
+                .jdigiclock_hours {
                     left: -55px;
                 }
-                #minutes {
+                .jdigiclock_minutes {
                     left: 40px;
                 }
             }
-            #weather {
+            .jdigiclock_weather {
                 color: black;
                 width: 200px;
                 height: initial;
@@ -44,12 +44,87 @@
         }
 
         /* WHEATER */
-        #forecast_container {
+        .jdigiclock_forecast_container {
             left: 200px;
             height: 100px;
             background-image: none;
             img {
                 max-width: 95%;
+            }
+        }
+    }
+}
+
+.hit-clock-desktop {
+    width: 100%;
+
+    .jdigiclock_plugin_container {
+        background: none;
+        width: inherit;
+        height: 420px;
+
+        .jdigiclock_digital_container {
+            background: none;
+            width: initial;
+            height: initial;
+            top: 0px;
+            .jdigiclock_clock {
+                float: none;
+                margin: 0px;
+                .jdigiclock_hours, .jdigiclock_minutes {
+                    transform: scale(0.5);
+                    -webkit-transform: scale(0.5);
+                    float: none;
+                    position: absolute;
+                    top: -55px;
+                }
+                .jdigiclock_hours {
+                    left: 40px;
+                }
+                .jdigiclock_minutes {
+                    left: 135px;
+                }
+            }
+            .jdigiclock_weather {
+                color: black;
+                width: 200px;
+                height: initial;
+                top: 60px;
+                #temp {
+                    margin: 15px 45px 0 0;
+                    .temp {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        /* WHEATER */
+        .jdigiclock_forecast_container {
+            left: 0px;
+            top: 100px;
+            height: 100px;
+            width: 100%;
+            background-image: none;
+            .forecast-hit {
+                .hit-icon.hit-current-day {
+                    width: 100%;
+                    margin: 10px 0px;
+                    img {
+                        max-width: 60%;
+                    }
+                }
+                .hit-icon {
+                    text-align: center;
+                    border: none;
+                    width: 95px;
+                    img {
+                        max-width: 90%;
+                    }
+                }
+                .hit-icon~.hit-icon {
+                    margin: 0px;
+                }
             }
         }
     }

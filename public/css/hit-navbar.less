@@ -40,3 +40,42 @@
 		display: inline-block;
 	}
 }
+
+/** Proportional navbar */
+.hit-nav-proportional(@cols: 1) {
+	list-style: none;
+	.clearfix;
+	margin: 0px;
+
+	li {
+		width: 100% / @cols;
+		text-align: center;
+		float: left;
+		cursor: pointer;
+	}
+}
+.hit-nav-proportional.three {
+	.hit-nav-proportional(3);
+}
+
+/** Dashboard left container */
+.hit-nav-proportional.desktop-left-container {
+	margin-bottom: 20px;
+	li {
+		a {
+			margin: 2px 4px;
+			color: white;
+			background: rgba(51, 51, 51, 0.8);
+			&:hover {
+				color: white;
+				background: rgba(51, 51, 51, 1);
+			}
+		}
+	}
+	li.active > a {
+		background: rgba(122, 122, 122, 0.8);
+		&:hover {
+			background: rgba(122, 122, 122, 0.8);
+		}
+	}
+}

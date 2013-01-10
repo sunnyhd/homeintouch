@@ -336,12 +336,13 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     positionChanged: function(e){
+        console.log('Shutter positionChanged called');
         var $position = this.$el.find(".slider-vertical");
         var value = parseInt($position.slider("value"));
         var actualValue = this.calculateShutterValue(value);
         var address = this.writePosition.get("address");
         app.vent.trigger("device:write", this.writePosition, actualValue);
-        this.updateShutterDetails(value);
+        this.updateShutterDetails(actualValue);
     },
 
     switchUpDown: function(up){
@@ -355,7 +356,7 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         if ( $sliderEl.length > 0 && $sliderEl.slider() ) {
             var actualValue = this.calculateShutterValue(value);
             this.$el.find('.slider-vertical').slider("value", actualValue);
-            this.updateShutterDetails(actualValue);
+            this.updateShutterDetails(value);
         }
     },
 
@@ -369,16 +370,26 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
         
         if (value) {
             if (value < 100 && value >= 80) {
-            value = 80;
+                console.log('Shutter icon in 80, value: '+ value);
+                value = 80;
             } else if (value < 80 && value >= 60) {
+                console.log('Shutter icon in 60, value: '+ value);
                 value = 60;
             } else if (value < 60 && value >= 40) {
+                console.log('Shutter icon in 40, value: '+ value);
                 value = 40;
             } else if (value < 40 && value >= 20) {
+                console.log('Shutter icon in 20, value: '+ value);
                 value = 20;
             } else if (value < 20 && value >= 0) {
+                console.log('Shutter icon in 0, value: '+ value);
                 value = 0;
             }
+            /*
+            if (this.model.get('max_value') < this.model.get('min_value')) {
+                value = this.model.get('min_value') - value;
+            }
+*/
             $widget.data('hit-icon-type', 'devices.shutterOpen' + value);
         }
 
@@ -394,7 +405,8 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
     onSliderMoving: function(e, ui) {
         var value = Number(ui.value);
-        this.updateShutterDetails(value);
+        var actualValue = this.calculateShutterValue(value);
+        this.updateShutterDetails(actualValue);
     },
 
     onRender: function(){
@@ -416,7 +428,13 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     },
 
     calculateShutterValue: function(value) {
-        var shutterValue = Math.abs(Number(this.model.get('min_value')) - Number(value));
+
+        var shutterValue = value;
+
+        if (this.model.get('max_value') < this.model.get('min_value')) {
+            shutterValue = this.model.get('min_value') - value;
+        }
+
         return shutterValue;        
     }
 });

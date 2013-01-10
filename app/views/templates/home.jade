@@ -85,15 +85,41 @@ script(id="view-home-template", type="text/template")
     a(href="#").cancel.btn.btn-primary Close
 
 script(id="dashboard-home", type="text/template")
-  .row-fluid.home-widget-container
+  .main-left-container.visible-desktop
+    .tabbable
+      ul.nav.nav-pills.hit-nav-proportional.three.desktop-left-container
+        li.active
+          a(href="#desktop-time-weather", data-toggle="tab") Time & Weather
+        li
+          a(href="#desktop-now-playing", data-toggle="tab") Now Playing
+        li.dropdown
+          a.dropdown-toggle(data-toggle="dropdown", href="#") 
+            | More
+            b.caret
+          ul.dropdown-menu
+      .tab-content
+        #desktop-time-weather.tab-pane.active
+          #digiclock-desktop.hit-clock-desktop
+        #desktop-now-playing.tab-pane
+          p Now playing
+        #desktop-more.tab-pane
+          p MORE...
+  .main-right-container
+    .container-fluid
 
 script(id="my-house-template", type="text/template")
-  .hit-widget.clearfix.scrollable-x#my-house
-    .hit-title My House
+  .hit-desktop-title.visible-desktop
+      span My House
+  .hit-widget.hit-widget-desktop.clearfix.scrollable-x#my-house
+    .hit-title.hidden-desktop My House
       ul.nav.pull-right
         li
-          a#editWidgetStyle.pull-right(href="#")
+          a.editWidgetStyle.pull-right(href="#")
             i.icon-cog.icon-white
+    .hit-icon-container-desktop-options.visible-desktop
+      ul
+        li.editWidgetStyle
+          i.icon-cog.icon-white
     .hit-icon-container.viewport
       <% if(floors.length == 0) { %>
       .overview
@@ -114,12 +140,18 @@ script(id="my-house-template", type="text/template")
           .end
 
 script(id="my-library-template", type="text/template")
-  .hit-widget.clearfix.scrollable-x#my-library
-    .hit-title My Library
+  .hit-desktop-title.visible-desktop
+      span My Library
+  .hit-widget.hit-widget-desktop.clearfix.scrollable-x#my-library
+    .hit-title.hidden-desktop My Library
       ul.nav.pull-right
         li
-          a#editWidgetStyle.pull-right(href="#")
+          a.editWidgetStyle.pull-right(href="#")
             i.icon-cog.icon-white
+    .hit-icon-container-desktop-options.visible-desktop
+      ul
+        li.editWidgetStyle
+          i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview
         .hit-icon(data-hit-icon-href="#movies", data-hit-icon-type="media.movies")
@@ -138,11 +170,11 @@ script(id="my-library-template", type="text/template")
           .end
 
 script(id="time-wheater-template", type="text/template")
-  .hit-widget.clearfix.scrollable-x#time-wheater
-    .hit-title Time and Weather - <span id="jdigiclock-currentDay">Loading...</span>
+  .hit-widget.clearfix.scrollable-x.hidden-desktop#time-wheater
+    .hit-title.hidden-desktop Time and Weather - <span id="jdigiclock-currentDay">Loading...</span>
       ul.nav.pull-right
         li
-          a.pull-right#editWidgetStyle(href="#")
+          a.pull-right.editWidgetStyle(href="#")
             i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview
@@ -153,18 +185,30 @@ script(id="time-wheater-template", type="text/template")
           .end
 
 script(id="recently-added-template", type="text/template")
-  .hit-widget.medium.clearfix.scrollable-x#recently-added
-    .hit-title Recently Added <span class="loading">- Loading...</span>
+  .hit-desktop-title.visible-desktop
+      span Recently Added
+  .hit-widget.hit-widget-desktop.medium.clearfix.scrollable-x#recently-added
+    .hit-title.hidden-desktop Recently Added <span class="loading">- Loading...</span>
       ul.nav.pull-right
         li
-          a.pull-right#editWidgetStyle(href="#")
+          a.pull-right.editWidgetStyle(href="#")
             i.icon-cog.icon-white
-          a.pull-right#showNewEpisodes(href="#")
-            i.icon-film.icon-white
-          a.pull-right#showNewMovies(href="#")
-            i.icon-facetime-video.icon-white
-          a.pull-right#showNewMusic(href="#")
+          a.pull-right.showNewMusic(href="#")
             i.icon-music.icon-white
+          a.pull-right.showNewEpisodes(href="#")
+            i.icon-film.icon-white
+          a.pull-right.showNewMovies(href="#")
+            i.icon-facetime-video.icon-white
+    .hit-icon-container-desktop-options.visible-desktop
+      ul
+        li.showNewMovies
+          i.icon-facetime-video.icon-white
+        li.showNewEpisodes
+          i.icon-film.icon-white
+        li.showNewMusic
+          i.icon-music.icon-white
+        li.editWidgetStyle
+          i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview
     .scrollbar

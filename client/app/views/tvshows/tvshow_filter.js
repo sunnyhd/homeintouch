@@ -1,4 +1,9 @@
+var app = require('app');
+var TvShows = require('collections/tvshows');
 var FilterPanelView = require('views/filtered_panel');
+var SearchModalView = require('views/tvshows/tvshow_mobile_search_modal');
+var FilterModalView = require('views/tvshows/tvshow_mobile_filter_modal');
+var tvShowsController = app.controller('tvshows');
 
 module.exports = FilterPanelView.extend({
 
@@ -7,7 +12,12 @@ module.exports = FilterPanelView.extend({
         'click #tvshow-genre-list li a' : 'filterByGenre',
         'change input[name=search]': 'search',
         'click .search': 'search',
-        'click .clear': 'clear'
+        'click .clear': 'clear',
+
+        // Touch events
+        'click .touch-tvshow-search': 'openMobileSearchDialog',
+        'click .touch-tvshow-filter': 'openMobileFilterDialog',
+        'click .touch-tvshow-default': 'clearMobile'
 	},
 
     template: require('templates/tvshows/tvshow_filter'),
@@ -26,23 +36,16 @@ module.exports = FilterPanelView.extend({
         this.$('button.clear').hide();
         this.$('button.search').show();
 
-    	var that = this;
-    	$.get('/api/genres/tvshows')
-    	.done(function(data) {
-    		that.loadGenres(data);
-    	});
+        this.genres = _.compact(_.union([this.AllGenres], tvShowsController.filters.genres));
+
+        this.renderGenres( this.genres );
     },
 
-    loadGenres: function(genreList) {
-
-    	var allListItem = $('<li><a href="#" data-genre="' + this.AllGenres + '">' + this.AllGenres + '</a></li>');
-    	this.$('#tvshow-genre-list').append(allListItem);
-
-    	for (var i = 0; i < genreList.length; i++) {
-    		var genre = genreList[i];
-    		var listItem = $('<li><a href="#" data-genre="' + genre + '">' + genre + '</a></li>');
-    		this.$('#tvshow-genre-list').append(listItem);
-    	};
+    renderGenres: function(genreList) {
+        _.each(genreList, function(genre) {
+            var listItem = $('<li><a href="#" data-genre="' + genre + '">' + genre + '</a></li>');
+            this.$('#tvshow-genre-list').append(listItem);
+        }, this);
     },
 
     filterByGenre: function(event) {
@@ -76,7 +79,21 @@ module.exports = FilterPanelView.extend({
         this.$('button[data-toggle="dropdown"]').parent().removeClass('open');
 
         return false;
+    },
 
+    refreshDisplayedTvShows: function() {
+        var opts = {};
+
+        opts = {
+            filters: {
+                genre: this.filter['genre']
+            },
+            criteria: this.model.get('term')
+        };
+
+        console.log(opts);
+        var originalCollection = new TvShows(this.collections.originalModels);
+        this.resetCollection( originalCollection.filterAndSortBy(opts) );
     },
 
     getListAllFilter: function() {
@@ -88,11 +105,39 @@ module.exports = FilterPanelView.extend({
     },
 
     listTvShows: function() {
-    	this.collection.fetch({data: this.filter});
+    	this.refreshDisplayedTvShows();
     },
 
     setCurrentFilterName: function(filterName) {
         this.$('#filter-name').text(filterName);
+    },
+
+    // Touch event handlers
+    openMobileSearchDialog: function() {
+        var modal = new SearchModalView( { term: this.model.get('term') } );
+        modal.on('media-tvshow:search', function(criteria) {
+            this.performSearch(criteria);
+            this.refreshDisplayedTvShows();
+        }, this);
+
+        app.modal.show(modal);
+    },
+
+    openMobileFilterDialog: function() {
+        var modal = new FilterModalView({
+            genres: this.genres,
+            currentGenre: this.filter['genre']
+        });
+        modal.on('media-tvshow:filter', function(filters) {
+            this.filterByGenre(filters);
+        }, this);
+
+        app.modal.show(modal);
+    },
+
+    clearMobile: function() {
+        this.filter = {};
+        this.performSearch('');
+        this.refreshDisplayedTvShows();
     }
-    
 });

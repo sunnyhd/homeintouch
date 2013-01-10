@@ -113,7 +113,8 @@
             {
                 oViewport.obj[0].ontouchstart = function( event )
                 {   
-                    if( 1 === event.touches.length )
+                    if( 2 === event.touches.length )
+                    // if( 1 === event.touches.length )
                     {
                         start( event.touches[ 0 ] );
                         event.stopPropagation();

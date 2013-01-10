@@ -95,58 +95,18 @@ div.tvshow-banner {
   	}
 }
 
-/* Landscape phone to portrait tablet */
-@media (max-width: 979px) {
-	#tvshow-filter .tvshow-header {
-		display: none;
-		position: fixed;
-		z-index: 5;
-		padding: 5px;
+.touch-tvshow-nav {
+	color: white;
 
-		&.mobile-showed {
-			left: 35px;
-			border-top-left-radius: 0px;
-		}
-
-		#view-mode-group {
-			display: none;
-		}
-
-		.tvshow-header-option~.tvshow-header-option {
-			margin-left: 0px;
-		}
-		.btn-group ~ .btn-group {
-	  		margin-left: 5px;
-	  	}
-		.search-grp-1 {
-			display: block;
-			&:after {
-			    content: " ";
-			    display: block;
-			    height: 0;
-			    clear: both;
-			}
-			margin: 0px 0px 5px 0px;
-		}
-		.search-grp-2.btn-group, .search-grp-3 {
-			float: left;
-			margin: 0px;
-			& > .dropdown-menu { right: initial; }
-		}
+	li {
+		padding: 3px 0px;
+		border-radius: 5px;
 	}
-	.mobile-search-menu {
-		display: block;
-		&.open {
-			border-radius: 0px;
-			border-right-color: @gray;
-		}
+	li:hover {
+		background: rgba(51, 51, 51, 0.8);
 	}
-}
-
-/* Portrait phones */
-@media (max-width: 320px) {
-	input.tvshow-search {
-		width: 110px;
+	li.active {
+		background: rgba(122, 122, 122, 0.8);
 	}
 }
 

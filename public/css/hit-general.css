@@ -59,3 +59,56 @@ ul.hit-nav-right li a {
 ul.hit-nav-right li a:hover {
 	background-color: inherit;
 }
+
+/************************ New Layout ************************/
+.main-left-container {
+	float: left;
+	height: 500px;
+	width: 400px;
+	position: fixed;
+	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.main-left-container * {
+	color: white;
+}
+.main-left-container .tabbable {
+	margin: 10px;
+}
+.main-right-container {
+	margin-left: 400px;
+}
+
+/* Desktop */
+@media (min-width: 979px) {
+	.row-fluid {
+		margin-bottom: 10px;
+	}
+	.hit-icon {
+		/*margin: 15px 0px 15px 15px;*/
+		margin: 0px;
+	}
+}
+
+/* Touchable */
+@media (max-width: 979px) {
+	.main-right-container {
+		margin-left: 0px;
+	}
+	.hit-icon {
+		margin: 0px;
+	}
+}
+/************************ END New Layout ************************/
+
+.modal.loading-spinner {
+	background-color: initial;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -12px 0 0 -12px;
+	
+	width: 200px;
+	margin-left: -100px;
+	z-index: 1050;
+}

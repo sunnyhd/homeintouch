@@ -82,10 +82,10 @@ exports.SwitchSelectedHomeView = Backbone.Marionette.ItemView.extend({
 
 exports.HouseWidgetView = Backbone.Marionette.ItemView.extend({
 
-    className: "room-device-group span6 clearfix",
+    className: "room-device-group span12 clearfix",
 
     events: {
-        "click a#editWidgetStyle": "editWidgetClicked"
+        "click .editWidgetStyle": "editWidgetClicked"
     },
 
     editWidgetClicked: function() {
@@ -159,12 +159,18 @@ exports.HouseWidgetView = Backbone.Marionette.ItemView.extend({
 
 exports.TimeWheaterWidgetView = exports.HouseWidgetView.extend({
 
+    initialize: function() {
+        this.loading = new $.Deferred();
+        app.showLoading(this.loading.promise());
+    },
+
     displayCurrentDate: function(date) {
         $('#jdigiclock-currentDay').html(date);
     },
 
     refreshTimeWeatherStyles: function() {
         this.applyStyles();
+        this.loading.resolve();
     },
 
     onRender: function() {
@@ -189,12 +195,26 @@ exports.TimeWheaterWidgetView = exports.HouseWidgetView.extend({
 exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
 
     events: _.extend({}, exports.HouseWidgetView.prototype.events, {
-        "click a#showNewEpisodes": "showEpisodesClicked",
-        "click a#showNewMovies": "showMoviesClicked",
-        "click a#showNewMusic": "showMusicClicked"
+        "click .showNewEpisodes": "showEpisodesClicked",
+        "click .showNewMovies": "showMoviesClicked",
+        "click .showNewMusic": "showMusicClicked"
     }),
 
+    initialize: function() {
+        this.firstDisplay = true;
+    },
+
+    showLoading: function() {
+        this.loading = new $.Deferred();
+        if (!this.firstDisplay) {
+            app.showLoading(this.loading.promise());
+        } else {
+            this.firstDisplay = false;
+        }
+    },
+
     showEpisodesClicked: function() {
+        this.showLoading();
         this.collection = new Episodes( {lastN: 25} );
         this.collection.comparator = null;
         this.collectionTemplate = '#episode-recently-added';
@@ -203,6 +223,7 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
     },
 
     showMoviesClicked: function() {
+        this.showLoading();
         this.collection = new Movies( {lastN: 25} );
         this.collection.comparator = null;
         this.collectionTemplate = '#movie-recently-added';
@@ -211,6 +232,7 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
     },
 
     showMusicClicked: function() {
+        this.showLoading();
         this.collection = new Albums( {lastN: 25} );
         this.collection.comparator = null;
         this.collectionTemplate = '#album-recently-added';
@@ -220,6 +242,7 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
 
     onRender: function() {
         exports.HouseWidgetView.prototype.onRender.apply(this);
+        // this.showMoviesClicked();
         this.showMusicClicked();
     },
 
@@ -240,8 +263,9 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
         });
 
         // Adds the click handler on media widgets
-        $('.hit-icon-container .overview [data-media-action]', this.$el).click(function() {           
+        $('.hit-icon-container .overview [data-media-action]', this.$el).click(function() {
             app.router.navigate('#' + $(this).data('media-action'), {trigger: true});
+            return false;
         });
 
         this.onDataFinally();
@@ -258,6 +282,8 @@ exports.RecentlyAddedWidgetView = exports.HouseWidgetView.extend({
         $('.loading', this.$el).hide();
         var $widget = $('#recently-added', this.$el);
         app.vent.trigger("home:dashboard:reset-scrollbars", $widget);
+
+        this.loading.resolve();
     }
 });
 
@@ -574,18 +600,12 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
         if (!iv.model.get('visible')) {
             return;
         }
+        $container = cv.$('.main-right-container .container-fluid');
+        $rowContainer = $('<div class="row-fluid">').appendTo($container);
 
-        var $rowContainer = null;
-        var $rows = cv.$(".row-fluid.home-widget-container");
-        _.each($rows, function(row) {
-            if ($('.hit-widget', row).length < 2) {
-                $rowContainer = $(row);
-            }
-        });
-
-        if (!$rowContainer) {
-            $container = $(cv.el);
-            $rowContainer = $('<div class="row-fluid home-widget-container">').appendTo($container);
+        // If the row entry is hidden on desktop, add the class to the row container
+        if ($('.hit-widget.hidden-desktop', $(iv.el)).length > 0) {
+            $rowContainer.addClass('hidden-desktop');
         }
 
         $rowContainer.append(iv.el);
@@ -669,6 +689,24 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
 
     onRender: function() {
         this.setScrollbarOverview();
+
+        var location = this.model.get('timeWheaterConfiguration').get('location');
+
+        $('#digiclock-desktop', this.$el).jdigiclock({
+            proxyUrl: 'api/jdigiclock/proxy',
+            dayCallback: $.proxy(this.displayCurrentDate, this),
+            loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
+            weatherLocationCode: location,
+            jdigiclockType: 'big'
+        });
+    },
+
+    displayCurrentDate: function(date) {
+        // $('.hit-current-day p', this.$el).first().html(date);
+    },
+
+    refreshTimeWeatherStyles: function() {
+        this.applyStyles();
     }
 });
 

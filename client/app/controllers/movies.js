@@ -3,13 +3,14 @@ var Movies = require('collections/movies');
 var Movie = require('models/movie');
 var Player = require('models/player');
 var MovieContainerView = require('views/movies/movie_container');
+var homesController = require('controllers/homes');
 var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 var MovieDetailView = require('views/movies/movie_detail');
 var MediaConfigurationOptionsView = require('views/settings/media_configuration_options');
 
 exports.movies = new Movies();
-exports.loading = null; // Holds the promise reference
+exports.loading = null; // Holds the promise reference to the previous collection
 
 // Filter for movies
 exports.filters = {};
@@ -19,17 +20,25 @@ exports.filters.genres = null;
 // Show views
 
 exports.showMovieCoverView = function() {
-    updateNavs();
-    updateConfigurationOptions();
-    var view = new MovieContainerView({ collection: exports.movies, mode: 'cover' });
-    app.main.show(view);
+
+    exports.loading.done(function() {
+
+        updateNavs();
+        updateConfigurationOptions();
+        var view = new MovieContainerView({ collection: exports.movies, mode: 'cover' });
+        app.main.show(view);
+    });
 };
 
 exports.showMovieListView = function() {
-    updateNavs();
-    updateConfigurationOptions();
-    var view = new MovieContainerView({ collection: exports.movies, mode: 'list' });
-    app.main.show(view);
+
+    exports.loading.done(function() {
+
+        updateNavs();
+        updateConfigurationOptions();
+        var view = new MovieContainerView({ collection: exports.movies, mode: 'list' });
+        app.main.show(view);
+    });
 };
 
 exports.showMovieDetailView = function(id) {
@@ -37,6 +46,9 @@ exports.showMovieDetailView = function(id) {
     var movie = null;
     var def = new $.Deferred();
     var loadingMovie = def.promise();
+
+    // Show the loading view
+    app.showLoading(loadingMovie);
 
     // When the movie instace is loaded, displays its data
     loadingMovie.done(function() {
@@ -84,7 +96,16 @@ exports.addToPlaylist = function(movie) {
 
 // Helper methods
 
+function ensureHomeNav() {
+    if (!homesController.currentHome) {
+        var home = homesController.homes.defaultHome();
+        homesController.setHomeData(home);
+    }
+}
+
 function updateNavs() {
+    ensureHomeNav();
+
     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
 
     app.updateDesktopBreadcrumbNav( { 

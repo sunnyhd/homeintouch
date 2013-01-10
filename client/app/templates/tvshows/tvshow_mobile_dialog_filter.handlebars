@@ -1,0 +1,18 @@
+<div class="modal-header">
+    <a class="close" href="#">x</a>
+    <h2>Filter Series</h2>
+</div>
+
+<div class="modal-body content-centered">
+	<form>
+		<select class="genres-filter">
+  			{{#genres}}
+			  <option>{{.}}</option>
+			{{/genres}}
+		</select>
+	</form>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-primary filter">Filter</button>
+</div>

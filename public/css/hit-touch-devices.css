@@ -1,0 +1,12 @@
+/* This file is only loaded for touch devices  */
+
+@media (min-width: 979px) { /* HIT Table */
+
+	.room-device-group .hit-desktop-title {
+		background-color: rgba(31, 31, 31, 0.9) !important;
+	}
+		
+	.room-device-group  .hit-icon-container-desktop-options {
+		opacity: 1 !important;
+	}
+}
