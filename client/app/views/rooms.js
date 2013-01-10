@@ -573,15 +573,6 @@ exports.DoorDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(on) {
-        var $anchor = $('a', this.$el);
-        $anchor.removeClass('selected');
-        if (on) {
-            $anchor.addClass('selected');
-            $anchor.html('OPEN');
-        } else {
-            $anchor.removeClass('selected');
-            $anchor.html('CLOSE');
-        }
         this.updateIconColor(on);
     },
 
