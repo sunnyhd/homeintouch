@@ -160,7 +160,7 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     className: "hit-icon-wrapper",
 
     formEvents: {
-        "click .hit-icon a": "switchClicked"
+        "click .hit-icon": "switchClicked"
     },
 
     initialize: function(){
@@ -178,16 +178,18 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
 
         this.bindTo(this.writeDimmer, "change:value", this.selectDimmer, this);
         this.bindTo(this.readSwitch, "change:value", this.updateSwitch, this);
-
-
     },
 
     switchClicked: function (e) {
         e.preventDefault();
+        var widget = $(e.currentTarget);
+        
+        var currentValue = widget.data('value');
+        var on = widget.data('on-value');
+        var off = widget.data('off-value');
 
-        var btnClicked = $(e.currentTarget);
-        var value = btnClicked.data('value');
-
+        // Gets the new value to be set
+        var value = (currentValue === on) ? off : on;
         this.flipSwitch(value);
 
         this.setReadValue = true;
@@ -216,13 +218,12 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
     },
 
     selectSwitch: function(value){
-        $('a', this.$el).removeClass('selected');
-        $('a[data-value="' + value + '"]', this.$el).addClass('selected');
+        $('.hit-icon', this.$el).data('value', value);
         this.refreshIcon(value);
     },
 
     isSwitchOn: function() {
-        return (this.$('.selected').data('value') === Number(this.model.get('on_value')));
+        return (this.$('.hit-icon').data('value') === Number(this.model.get('on_value')));
     },
 
     refreshIcon: function() {

@@ -218,11 +218,23 @@
 }
 
 /** Dimmer styles */
-.dimmer-detail {
-	position: absolute;
-	right: 10px;
-	font-size: 1.2em;
-	top: 55px;
+.hit-icon.device-widget[data-widget-type="dimmer"] {
+	background-position: 50% 25%;
+	.dimmer-detail {
+		position: absolute;
+		right: 10px;
+		font-size: 1.2em;
+		top: 75px;
+	}
+	div.slider-horizontal {
+		margin-top: 20px;
+		&.ui-slider-horizontal {
+			height: 2em;
+		}
+		a.ui-slider-handle {
+			height: 2.4em;
+		}
+	}
 }
 
 /** Thermostat styles */
