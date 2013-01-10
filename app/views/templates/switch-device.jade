@@ -1,12 +1,12 @@
 script(id="device-list-switch-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="switch", data-hit-icon-type="devices.lightSwitch", data-model-id!="<%=id%>")
+  .hit-icon.device-widget(data-widget-type="switch", data-hit-icon-type="devices.lightSwitch", data-model-id!="<%=id%>", data-on-value!="<%=on_value%>", data-off-value!="<%=off_value%>")
     span.device-name <%= name %>
-    .widget-opts
-      ul.device-btn-group.two.clearfix
-        li.device-btn
-          a(href="#", data-value!="<%=on_value%>") ON
-        li.device-btn
-          a(href="#", data-value!="<%=off_value%>") OFF
+    //- .widget-opts
+    //-   ul.device-btn-group.two.clearfix
+    //-     li.device-btn
+    //-       a(href="#", data-value!="<%=on_value%>") ON
+    //-     li.device-btn
+    //-       a(href="#", data-value!="<%=off_value%>") OFF
 
 script(id="device-add-switch-template", type="text/template")
   .modal-header

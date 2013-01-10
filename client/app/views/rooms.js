@@ -92,7 +92,7 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     className: "hit-icon-wrapper",
 
     formEvents: {
-        "click .hit-icon a": "switchClicked"
+        "click .hit-icon": "switchClicked"
     },
 
     initialize: function() {
@@ -103,20 +103,25 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
 
     switchClicked: function (e) {
         e.preventDefault();
-        var btnClicked = $(e.currentTarget);
-        var value = btnClicked.data('value');
+        var widget = $(e.currentTarget);
+        
+        var currentValue = widget.data('value');
+        var on = widget.data('on-value');
+        var off = widget.data('off-value');
+
+        // Gets the new value to be set
+        var value = (currentValue === on) ? off : on;
 
         this.flipSwitch(value);
         this.updateSwitch(value);
     },
 
     flipSwitch: function(value){
-        //var address = this.writeAddress.get("address");
         app.vent.trigger("device:write", this.writeAddress, value);
     },
 
     isSwitchOn: function() {
-        return (this.$('.selected').data('value') === Number(this.model.get('on_value')));
+        return (this.$('.hit-icon').data('value') === Number(this.model.get('on_value')));
     },
 
     refreshIcon: function() {
@@ -124,8 +129,7 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
     },
 
     updateSwitch: function(value) {
-        $('a', this.$el).removeClass('selected');
-        $('a[data-value="' + value + '"]', this.$el).addClass('selected');
+        $('.hit-icon', this.$el).data('value', value);
         this.updateIconColor(value);
     },
 
