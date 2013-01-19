@@ -391,6 +391,11 @@ app.loadMediaData = function() {
     var loadingEpisodeNames = $.get('/api/episodes/label').done(function(data) { tvShowsController.filters.episodeLabels = data; });
 
     tvShowsController.loading = $.when(loadingSeries, loadingSeriesGenres, loadingEpisodeNames);
+
+    var musicController = app.controller('music');
+    var loadingArtists = musicController.artists.fetch();
+
+    musicController.loading = loadingArtists;
 }
 
 app.vent.on('media:data-changed', function(address, value) {

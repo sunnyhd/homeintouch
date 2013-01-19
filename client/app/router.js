@@ -11,11 +11,12 @@ module.exports = Backbone.Router.extend({
         'movies/list-view': 'moviesListView',
         'movies/details/:movieid': 'movieDetailView',
 
-        'artists': 'artists',
-        'albums': 'albums',
-        'songs': 'songs',
-        'artists/:artistid': 'artistAlbums',
-        'albums/:albumid': 'albumSongs',
+        'music': 'music',
+        'music/artists': 'artists',
+        'music/albums': 'albums',
+        'music/songs': 'songs',
+        'music/artists/:artistid': 'artistAlbums',
+        'music/albums/:albumid': 'albumSongs',
         'import': 'importSettings',
 
         'pictures': 'pictures',
@@ -58,8 +59,12 @@ module.exports = Backbone.Router.extend({
             this.app.controller('movies').showMovieDetailView(movieid);
         },
 
+        music: function() {
+            this.app.controller('music').showHomeView();
+        },
+
         artists: function() {
-            this.app.controller('music').showArtistList().fetch();
+            this.app.controller('music').showArtistList();
         },
 
         albums: function() {
