@@ -43,12 +43,12 @@ module.exports = FilterPanelView.extend({
 
     setListBtnActive: function() {
         this.$('#view-mode-group button').removeClass('active');
-        this.$('#view-mode-group button[href="#music/artist/list-view"]').addClass('active');
+        this.$('#view-mode-group button[href="#music/artists/list-view"]').addClass('active');
     },
     
     setCoverBtnActive: function() {
         this.$('#view-mode-group button').removeClass('active');
-        this.$('#view-mode-group button[href="#music/artist/cover-view"]').addClass('active');
+        this.$('#view-mode-group button[href="#music/artists/cover-view"]').addClass('active');
     },
 
     listViewClicked: function(e) {

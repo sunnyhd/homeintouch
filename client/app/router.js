@@ -13,6 +13,8 @@ module.exports = Backbone.Router.extend({
 
         'music': 'music',
         'music/artists': 'artists',
+        'music/artists/cover-view': 'artists',
+        'music/artists/list-view': 'artistsListView',
         'music/albums': 'albums',
         'music/songs': 'songs',
         'music/artists/:artistid': 'artistAlbums',
@@ -65,6 +67,10 @@ module.exports = Backbone.Router.extend({
 
         artists: function() {
             this.app.controller('music').showArtistList();
+        },
+
+        artistsListView: function() {
+            this.app.controller('music').showArtistListView();
         },
 
         albums: function() {

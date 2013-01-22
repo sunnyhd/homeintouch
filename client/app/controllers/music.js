@@ -66,7 +66,33 @@ exports.showArtistList = function() {
         var view = new ArtistContainerView({ collection: exports.artists, mode: 'cover'});
         app.main.show(view);
     });
+};
 
+exports.showArtistListView = function() {
+
+    exports.loading.done(function(){
+        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+        app.updateDesktopBreadcrumbNav( { 
+            itemType: 'floor',
+            name: 'Artist', 
+            handler: function(e) {
+                app.router.navigate('#music/artists', {trigger: true});
+                return false;
+            }
+        });
+
+        app.updateTouchNav({
+            name: 'Artist', 
+            previous: 'Music',
+            handler: function(e) {
+                app.router.navigate('#music', {trigger: true});
+                return false;
+            }
+        });
+
+        var view = new ArtistContainerView({ collection: exports.artists, mode: 'list'});
+        app.main.show(view);
+    });
 };
 
 exports.showAlbumList = function() {

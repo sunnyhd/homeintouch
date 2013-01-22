@@ -1,1 +1,14 @@
-<a class="detail" href="#">{{ label }}</a>
+<div class="artistContainer clearfix">
+	<div class="artist-image">
+		{{#if thumbnail}}
+        <img src="{{ thumbnail }}">
+    	{{else}}
+    	<div class="no-img"></div>
+    	{{/if}}
+	</div>
+
+    <div class="artist-info">
+    	<div class="artist-title">{{ label }}</div>
+    	<div class="plot-container"><span class="info-key"></span> {{ description }}</div>
+    </div>
+</div>

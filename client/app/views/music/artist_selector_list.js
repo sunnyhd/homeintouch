@@ -6,7 +6,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 		'click button': 'listViewClicked'
     },
 
-    template: require('templates/music/music_selector_list'),
+    template: require('templates/music/artist_selector_list'),
 
     select: function(mode) {
     	this.$el.find('.btn[data-mode=' + mode + ']').addClass('active');
