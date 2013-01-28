@@ -87,7 +87,14 @@ script(id="device-add-camera-template", type="text/template")
             .control-group
               label(for="cmd_opt1_read_address").control-label Trigger Address
               .controls
-                input(id="cmd_opt1_read_address", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('cmd_opt1_read_address') %>")
+                select(id="cmd_opt1_read_address", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('cmd_opt1_read_address') %>")
+                  <% _.each(etsData, function(ets) { %>
+                  <% if(ets.address === getAddressValue('cmd_opt1_read_address')) { %>
+                  option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+                  <% } else {%>
+                  option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+                  <% } %>
+                  <% }); %>
                 span.help-inline(rel="tooltip", data-placement="left", title="Optional. When this address receives the value '1', the command is sent to the HIT server.")
                   i.icon-question-sign
           .tab-pane#camera-form-tab3
@@ -106,7 +113,14 @@ script(id="device-add-camera-template", type="text/template")
             .control-group
               label(for="cmd_opt2_read_address").control-label Trigger Address
               .controls
-                input(id="cmd_opt2_read_address", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('cmd_opt2_read_address') %>")
+                select(id="cmd_opt2_read_address", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('cmd_opt2_read_address') %>")
+                  <% _.each(etsData, function(ets) { %>
+                  <% if(ets.address === getAddressValue('cmd_opt2_read_address')) { %>
+                  option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+                  <% } else {%>
+                  option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+                  <% } %>
+                  <% }); %>
                 span.help-inline(rel="tooltip", data-placement="left", title="Optional. When this address receives the value '1', the command is sent to the HIT server.")
                   i.icon-question-sign
           .tab-pane#camera-form-tab4
@@ -125,7 +139,14 @@ script(id="device-add-camera-template", type="text/template")
             .control-group
               label(for="cmd_opt3_read_address").control-label Trigger Address
               .controls
-                input(id="cmd_opt3_read_address", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('cmd_opt3_read_address') %>")
+                select(id="cmd_opt3_read_address", type="text", placeHolder="#/#/#")
+                  <% _.each(etsData, function(ets) { %>
+                  <% if(ets.address === getAddressValue('cmd_opt3_read_address')) { %>
+                  option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+                  <% } else {%>
+                  option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+                  <% } %>
+                  <% }); %>
                 span.help-inline(rel="tooltip", data-placement="left", title="Optional. When this address receives the value '1', the command is sent to the HIT server.")
                   i.icon-question-sign
   .modal-footer

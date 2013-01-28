@@ -32,35 +32,91 @@ script(id="device-add-rgb-template", type="text/template")
       .control-group
         label(for="read_red_color").control-label Read Red Color Address
         .controls
-          input(id="read_red_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_red_color') %>")
+          select(id="read_red_color", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('read_red_color')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="write_red_color").control-label Write Red Color Address
         .controls
-          input(id="write_red_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_red_color') %>")
+          select(id="write_red_color", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('write_red_color')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="read_green_color").control-label Read Green Color Address
         .controls
-          input(id="read_green_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_green_color') %>")
+          select(id="read_green_color", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('read_green_color')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="write_green_color").control-label Write Green Color Address
         .controls
-          input(id="write_green_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_green_color') %>")
+          select(id="write_green_color", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('write_green_color')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="read_blue_color").control-label Read Blue Color Address
         .controls
-          input(id="read_blue_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_blue_color') %>")
+          select(id="read_blue_color", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('read_blue_color')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="write_blue_color").control-label Write Blue Color Address
         .controls
-          input(id="write_blue_color", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_blue_color') %>")
+          select(id="write_blue_color", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('write_blue_color')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="read_brightness").control-label Read Brightness Address
         .controls
-          input(id="read_brightness", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_brightness') %>")
+          select(id="read_brightness", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('read_brightness_color')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="write_brightness").control-label Write Brightness Address
         .controls
-          input(id="write_brightness", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_brightness') %>")
+          select(id="write_brightness", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('write_brightness_color')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
   .modal-footer
     a(href="#").cancel.btn Cancel
     a(href="#").add.btn.btn-primary <%= primaryBtnText %>

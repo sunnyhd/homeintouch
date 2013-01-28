@@ -1,6 +1,7 @@
 var Device = require('models/device');
 var Configuration = require('models/configuration');
 var roomsController = require('controllers/rooms');
+var homesController = require('controllers/homes');
 var StyleConfigurationView = require('views/settings/style_settings');
 
 exports.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
@@ -54,6 +55,9 @@ exports.EditDeviceGroupOfRoomForm = StyleConfigurationView.extend({
 
         this.addStyleValues(data.titleFields, this.model.get("titleConfiguration"));
         this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
+
+        var noData = {room: 'No Address', widget: '', address: '0/0/0'};
+        data.etsData = _.union([noData], homesController.currentHome.get("etsData"));
 
         return data;
     },
@@ -122,6 +126,9 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
         if (this.mode !== "edit" && this.mode !== "view") {
             data.name = "";
         }
+
+        var noData = {room: 'No Address', widget: '', address: '0/0/0'};
+        data.etsData = _.union([noData], homesController.currentHome.get("etsData"));
 
         return data;
     },

@@ -22,11 +22,25 @@ script(id="device-add-switch-template", type="text/template")
       .control-group
         label(for="read_switch").control-label Read Address
         .controls
-          input(id="read_switch", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_switch') %>")
+          select(id="read_switch", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('read_switch')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="write_switch").control-label Write Address
         .controls
-          input(id="write_switch", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_switch') %>")
+          select(id="write_switch", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('write_switch')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="on_value").control-label On Value
         .controls

@@ -49,23 +49,58 @@ script(id="device-add-thermostat-template", type="text/template")
       .control-group
         label(for="write_mode").control-label Write Mode Address
         .controls
-          input(id="write_mode", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_mode') %>")
+          select(id="write_mode", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('write_mode')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="read_mode").control-label Read Mode Address
         .controls
-          input(id="read_mode", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_mode') %>")
+          select(id="read_mode", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('read_mode')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="read_temperature_actual").control-label Read Temp Address
         .controls
-          input(id="read_temperature_actual", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_temperature_actual') %>")
+          select(id="read_temperature_actual", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('read_temperature_actual')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="read_temperature_set").control-label Read Temp Setpoint Address
         .controls
-          input(id="read_temperature_set", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_temperature_set') %>")
+          select(id="read_temperature_set", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('read_temperature_set')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="write_temperature_set").control-label Write Temp Setpoint Address
         .controls
-          input(id="write_temperature_set", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_temperature_set') %>")
+          select(id="write_temperature_set", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('write_temperature_set')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="step").control-label Increase/Decrease Step
         .controls

@@ -22,7 +22,14 @@ script(id="device-add-motion-template", type="text/template")
       .control-group
         label(for="read_motion").control-label Read Address
         .controls
-          input(id="read_motion", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_motion') %>")
+          select(id="read_motion", type="text", placeHolder="#/#/#")
+            <% _.each(etsData, function(ets) { %>
+            <% if(ets.address === getAddressValue('read_motion')) { %>
+            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
+            <% } else {%>
+            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
+            <% } %>
+            <% }); %>
       .control-group
         label(for="on_value").control-label On Value
         .controls
