@@ -22,25 +22,13 @@ script(id="device-add-socket-template", type="text/template")
       .control-group
         label(for="read_socket").control-label Read Address
         .controls
-          select(id="read_socket", type="text", placeHolder="#/#/#")
-            <% _.each(etsData, function(ets) { %>
-            <% if(ets.address === getAddressValue('read_socket')) { %>
-            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
-            <% } else {%>
-            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
-            <% } %>
-            <% }); %>
+          input(id="read_socketLabel", data-control="autocomplete", data-hidden-id="read_socket", type="text", placeHolder="#/#/#")
+          input(id="read_socket", type="hidden", value!="<%= getAddressValue('read_socket') %>")
       .control-group
         label(for="write_socket").control-label Write Address
         .controls
-          select(id="write_socket", type="text", placeHolder="#/#/#")
-            <% _.each(etsData, function(ets) { %>
-            <% if(ets.address === getAddressValue('write_socket')) { %>
-            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
-            <% } else {%>
-            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
-            <% } %>
-            <% }); %>
+          input(id="write_socketLabel", data-control="autocomplete", data-hidden-id="write_socket", type="text", placeHolder="#/#/#")
+          input(id="write_socket", type="hidden", value!="<%= getAddressValue('write_socket') %>")
       .control-group
         label(for="on_value").control-label On Value
         .controls

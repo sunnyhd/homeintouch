@@ -22,14 +22,8 @@ script(id="device-add-window-template", type="text/template")
       .control-group
         label(for="read_window").control-label Read Address
         .controls
-          select(id="read_window", type="text", placeHolder="#/#/#")
-            <% _.each(etsData, function(ets) { %>
-            <% if(ets.address === getAddressValue('read_window')) { %>
-            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
-            <% } else {%>
-            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
-            <% } %>
-            <% }); %>
+          input(id="read_windowLabel", data-control="autocomplete", data-hidden-id="read_window", type="text", placeHolder="#/#/#")
+          input(id="read_window", type="hidden", value!="<%= getAddressValue('read_window') %>")
       .control-group
         label(for="open_value").control-label Open Value
         .controls

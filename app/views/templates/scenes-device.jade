@@ -22,14 +22,8 @@ script(id="device-add-scenes-template", type="text/template")
       .control-group
         label(for="write_scenes").control-label Write Address
         .controls
-          select(id="write_scenes", type="text", placeHolder="#/#/#")
-            <% _.each(etsData, function(ets) { %>
-            <% if(ets.address === getAddressValue('write_scenes')) { %>
-            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
-            <% } else {%>
-            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
-            <% } %>
-            <% }); %>
+          input(id="write_scenesLabel", data-control="autocomplete", data-hidden-id="write_scenes", type="text", placeHolder="#/#/#")
+          input(id="write_scenes", type="hidden", value!="<%= getAddressValue('write_scenes') %>")
       .control-group
         label(for="scenes_icon").control-label Icon
         .controls

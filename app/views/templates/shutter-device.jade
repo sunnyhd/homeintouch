@@ -35,47 +35,23 @@ script(id="device-add-shutter-template", type="text/template")
       .control-group
         label(for="read_position").control-label Read Position Address
         .controls
-          select(id="read_position", type="text", placeHolder="#/#/#")
-            <% _.each(etsData, function(ets) { %>
-            <% if(ets.address === getAddressValue('read_position')) { %>
-            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
-            <% } else {%>
-            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
-            <% } %>
-            <% }); %>
+          input(id="read_positionLabel", data-control="autocomplete", data-hidden-id="read_position", type="text", placeHolder="#/#/#")
+          input(id="read_position", type="hidden", value!="<%= getAddressValue('read_position') %>")
       .control-group
         label(for="write_stop").control-label Write Stop Address
         .controls
-          select(id="write_stop", type="text", placeHolder="#/#/#")
-            <% _.each(etsData, function(ets) { %>
-            <% if(ets.address === getAddressValue('write_stop')) { %>
-            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
-            <% } else {%>
-            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
-            <% } %>
-            <% }); %>
+          input(id="write_stopLabel", data-control="autocomplete", data-hidden-id="write_stop", type="text", placeHolder="#/#/#")
+          input(id="write_stop", type="hidden", value!="<%= getAddressValue('write_stop') %>")
       .control-group
         label(for="write_switch").control-label Write Switch Address
         .controls
-          select(id="write_switch", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_switch') %>")
-            <% _.each(etsData, function(ets) { %>
-            <% if(ets.address === getAddressValue('write_switch')) { %>
-            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
-            <% } else {%>
-            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
-            <% } %>
-            <% }); %>
+          input(id="write_switchLabel", data-control="autocomplete", data-hidden-id="write_switch", type="text", placeHolder="#/#/#")
+          input(id="write_switch", type="hidden", value!="<%= getAddressValue('write_switch') %>")
       .control-group
         label(for="write_position").control-label Write Position Address
         .controls
-          select(id="write_position", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_position') %>")
-            <% _.each(etsData, function(ets) { %>
-            <% if(ets.address === getAddressValue('write_position')) { %>
-            option(value!="<%= ets.address %>", selected="selected") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget  %>
-            <% } else {%>
-            option(value!="<%= ets.address %>") <%= ets.address + ' - ' + ets.room + ' - ' + ets.widget %>
-            <% } %>
-            <% }); %>
+          input(id="write_positionLabel", data-control="autocomplete", data-hidden-id="write_position", type="text", placeHolder="#/#/#")
+          input(id="write_position", type="hidden", value!="<%= getAddressValue('write_position') %>")
       .control-group
         label(for="max_value").control-label Max Value
         .controls
