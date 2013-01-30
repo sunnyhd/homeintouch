@@ -139,18 +139,19 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
         var deviceView = this;
 
         var autocompleteSource = _.map(homesController.currentHome.get("etsData"), function(item){
-            item.label = (item.address + ' - ' + item.room + ' - ' + item.widget);
+            item.label = (item.address + ' - ' + item.room + ' - ' + item.widget + ' - ' + item.extraData);
             return item;
         });
 
         var $autocompleteEl = this.$('[data-control="autocomplete"]');
+        this.$autocompleteEl = $autocompleteEl;
         if ($autocompleteEl) {
             $autocompleteEl.autocomplete({
                 minLength: 0,
                 source: autocompleteSource,
                 focus: function( e, ui ) {
                     if (ui.item) {
-                        $(this).val( (ui.item.address + '-' + ui.item.room + ' - ' + ui.item.widget) );
+                        $(this).val( ui.item.label );
                     }
                     return false;
                 },
@@ -179,7 +180,7 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
                     var selectedValue = _.find(autocompleteSource, function(item){
                         return (item.address === $hidden.val());
                     });
-                    
+
                     if (selectedValue) {
                         $this.val(selectedValue.label);
                     } else {
@@ -190,7 +191,7 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
                 $this.data("autocomplete")._renderItem = function(ul, item) {
                     return $( "<li>" )
                         .data( "item.autocomplete", item )
-                        .append("<a><b>" + item.address + "</b><br><span style='font-size: 90%;'><i>" + (item.room + ' - ' + item.widget) + "</i></span></a>")
+                        .append("<a><b>" + item.address + "</b><br><span style='font-size: 90%;'><i>" + (item.room + ' - ' + item.widget + ' - ' + item.extraData) + "</i></span></a>")
                         .appendTo( ul );
                 };
 
@@ -229,6 +230,17 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
 
     addClicked: function(e){
         e.preventDefault();
+
+        var deviceView = this;
+
+        this.$autocompleteEl.each(function() {
+            var $this = $(this);
+            var hiddenId = $this.data('hidden-id');
+            var $hidden = deviceView.$("#" + hiddenId);
+            if ($this.val() === '') {
+                $hidden.val('');
+            }
+        });
 
         var formFields = _.union( ["isFavorite"], this.formFields );
 

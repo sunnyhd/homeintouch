@@ -785,8 +785,11 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
                 if (etsDetail.length > 2) {
                     var room = etsDetail[0];
                     var widget =  etsDetail[1];
-                    var address = etsDetail[2].split(/\s/)[0];
-                    homeEtsArray.push({room: room, widget: widget, address: address});
+                    var extraDataArray = etsDetail[2].split(/\s/);
+                    var address = extraDataArray[0];
+                    var extraData = extraDataArray.slice(1).join(' ');
+
+                    homeEtsArray.push({room: room, widget: widget, address: address, extraData: extraData});
                 }
             }
             that.etsData = homeEtsArray;
