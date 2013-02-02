@@ -25,10 +25,24 @@ exports.cacheImages = function(Model, fields) {
             return function(callback) {
                 if (!self[attrs.src]) return callback();
 
+                var imageUrl;
+
+                var urlFromXbmc = self[attrs.src];
+                if (urlFromXbmc.indexOf('image://') === 0) {
+                    var tempURL = urlFromXbmc.substring('image://'.length);
+                    if (tempURL.indexOf('http') === 0) {
+                        imageUrl = decodeURI(tempURL);
+                    } else {
+                        imageUrl = settings.images.url + tempURL;
+                    }
+                }
+
                 var options = {
-                    url: settings.images.url + self[attrs.src],
+                    url: imageUrl,
                     encoding: 'binary'
                 };
+
+                console.log('Caching Image - Image URL: ' + options.url);
 
                 // Make HTTP request for image
                 request(options, function(err, res, body) {
