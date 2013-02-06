@@ -31,7 +31,7 @@ exports.cacheImages = function(Model, fields) {
                 if (urlFromXbmc.indexOf('image://') === 0) {
                     var tempURL = urlFromXbmc.substring('image://'.length);
                     if (tempURL.indexOf('http') === 0) {
-                        imageUrl = decodeURI(tempURL);
+                        imageUrl = decodeURIComponent(tempURL);
                     } else {
                         imageUrl = settings.images.url + tempURL;
                     }
