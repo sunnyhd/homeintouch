@@ -15,12 +15,13 @@
     "socket.io": "0.9.4",
     "jade": "0.24.0",
     "dirty": "0.9.6",
-    "stitch": "0.3.3",
+    "stitch": "https://github.com/featurist/stitch/tarball/windows",
     "mongoose": "2.7.1",
     "nettle": "0.0.4",
     "request": "2.9.203",
     "xml2js": "0.2.0",
-    "underscore": "1.4.2"
+    "underscore": "1.4.2",
+    "json-stream": "0.1.2"
   },
   "engines": {
     "node": "*"
