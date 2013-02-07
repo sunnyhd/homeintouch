@@ -74,7 +74,7 @@ module.exports = Backbone.Router.extend({
         },
 
         albums: function() {
-            this.app.controller('music').showAlbumList().fetch();
+            this.app.controller('music').showAlbumList();
         },
 
         songs: function() {

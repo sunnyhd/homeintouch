@@ -394,8 +394,9 @@ app.loadMediaData = function() {
 
     var musicController = app.controller('music');
     var loadingArtists = musicController.artists.fetch();
+    var loadingAlbums = musicController.albums.fetch();
 
-    musicController.loading = loadingArtists;
+    musicController.loading = $.when(loadingArtists, loadingAlbums);
 }
 
 app.vent.on('media:data-changed', function(address, value) {

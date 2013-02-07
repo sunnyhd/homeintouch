@@ -4,16 +4,19 @@ var Artists = require('collections/artists');
 var Songs = require('collections/songs');
 var Album = require('models/album');
 var Artist = require('models/artist');
-var ArtistListView = require('views/music/artist_list');
 var AlbumListView = require('views/music/album_list');
 var SongListView = require('views/music/song_list');
 var AlbumSongListView = require('views/music/album_song_list');
 var ArtistAlbumListView = require('views/music/artist_album_list');
 var playlistsController = require('controllers/playlists');
+
 var ArtistContainerView = require('views/music/artist_container');
+var AlbumContainerView = require('views/music/album_container');
 var MusicHomeView = require('views/music/home');
 
 exports.artists = new Artists();
+exports.albums = new Albums();
+
 exports.loading = null;
 
 exports.showHomeView = function() {
@@ -46,7 +49,7 @@ exports.showArtistList = function() {
     exports.loading.done(function(){
         $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
         app.updateDesktopBreadcrumbNav( { 
-            itemType: 'floor',
+            itemType: 'room',
             name: 'Artist', 
             handler: function(e) {
                 app.router.navigate('#music/artists', {trigger: true});
@@ -73,7 +76,7 @@ exports.showArtistListView = function() {
     exports.loading.done(function(){
         $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
         app.updateDesktopBreadcrumbNav( { 
-            itemType: 'floor',
+            itemType: 'room',
             name: 'Artist', 
             handler: function(e) {
                 app.router.navigate('#music/artists', {trigger: true});
@@ -99,7 +102,7 @@ exports.showAlbumList = function() {
 
     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
     app.updateDesktopBreadcrumbNav( { 
-        itemType: 'floor',
+        itemType: 'room',
         name: 'Albums', 
         handler: function(e) {
             app.router.navigate('#music/albums', {trigger: true});
@@ -116,17 +119,15 @@ exports.showAlbumList = function() {
         }
     });
 
-    var albums = new Albums();
-    var view = new AlbumListView({ collection: albums });
+    var view = new AlbumContainerView({ collection: exports.albums});
     app.main.show(view);
-    return albums;
 };
 
 exports.showSongList = function() {
 
     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
     app.updateDesktopBreadcrumbNav( { 
-        itemType: 'floor',
+        itemType: 'room',
         name: 'Songs', 
         handler: function(e) {
             app.router.navigate('#music/songs', {trigger: true});

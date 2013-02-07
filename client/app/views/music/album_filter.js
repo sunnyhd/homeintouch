@@ -1,5 +1,5 @@
 var app = require('app');
-var Artists = require('collections/artists');
+var Albums = require('collections/albums');
 var FilterPanelView = require('views/filtered_panel');
 var SearchModalView = require('views/movies/movie_mobile_search_modal');
 var FilterModalView = require('views/movies/movie_mobile_filter_modal');
@@ -8,12 +8,6 @@ var musicController = app.controller('music');
 module.exports = FilterPanelView.extend({
 
 	events: {
-        // List type
-		'click .movie-state-filter a[data-filter]' : 'artistListTypeChanged',
-
-        // View type (list or conver)
-        'click #view-mode-group button': 'listViewClicked',
-
         // Search and clear criteria
         'change input[name=search]': 'search',
         'click .search': 'search',
@@ -25,7 +19,7 @@ module.exports = FilterPanelView.extend({
         'click .touch-movies-default': 'clearMobile'
 	},
 
-    template: require('templates/music/artist_filter'),
+    template: require('templates/music/album_filter'),
     
     filter: {},
 
@@ -38,23 +32,7 @@ module.exports = FilterPanelView.extend({
         this.$('button.clear').hide();
         this.$('button.search').show();
 
-        this.bindTo(this.model, 'change', this.refreshDisplayedArtists, this);
-    },
-
-    setListBtnActive: function() {
-        this.$('#view-mode-group button').removeClass('active');
-        this.$('#view-mode-group button[href="#music/artists/list-view"]').addClass('active');
-    },
-    
-    setCoverBtnActive: function() {
-        this.$('#view-mode-group button').removeClass('active');
-        this.$('#view-mode-group button[href="#music/artists/cover-view"]').addClass('active');
-    },
-
-    listViewClicked: function(e) {
-        var $btn = $(e.currentTarget);
-        app.router.navigate($btn.attr('href'), {trigger: true});        
-        return false;
+        this.bindTo(this.model, 'change', this.refreshDisplayedAlbums, this);
     },
 
     // Artist list type functions
@@ -70,7 +48,7 @@ module.exports = FilterPanelView.extend({
         this.$('#filter-name').text(filterName);
     },
 
-    refreshDisplayedArtists: function() {
+    refreshDisplayedAlbums: function() {
         var opts = {};
 
         if (this.filter.lastN) {
@@ -81,7 +59,7 @@ module.exports = FilterPanelView.extend({
             };
         }
         console.log(opts);
-        var originalCollection = new Artists(this.collections.originalModels);
+        var originalCollection = new Albums(this.collections.originalModels);
         this.resetCollection( originalCollection.filterAndSortBy(opts) );
     },
 
@@ -90,7 +68,7 @@ module.exports = FilterPanelView.extend({
         var modal = new SearchModalView( { term: this.model.get('term') } );
         modal.on('media-movies:search', function(criteria) {
             this.performSearch(criteria);
-            this.refreshDisplayedArtists();
+            this.refreshDisplayedAlbums();
         }, this);
 
         app.modal.show(modal);
@@ -113,6 +91,6 @@ module.exports = FilterPanelView.extend({
     clearMobile: function() {
         this.filter = {};
         this.performSearch('');
-        this.refreshDisplayedArtists();
+        this.refreshDisplayedAlbums();
     }
 });
