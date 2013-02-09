@@ -141,3 +141,133 @@
 @media (max-width: 320px) {
 	.artists.coverView { .artistsResponsiveCoverView(0.69); }
 }
+
+/** ARTIST DETAILS */
+.artist-detail {
+	.visible-desktop {
+		@imgContainerWidth: 270px;
+		.m-header {
+			.clearfix;
+			h2 {
+				float: left;
+				color: @yellow;
+			}
+		}
+		.m-data {
+			color: darken(white, 30%);
+			strong {
+				color: white;
+			}
+			.clearfix;
+			.m-img-container {
+				.watermark-background;
+				.clearfix;
+				width: @imgContainerWidth;
+				float: left;
+
+				img {
+					max-width: 250px;
+					margin: 10px;
+				}
+				.no-img {
+					width: 250px;
+				}
+			}
+			.m-actions {
+				.watermark-background;
+				width: @imgContainerWidth;
+				clear: left;
+				float: left;
+				margin-top: 10px;
+				margin-right: 10px;
+				div {
+					margin: 10px;
+					.btn-block {
+						display: block;
+					}
+					a ~ a, a ~ div {
+						margin-top: 10px;
+					}
+				}
+			}
+			.m-data-container {
+				.watermark-background;
+				margin-left: @imgContainerWidth + 10px;
+
+				.m-rating {
+					margin: 10px;
+					position: absolute;
+					right: 20px;
+				}
+				.m-more-actions {
+					position: absolute;
+					right: 80px;
+					margin-top: 10px;
+					margin-left: 10px;
+				}
+
+				& > ul {
+					margin: 0px;
+					padding: 10px;
+					li {
+						padding: 0px 0px;
+						margin: 0px;
+						list-style: none;
+					}
+				}
+				.plot-container {
+					margin-top: 10px;
+					p.plot {
+						text-align: justify;
+					}
+				}
+			}
+		}
+	}
+
+	.hidden-desktop {
+		.m-data {
+			.watermark-background;
+			.clearfix;
+			
+			color: darken(white, 30%);
+			strong {
+				color: white;
+			}
+
+			.m-data-header {
+				margin: 10px;
+				.m-title {
+					float: left;
+					color: @yellow;
+					font-size: 1.2em;
+					font-weight: bold;
+				}
+			}
+			.m-data-container {
+				clear: left;
+				margin: 10px;
+				ul {
+					margin: 0px;
+					padding: 0px;
+					li {
+						padding: 0px 0px;
+						margin: 0px;
+						list-style: none;
+					}
+				}
+			}
+			.m-plot-container {
+				margin: 10px;
+				img {
+					width: 100px;
+					margin-right: 10px;
+					margin-bottom: 10px;
+				}
+				p {
+					text-align: justify;
+				}
+			}
+		}
+	}
+}

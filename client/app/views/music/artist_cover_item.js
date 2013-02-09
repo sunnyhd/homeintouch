@@ -1,5 +1,4 @@
 var app = require('app');
-var musicController = require('controllers/music');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -14,7 +13,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     show: function() {
-        //app.router.navigate('#music/artist/details/' + this.model.get('artistid'), {trigger: true});
+        app.router.navigate('#music/artists/' + this.model.get('artistid'), {trigger: true});
     }
     
 });

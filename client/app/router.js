@@ -15,9 +15,9 @@ module.exports = Backbone.Router.extend({
         'music/artists': 'artists',
         'music/artists/cover-view': 'artists',
         'music/artists/list-view': 'artistsListView',
+        'music/artists/:artistid': 'artistDetails',
         'music/albums': 'albums',
         'music/songs': 'songs',
-        'music/artists/:artistid': 'artistAlbums',
         'music/albums/:albumid': 'albumSongs',
         'import': 'importSettings',
 
@@ -81,8 +81,8 @@ module.exports = Backbone.Router.extend({
             this.app.controller('music').showSongList().fetch();
         },
 
-        artistAlbums: function(artistid) {
-            this.app.controller('music').showArtistAlbumList(artistid).fetch();
+        artistDetails: function(artistid) {
+            this.app.controller('music').showArtistDetailsView(artistid);
         },
 
         albumSongs: function(albumid) {

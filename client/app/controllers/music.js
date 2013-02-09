@@ -9,6 +9,7 @@ var SongListView = require('views/music/song_list');
 var AlbumSongListView = require('views/music/album_song_list');
 var ArtistAlbumListView = require('views/music/artist_album_list');
 var playlistsController = require('controllers/playlists');
+var ArtistDetailView = require('views/music/artist_detail')
 
 var ArtistContainerView = require('views/music/artist_container');
 var AlbumContainerView = require('views/music/album_container');
@@ -150,12 +151,35 @@ exports.showSongList = function() {
     return songs;
 };
 
-exports.showArtistAlbumList = function(artistid) {
-    var artist = new Artist({ artistid: artistid });
-    var view = new ArtistAlbumListView({ model: artist });
-    app.main.show(view);
-    return artist;
+exports.showArtistDetailsView = function(artistid) {
+
+    var artist = null;
+    var def = new $.Deferred();
+    var loadingArtist = def.promise();
+
+    // Show the loading view
+    app.showLoading(loadingArtist);
+
+    // When the movie instace is loaded, displays its data
+    loadingArtist.done(function() {
+        var view = new ArtistDetailView({ model: artist });
+        app.main.show(view);
+    });
+
+    // If the collection is loaded
+    if (!_.isUndefined(exports.artists) && exports.artists.models.length > 0) {
+        artist = exports.artists.get(artistid);
+        def.resolve();
+
+    // If not, loads the artist instance
+    } else {
+        artist = new Artist({ artistid: artistid });
+        artist.fetch().done(function() {
+            def.resolve();
+        });
+    }
 };
+
 
 exports.showAlbumSongList = function(albumid) {
     var album = new Album({ albumid: albumid });
