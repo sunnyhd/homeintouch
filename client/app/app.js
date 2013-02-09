@@ -313,7 +313,9 @@ app.addInitializer(function(options) {
     // Load bootstrapped data
     app.controller('device_types').deviceTypes.reset(options.deviceTypes);
     app.controller('homes').homes.reset(options.homes);
-    app.controller('players').ids = options.players;
+    if (options.players) {
+        app.controller('players').ids = options.players;
+    }
 
     app.loadMediaData();
 });
