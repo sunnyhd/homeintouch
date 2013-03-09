@@ -14,7 +14,8 @@ var Album = new mongoose.Schema({
     thumbnailid: ObjectId, 
     year: String, 
     mood: String,
-    style: String
+    style: String,
+    displayartist: String
 });
 
 helpers.cacheImages(Album, [

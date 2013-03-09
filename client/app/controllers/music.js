@@ -25,6 +25,7 @@ exports.filters = {
 };
 
 exports.filters.album.genres = null;
+exports.filters.album.years = null;
 exports.filters.artist.genres = null;
 
 exports.loading = null;

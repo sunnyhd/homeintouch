@@ -398,6 +398,7 @@ app.loadMediaData = function() {
     var loadingArtists = musicController.artists.fetch();
     var loadingAlbums = musicController.albums.fetch();
     var loadingAlbumsGenres = $.get('/api/genres/albums').done(function(data) { musicController.filters.album.genres = data; });
+    var loadingAlbumsYears = $.get('/api/years/albums').done(function(data) { musicController.filters.album.years = data; });
     var loadingArtistsGenres = $.get('/api/genres/artists').done(function(data) { musicController.filters.artist.genres = data; });
 
     musicController.loading = $.when(loadingArtists, loadingAlbums, loadingAlbumsGenres, loadingArtistsGenres);
