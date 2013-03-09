@@ -1,8 +1,8 @@
 var app = require('app');
 var Artists = require('collections/artists');
 var FilterPanelView = require('views/filtered_panel');
-var SearchModalView = require('views/movies/movie_mobile_search_modal');
-var FilterModalView = require('views/movies/movie_mobile_filter_modal');
+var SearchModalView = require('views/music/artist_mobile_search_modal');
+var FilterModalView = require('views/music/artist_mobile_filter_modal');
 var musicController = app.controller('music');
 
 module.exports = FilterPanelView.extend({
@@ -14,18 +14,23 @@ module.exports = FilterPanelView.extend({
         // View type (list or conver)
         'click #view-mode-group button': 'listViewClicked',
 
+        // Filter by Genre
+        'click #music-genre-list li a' : 'filterByGenre',
+
         // Search and clear criteria
         'change input[name=search]': 'search',
         'click .search': 'search',
         'click .clear': 'clear',
 
         // Touch events
-        'click .touch-movies-search': 'openMobileSearchDialog',
-        'click .touch-movies-filter': 'openMobileFilterDialog',
-        'click .touch-movies-default': 'clearMobile'
+        'click .touch-music-search': 'openMobileSearchDialog',
+        'click .touch-music-filter': 'openMobileFilterDialog',
+        'click .touch-music-default': 'clearMobile'
 	},
 
     template: require('templates/music/artist_filter'),
+
+    AllGenres: 'All Genres',
     
     filter: {},
 
@@ -39,6 +44,10 @@ module.exports = FilterPanelView.extend({
         this.$('button.search').show();
 
         this.bindTo(this.model, 'change', this.refreshDisplayedArtists, this);
+
+        this.genres = _.compact(_.union([this.AllGenres], musicController.filters.artist.genres));
+
+        this.renderGenres( this.genres );
     },
 
     setListBtnActive: function() {
@@ -49,6 +58,13 @@ module.exports = FilterPanelView.extend({
     setCoverBtnActive: function() {
         this.$('#view-mode-group button').removeClass('active');
         this.$('#view-mode-group button[href="#music/artists/cover-view"]').addClass('active');
+    },
+
+    renderGenres: function(genreList) {
+        _.each(genreList, function(genre) {
+            var listItem = $('<li><a href="#" data-genre="' + genre + '">' + genre + '</a></li>');
+            this.$('#music-genre-list').append(listItem);
+        }, this);
     },
 
     listViewClicked: function(e) {
@@ -70,6 +86,31 @@ module.exports = FilterPanelView.extend({
         this.$('#filter-name').text(filterName);
     },
 
+    filterByGenre: function(event) {
+        var $element = $(event.currentTarget);
+        var genre = $element.data('genre');
+
+        var $filterBtn = this.$('#genre-filter');
+        $filterBtn.find('.current-genre').html(genre);
+        $filterBtn.parent().removeClass('open');
+
+        this.filterByGenreAndYear({genre: genre});
+        return false;
+    },
+
+    // Filter functions
+    filterByGenreAndYear: function(filters) {
+        filters || (filters = {});       
+
+        if (filters.genre && (filters.genre !== this.AllGenres)) {
+            this.filter['genre'] = filters.genre;
+        } else if (filters.genre === this.AllGenres) {
+            this.filter['genre'] = null;
+        }
+
+        this.refreshDisplayedArtists();
+    },
+
     refreshDisplayedArtists: function() {
         var opts = {};
 
@@ -77,6 +118,9 @@ module.exports = FilterPanelView.extend({
             opts.listType = 'recently-added';
         } else {
             opts = {
+                filters: {
+                    genre: this.filter['genre']
+                },
                 criteria: this.model.get('term')
             };
         }
@@ -88,7 +132,7 @@ module.exports = FilterPanelView.extend({
     // Touch event handlers
     openMobileSearchDialog: function() {
         var modal = new SearchModalView( { term: this.model.get('term') } );
-        modal.on('media-movies:search', function(criteria) {
+        modal.on('media-music:search', function(criteria) {
             this.performSearch(criteria);
             this.refreshDisplayedArtists();
         }, this);
@@ -103,7 +147,7 @@ module.exports = FilterPanelView.extend({
             currentGenre: this.filter['genre'],
             currentYear: this.filter['year']
         });
-        modal.on('media-movies:filter', function(filters) {
+        modal.on('media-music:filter', function(filters) {
             this.filterByGenreAndYear(filters);
         }, this);
 

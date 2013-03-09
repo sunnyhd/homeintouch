@@ -18,6 +18,15 @@ var MusicHomeView = require('views/music/home');
 exports.artists = new Artists();
 exports.albums = new Albums();
 
+// Filter for albums
+exports.filters = {
+    album: {},
+    artist: {}
+};
+
+exports.filters.album.genres = null;
+exports.filters.artist.genres = null;
+
 exports.loading = null;
 
 exports.showHomeView = function() {

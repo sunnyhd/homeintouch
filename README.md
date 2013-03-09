@@ -4,7 +4,7 @@ Home In Touch
 Install
 -------
 
-    git clone git@github.com:scttnlsn/homeintouch.git
+    git clone git@github.com:sunnyhd/homeintouch.git
     cd homeintouch
     npm install
 

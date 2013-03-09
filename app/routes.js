@@ -38,10 +38,12 @@ module.exports = function(app) {
 
     app.get('/api/artists', controllers.artists.index);
     app.get('/api/artists/:artist', controllers.artists.show);
+    app.get('/api/genres/artists', controllers.artists.genres);
 
     app.get('/api/albums', controllers.albums.index);
     app.get('/api/albums/:album', controllers.albums.show);
     app.get('/api/albums/last/:n', controllers.albums.lastN);
+    app.get('/api/genres/albums', controllers.albums.genres);
 
     app.get('/api/songs', controllers.songs.index);
 

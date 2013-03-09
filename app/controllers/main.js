@@ -4,12 +4,14 @@ var xbmc = require('../../lib/xbmc');
 
 exports.index = function(req, res, next) {
     xbmc.rpc('Playlist.GetPlaylists', function(err, results) {
-        if (err) return callback(err);
-        var players = {};
 
-        results.forEach(function(playlist) {
-            players[playlist.type] = playlist.playlistid;
-        });
+        var players = {};
+        if (!err) {
+            console.log(JSON.stringify(results));
+            results.forEach(function(playlist) {
+                players[playlist.type] = playlist.playlistid;
+            });
+        } 
 
         res.render('index', {
             data: dataStore.getAll(),

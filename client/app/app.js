@@ -397,8 +397,10 @@ app.loadMediaData = function() {
     var musicController = app.controller('music');
     var loadingArtists = musicController.artists.fetch();
     var loadingAlbums = musicController.albums.fetch();
+    var loadingAlbumsGenres = $.get('/api/genres/albums').done(function(data) { musicController.filters.album.genres = data; });
+    var loadingArtistsGenres = $.get('/api/genres/artists').done(function(data) { musicController.filters.artist.genres = data; });
 
-    musicController.loading = $.when(loadingArtists, loadingAlbums);
+    musicController.loading = $.when(loadingArtists, loadingAlbums, loadingAlbumsGenres, loadingArtistsGenres);
 }
 
 app.vent.on('media:data-changed', function(address, value) {
