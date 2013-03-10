@@ -1,0 +1,63 @@
+/** SONGS LIST VIEW */
+
+.songs.listView {
+	margin: 0px;
+
+	li.song:nth-child(odd) {
+		.with-border-color(@gray);
+	}
+	li.song:nth-child(even) {
+		.with-border-color(@darkGray);
+	}
+
+	li.song {
+		margin: 5px;
+		list-style: none;
+		display: block;
+
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+	  	
+	  	height: 165px;
+
+	  	.song-image {
+	  		float: left;
+	  		height: 100%;
+	  		width: 120px;
+
+		  	img, .no-img {
+			  	height: 145px;
+			  	width: 100px;
+			  	margin: 10px;
+			}
+			.no-img {
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+	  	}
+
+		.song-info {
+			margin-left: 120px;
+			margin: 10px;
+			max-height: 145px;
+			overflow: hidden;
+			color: white;
+
+			div {
+				font-size: 0.9em;
+				color: darken(white, 30%);
+			}
+			.info-key {
+				font-weight: bold;
+				color: white;
+			}
+
+			span.song-title {
+				font-size: 1.2em;
+				color: @yellow;
+				font-weight: bold;
+			}
+		}
+	}
+}

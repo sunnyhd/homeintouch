@@ -4,8 +4,6 @@ var Artists = require('collections/artists');
 var Songs = require('collections/songs');
 var Album = require('models/album');
 var Artist = require('models/artist');
-var AlbumListView = require('views/music/album_list');
-var SongListView = require('views/music/song_list');
 var AlbumSongListView = require('views/music/album_song_list');
 var ArtistAlbumListView = require('views/music/artist_album_list');
 var playlistsController = require('controllers/playlists');
@@ -13,10 +11,12 @@ var ArtistDetailView = require('views/music/artist_detail')
 
 var ArtistContainerView = require('views/music/artist_container');
 var AlbumContainerView = require('views/music/album_container');
+var SongContainerView = require('views/music/song_container');
 var MusicHomeView = require('views/music/home');
 
 exports.artists = new Artists();
 exports.albums = new Albums();
+exports.songs = new Songs();
 
 // Filter for albums
 exports.filters = {
@@ -155,10 +155,8 @@ exports.showSongList = function() {
         }
     });
 
-    var songs = new Songs();
-    var view = new SongListView({ collection: songs });
+    var view = new SongContainerView({ collection: exports.songs });
     app.main.show(view);
-    return songs;
 };
 
 exports.showArtistDetailsView = function(artistid) {

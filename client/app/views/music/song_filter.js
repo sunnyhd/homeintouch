@@ -1,8 +1,8 @@
 var app = require('app');
-var Albums = require('collections/albums');
+var Songs = require('collections/songs');
 var FilterPanelView = require('views/filtered_panel');
-var SearchModalView = require('views/music/album_mobile_search_modal');
-var FilterModalView = require('views/music/album_mobile_filter_modal');
+var SearchModalView = require('views/music/song_mobile_search_modal');
+var FilterModalView = require('views/music/song_mobile_filter_modal');
 var musicController = app.controller('music');
 
 module.exports = FilterPanelView.extend({
@@ -23,7 +23,7 @@ module.exports = FilterPanelView.extend({
         'click .touch-music-default': 'clearMobile'
 	},
 
-    template: require('templates/music/album_filter'),
+    template: require('templates/music/song_filter'),
 
     AllYears: 'All Years',
 
@@ -40,7 +40,7 @@ module.exports = FilterPanelView.extend({
         this.$('button.clear').hide();
         this.$('button.search').show();
 
-        this.bindTo(this.model, 'change', this.refreshDisplayedAlbums, this);
+        this.bindTo(this.model, 'change', this.refreshDisplayedSongs, this);
 
         this.genres = _.compact(_.union([this.AllGenres], musicController.filters.album.genres));
         this.years = _.compact(_.union([this.AllYears], musicController.filters.album.years));
@@ -87,7 +87,7 @@ module.exports = FilterPanelView.extend({
         return false;
     },
 
-    refreshDisplayedAlbums: function() {
+    refreshDisplayedSongs: function() {
         var opts = {};
 
         if (this.filter.lastN) {
@@ -102,7 +102,7 @@ module.exports = FilterPanelView.extend({
             };
         }
         console.log(opts);
-        var originalCollection = new Albums(this.collections.originalModels);
+        var originalCollection = new Songs(this.collections.originalModels);
         this.resetCollection( originalCollection.filterAndSortBy(opts) );
     },
 
@@ -111,7 +111,7 @@ module.exports = FilterPanelView.extend({
         var modal = new SearchModalView( { term: this.model.get('term') } );
         modal.on('media-music:search', function(criteria) {
             this.performSearch(criteria);
-            this.refreshDisplayedAlbums();
+            this.refreshDisplayedSongs();
         }, this);
 
         app.modal.show(modal);
@@ -147,12 +147,12 @@ module.exports = FilterPanelView.extend({
             this.filter['genre'] = null;
         }
 
-        this.refreshDisplayedAlbums();
+        this.refreshDisplayedSongs();
     },
 
     clearMobile: function() {
         this.filter = {};
         this.performSearch('');
-        this.refreshDisplayedAlbums();
+        this.refreshDisplayedSongs();
     }
 });
