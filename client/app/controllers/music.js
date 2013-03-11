@@ -7,7 +7,7 @@ var Artist = require('models/artist');
 var AlbumSongListView = require('views/music/album_song_list');
 var ArtistAlbumListView = require('views/music/artist_album_list');
 var playlistsController = require('controllers/playlists');
-var ArtistDetailView = require('views/music/artist_detail')
+var ArtistDetailView = require('views/music/artist_detail_container');
 
 var ArtistContainerView = require('views/music/artist_container');
 var AlbumContainerView = require('views/music/album_container');
@@ -168,7 +168,7 @@ exports.showArtistDetailsView = function(artistid) {
     // Show the loading view
     app.showLoading(loadingArtist);
 
-    // When the movie instace is loaded, displays its data
+    // When the artist instace is loaded, displays its data
     loadingArtist.done(function() {
         var view = new ArtistDetailView({ model: artist });
         app.main.show(view);
@@ -177,12 +177,38 @@ exports.showArtistDetailsView = function(artistid) {
     // If the collection is loaded
     if (!_.isUndefined(exports.artists) && exports.artists.models.length > 0) {
         artist = exports.artists.get(artistid);
+        artist.albums = new Albums(exports.albums.where({'artistid' : artist.get('artistid')}));
+        _.each(artist.albums.models, function(album) {
+            album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
+            album.songs.comparator = function(song) { return song.get('track'); };
+            album.songs.sort({silent: true});
+        });
         def.resolve();
 
     // If not, loads the artist instance
     } else {
         artist = new Artist({ artistid: artistid });
-        artist.fetch().done(function() {
+        var fetchingArtist = artist.fetch();
+        var fetchingAlbums = null;
+        var fetchingSongs = null;
+        var fetchingArtistDetails = fetchingArtist;
+        if (!_.isUndefined(exports.albums) && exports.albums.models.length > 0) {
+            fetchingAlbums = exports.albums.fetch();
+            if (!_.isUndefined(exports.songs) && exports.songs.models.length > 0) {
+                fetchingSongs = exports.songs.fetch();
+                fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums, fetchingSongs);
+            } else {
+                fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums);
+            }
+        }
+
+        fetchingArtistDetails.done(function() {
+            artist.albums = new Albums(exports.albums.where({'artistid' : artist.get('artistid')}));
+            _.each(artist.albums.models, function(album) {
+                album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
+                album.songs.comparator = function(song) { return song.get('track'); };
+                album.songs.sort({silent: true});
+            });
             def.resolve();
         });
     }

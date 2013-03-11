@@ -1,4 +1,4 @@
-var AlbumItemView = require('views/music/album_item');
+var AlbumItemView = require('views/music/artist_album_item_container');
 var FilteredListView = require('views/filtered_list');
 
 module.exports = FilteredListView.extend({

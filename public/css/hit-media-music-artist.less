@@ -144,6 +144,7 @@
 
 /** ARTIST DETAILS */
 .artist-detail {
+
 	.visible-desktop {
 		@imgContainerWidth: 270px;
 		.m-header {
@@ -268,6 +269,57 @@
 					text-align: justify;
 				}
 			}
+		}
+	}
+}
+
+#album-list {
+
+	ul.albums {
+		li.album {
+			.watermark-background;
+			list-style: none;
+			padding: 20px 0;
+		}
+
+		li.album ~ li.album {
+  			margin-top: 10px;
+	  	}
+	}
+
+	#album-detail {
+		div.albumContainer {
+			width: 120px;
+
+			.album-caption {
+				margin-top: 10px;
+				font-size: 0.9em;
+				color: white;
+				font-weight: bold;
+			}
+		}	
+	}
+
+	#song-list {
+		float: left;
+		margin-left: 10px;
+
+		ul.songs li {
+			list-style: none;
+		}
+
+		div.song-track {
+			float: left;
+			color: white;
+			font-weight: bold;
+			width: 2em;
+		}
+
+		span.song-title {
+			margin-left: 5px;
+			font-size: 1.1em;
+			color: @yellow;
+			font-weight: bold;
 		}
 	}
 }
