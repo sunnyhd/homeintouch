@@ -4,7 +4,6 @@ var Artists = require('collections/artists');
 var Songs = require('collections/songs');
 var Album = require('models/album');
 var Artist = require('models/artist');
-var AlbumSongListView = require('views/music/album_song_list');
 var ArtistAlbumListView = require('views/music/artist_album_list');
 var playlistsController = require('controllers/playlists');
 var ArtistDetailView = require('views/music/artist_detail_container');
@@ -55,10 +54,14 @@ exports.showHomeView = function() {
     app.main.show(view);
 };
 
-exports.showArtistList = function() {
+exports.showArtistCoverView = function() {
 
     exports.loading.done(function(){
-        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+
+        // Removes previous link texts
+        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
+        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
+
         app.updateDesktopBreadcrumbNav( { 
             itemType: 'room',
             name: 'Artist', 
@@ -85,7 +88,11 @@ exports.showArtistList = function() {
 exports.showArtistListView = function() {
 
     exports.loading.done(function(){
-        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+
+        // Removes previous link texts
+        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
+        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
+
         app.updateDesktopBreadcrumbNav( { 
             itemType: 'room',
             name: 'Artist', 
@@ -111,52 +118,61 @@ exports.showArtistListView = function() {
 
 exports.showAlbumList = function() {
 
-    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
-    app.updateDesktopBreadcrumbNav( { 
-        itemType: 'room',
-        name: 'Albums', 
-        handler: function(e) {
-            app.router.navigate('#music/albums', {trigger: true});
-            return false;
-        }
-    });
+    exports.loading.done(function(){
 
-    app.updateTouchNav({
-        name: 'Albums', 
-        previous: 'Music',
-        handler: function(e) {
-            app.router.navigate('#music', {trigger: true});
-            return false;
-        }
-    });
+        // Removes previous link texts
+        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
+        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
 
-    var view = new AlbumContainerView({ collection: exports.albums});
-    app.main.show(view);
+        app.updateDesktopBreadcrumbNav( { 
+            itemType: 'room',
+            name: 'Albums', 
+            handler: function(e) {
+                app.router.navigate('#music/albums', {trigger: true});
+                return false;
+            }
+        });
+
+        app.updateTouchNav({
+            name: 'Albums', 
+            previous: 'Music',
+            handler: function(e) {
+                app.router.navigate('#music', {trigger: true});
+                return false;
+            }
+        });
+
+        var view = new AlbumContainerView({ collection: exports.albums});
+        app.main.show(view);
+    });
 };
 
 exports.showSongList = function() {
 
-    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
-    app.updateDesktopBreadcrumbNav( { 
-        itemType: 'room',
-        name: 'Songs', 
-        handler: function(e) {
-            app.router.navigate('#music/songs', {trigger: true});
-            return false;
-        }
-    });
+    exports.loading.done(function(){
 
-    app.updateTouchNav({
-        name: 'Songs', 
-        previous: 'Music',
-        handler: function(e) {
-            app.router.navigate('#music', {trigger: true});
-            return false;
-        }
-    });
+        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+        app.updateDesktopBreadcrumbNav( { 
+            itemType: 'room',
+            name: 'Songs', 
+            handler: function(e) {
+                app.router.navigate('#music/songs', {trigger: true});
+                return false;
+            }
+        });
 
-    var view = new SongContainerView({ collection: exports.songs });
-    app.main.show(view);
+        app.updateTouchNav({
+            name: 'Songs', 
+            previous: 'Music',
+            handler: function(e) {
+                app.router.navigate('#music', {trigger: true});
+                return false;
+            }
+        });
+
+        var view = new SongContainerView({ collection: exports.songs });
+        app.main.show(view);
+    });
 };
 
 exports.showArtistDetailsView = function(artistid) {
@@ -170,7 +186,27 @@ exports.showArtistDetailsView = function(artistid) {
 
     // When the artist instace is loaded, displays its data
     loadingArtist.done(function() {
-        var view = new ArtistDetailView({ model: artist });
+
+        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
+        app.updateDesktopBreadcrumbNav( { 
+            itemType: 'inner-room',
+            name: artist.get('label'), 
+            handler: function(e) {
+                app.router.navigate('#music/artists/' + artist.get('artistid'), {trigger: true});
+                return false;
+            }
+        });
+
+        app.updateTouchNav({
+            name: artist.get('label'), 
+            previous: 'Artist',
+            handler: function(e) {
+                app.router.navigate('#music/artists', {trigger: true});
+                return false;
+            }
+        });
+
+        var view = new ArtistDetailView({ model: artist, mode: 'artist' });
         app.main.show(view);
     });
 
@@ -192,9 +228,9 @@ exports.showArtistDetailsView = function(artistid) {
         var fetchingAlbums = null;
         var fetchingSongs = null;
         var fetchingArtistDetails = fetchingArtist;
-        if (!_.isUndefined(exports.albums) && exports.albums.models.length > 0) {
+        if (_.isUndefined(exports.albums) || exports.albums.models.length == 0) {
             fetchingAlbums = exports.albums.fetch();
-            if (!_.isUndefined(exports.songs) && exports.songs.models.length > 0) {
+            if (_.isUndefined(exports.songs) || exports.songs.models.length == 0) {
                 fetchingSongs = exports.songs.fetch();
                 fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums, fetchingSongs);
             } else {
@@ -216,10 +252,74 @@ exports.showArtistDetailsView = function(artistid) {
 
 
 exports.showAlbumSongList = function(albumid) {
-    var album = new Album({ albumid: albumid });
-    var view = new AlbumSongListView({ model: album });
-    app.main.show(view);
-    return album;
+
+    var artist = null;
+    var def = new $.Deferred();
+    var loadingArtist = def.promise();
+
+    // Show the loading view
+    app.showLoading(loadingArtist);
+
+    // When the artist instace is loaded, displays its data
+    loadingArtist.done(function() {
+
+        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
+        app.updateDesktopBreadcrumbNav( { 
+            itemType: 'inner-room',
+            name: artist.albums.models[0].get('label'), 
+            handler: function(e) {
+                app.router.navigate('#music/albums/' + albumid, {trigger: true});
+                return false;
+            }
+        });
+
+        app.updateTouchNav({
+            name: artist.albums.models[0].get('label'), 
+            previous: 'Albums',
+            handler: function(e) {
+                app.router.navigate('#music/albums', {trigger: true});
+                return false;
+            }
+        });
+
+        var view = new ArtistDetailView({ model: artist, mode: 'album' });
+        app.main.show(view);
+    });
+
+    if (!_.isUndefined(exports.albums) && exports.albums.models.length > 0) {
+        var album = exports.albums.get(albumid);
+        artist = exports.artists.where({'artistid' : album.get('artistid')})[0];
+        artist.albums = new Albums([album]);
+
+        album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
+        album.songs.comparator = function(song) { return song.get('track'); };
+        album.songs.sort({silent: true});
+        def.resolve();
+    } else {
+        artist = new Artist({ artistid: artistid });
+        var album = new Album({ albumid: albumid})
+        var fetchingArtist = artist.fetch();
+        var fetchingAlbums = null;
+        var fetchingSongs = null;
+        var fetchingArtistDetails = fetchingArtist;
+        if (_.isUndefined(exports.albums) || exports.albums.models.length == 0) {
+            fetchingAlbums = album.fetch();
+            if (_.isUndefined(exports.songs) || exports.songs.models.length == 0) {
+                fetchingSongs = exports.songs.fetch();
+                fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums, fetchingSongs);
+            } else {
+                fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums);
+            }
+        }
+
+        fetchingArtistDetails.done(function() {
+            artist.albums = new Albums([album]);
+            album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
+            album.songs.comparator = function(song) { return song.get('track'); };
+            album.songs.sort({silent: true});
+            def.resolve();
+        });
+    }
 };
 
 exports.addSongToPlaylist = function(song, position) {

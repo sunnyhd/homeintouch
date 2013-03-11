@@ -11,6 +11,12 @@ module.exports = FilteredListView.extend({
         this.collection = this.model.albums;
         this.bindTo(this.model, 'change', this.render, this);
     },
+
+    serializeData: function() {
+        var result = FilteredListView.prototype.serializeData.apply(this);
+        result.artistMode = (this.options.mode == 'artist');
+        return result;
+    },
     
     appendHtml: function(cv, iv) {
         this.$('.albums').append(iv.el);

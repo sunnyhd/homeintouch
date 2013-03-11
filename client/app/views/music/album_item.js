@@ -1,6 +1,4 @@
-var Playable = require('models/playable');
-var musicController = require('controllers/music');
-var playersController = require('controllers/players');
+var app = require('app');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -11,20 +9,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
     template: require('templates/music/album_item'),
 
     events: {
-        'click .add-to-playlist': 'addToPlaylist',
-        'click .play': 'play'
+        'click .albumContainer': 'show'
     },
 
-    addToPlaylist: function() {
-        musicController.addAlbumToPlaylist(this.model);
-    },
-
-    play: function() {
-        musicController.addAlbumToPlaylist(this.model, 0);
-
-        var playlistid = playersController.getPlayerId('audio');
-        var playable = new Playable({ item: { playlistid: playlistid, position: 0 }});
-        playable.save();
+    show: function() {
+        app.router.navigate('#music/albums/' + this.model.get('albumid'), {trigger: true});
     }
-    
 });

@@ -20,7 +20,7 @@ module.exports = Backbone.Marionette.Layout.extend({
         var artistDetailView = new ArtistDetailView({ model: this.model });
         this.artistDetail.show(artistDetailView);
 
-        var albumListView = new AlbumListView({ model: this.model });
+        var albumListView = new AlbumListView({ model: this.model, mode: this.options.mode });
         this.albumList.show(albumListView);
     }
 });

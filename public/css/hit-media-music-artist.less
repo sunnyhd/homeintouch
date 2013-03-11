@@ -275,7 +275,14 @@
 
 #album-list {
 
+	h3 {
+		color: white;
+	}
+
 	ul.albums {
+
+		margin-left: 0px;
+
 		li.album {
 			.watermark-background;
 			list-style: none;
@@ -304,6 +311,13 @@
 		float: left;
 		margin-left: 10px;
 
+		.hidden-desktop.album-caption {
+			margin-bottom: 10px;
+			font-size: 1.2em;
+			color: white;
+			font-weight: bold;
+		}
+
 		ul.songs li {
 			list-style: none;
 		}
@@ -320,6 +334,23 @@
 			font-size: 1.1em;
 			color: @yellow;
 			font-weight: bold;
+		}
+	}
+}
+
+/* Landscape phone to portrait tablet */
+/* Landscape phones and down */
+/* Portrait phones */
+@media (max-width: 767px) or (max-width: 480px) or (max-width: 320px) {
+	#album-list {
+
+		div.row-fluid {
+			margin-bottom: 10px;
+		}
+
+		ul.albums li.album div.container-fluid { 
+			padding-left: 10px;
+			padding-right: 10px;
 		}
 	}
 }

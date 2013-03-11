@@ -3,6 +3,7 @@ var SongListView = require('views/music/album_song_list');
 
 var musicController = require('controllers/music');
 var playersController = require('controllers/players');
+var Playable = require('models/playable');
 
 module.exports = Backbone.Marionette.Layout.extend({
 
