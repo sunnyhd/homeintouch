@@ -38,6 +38,8 @@ exports.lastN = function(req, res, next) {
     });
 };
 
+var genreSplitter = ',';
+
 exports.genres = function(req, res, next) {
     Movie.find({}, ['genre'], function(err, shows) {
 	    if (err) return next(err);
@@ -45,8 +47,8 @@ exports.genres = function(req, res, next) {
 
 	    for (var i = 0; i < shows.length; i++) {
 	    	var genre = shows[i].genre;
-	    	if (genre.indexOf('/') > 0) {
-	    		var subGenres = genre.split('/');
+	    	if (genre.indexOf(genreSplitter) > 0) {
+	    		var subGenres = genre.split(genreSplitter);
 	    		for (var j = 0; j < subGenres.length; j++) {
 	    			var subGenre = subGenres[j];
 	    			genres.push(subGenre.trim());

@@ -32,6 +32,8 @@ exports.show = function(req, res, next) {
     });
 };
 
+var genresSplitter = ',';
+
 exports.genres = function(req, res, next) {
     TVShow.find({}, ['genre'], function(err, shows) {
         if (err) return next(err);
@@ -39,8 +41,8 @@ exports.genres = function(req, res, next) {
 
         for (var i = 0; i < shows.length; i++) {
             var genre = shows[i].genre;
-            if (genre.indexOf('/') > 0) {
-                var subGenres = genre.split('/');
+            if (genre.indexOf(genresSplitter) > 0) {
+                var subGenres = genre.split(genresSplitter);
                 for (var j = 0; j < subGenres.length; j++) {
                     var subGenre = subGenres[j];
                     genres.push(subGenre.trim());
