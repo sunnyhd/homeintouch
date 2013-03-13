@@ -63,13 +63,15 @@ exports.years = function(req, res, next) {
         var years = [];
 
         for (var i = 0; i < shows.length; i++) {
-            var year = shows[i].year.toString();
-            if (year < 2000) {
-                var yearPrefix = year.slice(0, (year.length - 1));
-                year = yearPrefix + '0-' + yearPrefix + '9';
-            }
+            if (shows[i].year) {
+                var year = shows[i].year.toString();
+                if (year < 2000) {
+                    var yearPrefix = year.slice(0, (year.length - 1));
+                    year = yearPrefix + '0-' + yearPrefix + '9';
+                }
 
-            years.push(year);
+                years.push(year);
+            }
         };
 
         years = _.uniq(years);
