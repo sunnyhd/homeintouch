@@ -37,6 +37,13 @@ exports.cacheImages = function(Model, fields) {
                     }
                 }
 
+                var lastCharIndex = imageUrl.length - 1;
+                var lastChar = imageUrl.charAt(lastCharIndex);
+
+                if (lastChar === '/') {
+                    imageUrl = imageUrl.slice(0, -1);
+                }
+
                 var options = {
                     url: imageUrl,
                     encoding: 'binary'
