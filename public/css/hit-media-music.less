@@ -6,13 +6,36 @@
 	.background-black-overlay;
 	.clearfix;
 	padding: 20px;
-	.hit-icon {
-		width: 200px;
-		height: 200px;
+
+	.hit-icon { .square-size(200px); }
+	.hit-icon~.hit-icon { margin-left: 100px; }
+	img { height: 90%; }
+	.hit-icon span { top: 5px; }
+
+	/* 1024 desktop */
+	@media (max-width: 1024px) { 
+		.hit-icon~.hit-icon { margin-left: 80px; }
 	}
-	.hit-icon~.hit-icon {
-		margin-left: 100px;
+
+	/* Portrait tablet to landscape and desktop */
+	@media (max-width: 979px) { 
+		.hit-icon~.hit-icon { margin-left: 50px; }
 	}
+
+	/* Landscape phone to portrait tablet */
+	@media (max-width: 767px) {
+		.hit-icon { .square-size(120px); }
+		.hit-icon~.hit-icon { margin-left: 20px; }
+	}
+ 
+	/* Landscape phones and down */
+	@media (max-width: 480px) {
+		padding: 10px;
+		.hit-icon { .square-size(90px); }
+		.hit-icon~.hit-icon { margin-left: 10px; }
+		img { height: 85%; }
+		.hit-icon span { top: 2px; }
+	}	
 }
 
 

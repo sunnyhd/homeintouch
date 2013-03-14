@@ -9,7 +9,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     template: require('templates/music/home'),
 
     onRender: function() {
-        app.loadIcons(this.el);
+        app.loadSvgImgs(this.el);
     },
 
     select: function(mode) {
