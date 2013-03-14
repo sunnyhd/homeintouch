@@ -40,15 +40,17 @@ exports.genres = function(req, res, next) {
         var genres = [];
 
         for (var i = 0; i < shows.length; i++) {
-            var genre = shows[i].genre;
-            if (genre.indexOf(genresSplitter) > 0) {
-                var subGenres = genre.split(genresSplitter);
-                for (var j = 0; j < subGenres.length; j++) {
-                    var subGenre = subGenres[j];
-                    genres.push(subGenre.trim());
+            if (shows[i].genre) {
+                var genre = shows[i].genre;
+                if (genre.indexOf(genresSplitter) > 0) {
+                    var subGenres = genre.split(genresSplitter);
+                    for (var j = 0; j < subGenres.length; j++) {
+                        var subGenre = subGenres[j];
+                        genres.push(subGenre.trim());
+                    }
+                } else {
+                    genres.push(shows[i].genre);    
                 }
-            } else {
-                genres.push(shows[i].genre);    
             }
         };
 
