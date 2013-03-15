@@ -33,11 +33,20 @@ module.exports = Backbone.Model.extend({
         }
     },
 
+    banner: function() {
+        var id = this.get('bannerid');
+
+        if (id) {
+            return '/api/images/' + this.get('bannerid');
+        }
+    },    
+
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         data.thumbnail = this.thumbnail();
+        data.banner = this.banner();
         data.fanartImage = this.fanartImage();
         return data;
-    },
+    }
 
 });
