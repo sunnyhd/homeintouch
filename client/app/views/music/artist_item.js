@@ -8,7 +8,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     template: require('templates/music/artist_item'),
 
-    iconNoImg: app.getBackgroundIcon('media.defaultMovie', '#333333'),
+    iconNoImg: app.getBackgroundIcon('media.defaultArtist', '#333333'),
 
     events: {
         'click .artistContainer': 'show'
