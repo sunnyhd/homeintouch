@@ -23,11 +23,28 @@ exports.cacheImages = function(Model, fields) {
 
         var funcs = fields.map(function(attrs) {
             return function(callback) {
-                if (!self[attrs.src]) return callback();
+
+                var source;
+                if (attrs.src.indexOf('.') !== 0) {
+                    // The source is an inner object
+                    var srcArray = attrs.src.split('.');
+                    var sourceObj = self;
+                    for (var i = 0; i < srcArray.length; i++) {
+                        if (!sourceObj) {
+                            return callback();
+                        }
+                        sourceObj = sourceObj[srcArray[i]];
+                    }
+                    source = sourceObj;
+                } else {
+                    source = self[attrs.src];
+                }
+                
+                if (!source) return callback();   
 
                 var imageUrl;
 
-                var urlFromXbmc = self[attrs.src];
+                var urlFromXbmc = source;
                 if (urlFromXbmc.indexOf('image://') === 0) {
                     var tempURL = urlFromXbmc.substring('image://'.length);
                     if (tempURL.indexOf('http') === 0) {
