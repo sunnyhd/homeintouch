@@ -1,19 +1,35 @@
 <div class="songContainer clearfix">
     <div class="song-image">
         {{#if thumbnail}}
-        <img src="{{ thumbnail }}">
+            <img src="{{ thumbnail }}">
         {{else}}
-        <div class="no-img"></div>
+            <div class="no-img"></div>
         {{/if}}
     </div>
 
     <div class="song-info">
     	<div>
     		<span class="song-title">{{ label }}</span>
-    		<span class="pull-right">
-				<a href="#" data-action="play" class="btn btn-success btn-block"><i class="icon-play icon-white"/> <span class="visible-desktop">Play</span></a>
-			 	<a href="#" data-action="playlist" class="btn btn-primary btn-block"><i class="icon-time icon-white"/> <span class="visible-desktop">Add to Playlist</span></a>
-			</span>
+    		
+            {{! Add to playlist }}
+            <button data-action="playlist" class="btn btn-primary pull-right">
+                <i class="icon-time icon-white" />
+                <span class="visible-desktop">Add to Playlist</span>
+            </button>
+
+            {{! Play buttons }}
+            <div class="btn-group pull-right">
+                <button class="btn btn-success" data-action="play">
+                    <i class="icon-play icon-white" />
+                    <span class="visible-desktop">Play</span>
+                </button>
+                <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-action="play-album">Play Album</a></li>
+                </ul>
+            </div>
     	</div>
     	<div><span class="info-key">Album: </span> {{ album }}</div>
     	<div><span class="info-key">Artist: </span> {{ artist }}</div>
