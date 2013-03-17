@@ -32,6 +32,9 @@ module.exports = function(app) {
     app.get('/api/tvshows/:tvshow', controllers.tvshows.show);
     app.get('/api/genres/tvshows', controllers.tvshows.genres);
 
+    app.get('/api/seasons', controllers.seasons.index);
+    app.get('/api/seasons/:tvshow/:season', controllers.seasons.show);
+
     app.get('/api/episodes', controllers.episodes.index);
     app.get('/api/episodes/last/:n', controllers.episodes.lastN);
     app.get('/api/episodes/label', controllers.episodes.label);

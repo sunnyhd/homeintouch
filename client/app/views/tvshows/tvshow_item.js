@@ -1,6 +1,4 @@
 var app = require('app');
-var tvShowController = require('controllers/tvshows');
-var TVShowDetailView = require('views/tvshows/tvshow_episode_list');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 

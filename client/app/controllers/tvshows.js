@@ -1,11 +1,17 @@
 var app = require('app');
+
 var Episodes = require('collections/episodes');
 var TVShows = require('collections/tvshows');
+var Seasons = require('collections/seasons');
+
 var TVShow = require('models/tvshow');
-var EpisodeListView = require('views/tvshows/episode_list');
+var Season = require('models/season');
+
+var SeasonEpisodeListView = require('views/tvshows/season_episode_list');
 var TVShowContainerView = require('views/tvshows/tvshow_container');
-var TVShowEpisodeListView = require('views/tvshows/tvshow_episode_list');
+var TVShowSeasonListView = require('views/tvshows/tvshow_season_list');
 var MediaConfigurationOptionsView = require('views/settings/media_configuration_options');
+
 var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 
@@ -34,7 +40,7 @@ exports.showTVShowList = function() {
     return exports.shows;
 };
 
-exports.showTVShowEpisodeList = function(tvshowid) {
+exports.showTVShowSeasonList = function(tvshowid) {
 
     updateConfigurationOptions();
 
@@ -42,7 +48,7 @@ exports.showTVShowEpisodeList = function(tvshowid) {
 
     var successCallback = function(model) {
         updateTvShowNavs(model.get('tvshowid'), model.get('label'));
-        var view = new TVShowEpisodeListView({ model: tvshow });
+        var view = new TVShowSeasonListView({ model: tvshow });
         app.main.show(view);
     }
 
@@ -51,16 +57,18 @@ exports.showTVShowEpisodeList = function(tvshowid) {
     return tvshow;
 };
 
-exports.showEpisodeList = function() {
+exports.showSeasonEpisodeList = function(tvshowid, season) {
 
-    updateNavs();
-    updateConfigurationOptions();
+    var season = new Season({ tvshowid: tvshowid, season: season });
 
-    var episodes = new Episodes();
-    var view = new EpisodeListView({ collection: episodes });
-    app.main.show(view);
-    return episodes;
-};
+    var successCallback = function(model) {
+        updateSeasonNavs(model.get('tvshowid'), model.get('season'), model.get('showtitle'), model.get('label'));
+        var view = new SeasonEpisodeListView({ model: season });
+        app.main.show(view);
+    }
+
+    season.fetch({success: successCallback});
+}
 
 exports.play = function(episode) {
     episode.play();
@@ -97,7 +105,10 @@ function updateNavs () {
 };
 
 function updateTvShowNavs (tvShowId, tvShowName) {
-     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    // Removes previous link texts
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html('');
+    $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
+
     app.updateDesktopBreadcrumbNav( { 
         itemType: 'room',
         name: tvShowName, 
@@ -112,6 +123,27 @@ function updateTvShowNavs (tvShowId, tvShowName) {
         previous: 'TV Shows',
         handler: function(e) {
             app.router.navigate('#tvshows', {trigger: true});
+            return false;
+        }
+    });
+};
+
+function updateSeasonNavs (tvShowId, season, tvShowName, seasonName) {
+    $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'inner-room',
+        name: seasonName, 
+        handler: function(e) {
+            app.router.navigate(('#tvshows/' + tvShowId + '/season/' + season), {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: seasonName, 
+        previous: tvShowName,
+        handler: function(e) {
+            app.router.navigate(('#tvshows/' + tvShowId), {trigger: true});
             return false;
         }
     });

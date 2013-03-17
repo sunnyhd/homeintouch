@@ -1,19 +1,21 @@
-var Seasons = require('collections/seasons');
+var Episodes = require('collections/episodes');
 
 module.exports = Backbone.Model.extend({
 
-    idAttribute: 'tvshowid',
+    idAttribute: '_id',
 
-    urlRoot: '/api/tvshows',
+    url: function() {
+        return '/api/seasons/' + this.get('tvshowid') + '/' + this.get('season');
+    },
 
     initialize: function() {
-        this.seasons = new Seasons();
+        this.episodes = new Episodes();
     },
 
     parse: function(res) {
-        this.seasons || (this.seasons = new Seasons());
-        this.seasons.reset(res.seasons);
-        delete res.seasons;
+        this.episodes || (this.episodes = new Episodes());
+        this.episodes.reset(res.episodes);
+        delete res.episodes;
         return res;
     },
 

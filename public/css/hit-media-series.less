@@ -110,6 +110,87 @@ div.tvshow-banner {
 	}
 }
 
+// SEASONS
+
+/* SEASON COVER VIEW */
+
+.seasonsResponsiveCoverView (@proportion: 1) {
+	li.season {
+	  	height: 178px * @proportion;
+	  	width: 124px * @proportion;
+	  	margin: 5px * @proportion;
+	  	img, .no-img {
+	  		width: 114px * @proportion;
+	  		height: 168px * @proportion;
+		  	margin: 5px * @proportion;
+		}
+	}
+}
+
+.seasons {
+	.seasonsResponsiveCoverView(1.5);
+	margin: 0px;
+	li.season {
+		float: left;
+		list-style: none;
+	  	position: relative;
+	  	.with-border-color(@gray);
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+		.no-img {
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+		.season-caption {
+			width: 100%;
+			position: absolute;
+			right: 0;
+			bottom: 10px;
+			left: 0;
+			background: #333;
+			background: rgba(0, 0, 0, 0.75);
+			color: white;
+			span {
+				padding: 5px 10px;
+				display: block;
+				max-height: 35px;
+				overflow: hidden;
+			}
+		}
+	}
+}
+
+/* Large desktop */
+@media (max-width: 1200px) { 
+	.seasons.coverView { .seasonsResponsiveCoverView(1.5); }
+}
+
+/* 1024 desktop */
+@media (max-width: 1024px) { 
+	.seasons.coverView { .seasonsResponsiveCoverView(1.39); }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (max-width: 979px) { 
+	.seasons.coverView { .seasonsResponsiveCoverView(1); }
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	.seasons.coverView { .seasonsResponsiveCoverView(1.25); }
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) {
+	.seasons.coverView { .seasonsResponsiveCoverView(1); }
+}
+
+/* Portrait phones */
+@media (max-width: 320px) {
+	.seasons.coverView { .seasonsResponsiveCoverView(0.69); }
+}
+
 // EPISODES
 
 .episodes {

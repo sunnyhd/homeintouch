@@ -28,8 +28,8 @@ module.exports = Backbone.Router.extend({
         'pictures/*path': 'pictures',
 
         'tvshows': 'tvshows',
-        'tvshows/:tvshowid': 'tvshowEpisodes',
-        'episodes': 'episodes'
+        'tvshows/:tvshowid': 'tvshowSeasons',
+        'tvshows/:tvshowid/season/:season': 'seasonEpisodeList'
     },
 
     handlers: {
@@ -101,16 +101,15 @@ module.exports = Backbone.Router.extend({
         },
 
         tvshows: function() {
-
             this.app.controller('tvshows').showTVShowList();
         },
 
-        tvshowEpisodes: function(tvshowid) {
-            this.app.controller('tvshows').showTVShowEpisodeList(tvshowid);
+        tvshowSeasons: function(tvshowid) {
+            this.app.controller('tvshows').showTVShowSeasonList(tvshowid);
         },
 
-        episodes: function() {
-            this.app.controller('tvshows').showEpisodeList().fetch();
+        seasonEpisodeList: function(tvshowid, season) {
+            this.app.controller('tvshows').showSeasonEpisodeList(tvshowid, season);
         }
     },
 

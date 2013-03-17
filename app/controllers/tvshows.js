@@ -1,5 +1,6 @@
 var Episode = require('../models/episode');
 var TVShow = require('../models/tvshow');
+var Season = require('../models/season');
 var _ = require('underscore');
 
 exports.index = function(req, res, next) {
@@ -21,11 +22,11 @@ exports.show = function(req, res, next) {
         if (err) return next(err);
         if (!show) return next(new Error('No such show'));
 
-        Episode.find({ tvshowid: show.tvshowid }, function(err, episodes) {
+        Season.find({ tvshowid: show.tvshowid }, function(err, seasons) {
             if (err) return next(err);
 
             show = show.toObject();
-            show.episodes = episodes;
+            show.seasons = seasons;
 
             res.json(show);
         });
