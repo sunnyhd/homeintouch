@@ -4,8 +4,6 @@ var FilteredListView = require('views/filtered_list');
 module.exports = FilteredListView.extend({
     
     template: require('templates/music/album_song_list'),
-
-    className: 'row-fluid',
     
     itemView: AlbumSongItemView,
 
