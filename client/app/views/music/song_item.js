@@ -9,10 +9,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     template: require('templates/music/song_item'),
 
-    iconNoImg: app.getBackgroundIcon('media.defaultMovie', '#333333'),
+    iconNoImg: app.getBackgroundIcon('media.defaultSong', '#333333'),
 
     events: {
         'click [data-action="play"]': 'play',
+        'click [data-action="play-album"]': 'playAlbum',
         'click [data-action="playlist"]': 'addToPlaylist'
     },
 
@@ -22,6 +23,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     play: function(e) {
+        this.model.play();
+        return false;
+    },
+
+    playAlbum: function(e) {
         this.model.play();
         return false;
     },
