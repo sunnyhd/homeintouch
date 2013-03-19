@@ -31,7 +31,10 @@ exports.loading = null;
 
 exports.showHomeView = function() {
 
-    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    // Removes previous link texts
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
+    $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
+
     app.updateDesktopBreadcrumbNav( { 
         itemType: 'floor',
         name: 'Music', 
@@ -58,28 +61,7 @@ exports.showArtistCoverView = function() {
 
     exports.loading.done(function(){
 
-        // Removes previous link texts
-        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
-        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
-
-        app.updateDesktopBreadcrumbNav( { 
-            itemType: 'room',
-            name: 'Artist', 
-            handler: function(e) {
-                app.router.navigate('#music/artists', {trigger: true});
-                return false;
-            }
-        });
-
-        app.updateTouchNav({
-            name: 'Artist', 
-            previous: 'Music',
-            handler: function(e) {
-                app.router.navigate('#music', {trigger: true});
-                return false;
-            }
-        });
-
+        updateListNav('Artists', '#music/artists');
         var view = new ArtistContainerView({ collection: exports.artists, mode: 'cover'});
         app.main.show(view);
     });
@@ -89,30 +71,34 @@ exports.showArtistListView = function() {
 
     exports.loading.done(function(){
 
-        // Removes previous link texts
-        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
-        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
-
-        app.updateDesktopBreadcrumbNav( { 
-            itemType: 'room',
-            name: 'Artist', 
-            handler: function(e) {
-                app.router.navigate('#music/artists', {trigger: true});
-                return false;
-            }
-        });
-
-        app.updateTouchNav({
-            name: 'Artist', 
-            previous: 'Music',
-            handler: function(e) {
-                app.router.navigate('#music', {trigger: true});
-                return false;
-            }
-        });
-
+        updateListNav('Artists', '#music/artists');
         var view = new ArtistContainerView({ collection: exports.artists, mode: 'list'});
         app.main.show(view);
+    });
+};
+
+var updateListNav = function(title, url) {
+
+    // Removes previous link texts
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
+    $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
+
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'room',
+        name: title, 
+        handler: function(e) {
+            app.router.navigate(url, {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: title, 
+        previous: 'Music',
+        handler: function(e) {
+            app.router.navigate('#music', {trigger: true});
+            return false;
+        }
     });
 };
 
@@ -120,28 +106,7 @@ exports.showAlbumList = function() {
 
     exports.loading.done(function(){
 
-        // Removes previous link texts
-        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
-        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
-
-        app.updateDesktopBreadcrumbNav( { 
-            itemType: 'room',
-            name: 'Albums', 
-            handler: function(e) {
-                app.router.navigate('#music/albums', {trigger: true});
-                return false;
-            }
-        });
-
-        app.updateTouchNav({
-            name: 'Albums', 
-            previous: 'Music',
-            handler: function(e) {
-                app.router.navigate('#music', {trigger: true});
-                return false;
-            }
-        });
-
+        updateListNav('Albums', '#music/albums');
         var view = new AlbumContainerView({ collection: exports.albums});
         app.main.show(view);
     });
@@ -151,25 +116,7 @@ exports.showSongList = function() {
 
     exports.loading.done(function(){
 
-        $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
-        app.updateDesktopBreadcrumbNav( { 
-            itemType: 'room',
-            name: 'Songs', 
-            handler: function(e) {
-                app.router.navigate('#music/songs', {trigger: true});
-                return false;
-            }
-        });
-
-        app.updateTouchNav({
-            name: 'Songs', 
-            previous: 'Music',
-            handler: function(e) {
-                app.router.navigate('#music', {trigger: true});
-                return false;
-            }
-        });
-
+        updateListNav('Songs', '#music/songs');
         var view = new SongContainerView({ collection: exports.songs });
         app.main.show(view);
     });

@@ -84,7 +84,10 @@ exports.addToPlaylist = function(episode) {
 };
 
 function updateNavs () {
-     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    // Removes previous link texts
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html('');
+    $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
+    
     app.updateDesktopBreadcrumbNav( { 
         itemType: 'floor',
         name: 'TV Shows', 
