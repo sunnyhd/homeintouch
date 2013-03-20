@@ -37,7 +37,7 @@ var Albums = module.exports = Backbone.Collection.extend({
 
         // Applies the list type filter
         if (opts.listType === 'recently-added') {
-            items = _.first( _.sortBy(items, function(i) { return i.id; }) , 25);
+            items = _.last( _.sortBy(items, function(i) { return i.id; }) , 25);
         } else {
             // All items
         }

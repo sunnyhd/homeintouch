@@ -8,6 +8,10 @@ var musicController = app.controller('music');
 module.exports = FilterPanelView.extend({
 
 	events: {
+
+        // List type
+        'click .music-state-filter a[data-filter]' : 'musicListTypeChanged',
+
         // Search and clear criteria
         'change input[name=search]': 'search',
         'click .search': 'search',
@@ -61,6 +65,22 @@ module.exports = FilterPanelView.extend({
             var listItem = $('<li><a href="#" data-year="' + year + '">' + year + '</a></li>');
             this.$('#music-year-list').append(listItem);
         }, this);
+    },
+
+    musicListTypeChanged: function(event) {
+        var $element = $(event.currentTarget);
+
+        this.filter.lastN = ($element.data('filter') === 'recently-added');
+
+        this.filterByGenreAndYear();
+
+        this.setCurrentMusicListType($element.html());
+        this.$('button[data-toggle="dropdown"]').parent().removeClass('open');
+        return false;
+    },
+
+    setCurrentMusicListType: function(filterName) {
+        this.$('#filter-name').text(filterName);
     },
 
     filterByGenre: function(event) {
