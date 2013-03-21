@@ -161,8 +161,7 @@
 			width: 120px;
 
 			.album-caption {
-				margin-top: 10px;
-				// font-size: 0.9em;
+				margin-bottom: 10px;
 				color: @yellow;
 				font-weight: bold;
 				text-align: center;
@@ -171,7 +170,7 @@
 	}
 
 	#song-list {
-		float: left;
+		// float: left;
 		// margin-left: 10px;
 
 		.hidden-desktop.album-caption {
@@ -185,22 +184,39 @@
 			margin: 0px 10px 0px 30px;
 			li {
 				list-style: none;
+				padding: 6px;
+
+				&:nth-child(even) {
+					.background-white-overlay (0.1);
+				}
+				&:nth-child(odd) {
+					.background-white-overlay (0.2);
+				}
+			}
+			li~li {
+				margin-top: 7px;
 			}
 		}
 
 		div.song-track {
-			float: left;
-			color: white;
-			// font-weight: bold;
-			width: 2em;
-		}
-
-		span.song-title {
-			margin-left: 5px;
 			color: darken(white, 20%);
-			// font-size: 1.1em;
-			// color: @yellow;
-			// font-weight: bold;
+			.track-number {
+				margin-left: 5px;
+			}
+			.track-title {
+				margin-left: 5px;
+			}
+			.track-buttons {
+				float: right;
+				margin-left: 5px;
+
+				i {
+					padding: 5px 3px 5px 3px;
+				}
+				i~i {
+					margin-left: 2px;
+				}
+			}
 		}
 	}
 }
@@ -208,7 +224,7 @@
 /* Landscape phone to portrait tablet */
 /* Landscape phones and down */
 /* Portrait phones */
-@media (max-width: 767px) {
+@media (max-width: 979px) {
 	#album-list {
 		#song-list {
 			ul.songs {
@@ -218,11 +234,11 @@
 	}
 }
 
-@media (min-width: 767px) {
+@media (min-width: 979px) {
 	#album-list {
 		#song-list {
 			ul.songs {
-				margin: 0px 10px 0px 30px;
+				margin: 0px 10px 0px 140px;
 			}
 		}
 	}

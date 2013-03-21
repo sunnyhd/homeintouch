@@ -1,9 +1,20 @@
+<div class="album-caption">
+    <span>{{ label }}</span>
+</div>
+
 {{#if thumbnail}}
     <img src="{{ thumbnail }}">
 {{else}}
     <img src="img/svg/media/defaultAlbum.svg">
 {{/if}}
 
-<div class="album-caption">
-    <span>{{ label }}</span>
+<div class="pull-right">
+	<a href="#" data-action="play" class="btn btn-success btn-block">
+		<i class="icon-play icon-white"/>
+		<span class="visible-desktop">Play</span>
+	</a>
+ 	<a href="#" data-action="playlist" class="btn btn-primary btn-block">
+ 		<i class="icon-time icon-white"/>
+ 		<span class="visible-desktop">Add to Playlist</span>
+ 	</a>
 </div>
