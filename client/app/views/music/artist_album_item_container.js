@@ -19,8 +19,8 @@ module.exports = Backbone.Marionette.Layout.extend({
     },
 
     events: {
-        'click [data-action="play"]': 'play',
-        'click [data-action="playlist"]': 'addToPlaylist'
+        'click [data-action="play-album"]': 'playAlbum',
+        'click [data-action="playlist-album"]': 'addAlbumToPlaylist'
     },
 
     // Avoid rendering when the music collection is reseted.
@@ -35,15 +35,20 @@ module.exports = Backbone.Marionette.Layout.extend({
         this.songList.show(songListView);
     },
 
-    addToPlaylist: function() {
-        musicController.addAlbumToPlaylist(this.model);
-    },
+    // Actions
 
-    play: function() {
+    playAlbum: function() {
+        console.log('Play albumid: ' + this.model.get('albumid'));
         musicController.addAlbumToPlaylist(this.model, 0);
 
         var playlistid = playersController.getPlayerId('audio');
         var playable = new Playable({ item: { playlistid: playlistid, position: 0 }});
         playable.save();
+    },
+
+    addAlbumToPlaylist: function() {
+        console.log('Adding to playlist albumid: ' + this.model.get('albumid'));
+        musicController.addAlbumToPlaylist(this.model);
     }
+
 });
