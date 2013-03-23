@@ -6,6 +6,7 @@ module.exports = SongItemView.extend({
     template: require('templates/music/album_song_item'),
 
     events: {
+        'click': 'playSong',
         'click [data-action="play-song"]': 'playSong',
         'click [data-action="playlist-song"]': 'addSongToPlaylist'
     },
