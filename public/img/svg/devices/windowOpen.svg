@@ -25,9 +25,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7.7781746"
-     inkscape:cx="48.40114"
-     inkscape:cy="28.243255"
-     inkscape:current-layer="layer1"
+     inkscape:cx="33.037638"
+     inkscape:cy="52.453388"
+     inkscape:current-layer="g2991"
      showgrid="false"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
@@ -56,7 +56,8 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
     <g
-       id="g3836">
+       id="g2991"
+       transform="matrix(1.35,0,0,1.35,-11.236329,-22.131761)">
       <path
          d="m 17.367651,60.733602 29.318548,0 0,-41.430009 -29.318548,0 0,41.430009 z"
          inkscape:connector-curvature="0"

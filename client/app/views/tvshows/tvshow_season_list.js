@@ -1,14 +1,14 @@
 var app = require('app');
-var EpisodeItemView = require('views/tvshows/episode_item');
+var SeasonItemView = require('views/tvshows/season_item');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
     
-    template: require('templates/tvshows/tvshow_episode_list'),
+    template: require('templates/tvshows/tvshow_season_list'),
     
-    itemView: EpisodeItemView,
+    itemView: SeasonItemView,
 
     initialize: function() {
-        this.collection = this.model.episodes;
+        this.collection = this.model.seasons;
         this.bindTo(this.model, 'change', this.render, this);
     },
 
@@ -28,7 +28,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     },
     
     appendHtml: function(cv, iv) {
-        this.$('.episodes').append(iv.el);
+        this.$('.seasons').append(iv.el);
     }
     
 });

@@ -22,7 +22,8 @@ script(id="device-add-scenes-template", type="text/template")
       .control-group
         label(for="write_scenes").control-label Write Address
         .controls
-          input(id="write_scenes", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('write_scenes') %>")
+          input(id="write_scenesLabel", data-control="autocomplete", data-hidden-id="write_scenes", type="text", placeHolder="#/#/#")
+          input(id="write_scenes", type="hidden", value!="<%= getAddressValue('write_scenes') %>")
       .control-group
         label(for="scenes_icon").control-label Icon
         .controls

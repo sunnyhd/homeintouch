@@ -1,1 +1,450 @@
 // LESS hit-media-music
+
+/* Media music separators: Artists, Albums & Songs */
+
+.hit-media-music-separator {
+	.background-black-overlay;
+	.clearfix;
+	padding: 20px;
+
+	.hit-icon { .square-size(200px); }
+	.hit-icon~.hit-icon { margin-left: 100px; }
+	img { height: 90%; }
+	.hit-icon span { top: 5px; }
+
+	/* 1024 desktop */
+	@media (max-width: 1024px) { 
+		.hit-icon~.hit-icon { margin-left: 80px; }
+	}
+
+	/* Portrait tablet to landscape and desktop */
+	@media (max-width: 979px) { 
+		.hit-icon~.hit-icon { margin-left: 50px; }
+	}
+
+	/* Landscape phone to portrait tablet */
+	@media (max-width: 767px) {
+		.hit-icon { .square-size(120px); }
+		.hit-icon~.hit-icon { margin-left: 20px; }
+	}
+ 
+	/* Landscape phones and down */
+	@media (max-width: 480px) {
+		padding: 10px;
+		.hit-icon { .square-size(75px); }
+		.hit-icon~.hit-icon { margin-left: 10px; }
+		img { height: 85%; }
+		.hit-icon span { top: 2px; }
+	}	
+}
+
+
+/* SEARCH FILTERS STYLES */
+
+@media (max-width: 979px) {
+	#music-filter.row-fluid {
+		position: fixed;
+		top: 50px;
+		left: 0px;
+		width: 100%;
+		z-index: 10;
+		.music-header {
+  			border-radius: 5px;
+  		}
+	}
+	#music-list {
+		margin-top: 50px;
+	}
+}
+
+#music-filter .music-header {
+	.with-border-color(@gray);
+	padding: 5px 10px;
+	border-style: solid;
+  	border-width: 1px;
+  	border-radius: 5px;
+  	display: block;
+
+
+  	.btn-group.music-header-option:after {
+  		clear: none;
+  	}
+  	.music-header-option {
+  		display: inline;
+  		margin: 5px 0px;
+  	}
+  	.music-header-option~.music-header-option {
+  		margin-left: 5px;
+  	}
+
+  	.btn-group ~ .btn-group {
+  		margin-left: 10px;
+  	}
+}
+
+// /* Landscape phone to portrait tablet */
+// @media (max-width: 979px) {
+// 	#movie-filter .music-header {
+// 		display: none;
+// 		position: fixed;
+// 		z-index: 5;
+// 		padding: 5px;
+
+// 		&.mobile-showed {
+// 			left: 35px;
+// 			border-top-left-radius: 0px;
+// 		}
+
+// 		#view-mode-group {
+// 			display: none;
+// 		}
+
+// 		.movies-header-option~.movies-header-option {
+// 			margin-left: 0px;
+// 		}
+// 		.btn-group ~ .btn-group {
+// 	  		margin-left: 5px;
+// 	  	}
+// 		.search-grp-1 {
+// 			display: block;
+// 			&:after {
+// 			    content: " ";
+// 			    display: block;
+// 			    height: 0;
+// 			    clear: both;
+// 			}
+// 			margin: 0px 0px 5px 0px;
+// 		}
+// 		.search-grp-2.btn-group, .search-grp-3 {
+// 			float: left;
+// 			margin: 0px;
+// 			& > .dropdown-menu { right: initial; }
+// 		}
+// 	}
+// }
+
+// /* Portrait phones */
+// @media (max-width: 320px) {
+// 	input.movie-search {
+// 		width: 110px;
+// 	}
+// }
+
+.touch-music-nav {
+	color: white;
+
+	li {
+		padding: 3px 0px;
+		border-radius: 5px;
+	}
+	li:hover {
+		background: rgba(51, 51, 51, 0.8);
+	}
+	li.active {
+		background: rgba(122, 122, 122, 0.8);
+	}
+}
+
+
+/** MOVIES LIST VIEW */
+
+.movies.listView {
+	margin: 0px;
+
+	li.movie:nth-child(odd) {
+		.with-border-color(@gray);
+	}
+	li.movie:nth-child(even) {
+		.with-border-color(@darkGray);
+	}
+
+	li.movie {
+		margin: 5px;
+		list-style: none;
+		display: block;
+
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+	  	
+	  	height: 165px;
+
+	  	.movie-image {
+	  		float: left;
+	  		height: 100%;
+	  		width: 120px;
+
+		  	img, .no-img {
+			  	height: 145px;
+			  	width: 100px;
+			  	margin: 10px;
+			}
+			.no-img {
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+	  	}
+
+		.movie-info {
+			margin-left: 120px;
+			margin: 10px;
+			max-height: 145px;
+			overflow: hidden;
+			color: white;
+
+			div {
+				font-size: 0.9em;
+				color: darken(white, 30%);
+			}
+			.info-key {
+				font-weight: bold;
+				color: white;
+			}
+
+			div.movie-title {
+				font-size: 1.2em;
+				color: @yellow;
+				font-weight: bold;
+			}
+		}
+	}
+}
+
+
+/* MOVIE COVER VIEW */
+
+.moviesResponsiveCoverView (@proportion: 1) {
+	li.movie {
+	  	height: 178px * @proportion;
+	  	width: 124px * @proportion;
+	  	margin: 5px * @proportion;
+	  	img, .no-img {
+	  		width: 114px * @proportion;
+	  		height: 168px * @proportion;
+		  	margin: 5px * @proportion;
+		}
+	}
+}
+
+.movies.coverView {
+	.moviesResponsiveCoverView(1.5);
+	margin: 0px;
+	li.movie {
+		float: left;
+		list-style: none;
+	  	position: relative;
+	  	.with-border-color(@gray);
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+		.no-img {
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+		.movie-caption {
+			width: 100%;
+			position: absolute;
+			right: 0;
+			bottom: 10px;
+			left: 0;
+			background: #333;
+			background: rgba(0, 0, 0, 0.75);
+			color: white;
+			span {
+				padding: 5px 10px;
+				display: block;
+				max-height: 35px;
+				overflow: hidden;
+			}
+		}
+	}
+}
+
+/* Large desktop */
+@media (max-width: 1200px) { 
+	.movies.coverView { .moviesResponsiveCoverView(1.5); }
+}
+
+/* 1024 desktop */
+@media (max-width: 1024px) { 
+	.movies.coverView { .moviesResponsiveCoverView(1.39); }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (max-width: 979px) { 
+	.movies.coverView { .moviesResponsiveCoverView(1); }
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	.movies.coverView { .moviesResponsiveCoverView(1.25); }
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) {
+	.movies.coverView { .moviesResponsiveCoverView(1); }
+}
+
+/* Portrait phones */
+@media (max-width: 320px) {
+	.movies.coverView { .moviesResponsiveCoverView(0.69); }
+}
+
+.watermark-background {
+	background-color: rgba(0, 0, 0, 0.6);
+  	border-radius: 5px;
+}
+
+/** MOVIE DETAILS */
+.movie-detail {
+	.visible-desktop {
+		@imgContainerWidth: 270px;
+		.m-header {
+			.clearfix;
+			h2 {
+				float: left;
+				color: @yellow;
+			}
+		}
+		.m-data {
+			color: darken(white, 30%);
+			strong {
+				color: white;
+			}
+			.clearfix;
+			.m-img-container {
+				.watermark-background;
+				.clearfix;
+				width: @imgContainerWidth;
+				float: left;
+
+				img {
+					max-width: 250px;
+					margin: 10px;
+				}
+				.no-img {
+					width: 250px;
+				}
+			}
+			.m-actions {
+				.watermark-background;
+				width: @imgContainerWidth;
+				clear: left;
+				float: left;
+				margin-top: 10px;
+				margin-right: 10px;
+				div {
+					margin: 10px;
+					.btn-block {
+						display: block;
+					}
+					a ~ a, a ~ div {
+						margin-top: 10px;
+					}
+				}
+			}
+			.m-data-container {
+				.watermark-background;
+				margin-left: @imgContainerWidth + 10px;
+
+				.m-rating {
+					margin: 10px;
+					position: absolute;
+					right: 20px;
+				}
+				.m-more-actions {
+					position: absolute;
+					right: 80px;
+					margin-top: 10px;
+					margin-left: 10px;
+				}
+
+				& > ul {
+					margin: 0px;
+					padding: 10px;
+					li {
+						padding: 0px 0px;
+						margin: 0px;
+						list-style: none;
+					}
+				}
+				.plot-container {
+					margin-top: 10px;
+					p.plot {
+						text-align: justify;
+					}
+				}
+			}
+		}
+	}
+
+	.hidden-desktop {
+		.m-data {
+			.watermark-background;
+			.clearfix;
+			
+			color: darken(white, 30%);
+			strong {
+				color: white;
+			}
+
+			.m-data-header {
+				margin: 10px;
+				.m-title {
+					float: left;
+					color: @yellow;
+					font-size: 1.2em;
+					font-weight: bold;
+				}
+			}
+			.m-data-container {
+				clear: left;
+				margin: 10px;
+				ul {
+					margin: 0px;
+					padding: 0px;
+					li {
+						padding: 0px 0px;
+						margin: 0px;
+						list-style: none;
+					}
+				}
+			}
+			.m-plot-container {
+				margin: 10px;
+				img {
+					width: 100px;
+					margin-right: 10px;
+					margin-bottom: 10px;
+				}
+				p {
+					text-align: justify;
+				}
+			}
+		}
+	}
+}
+
+.m-rating {
+	float: right;
+	border: solid 1px white;
+	border-radius: 5px;
+	text-align: center;
+	color: white;
+	.m-rating-title {
+		font-size: 0.6em;
+		border-bottom: solid 1px;
+		padding: 0px 4px;
+	}
+	.m-rating-value {
+		font-weight: bold;
+		margin: 3px;
+	}
+}
+
+.btn.imdb {
+	padding: 2px 6px;
+	img.imdb {
+		width: 22px;
+	}
+}

@@ -739,7 +739,8 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
 
     events: {
         "click .save": "saveClicked",
-        "click .cancel": "cancelClicked"
+        "click .cancel": "cancelClicked",
+        "change #etsFile": "loadFile"
     },
 
     serializeData: function() {
@@ -768,6 +769,35 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
         return data;
     },
 
+    loadFile: function(event){
+        var etsFile = event.target.files[0];
+        
+        var that = this;
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var fileContent = event.target.result;
+            var lineArray = fileContent.split('\n');
+            var homeEtsArray = [];
+            for (var i = 0; i < lineArray.length; i++) {
+                var line = lineArray[i];
+                var etsDetail = line.split('\.');
+                if (etsDetail.length > 2) {
+                    var room = etsDetail[0];
+                    var widget =  etsDetail[1];
+                    var extraDataArray = etsDetail[2].split(/\t/);
+                    var address = extraDataArray[0];
+                    var extraData = extraDataArray[1];
+
+                    homeEtsArray.push({room: room, widget: widget, address: address, extraData: extraData});
+                }
+            }
+            that.etsData = homeEtsArray;
+        };
+
+        reader.readAsText(etsFile);
+    },
+
     saveClicked: function(e) {
         var name = this.$("#name").val();
         this.model.set("name", name);
@@ -778,6 +808,8 @@ exports.EditHomeForm = Backbone.Marionette.ItemView.extend({
         var startPageTimeout = this.$("#startPageTimeout").val();
         // Multiply the timeout by 1000 to save seconds.
         this.model.set("startPageTimeout", startPageTimeout * 1000);
+
+        this.model.set("etsData", this.etsData);
 
         var $lis = $('#widget-sortable li', this.$el);
         _.each($lis, function(li, idx) {

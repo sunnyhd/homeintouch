@@ -1,5 +1,6 @@
 var Episode = require('../models/episode');
 var TVShow = require('../models/tvshow');
+var Season = require('../models/season');
 var _ = require('underscore');
 
 exports.index = function(req, res, next) {
@@ -21,16 +22,18 @@ exports.show = function(req, res, next) {
         if (err) return next(err);
         if (!show) return next(new Error('No such show'));
 
-        Episode.find({ tvshowid: show.tvshowid }, function(err, episodes) {
+        Season.find({ tvshowid: show.tvshowid }, function(err, seasons) {
             if (err) return next(err);
 
             show = show.toObject();
-            show.episodes = episodes;
+            show.seasons = seasons;
 
             res.json(show);
         });
     });
 };
+
+var genresSplitter = ',';
 
 exports.genres = function(req, res, next) {
     TVShow.find({}, ['genre'], function(err, shows) {
@@ -38,15 +41,17 @@ exports.genres = function(req, res, next) {
         var genres = [];
 
         for (var i = 0; i < shows.length; i++) {
-            var genre = shows[i].genre;
-            if (genre.indexOf('/') > 0) {
-                var subGenres = genre.split('/');
-                for (var j = 0; j < subGenres.length; j++) {
-                    var subGenre = subGenres[j];
-                    genres.push(subGenre.trim());
+            if (shows[i].genre) {
+                var genre = shows[i].genre;
+                if (genre.indexOf(genresSplitter) > 0) {
+                    var subGenres = genre.split(genresSplitter);
+                    for (var j = 0; j < subGenres.length; j++) {
+                        var subGenre = subGenres[j];
+                        genres.push(subGenre.trim());
+                    }
+                } else {
+                    genres.push(shows[i].genre);    
                 }
-            } else {
-                genres.push(shows[i].genre);    
             }
         };
 

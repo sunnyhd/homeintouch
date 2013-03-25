@@ -22,7 +22,8 @@ script(id="device-add-motion-template", type="text/template")
       .control-group
         label(for="read_motion").control-label Read Address
         .controls
-          input(id="read_motion", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_motion') %>")
+          input(id="read_motionLabel", data-control="autocomplete", data-hidden-id="read_motion", type="text", placeHolder="#/#/#")
+          input(id="read_motion", type="hidden", value!="<%= getAddressValue('read_motion') %>")
       .control-group
         label(for="on_value").control-label On Value
         .controls

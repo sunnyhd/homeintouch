@@ -1,10 +1,6 @@
 script(id="device-list-window-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="window", data-hit-icon-type="devices.windowClose", data-model-id!="<%=id%>")
     span.device-name <%= name %>
-    .widget-opts
-      ul.device-btn-group.clearfix
-        li.device-btn
-          a.open(href="#") OPEN
 
 script(id="device-add-window-template", type="text/template")
   .modal-header
@@ -26,7 +22,8 @@ script(id="device-add-window-template", type="text/template")
       .control-group
         label(for="read_window").control-label Read Address
         .controls
-          input(id="read_window", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_window') %>")
+          input(id="read_windowLabel", data-control="autocomplete", data-hidden-id="read_window", type="text", placeHolder="#/#/#")
+          input(id="read_window", type="hidden", value!="<%= getAddressValue('read_window') %>")
       .control-group
         label(for="open_value").control-label Open Value
         .controls

@@ -1,4 +1,4 @@
-var AlbumItemView = require('views/music/album_item');
+var AlbumItemView = require('views/music/artist_album_item_container');
 var FilteredListView = require('views/filtered_list');
 
 module.exports = FilteredListView.extend({
@@ -10,6 +10,12 @@ module.exports = FilteredListView.extend({
     initialize: function() {
         this.collection = this.model.albums;
         this.bindTo(this.model, 'change', this.render, this);
+    },
+
+    serializeData: function() {
+        var result = FilteredListView.prototype.serializeData.apply(this);
+        result.artistMode = (this.options.mode == 'artist');
+        return result;
     },
     
     appendHtml: function(cv, iv) {

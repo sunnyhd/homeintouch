@@ -2,17 +2,26 @@ var app = require('app');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
+    className: 'artist-detail',
+
     template: require('templates/music/artist_detail'),
 
     events: {
-        'click .close': 'close',
-        'click .albums': 'albums'
     },
 
-    albums: function() {
-        this.close();
-        var url = 'artists/' + this.model.id;
-        app.router.navigate(url, { trigger: true });
-    }
+    onRender: function() {
+
+        // Fanart background
+        var src = 'img/cinema-background.jpg';
+        var fanArt = this.model.get('fanartid');
+        if (fanArt && fanArt !== '') {
+            src = 'api/images/' + fanArt;
+        }
+        app.setRepeatBackgroundImg( src );
+    },
+
+    close: function() {
+        app.removeBackgroundImg();
+    },
 
 });

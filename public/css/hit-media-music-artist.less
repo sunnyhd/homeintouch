@@ -1,0 +1,147 @@
+/** ARTISTS LIST VIEW */
+
+.artists.listView {
+	margin: 0px;
+
+	li.artist:nth-child(odd) {
+		.with-border-color(@gray);
+	}
+	li.artist:nth-child(even) {
+		.with-border-color(@darkGray);
+	}
+
+	li.artist {
+		margin: 5px;
+		list-style: none;
+		display: block;
+
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+	  	
+	  	height: 165px;
+
+	  	.artist-image {
+	  		float: left;
+	  		height: 100%;
+	  		width: 165px;
+
+		  	img, .no-img {
+			  	height: 145px;
+			  	width: 145px;
+			  	margin: 10px;
+			}
+			.no-img {
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+	  	}
+
+		.artist-info {
+			margin-left: 120px;
+			margin: 10px;
+			max-height: 145px;
+			overflow: hidden;
+			color: white;
+
+			div {
+				font-size: 0.9em;
+				color: darken(white, 30%);
+			}
+			.info-key {
+				font-weight: bold;
+				color: white;
+			}
+
+			div.artist-title {
+				font-size: 1.2em;
+				color: @yellow;
+				font-weight: bold;
+			}
+		}
+	}
+}
+
+
+/* ARTIST COVER VIEW */
+
+.artistsResponsiveCoverView (@proportion: 1) {
+	li.artist {
+	  	// height: 178px * @proportion;
+	  	height: 140px * @proportion;
+	  	// width: 124px * @proportion;
+	  	width: 140px * @proportion;
+	  	margin: 5px * @proportion;
+	  	img, .no-img {
+	  		// width: 114px * @proportion;
+	  		width: 130px * @proportion;
+	  		// height: 168px * @proportion;
+	  		height: 130px * @proportion;
+		  	margin: 5px * @proportion;
+		}
+	}
+}
+
+.artists.coverView {
+	.artistsResponsiveCoverView(1.5);
+	margin: 0px;
+	li.artist {
+		float: left;
+		list-style: none;
+	  	position: relative;
+	  	.with-border-color(@gray);
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+		.no-img {
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+		.artist-caption {
+			width: 100%;
+			position: absolute;
+			right: 0;
+			bottom: 10px;
+			left: 0;
+			background: #333;
+			background: rgba(0, 0, 0, 0.75);
+			color: white;
+			span {
+				padding: 5px 10px;
+				display: block;
+				max-height: 35px;
+				overflow: hidden;
+			}
+		}
+	}
+}
+
+/* Large desktop */
+@media (max-width: 1200px) { 
+	.artists.coverView { .artistsResponsiveCoverView(1.5); }
+}
+
+/* 1024 desktop */
+@media (max-width: 1024px) { 
+	.artists.coverView { .artistsResponsiveCoverView(1.39); }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (max-width: 979px) { 
+	.artists.coverView { .artistsResponsiveCoverView(1); }
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	.artists.coverView { .artistsResponsiveCoverView(1.25); }
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) {
+	.artists.coverView { .artistsResponsiveCoverView(1); }
+}
+
+/* Portrait phones */
+@media (max-width: 320px) {
+	.artists.coverView { .artistsResponsiveCoverView(0.9); }
+}

@@ -1,5 +1,8 @@
-{{ label }}
-<br>
-<a class="add-to-playlist" href="#">Add to Playlist</a>
-&mdash;
-<a class="play" href="#">Play</a>
+<div class="song-track">
+	<span class="track-number">{{ track }}</span>
+	<span class="track-title">{{ label }}</span>
+	<span class="track-buttons">
+		{{! <i class="icon-play icon-white" data-action="play-song"></i> }}
+		<i class="icon-time icon-white" data-action="playlist-song"></i>
+	</span>
+</div>

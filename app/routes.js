@@ -32,16 +32,22 @@ module.exports = function(app) {
     app.get('/api/tvshows/:tvshow', controllers.tvshows.show);
     app.get('/api/genres/tvshows', controllers.tvshows.genres);
 
+    app.get('/api/seasons', controllers.seasons.index);
+    app.get('/api/seasons/:tvshow/:season', controllers.seasons.show);
+
     app.get('/api/episodes', controllers.episodes.index);
     app.get('/api/episodes/last/:n', controllers.episodes.lastN);
     app.get('/api/episodes/label', controllers.episodes.label);
 
     app.get('/api/artists', controllers.artists.index);
     app.get('/api/artists/:artist', controllers.artists.show);
+    app.get('/api/genres/artists', controllers.artists.genres);
 
     app.get('/api/albums', controllers.albums.index);
     app.get('/api/albums/:album', controllers.albums.show);
     app.get('/api/albums/last/:n', controllers.albums.lastN);
+    app.get('/api/genres/albums', controllers.albums.genres);
+    app.get('/api/years/albums', controllers.albums.years);
 
     app.get('/api/songs', controllers.songs.index);
 

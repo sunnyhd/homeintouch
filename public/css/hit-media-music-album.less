@@ -1,0 +1,87 @@
+/* ALBUM FILTER VIEW */
+
+#music-filter .music-header {
+  	.visible-desktop > .btn-group {
+  		margin-left: 10px;
+  	}
+}
+
+/* ALBUM COVER VIEW */
+
+.albumsResponsiveCoverView (@proportion: 1) {
+	li.album {
+	  	height: 158px * @proportion;
+	  	width: 158px * @proportion;
+	  	margin: 5px * @proportion;
+	  	img, .no-img {
+	  		// width: 114px * @proportion;
+	  		width: 148px * @proportion;
+	  		height: 148px * @proportion;
+		  	margin: 5px * @proportion;
+		}
+	}
+}
+
+.albums.coverView {
+	.albumsResponsiveCoverView(1.5);
+	margin: 0px;
+	li.album {
+		float: left;
+		list-style: none;
+	  	position: relative;
+	  	.with-border-color(@gray);
+		border-style: solid;
+	  	border-width: 1px;
+	  	border-radius: 5px;
+		.no-img {
+			background-repeat: no-repeat;
+			background-position: center;
+		}
+		.album-caption {
+			width: 100%;
+			position: absolute;
+			right: 0;
+			bottom: 10px;
+			left: 0;
+			background: #333;
+			background: rgba(0, 0, 0, 0.75);
+			color: white;
+			span {
+				padding: 5px 10px;
+				display: block;
+				max-height: 35px;
+				overflow: hidden;
+			}
+		}
+	}
+}
+
+/* Large desktop */
+@media (max-width: 1200px) { 
+	.albums.coverView { .albumsResponsiveCoverView(1.5); }
+}
+
+/* 1024 desktop */
+@media (max-width: 1024px) { 
+	.albums.coverView { .albumsResponsiveCoverView(1.39); }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (max-width: 979px) { 
+	.albums.coverView { .albumsResponsiveCoverView(1); }
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	.albums.coverView { .albumsResponsiveCoverView(1.25); }
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) {
+	.albums.coverView { .artistsResponsiveCoverView(1); }
+}
+
+/* Portrait phones */
+@media (max-width: 320px) {
+	.albums.coverView { .artistsResponsiveCoverView(0.69); }
+}

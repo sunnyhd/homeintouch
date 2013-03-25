@@ -1,6 +1,7 @@
 var Device = require('models/device');
 var Configuration = require('models/configuration');
 var roomsController = require('controllers/rooms');
+var homesController = require('controllers/homes');
 var StyleConfigurationView = require('views/settings/style_settings');
 
 exports.AddDeviceGroupToRoomForm = Backbone.Marionette.ItemView.extend({
@@ -123,7 +124,90 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
             data.name = "";
         }
 
+        var noData = {room: 'No Address', widget: '', address: '0/0/0'};
+        data.etsData = _.union([noData], homesController.currentHome.get("etsData"));
+
         return data;
+    },
+
+    onRender: function() {
+
+        if (this.mode === "view") {
+            return;
+        }
+
+        var deviceView = this;
+
+        var autocompleteSource = _.map(homesController.currentHome.get("etsData"), function(item){
+            item.label = (item.address + ' - ' + item.room + ' - ' + item.widget + ' - ' + item.extraData);
+            return item;
+        });
+
+        var $autocompleteEl = this.$('[data-control="autocomplete"]');
+        this.$autocompleteEl = $autocompleteEl;
+        if ($autocompleteEl) {
+            $autocompleteEl.autocomplete({
+                minLength: 0,
+                source: autocompleteSource,
+                focus: function( e, ui ) {
+                    if (ui.item) {
+                        $(this).val( ui.item.label );
+                    }
+                    return false;
+                },
+                select: function( e, ui ) {
+                    if (ui.item) {
+                        var hiddenId = $(this).data('hidden-id');
+                        $(this).val( ui.item.label );
+                        $("#" + hiddenId).val( ui.item.address );
+                    }
+                    return false;
+                },
+                response: function( e, ui ) {
+                    if (ui.content.length === 0) {
+                        var hiddenId = $(this).data('hidden-id');
+                        $("#" + hiddenId).val( $(this).val() );
+                    }
+                }
+            });
+
+            $autocompleteEl.each(function() {
+                var $this = $(this);
+
+                var hiddenId = $this.data('hidden-id');
+                var $hidden = deviceView.$("#" + hiddenId);
+                if ($hidden.val()) {
+                    var selectedValue = _.find(autocompleteSource, function(item){
+                        return (item.address === $hidden.val());
+                    });
+
+                    if (selectedValue) {
+                        $this.val(selectedValue.label);
+                    } else {
+                        $this.val($hidden.val());
+                    }
+                }
+
+                $this.data("autocomplete")._renderItem = function(ul, item) {
+                    return $( "<li>" )
+                        .data( "item.autocomplete", item )
+                        .append("<a><b>" + item.address + "</b><br><span style='font-size: 90%;'><i>" + (item.room + ' - ' + item.widget + ' - ' + item.extraData) + "</i></span></a>")
+                        .appendTo( ul );
+                };
+
+                $this.data("autocomplete")._renderMenu = function(ul, items) {
+                    var self = this;
+                    var subItems = _.first(items, 15);
+                    $.each(subItems, function(index, item) {
+                        self._renderItem(ul, item);
+                    });
+                    
+                    $("<li class='ui-menu-item'></li>")
+                    .append("<span class='ui-autocomplete-result-item'>Showing <b>" + subItems.length + "</b> of <b>" + items.length + "</b> results</span>")
+                    .appendTo(ul);
+                };
+            });
+        }
     },
 
     deleteClicked: function(e){
@@ -146,6 +230,17 @@ exports.AddEditDeviceTypeForm = Backbone.Marionette.ItemView.extend({
 
     addClicked: function(e){
         e.preventDefault();
+
+        var deviceView = this;
+
+        this.$autocompleteEl.each(function() {
+            var $this = $(this);
+            var hiddenId = $this.data('hidden-id');
+            var $hidden = deviceView.$("#" + hiddenId);
+            if ($this.val() === '') {
+                $hidden.val('');
+            }
+        });
 
         var formFields = _.union( ["isFavorite"], this.formFields );
 
@@ -546,6 +641,7 @@ exports.AddCameraDeviceForm = exports.AddEditDeviceTypeForm.extend({
     },
 
     onRender: function() {
+        exports.AddEditDeviceTypeForm.prototype.onRender.apply(this, arguments);
         this.cameraTypeChanged();
         $('*[rel="tooltip"]', this.$el).tooltip();
     }

@@ -13,3 +13,28 @@
 .content-centered {
 	text-align: center;
 }
+
+.centered-container {
+  margin: 0 auto;
+  display: table;
+}
+
+/* Background box overlay */
+.background-color-overlay (@r, @g, @b, @a) {
+  background-color: rgba(@r, @g, @b, @a);
+  border-radius: 10px 10px 10px 10px;
+}
+
+.background-black-overlay (@a: 0.5) {
+  .background-color-overlay (0, 0, 0, @a);
+}
+
+.background-white-overlay (@a: 0.5) {
+  .background-color-overlay (255, 255, 255, @a);
+}
+
+/* Elements sizes */
+.square-size (@size) {
+  width: @size;
+  height: @size;
+}

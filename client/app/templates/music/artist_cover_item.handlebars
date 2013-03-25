@@ -1,0 +1,11 @@
+<div class="artistContainer">
+    {{#if thumbnail}}
+        <img src="{{ thumbnail }}">
+    {{else}}
+    	<img src="img/svg/media/defaultArtist.svg">
+    {{/if}}
+
+    <div class="artist-caption">
+    	<span>{{ label }}</span>
+    </div>
+</div>

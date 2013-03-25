@@ -1,10 +1,6 @@
 script(id="device-list-door-item-template", type="text/template")
   .hit-icon.device-widget(data-widget-type="door", data-hit-icon-type="devices.doorClose", data-model-id!="<%=id%>")
     span.device-name <%= name %>
-    .widget-opts
-      ul.device-btn-group.clearfix
-        li.device-btn
-          a.open(href="#") OPEN
 
 script(id="device-add-door-template", type="text/template")
   .modal-header
@@ -26,7 +22,8 @@ script(id="device-add-door-template", type="text/template")
       .control-group
         label(for="read_door").control-label Read Address
         .controls
-          input(id="read_door", type="text", placeHolder="#/#/#", value!="<%= getAddressValue('read_door') %>")
+          input(id="read_doorLabel", data-control="autocomplete", data-hidden-id="read_door", type="text", placeHolder="#/#/#")
+          input(id="read_door", type="hidden", value!="<%= getAddressValue('read_door') %>")
       .control-group
         label(for="open_value").control-label Open Value
         .controls

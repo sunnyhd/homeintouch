@@ -1,5 +1,4 @@
 var app = require('app');
-var ArtistDetailView = require('views/music/artist_detail');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -9,13 +8,21 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     template: require('templates/music/artist_item'),
 
+    iconNoImg: app.getBackgroundIcon('media.defaultArtist', '#333333'),
+
     events: {
-        'click .detail': 'detail'
+        'click .artistContainer': 'show'
     },
 
-    detail: function() {
-        var view = new ArtistDetailView({ model: this.model });
-        app.modal.show(view);
+    show: function() {
+        app.router.navigate('#music/artists/' + this.model.get('artistid'), {trigger: true});
+    },
+
+    onRender: function() {
+        var $noImgContainer = this.$el.find('.no-img');
+        if ($noImgContainer.length > 0) {
+            app.applyBackgroundIcon($noImgContainer, this.iconNoImg);
+        }
     }
     
 });

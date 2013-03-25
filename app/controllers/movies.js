@@ -38,21 +38,25 @@ exports.lastN = function(req, res, next) {
     });
 };
 
+var genreSplitter = ',';
+
 exports.genres = function(req, res, next) {
     Movie.find({}, ['genre'], function(err, shows) {
 	    if (err) return next(err);
 	    var genres = [];
 
 	    for (var i = 0; i < shows.length; i++) {
-	    	var genre = shows[i].genre;
-	    	if (genre.indexOf('/') > 0) {
-	    		var subGenres = genre.split('/');
-	    		for (var j = 0; j < subGenres.length; j++) {
-	    			var subGenre = subGenres[j];
-	    			genres.push(subGenre.trim());
-	    		}
-	    	} else {
-	    		genres.push(shows[i].genre);	
+	    	if (shows[i].genre) {
+		    	var genre = shows[i].genre;
+		    	if (genre.indexOf(genreSplitter) > 0) {
+		    		var subGenres = genre.split(genreSplitter);
+		    		for (var j = 0; j < subGenres.length; j++) {
+		    			var subGenre = subGenres[j];
+		    			genres.push(subGenre.trim());
+		    		}
+		    	} else {
+		    		genres.push(shows[i].genre);	
+		    	}
 	    	}
 	    };
 
@@ -68,13 +72,15 @@ exports.years = function(req, res, next) {
 	    var years = [];
 
 	    for (var i = 0; i < shows.length; i++) {
-	    	var year = shows[i].year.toString();
-	    	if (year < 2000) {
-	    		var yearPrefix = year.slice(0, (year.length - 1));
-	    		year = yearPrefix + '0-' + yearPrefix + '9';
-	    	}
+	    	if (shows[i].year) {
+		    	var year = shows[i].year.toString();
+		    	if (year < 2000) {
+		    		var yearPrefix = year.slice(0, (year.length - 1));
+		    		year = yearPrefix + '0-' + yearPrefix + '9';
+		    	}
 
-	    	years.push(year);
+		    	years.push(year);
+	    	}
 	    };
 
 	    years = _.uniq(years);

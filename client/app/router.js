@@ -11,19 +11,25 @@ module.exports = Backbone.Router.extend({
         'movies/list-view': 'moviesListView',
         'movies/details/:movieid': 'movieDetailView',
 
-        'artists': 'artists',
-        'albums': 'albums',
-        'songs': 'songs',
-        'artists/:artistid': 'artistAlbums',
-        'albums/:albumid': 'albumSongs',
+        'music': 'music',
+        'music/artists': 'artists',
+        'music/artists/cover-view': 'artists',
+        'music/artists/list-view': 'artistsListView',
+        'music/artists/:artistid': 'artistDetails',
+
+        'music/albums': 'albums',
+        'music/albums/:albumid': 'albumSongs',
+
+        'music/songs': 'songs',
+        
         'import': 'importSettings',
 
         'pictures': 'pictures',
         'pictures/*path': 'pictures',
 
         'tvshows': 'tvshows',
-        'tvshows/:tvshowid': 'tvshowEpisodes',
-        'episodes': 'episodes'
+        'tvshows/:tvshowid': 'tvshowSeasons',
+        'tvshows/:tvshowid/season/:season': 'seasonEpisodeList'
     },
 
     handlers: {
@@ -58,24 +64,32 @@ module.exports = Backbone.Router.extend({
             this.app.controller('movies').showMovieDetailView(movieid);
         },
 
+        music: function() {
+            this.app.controller('music').showHomeView();
+        },
+
         artists: function() {
-            this.app.controller('music').showArtistList().fetch();
+            this.app.controller('music').showArtistCoverView();
+        },
+
+        artistsListView: function() {
+            this.app.controller('music').showArtistListView();
         },
 
         albums: function() {
-            this.app.controller('music').showAlbumList().fetch();
+            this.app.controller('music').showAlbumList();
         },
 
         songs: function() {
-            this.app.controller('music').showSongList().fetch();
+            this.app.controller('music').showSongList();
         },
 
-        artistAlbums: function(artistid) {
-            this.app.controller('music').showArtistAlbumList(artistid).fetch();
+        artistDetails: function(artistid) {
+            this.app.controller('music').showArtistDetailsView(artistid);
         },
 
         albumSongs: function(albumid) {
-            this.app.controller('music').showAlbumSongList(albumid).fetch();
+            this.app.controller('music').showAlbumSongList(albumid);
         },
 
         importSettings: function() {
@@ -87,16 +101,15 @@ module.exports = Backbone.Router.extend({
         },
 
         tvshows: function() {
-
             this.app.controller('tvshows').showTVShowList();
         },
 
-        tvshowEpisodes: function(tvshowid) {
-            this.app.controller('tvshows').showTVShowEpisodeList(tvshowid);
+        tvshowSeasons: function(tvshowid) {
+            this.app.controller('tvshows').showTVShowSeasonList(tvshowid);
         },
 
-        episodes: function() {
-            this.app.controller('tvshows').showEpisodeList().fetch();
+        seasonEpisodeList: function(tvshowid, season) {
+            this.app.controller('tvshows').showSeasonEpisodeList(tvshowid, season);
         }
     },
 

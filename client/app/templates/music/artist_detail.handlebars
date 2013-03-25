@@ -1,21 +1,39 @@
-<div class="modal-header">
-    <a class="close" href="#">x</a>
-    <h2>{{ label }}</h2>
+<div class="visible-desktop">
+    <div class="m-header">
+        <h2>{{ label }}</h2>
+    </div>
+    <div class="m-data">
+        <div class="m-img-container">
+            {{#if thumbnail}}
+                <img src="{{ thumbnail }}" class="cover pull-left">
+            {{else}}
+                <img src="img/svg/media/defaultArtist.svg" class="cover pull-left no-img">
+            {{/if}}
+        </div>
+        <div class="m-data-container">
+            <ul>
+                <li><strong>Genre:</strong> {{ genre }}</li>
+                <li class="plot-container"><p class="plot">{{ description }}</p></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
-<div class="modal-body">
-    <div class="row">
-        <img src="{{ image thumbnail }}" class="cover pull-left">
-        <ul>
-            <li><strong>Genre</strong>: {{ genre }}</li>
-            <li><strong>Description</strong>: {{ description }}</li>
-        </ul>
+<div class="hidden-desktop">
+    <div class="m-data">
+        <div class="m-data-header">
+            <div class="m-title">{{ label }}</div>
+        </div>
+        <div class="m-data-container">
+            <ul>
+                <li><strong>Genre:</strong> {{ genre }}</li>
+            </ul>
+        </div>
+        <div class="m-plot-container">
+            {{#if thumbnail}}
+            <img src="{{ thumbnail }}" class="cover pull-left">
+            {{/if}}
+            <p>{{ description }}</p>
+        </div>
     </div>
-    <div class="row">
-        <img src="{{ image fanart }}" class="cover pull-left">
-    </div>
-</div>
-
-<div class="modal-footer">
-    <a class="btn albums" href="#">Albums</a>
 </div>

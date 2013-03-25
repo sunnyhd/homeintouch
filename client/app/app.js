@@ -141,10 +141,9 @@ app.hitIcons = function($el) {
 };
 
 /**
- * Loads the svg icons depending on the data-hit-icon-type value.
+ * Generates the URL for an image type and color.
  */
-app.loadIcons = function(container, color) {
-    var $container = $(container);
+app.getImgUrl = function(type, color) {
     var appliedColor = "0xFFFFFF";
     if (color) {
         if (color.indexOf('#') === 0) {
@@ -153,54 +152,49 @@ app.loadIcons = function(container, color) {
              appliedColor = color;
         }
     }
-
     var urlRoot = '/api/svg/';
+    return urlRoot + appliedColor + '/' + type.replace(/\./g, '-') + '.svg';
+};
+
+app.loadSvgImgs = function(container, color) {
+    var $container = $(container);
+
+    $.each ( $('img[data-svg]', $container), function (idx, img) {
+        var $img = $(img);
+        var url = app.getImgUrl( $img.data('svg'), color );
+        $img.attr('src', url);
+    });
+};
+
+/**
+ * Loads the svg icons depending on the data-hit-icon-type value.
+ */
+app.loadIcons = function(container, color) {
+    var $container = $(container);
 
     $.each($('.hit-icon[data-hit-icon-type]', $container), function (idx, icon) {
         var iconType = $(icon).data('hit-icon-type');
-        var url = urlRoot + appliedColor + '/' + iconType.replace(/\./g, '-') + '.svg';
+        var url = app.getImgUrl(iconType, color);
         $(icon).css('background-image', "url(\""+url+"\")");
     });
 };
 
 app.changeIconState = function($icon, color) {
-
-    var appliedColor = "0xFFFFFF";
-    if (color) {
-        if (color.indexOf('#') === 0) {
-            appliedColor = "0x" + color.substring(1);
-        } else {
-             appliedColor = color;
-        }
-    }
-
-    var urlRoot = '/api/svg/';
-
     if ($icon.length) {
         var iconType = $icon.data('hit-icon-type');
         if (iconType) {
-            var url = urlRoot + appliedColor + '/' + iconType.replace(/\./g, '-') + '.svg';
+            var url = app.getImgUrl(iconType, color);
             $icon.css('background-image', "url(\""+url+"\")");
         }
     }
 };
 
 /** To load only one time the icons */
-app.getBackgroundIcon = function(iconPath, color) {
-    var urlRoot = '/api/svg/';
-
-    var appliedColor = "0xFFFFFF";
-    if (color) {
-        if (color.indexOf('#') === 0) {
-            appliedColor = "0x" + color.substring(1);
-        } else {
-             appliedColor = color;
-        }
-    }
-
-    var url = urlRoot + appliedColor + '/' + iconPath.replace(/\./g, '-') + '.svg';
+app.getBackgroundIcon = function(iconType, color) {
+    var url = app.getImgUrl(iconType, color);
     return "url(\""+url+"\")";
 };
+
 
 app.applyBackgroundIcon = function($container, iconStr) {
     $container.css('background-image', iconStr);
@@ -313,7 +307,9 @@ app.addInitializer(function(options) {
     // Load bootstrapped data
     app.controller('device_types').deviceTypes.reset(options.deviceTypes);
     app.controller('homes').homes.reset(options.homes);
-    app.controller('players').ids = options.players;
+    if (options.players) {
+        app.controller('players').ids = options.players;
+    }
 
     app.loadMediaData();
 });
@@ -391,6 +387,16 @@ app.loadMediaData = function() {
     var loadingEpisodeNames = $.get('/api/episodes/label').done(function(data) { tvShowsController.filters.episodeLabels = data; });
 
     tvShowsController.loading = $.when(loadingSeries, loadingSeriesGenres, loadingEpisodeNames);
+
+    var musicController = app.controller('music');
+    var loadingArtists = musicController.artists.fetch();
+    var loadingAlbums = musicController.albums.fetch();
+    var loadingSongs = musicController.songs.fetch();
+    var loadingAlbumsGenres = $.get('/api/genres/albums').done(function(data) { musicController.filters.album.genres = data; });
+    var loadingAlbumsYears = $.get('/api/years/albums').done(function(data) { musicController.filters.album.years = data; });
+    var loadingArtistsGenres = $.get('/api/genres/artists').done(function(data) { musicController.filters.artist.genres = data; });
+
+    musicController.loading = $.when(loadingArtists, loadingAlbums, loadingSongs, loadingAlbumsGenres, loadingAlbumsYears, loadingArtistsGenres);
 }
 
 app.vent.on('media:data-changed', function(address, value) {

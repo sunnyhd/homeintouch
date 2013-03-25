@@ -1,0 +1,48 @@
+<div class="music-header">
+
+    <!-- Desktop Filters -->
+    <div class="visible-desktop">
+
+      <div class="input-append music-header-option">
+        <input class="music-search" type="text" name="search" value="{{ term }}" placeholder="Search music...">
+        <div class="btn-group">
+          <button class="btn clear" href="#"><i class="icon-remove"></i></button>
+          <button class="btn search" href="#"><i class="icon-search"></i></button>
+          <button id="current-filter" class="btn dropdown-toggle" data-toggle="dropdown"><span id="filter-name">All Albums</span> <span class="caret"></span></button>
+          <ul class="dropdown-menu music-state-filter">
+            <li><a data-filter="all" href="#">All Albums</a></li>
+            <li><a data-filter="recently-added" href="#">Recently Added</a></li>
+          </ul>
+        </div><!-- /btn-group -->
+      </div>
+
+      <div class="btn-group pull-right search-grp-2">
+        <a href="#" id="genre-filter" class="btn dropdown-toggle" data-toggle="dropdown" data-filter="genre">
+          <span class="current-genre">All Genres</span>&nbsp;
+          <span class="caret"></span>
+        </a>
+        <ul id="music-genre-list" class="dropdown-menu"></ul>
+      </div>
+
+      <div class="btn-group pull-right search-grp-3">
+        <a href="#" id="year-filter" class="btn dropdown-toggle" data-toggle="dropdown" data-filter="year">
+          <span class="current-year">All Years</span>&nbsp;
+          <span class="caret"></span>
+        </a>
+        <ul id="music-year-list" class="dropdown-menu"></ul>
+      </div>
+
+    </div>
+
+    <!-- Desktop Filters -->
+    <div class="hidden-desktop">
+
+      <ul class="hit-nav-proportional three touch-music-nav">
+        <li class="touch-music-search"><i class="icon-search icon-white"></i><span class="show">&nbsp;Search</span></li>
+        <li class="touch-music-filter"><i class="icon-glass icon-white"></i><span class="show">&nbsp;Filter</span></li>
+        <li class="touch-music-default"><i class="icon-refresh icon-white"></i><span class="show">&nbsp;Default</span></li>
+      </ul>
+
+    </div>
+
+</div>
