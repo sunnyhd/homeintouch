@@ -31,9 +31,13 @@
         </div>
         <div class="m-plot-container">
             {{#if thumbnail}}
-            <img src="{{ thumbnail }}" class="cover pull-left">
+                <img src="{{ thumbnail }}" class="cover pull-left">
             {{/if}}
+            {{#if description}}
+            <p class="show-more">{{ description }}</p>
+            {{else}}
             <p>{{ description }}</p>
+            {{/if}}
         </div>
     </div>
 </div>

@@ -20,6 +20,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
         app.setRepeatBackgroundImg( src );
     },
 
+    toggleBioVisibility: function() {
+        this.$(".hidden-desktop .m-plot-container p").toggleClass("show-more");
+    },
+
     close: function() {
         app.removeBackgroundImg();
     },

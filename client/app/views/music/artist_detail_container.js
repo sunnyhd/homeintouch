@@ -1,5 +1,7 @@
+var app = require('app');
 var ArtistDetailView = require('views/music/artist_detail');
 var AlbumListView = require('views/music/artist_album_list');
+var ArtistBioVisibilityView = require('views/music/artist_bio_visibility');
 
 module.exports = Backbone.Marionette.Layout.extend({
 
@@ -22,5 +24,12 @@ module.exports = Backbone.Marionette.Layout.extend({
 
         var albumListView = new AlbumListView({ model: this.model, mode: this.options.mode });
         this.albumList.show(albumListView);
+
+        if (this.model.get('description') !== null && this.model.get('description') !== '') {
+            var artistBioVisibilityView = new ArtistBioVisibilityView();
+            app.touchBottomContent.show(artistBioVisibilityView);
+            artistBioVisibilityView.on('show-more', artistDetailView.toggleBioVisibility, artistDetailView);
+        }
+
     }
 });
