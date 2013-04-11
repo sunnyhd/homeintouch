@@ -1,9 +1,19 @@
-{{#if directory}}
-    <a href="#pictures/{{ file }}">{{ label }}</a>
-{{else}}
-    <a href="#" class="show">{{ label }}</a>
-{{/if}}
-<p>
-    {{ file }}
-    <a href="#" class="play">Play</a>
-</p>
+<div class="pictureContainer clearfix">
+	<div class="picture-image">
+		{{#if directory}}
+			<img src="img/svg/media/defaultMovie.svg">
+		{{else}}
+		    <img src="{{ image file }}">
+		{{/if}}
+	</div>
+
+    <div class="picture-info">
+    	<div>
+    		<span class="picture-title"> {{ label }}</span>
+    		<span class="pull-right">
+    		 	<a href="#" data-action="play" class="btn btn-success btn-block"><i class="icon-play icon-white"/> <span class="visible-desktop">Play Slideshow</span></a>    		 	
+    		</span>
+    	</div>
+    </div>
+</div>
+

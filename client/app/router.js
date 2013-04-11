@@ -24,7 +24,12 @@ module.exports = Backbone.Router.extend({
         
         'import': 'importSettings',
 
+        'pictures/cover-view': 'pictures',
+        'pictures/list-view': 'picturesListView',
         'pictures': 'pictures',
+
+        'pictures/cover-view/*path': 'pictures',
+        'pictures/list-view/*path': 'picturesListView',
         'pictures/*path': 'pictures',
 
         'tvshows': 'tvshows',
@@ -97,7 +102,11 @@ module.exports = Backbone.Router.extend({
         },
 
         pictures: function(path) {
-            this.app.controller('pictures').showPictures(path).fetch();
+            this.app.controller('pictures').showPicturesCoverView(path).fetch();
+        },
+
+        picturesListView: function(path) {
+            this.app.controller('pictures').showPicturesListView(path).fetch();
         },
 
         tvshows: function() {

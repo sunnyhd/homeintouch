@@ -1,10 +1,33 @@
 var app = require('app');
 var Files = require('collections/files');
-var PictureListView = require('views/pictures/picture_list');
+var PictureContainerView = require('views/pictures/picture_container');
 
-exports.showPictures = function(path) {
+exports.showPicturesCoverView = function(path) {
 
-	$('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
+    updateNavs();
+
+    var pictures = new Files([], { type: 'pictures', directory: path });
+
+    var view = new PictureContainerView({ collection: pictures, mode: 'cover' });
+    app.main.show(view);
+
+    return pictures;
+};
+
+exports.showPicturesListView = function(path) {
+
+	updateNavs();
+
+    var pictures = new Files([], { type: 'pictures', directory: path });
+
+    var view = new PictureContainerView({ collection: pictures, mode: 'list' });
+    app.main.show(view);
+
+    return pictures;
+};
+
+var updateNavs = function() {
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
     app.updateDesktopBreadcrumbNav( { 
         itemType: 'floor',
         name: 'Photos', 
@@ -22,11 +45,4 @@ exports.showPictures = function(path) {
             return false;
         }
     });
-
-    var pictures = new Files([], { type: 'pictures', directory: path });
-
-    var view = new PictureListView({ collection: pictures });
-    app.main.show(view);
-
-    return pictures;
 };

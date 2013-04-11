@@ -1,7 +1,8 @@
 var app = require('app');
 var PictureItemView = require('views/pictures/picture_item');
+var FilteredListView = require('views/filtered_list');
 
-module.exports = Backbone.Marionette.CompositeView.extend({
+module.exports = FilteredListView.extend({
     
     template: require('templates/pictures/picture_list'),
     
@@ -13,6 +14,12 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     
     appendHtml: function(cv, iv) {
         this.$('.pictures').append(iv.el);
+    },
+
+    onRender: function() {
+        if (!this.collection.directory) {
+            this.$('a.parent').hide();
+        }
     },
 
     // Event Handlers
