@@ -66,7 +66,7 @@ importer.on('error', function(err) {
 
 dataStore.init(settings.database.path);
 mongoose.connect(settings.database.mongodb);
-eib.connect();
+//eib.connect();
 xbmc.connect();
 
 app.listen(settings.hosts.web.port, function() {
