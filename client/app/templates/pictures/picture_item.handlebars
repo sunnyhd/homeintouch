@@ -11,7 +11,12 @@
     	<div>
     		<span class="picture-title"> {{ label }}</span>
     		<span class="pull-right">
-    		 	<a href="#" data-action="play" class="btn btn-success btn-block"><i class="icon-play icon-white"/> <span class="visible-desktop">Play Slideshow</span></a>    		 	
+                {{#if directory}}
+                    <a href="#" data-action="play-slideshow" class="btn btn-success btn-block"><i class="icon-play icon-white"/> <span class="visible-desktop">Play Slideshow</span></a>
+                    <a href="#" data-action="watch-slideshow" class="btn btn-success btn-block"><i class="icon-film icon-white"/> <span class="visible-desktop">Watch Slideshow</span></a>
+                {{else}}
+    		 	    <a href="#" data-action="play" class="btn btn-success btn-block"><i class="icon-play icon-white"/> <span class="visible-desktop">Play Picture</span></a>
+                {{/if}}      
     		</span>
     	</div>
     </div>

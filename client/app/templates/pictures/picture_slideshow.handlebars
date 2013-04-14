@@ -1,0 +1,20 @@
+<div class="header">
+    <h2>Slideshow {{ folder.label }}</h2>
+    <a href="#" data-action="fullscreen" class="btn btn-success btn-block">Full Screen</a>
+</div>
+
+<div id="pictureCarousel" class="carousel slide">
+  <!-- Carousel items -->
+  <div class="carousel-inner">
+    {{#each files}}
+      {{#if this.firstItem}}
+        <div class="active item"><img class='full-picture' src="{{ image this.file }}"></div>
+      {{else}}
+        <div class="item"><img class='full-picture' src="{{ image this.file }}"></div>
+      {{/if}}
+    {{/each}}
+  </div>
+  <!-- Carousel nav -->
+  <a class="carousel-control left" href="#pictureCarousel" data-slide="prev">&lsaquo;</a>
+  <a class="carousel-control right" href="#pictureCarousel" data-slide="next">&rsaquo;</a>
+</div>

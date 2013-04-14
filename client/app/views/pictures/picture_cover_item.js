@@ -18,7 +18,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
         	app.router.navigate('#pictures/cover-view/' + this.model.get('file'), {trigger: true});
     	} else {
     		var view = new PictureDetailView({ model: this.model });
-        	app.modal.show(view);
+        	app.main.show(view);
     	}
     }
     

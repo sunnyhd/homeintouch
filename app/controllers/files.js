@@ -9,12 +9,12 @@ exports.index = function(req, res, next) {
     }
 
     var params = {
-        media: type/*,
+        media: type,
         sort: {
             ignorearticle: false,
             method: 'label',
             order: 'ascending'
-        }*/
+        }
     };
 
     if (directory) {

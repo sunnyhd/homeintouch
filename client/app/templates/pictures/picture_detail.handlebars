@@ -1,8 +1,12 @@
-<div class="modal-header">
-    <a class="close" href="#">x</a>
+<div class="m-header">
     <h2>{{ label }}</h2>
 </div>
-
-<div class="modal-body">
+<div class="m-actions">
+    <div>
+        <a class="btn btn-success btn-block" href="#" data-action="play"><i class="icon-play icon-white"></i>&nbsp;Play Picture</a>
+        <a class="btn btn-primary btn-block" href="#" data-action="play-slideshow"><i class="icon-picture icon-white"></i>&nbsp;Play Slideshow</a>
+    </div>
+</div>
+<div class="m-data">
     <img class="picture" src="{{ image file }}">
 </div>
