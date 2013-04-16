@@ -93,6 +93,17 @@ exports.addToPlaylist = function(movie) {
     playlistsController.addToPlaylist('video', { item: { movieid: movie.id }});
 };
 
+exports.loadMovies = function(onlyFilters) {
+     // Loads movie colletion, genres and years
+    
+    var loadingMovies = (onlyFilters)? true : exports.movies.fetch();
+    var loadingGenres = $.get('/api/genres/movies').done(function(data) { exports.filters.genres = data; });
+    var loadingYears  = $.get('/api/years/movies').done(function(data) { exports.filters.years = data; });
+
+    // When the three sources were loaded
+    exports.loading = $.when(loadingMovies, loadingGenres, loadingYears);
+}
+
 
 // Helper methods
 
@@ -140,7 +151,7 @@ function updateNavForMovie (movie) {
             return false;
         }
     });
-
+    
     app.updateTouchNav({
         name: movieLabel, 
         previous: 'Movies',
@@ -156,6 +167,45 @@ function updateConfigurationOptions () {
     app.touchBottomConfig.show(new MediaConfigurationOptionsView());
 }
 
+function updateFiltersAndView(data, logAction) {
+    exports.loadMovies(true);
+    exports.loading.done(function () {
+        app.vent.trigger('refresh-movie-views');
+        console.log('Movie with id ' + data.id + ' ' + logAction);
+     });
+    
+}
+
+// Notifications
 app.vent.on('sort-media-collections', function() {
     exports.movies.sort();
+});
+
+app.vent.on('xbmc:videolibrary:onupdate', function (data) {
+    if (data.type && data.type === 'movie') {
+        // Is the movie already loaded?
+        var movie = exports.movies.get(data.id);
+
+        if (!movie) {
+            // If not add the client instance
+            movie = new Movie({ movieid: data.id });
+            exports.movies.add(movie);
+        }
+        // Load the movie info (or update if it already exists in the client)
+        exports.loading = movie.fetch();
+
+        exports.loading.done(function () {
+            // When done, update the filters and the view
+            updateFiltersAndView(data, 'added or updated');
+        });
+    }
+});
+
+app.vent.on('xbmc:videolibrary:onremove', function (data) {
+    if (data.type && data.type === 'movie') {
+        // Remove the movie from the collection
+        exports.movies.remove(data.id);
+        // Update the filters and the view
+        updateFiltersAndView(data, 'removed');
+    }
 });

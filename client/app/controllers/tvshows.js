@@ -83,6 +83,14 @@ exports.addToPlaylist = function(episode) {
     playlistsController.addToPlaylist('video', { item: { episodeid: episode.id }});
 };
 
+exports.loadShows = function(onlyFilters) {
+    var loadingSeries = (onlyFilters)? true : exports.shows.fetch();
+    var loadingSeriesGenres = $.get('/api/genres/tvshows').done(function (data) { exports.filters.genres = data; });
+    var loadingEpisodeNames = $.get('/api/episodes/label').done(function (data) { exports.filters.episodeLabels = data; });
+
+    exports.loading = $.when(loadingSeries, loadingSeriesGenres, loadingEpisodeNames);
+}
+
 function updateNavs () {
     // Removes previous link texts
     $('#desktop-breadcrumb-nav').find('li.hit-room span').html('');
@@ -157,6 +165,43 @@ function updateConfigurationOptions () {
     app.touchBottomConfig.show(new MediaConfigurationOptionsView());
 };
 
+function updateFiltersAndView(data, logAction) {
+    exports.loadShows(true);
+    exports.loading.done(function () {
+        // Which one is for tv shows? app.vent.trigger('refresh-movie-views');
+        console.log('TV Show with id ' + data.id + ' ' + logAction);
+    });    
+}
+
 app.vent.on('sort-media-collections', function(){
     exports.shows.sort();
+});
+
+app.vent.on('xbmc:videolibrary:onupdate', function (data) {
+    if (data.type && data.type === 'tvshow') {
+        // Is the show already loaded?
+        var show = exports.shows.get(data.id);
+
+        if (!show) {
+            // If not add the client instance
+            show = new TVShow({ tvshowid: data.id });
+            exports.shows.add(show);
+        }
+        // Load the show info (or update if it already exists in the client)
+        exports.loading = show.fetch();
+
+        exports.loading.done(function () {
+            // When done, update the filters and the view
+            updateFiltersAndView(data, 'added or updated');
+        });
+    }
+});
+
+app.vent.on('xbmc:videolibrary:onremove', function (data) {
+    if (data.type && data.type === 'tvshow') {
+        // Remove the show from the collection
+        exports.shows.remove(data.id);
+        // Update the filters and the view
+        updateFiltersAndView(data, 'removed');
+    }
 });

@@ -48,8 +48,11 @@ eib.on('address', function(id, value) {
 
 xbmc.on('notification', function(data) {
     console.log('xbmc:notification', JSON.stringify(data));
-    io.sockets.emit('xbmc:notification', data);
-    importer.notification(data);
+    
+    // Let the importer try to process the notification first, and then notify the client app.
+    importer.notification(data, function(notificationData) {
+        io.sockets.emit('xbmc:notification', notificationData);
+    });
 });
 
 importer.on('done', function(time) {
