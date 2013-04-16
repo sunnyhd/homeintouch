@@ -77,6 +77,17 @@ exports.showArtistListView = function() {
     });
 };
 
+exports.loadMusic = function() {
+    var loadingArtists = exports.artists.fetch();
+    var loadingAlbums = exports.albums.fetch();
+    var loadingSongs = exports.songs.fetch();
+    var loadingAlbumsGenres = $.get('/api/genres/albums').done(function (data) { exports.filters.album.genres = data; });
+    var loadingAlbumsYears = $.get('/api/years/albums').done(function (data) { exports.filters.album.years = data; });
+    var loadingArtistsGenres = $.get('/api/genres/artists').done(function (data) { exports.filters.artist.genres = data; });
+
+    exports.loading = $.when(loadingArtists, loadingAlbums, loadingSongs, loadingAlbumsGenres, loadingAlbumsYears, loadingArtistsGenres);
+}
+
 var updateListNav = function(title, url) {
 
     // Removes previous link texts

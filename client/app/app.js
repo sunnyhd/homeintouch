@@ -367,36 +367,17 @@ app.addInitializer(function() {
 
 // Media data loader/updater
 // -------------------------
-app.loadMediaData = function() {
+app.loadMediaData = function () {
 
     // Movies media data
     var moviesController = app.controller('movies');
-
-    // Loads movie colletion, genres and years
-    var loadingMovies = moviesController.movies.fetch();
-    var loadingGenres = $.get('/api/genres/movies').done(function(data) { moviesController.filters.genres = data; });
-    var loadingYears  = $.get('/api/years/movies').done(function(data) { moviesController.filters.years = data; });
-
-    // When the three sources were loaded
-    moviesController.loading = $.when(loadingMovies, loadingGenres, loadingYears);
+    moviesController.loadMovies();
 
     var tvShowsController = app.controller('tvshows');
-
-    var loadingSeries = tvShowsController.shows.fetch();
-    var loadingSeriesGenres = $.get('/api/genres/tvshows').done(function(data) { tvShowsController.filters.genres = data; });
-    var loadingEpisodeNames = $.get('/api/episodes/label').done(function(data) { tvShowsController.filters.episodeLabels = data; });
-
-    tvShowsController.loading = $.when(loadingSeries, loadingSeriesGenres, loadingEpisodeNames);
+    tvShowsController.loadShows();
 
     var musicController = app.controller('music');
-    var loadingArtists = musicController.artists.fetch();
-    var loadingAlbums = musicController.albums.fetch();
-    var loadingSongs = musicController.songs.fetch();
-    var loadingAlbumsGenres = $.get('/api/genres/albums').done(function(data) { musicController.filters.album.genres = data; });
-    var loadingAlbumsYears = $.get('/api/years/albums').done(function(data) { musicController.filters.album.years = data; });
-    var loadingArtistsGenres = $.get('/api/genres/artists').done(function(data) { musicController.filters.artist.genres = data; });
-
-    musicController.loading = $.when(loadingArtists, loadingAlbums, loadingSongs, loadingAlbumsGenres, loadingAlbumsYears, loadingArtistsGenres);
+    musicController.loadMusic();
 }
 
 app.vent.on('media:data-changed', function(address, value) {
