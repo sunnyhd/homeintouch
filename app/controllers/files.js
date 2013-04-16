@@ -19,8 +19,9 @@ exports.index = function(req, res, next) {
 
     if (directory) {
 
-        if (directory.match(/\/\w\:\/.*/)) {
-            console.log('Windows directory: ' + directory);
+        var urlPattern = /^(\/\w+\:\/{1,2}).*/;
+
+        if (directory.match(urlPattern)) {
             directory = directory.substr(1);
         }
 
