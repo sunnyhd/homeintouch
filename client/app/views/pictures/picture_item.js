@@ -49,18 +49,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     watchSlideshow: function() {
 
-        var pictures = new Files([], { type: 'pictures', directory: this.model.get('file') });
-
-        var model = this.model;
-
-        var options = {
-            success: function(collection, response, options) {
-                var view = new PictureSlideshowView({model: model, collection: collection});
-                app.main.show(view);
-            }
-        };
-
-        pictures.fetch(options);
+        app.router.navigate('#pictures/list-view/slideshow/' + this.model.get('file'), {trigger: true});
 
         return false;
     }

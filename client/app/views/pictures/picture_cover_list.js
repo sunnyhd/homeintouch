@@ -46,10 +46,7 @@ module.exports = FilteredListView.extend({
 
     watchSlideshow: function() {
 
-        var model = this.model;
-
-        var view = new PictureSlideshowView({model: model, collection: this.collection});
-        app.main.show(view);
+        app.router.navigate('#pictures/cover-view/slideshow/' + this.collection.directory, { trigger: true });
 
         return false;
     },
