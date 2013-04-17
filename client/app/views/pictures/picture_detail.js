@@ -1,3 +1,6 @@
+var app = require('app');
+var Playable = require('models/playable');
+
 module.exports = Backbone.Marionette.ItemView.extend({
 
     template: require('templates/pictures/picture_detail'),
@@ -6,7 +9,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     events: {
         'click [data-action="play"]': 'play',
-        'click [data-action="play-slideshow"]': 'playSlideshow'
+        'click [data-action="play-slideshow"]': 'playSlideshow',
+        'click [data-action="parent-directory"]': 'parent'
+    },
+
+    initialize: function() {
+        this.mode = this.options.mode;
     },
 
     play: function() {
@@ -21,6 +29,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
         playable.save();
 
         return false;
+    },
+
+    parent: function() {
+        var parent = this.model.parent();
+        app.router.navigate('#pictures/' + this.mode + '/' + parent, { trigger: true });
     }
 
 });

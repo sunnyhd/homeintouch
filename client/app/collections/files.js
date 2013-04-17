@@ -41,6 +41,6 @@ module.exports = Backbone.Collection.extend({
         } else {
             return '/' + parts.join('/') + '/';
         }
-    },
+    }
 
 });

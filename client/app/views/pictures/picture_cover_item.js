@@ -1,5 +1,4 @@
 var app = require('app');
-var PictureDetailView = require('views/pictures/picture_detail');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -17,8 +16,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     	if (this.model.get('filetype') === 'directory') {
         	app.router.navigate('#pictures/cover-view/' + this.model.get('file'), {trigger: true});
     	} else {
-    		var view = new PictureDetailView({ model: this.model });
-        	app.main.show(view);
+            app.router.navigate('#pictures/cover-view/file/' + this.model.get('file'), {trigger: true});
     	}
     }
     

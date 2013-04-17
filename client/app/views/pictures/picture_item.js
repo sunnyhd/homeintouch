@@ -1,6 +1,5 @@
 var app = require('app');
 var Playable = require('models/playable');
-var PictureDetailView = require('views/pictures/picture_detail');
 var PictureSlideshowView = require('views/pictures/picture_slideshow');
 var picturesController = require('controllers/pictures');
 var Files = require('collections/files');
@@ -26,8 +25,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
         if (this.model.get('filetype') === 'directory') {
             app.router.navigate('#pictures/list-view/' + this.model.get('file'), {trigger: true});
         } else {
-            var view = new PictureDetailView({ model: this.model });
-            app.main.show(view);
+            app.router.navigate('#pictures/list-view/file/' + this.model.get('file'), {trigger: true});
         }
 
         return false;

@@ -1,29 +1,38 @@
 var app = require('app');
 var Files = require('collections/files');
+var PictureDetailView = require('views/pictures/picture_detail');
 var PictureContainerView = require('views/pictures/picture_container');
 
 exports.showPicturesCoverView = function(path) {
 
     updateNavs();
 
-    var pictures = new Files([], { type: 'pictures', directory: path });
+    exports.pictures = new Files([], { type: 'pictures', directory: path });
 
-    var view = new PictureContainerView({ collection: pictures, mode: 'cover' });
+    var view = new PictureContainerView({ collection: exports.pictures, mode: 'cover' });
     app.main.show(view);
 
-    pictures.fetch();
+    exports.pictures.fetch();
 };
 
 exports.showPicturesListView = function(path) {
 
 	updateNavs();
 
-    var pictures = new Files([], { type: 'pictures', directory: path });
+    exports.pictures = new Files([], { type: 'pictures', directory: path });
 
-    var view = new PictureContainerView({ collection: pictures, mode: 'list' });
+    var view = new PictureContainerView({ collection: exports.pictures, mode: 'list' });
     app.main.show(view);
 
-    pictures.fetch();
+    exports.pictures.fetch();
+};
+
+exports.showPictureDetailsView = function(path, mode) {
+
+    var picture = exports.pictures.where({file: path})[0];
+
+    var view = new PictureDetailView({ model: picture, mode: mode });
+    app.main.show(view);
 };
 
 var updateNavs = function() {

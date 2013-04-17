@@ -9,7 +9,7 @@ module.exports = FilteredListView.extend({
     itemView: PictureItemView,
 
     events: {
-        'click [data-action="parent-directory"]': 'parent'        
+        'click [data-action="parent-directory"]': 'parent'
     },
     
     appendHtml: function(cv, iv) {
