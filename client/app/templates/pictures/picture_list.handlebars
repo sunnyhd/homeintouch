@@ -1,12 +1,10 @@
 <div class="row-fluid">
-    <div class="span12">
-        <h3>Pictures</h3>
-        <p>
-            <a href="#" class="parent">Parent Directory</a>
-        </p>
+    <div class="header">
+        <h3>Pictures {{ directory }}</h3>
+        <a href="#" data-action="parent-directory" class="btn btn-success btn-block pull-right"><i class="icon-folder-open icon-white"></i>&nbsp;Parent <span class="visible-desktop">Folder</span></a>
     </div>
 </div>
 
-<div class="span12">
+<div>
     <ul class="pictures listView clearfix"></ul>
 </div>

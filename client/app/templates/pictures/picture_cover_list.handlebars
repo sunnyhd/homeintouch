@@ -1,4 +1,23 @@
-<div class="span12">
+<div class="row-fluid">
+    <div class="header">
+        <h3>Pictures {{ directory }}</h3>
+        <a href="#" data-action="parent-directory" class="btn btn-success btn-block pull-right"><i class="icon-folder-open icon-white"></i>&nbsp;Parent <span class="visible-desktop">Folder</span></a>
+        <div id="folder-actions" class="btn-group pull-right">
+			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		    	<span class="visible-desktop">Folder</span> Actions
+		    	<span class="caret"></span>
+		  	</a>
+		  	<ul class="dropdown-menu">
+		    	<!-- dropdown menu links -->
+		    	<li><a href="#" data-action="play-slideshow"><i class="icon-play"/>
+		    	Play Slideshow</a></li>
+                <li><a href="#" data-action="watch-slideshow"><i class="icon-film"/> Watch Slideshow</a></li>
+		  	</ul>
+		</div>
+    </div>
+</div>
+
+<div>
     <ul class="pictures coverView clearfix"></ul>
 </div>
 

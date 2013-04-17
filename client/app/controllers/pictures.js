@@ -11,7 +11,7 @@ exports.showPicturesCoverView = function(path) {
     var view = new PictureContainerView({ collection: pictures, mode: 'cover' });
     app.main.show(view);
 
-    return pictures;
+    pictures.fetch();
 };
 
 exports.showPicturesListView = function(path) {
@@ -23,7 +23,7 @@ exports.showPicturesListView = function(path) {
     var view = new PictureContainerView({ collection: pictures, mode: 'list' });
     app.main.show(view);
 
-    return pictures;
+    pictures.fetch();
 };
 
 var updateNavs = function() {

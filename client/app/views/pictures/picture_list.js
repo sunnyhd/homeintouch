@@ -9,7 +9,7 @@ module.exports = FilteredListView.extend({
     itemView: PictureItemView,
 
     events: {
-        'click .parent': 'parent'
+        'click [data-action="parent-directory"]': 'parent'        
     },
     
     appendHtml: function(cv, iv) {
@@ -18,7 +18,9 @@ module.exports = FilteredListView.extend({
 
     onRender: function() {
         if (!this.collection.directory) {
-            this.$('a.parent').hide();
+            this.$('a[data-action="parent-directory"]').hide();
+        } else {
+            this.$('div.header h3').html('Pictures of ' + this.collection.directory);
         }
     },
 
@@ -28,7 +30,7 @@ module.exports = FilteredListView.extend({
         var parent = this.collection.parent();
 
         if (parent) {
-            app.router.navigate('pictures/' + parent, { trigger: true });
+            app.router.navigate('#pictures/list-view/' + parent, { trigger: true });
         }
     }
     

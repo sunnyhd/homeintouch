@@ -102,11 +102,11 @@ module.exports = Backbone.Router.extend({
         },
 
         pictures: function(path) {
-            this.app.controller('pictures').showPicturesCoverView(path).fetch();
+            this.app.controller('pictures').showPicturesCoverView(path);
         },
 
         picturesListView: function(path) {
-            this.app.controller('pictures').showPicturesListView(path).fetch();
+            this.app.controller('pictures').showPicturesListView(path);
         },
 
         tvshows: function() {
