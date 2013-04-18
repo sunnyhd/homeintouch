@@ -29,10 +29,10 @@ module.exports = Backbone.Marionette.Layout.extend({
 
         if (this.options.mode === 'cover') {
             this.filterView.setCoverBtnActive();
-            this.listView = new PictureCoverView({ collection: this.collection });
+            this.listView = new PictureCoverView({ collection: this.collection, breadcrumb: this.options.breadcrumb });
         } else {
             this.filterView.setListBtnActive();
-            this.listView = new PictureListView({ collection: this.collection });
+            this.listView = new PictureListView({ collection: this.collection, breadcrumb: this.options.breadcrumb });
         }
 
         this.list.show(this.listView);

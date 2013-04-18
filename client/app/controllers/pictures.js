@@ -7,10 +7,11 @@ var PictureContainerView = require('views/pictures/picture_container');
 exports.showPicturesCoverView = function(path) {
 
     updateNavs();
+    buildBreadcrumb(path);
 
     exports.pictures = new Files([], { type: 'pictures', directory: path });
 
-    var view = new PictureContainerView({ collection: exports.pictures, mode: 'cover' });
+    var view = new PictureContainerView({ collection: exports.pictures, mode: 'cover', breadcrumb: exports.breadcrumb });
     app.main.show(view);
 
     var options = {
@@ -25,10 +26,11 @@ exports.showPicturesCoverView = function(path) {
 exports.showPicturesListView = function(path) {
 
 	updateNavs();
+    buildBreadcrumb(path);
 
     exports.pictures = new Files([], { type: 'pictures', directory: path });
 
-    var view = new PictureContainerView({ collection: exports.pictures, mode: 'list' });
+    var view = new PictureContainerView({ collection: exports.pictures, mode: 'list', breadcrumb: exports.breadcrumb });
     app.main.show(view);
 
     exports.pictures.fetch();
@@ -59,6 +61,38 @@ exports.showSlideshowView = function(path, mode) {
 
         exports.pictures.fetch(options);
     }
+};
+
+var buildBreadcrumb = function(path) {
+    if (!exports.breadcrumb || !path) {
+        exports.breadcrumb = [];
+        exports.breadcrumb.push({label: 'Home', path: ''});
+    } else {
+
+        var breadcrumbItem = _.find(exports.breadcrumb, function(item) {
+            return (item.path === path);
+        });
+
+        if (!breadcrumbItem) {
+            exports.breadcrumb.push({label: buildLabel(path), path: path});
+        } else {
+            var breadcrumbIndex = exports.breadcrumb.indexOf(breadcrumbItem);
+            exports.breadcrumb = exports.breadcrumb.slice(0, breadcrumbIndex + 1);
+        }
+    }
+};
+
+var buildLabel = function(path) {
+
+    var lastCharIndex = path.length - 1;
+    var lastChar = path.charAt(lastCharIndex);
+
+    if (lastChar === '/') {
+        path = path.slice(0, -1);
+    }
+
+    var pathArray = path.split('/');
+    return pathArray[pathArray.length - 1];
 };
 
 var updateNavs = function() {

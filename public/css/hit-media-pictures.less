@@ -76,6 +76,25 @@
 		#folder-actions {
 			margin-right: 10px;
 		}
+
+		ul.breadcrumb {
+			float: left;
+			margin: 0 0 0 25px;
+			background: transparent;
+			border: 0;
+			box-shadow: none;
+
+			li {
+				text-shadow: 0 0;
+				color: white;
+				font-size: 15px;
+				font-weight: bold;
+
+				.active {
+					color: white;
+				}
+			}
+		}
 	}
 }
 
@@ -250,6 +269,16 @@
 			margin-right: 10px;
 		}
 	}
+
+	.data {
+		.watermark-background;
+
+		.picture {
+			padding: 20px 0px;
+			display: block;
+			margin: auto;
+		}
+	}
 }
 
 .picture-slideshow {
@@ -275,24 +304,17 @@
 		}
 	}
 
-	.actions {
+	.carousel-inner {
 		.watermark-background;
-		clear: left;
-		float: left;
-		margin-top: 10px;
-		margin-right: 10px;
-		div {
-			margin: 10px;
-			.btn-block {
-				display: block;
-			}
-			a ~ a, a ~ div {
-				margin-top: 10px;
+
+		.item {
+
+			min-height: 500px;
+
+			.carousel-image {
+				margin: auto;
+				max-height: 450px;
 			}
 		}
-	}
-
-	.carousel-inner {
-		background-color: black;
 	}
 }

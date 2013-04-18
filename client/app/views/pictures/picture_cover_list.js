@@ -14,17 +14,13 @@ module.exports = FilteredListView.extend({
 
     events: {
 		'click .pictures-header-option button': 'listViewClicked',
-        'click [data-action="parent-directory"]': 'parent',
         'click [data-action="play-slideshow"]': 'playSlideshow',
-        'click [data-action="watch-slideshow"]': 'watchSlideshow'
+        'click [data-action="watch-slideshow"]': 'watchSlideshow',
+        'click [data-redirect]' : 'navigateFolder'
     },
 
     onRender: function() {
-        if (!this.collection.directory) {
-            this.$('a[data-action="parent-directory"], div#folder-actions').hide();
-        } else {
-            this.$('div.header h3').html('Pictures of ' + this.collection.directory);
-        }
+        this.buildBreadcrumb();
     },
     
     appendHtml: function(cv, iv) {
@@ -33,6 +29,24 @@ module.exports = FilteredListView.extend({
 
     matchers: function(picture) {
         return picture.get('label');
+    },
+
+    buildBreadcrumb: function() {
+
+        var breadcrumbList = this.options.breadcrumb;
+        var $breadcrumb = this.$('.header ul.breadcrumb');
+
+        var breadcrumbItem;
+
+        for (var i = 0; i < (breadcrumbList.length - 1); i++) {
+            breadcrumbItem = breadcrumbList[i];
+            
+            $breadcrumb.append('<li><a href="#" data-redirect="' + breadcrumbItem.path + '">' + breadcrumbItem.label + '</a> <span class="divider">/</span></li>');
+        }
+
+        breadcrumbItem = breadcrumbList[breadcrumbList.length - 1];
+
+        $breadcrumb.append('<li class="active">' + breadcrumbItem.label + '</li>');
     },
 
     playSlideshow: function() {
@@ -58,12 +72,11 @@ module.exports = FilteredListView.extend({
 
     // Event Handlers
 
-    parent: function() {
-        var parent = this.collection.parent();
+    navigateFolder: function(event) {
+        var $btn = $(event.currentTarget);
+        var path = $btn.data('redirect');
 
-        if (parent) {
-            app.router.navigate('#pictures/cover-view/' + parent, { trigger: true });
-        }
+        app.router.navigate('#pictures/cover-view/' + path, { trigger: true });
     }
     
 });

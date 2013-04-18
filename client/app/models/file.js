@@ -19,7 +19,7 @@ module.exports = Backbone.Model.extend({
         if (parts.length === 0) {
             return '/';
         } else {
-            return '/' + parts.join('/') + '/';
+            return parts.join('/') + '/';
         }
     },
 

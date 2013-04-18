@@ -9,7 +9,7 @@ module.exports = FilteredListView.extend({
     itemView: PictureItemView,
 
     events: {
-        'click [data-action="parent-directory"]': 'parent'
+        'click [data-redirect]' : 'navigateFolder'
     },
     
     appendHtml: function(cv, iv) {
@@ -17,21 +17,34 @@ module.exports = FilteredListView.extend({
     },
 
     onRender: function() {
-        if (!this.collection.directory) {
-            this.$('a[data-action="parent-directory"]').hide();
-        } else {
-            this.$('div.header h3').html('Pictures of ' + this.collection.directory);
+        this.buildBreadcrumb();
+    },
+
+    buildBreadcrumb: function() {
+
+        var breadcrumbList = this.options.breadcrumb;
+        var $breadcrumb = this.$('.header ul.breadcrumb');
+
+        var breadcrumbItem;
+
+        for (var i = 0; i < (breadcrumbList.length - 1); i++) {
+            breadcrumbItem = breadcrumbList[i];
+            
+            $breadcrumb.append('<li><a href="#" data-redirect="' + breadcrumbItem.path + '">' + breadcrumbItem.label + '</a> <span class="divider">/</span></li>');
         }
+
+        breadcrumbItem = breadcrumbList[breadcrumbList.length - 1];
+
+        $breadcrumb.append('<li class="active">' + breadcrumbItem.label + '</li>');
     },
 
     // Event Handlers
 
-    parent: function() {
-        var parent = this.collection.parent();
+    navigateFolder: function(event) {
+        var $btn = $(event.currentTarget);
+        var path = $btn.data('redirect');
 
-        if (parent) {
-            app.router.navigate('#pictures/list-view/' + parent, { trigger: true });
-        }
+        app.router.navigate('#pictures/cover-view/' + path, { trigger: true });
     }
     
 });
