@@ -36,5 +36,9 @@ module.exports = Backbone.Marionette.Layout.extend({
         }
 
         this.list.show(this.listView);
+    },
+
+    refreshFilterPanel: function() {
+        this.filterView.refreshCollection();
     }
 });

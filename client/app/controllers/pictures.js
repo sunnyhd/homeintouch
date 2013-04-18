@@ -13,7 +13,13 @@ exports.showPicturesCoverView = function(path) {
     var view = new PictureContainerView({ collection: exports.pictures, mode: 'cover' });
     app.main.show(view);
 
-    exports.pictures.fetch();
+    var options = {
+        success: function() {
+            view.refreshFilterPanel();
+        }
+    };
+
+    exports.pictures.fetch(options);
 };
 
 exports.showPicturesListView = function(path) {

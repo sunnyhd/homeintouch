@@ -1,4 +1,5 @@
 var app = require('app');
+var Files = require('collections/files');
 var FilterPanelView = require('views/filtered_panel');
 var SearchModalView = require('views/pictures/picture_mobile_search_modal');
 var picturesController = app.controller('pictures');
@@ -26,14 +27,14 @@ module.exports = FilterPanelView.extend({
     
     filter: {},
 
-    filterFields: ['playcount', 'lastN'],
-
     // Avoid rendering when the series collection is reseted.
     initialEvents: function() {},
 
     onRender: function() {
-        this.$('button.clear').hide();
-        this.$('button.search').show();
+
+        this.showSearchIcon();
+
+        this.bindTo(this.model, 'change', this.refreshDisplayedPictures, this);
     },
 
     setListBtnActive: function() {
@@ -53,9 +54,38 @@ module.exports = FilterPanelView.extend({
         return false;
     },
 
+    showSearchIcon: function() {
+
+        var $clearButton = this.$('button.clear');
+        var $searchButton = this.$('button.search');
+
+        var $buttonGroup = $searchButton.parent();
+
+        $buttonGroup.empty();
+
+        $clearButton.appendTo($buttonGroup);
+        $searchButton.appendTo($buttonGroup);
+
+        FilterPanelView.prototype.showSearchIcon.call(this);
+    },
+
+    hideSearchIcon: function() {
+        var $clearButton = this.$('button.clear');
+        var $searchButton = this.$('button.search');
+
+        var $buttonGroup = $searchButton.parent();
+
+        $buttonGroup.empty();
+
+        $searchButton.appendTo($buttonGroup);
+        $clearButton.appendTo($buttonGroup);
+
+        FilterPanelView.prototype.hideSearchIcon.call(this);
+    },
+
     // Filter functions
     filterByGenreAndYear: function(filters) {
-        this.refreshDisplayedMovies();
+        this.refreshDisplayedPictures();
     },
 
     // Picture list type functions
@@ -67,14 +97,24 @@ module.exports = FilterPanelView.extend({
         return false;
     },
 
-    refreshDisplayedMovies: function() {
+    refreshDisplayedPictures: function() {
         var opts = {
             criteria: this.model.get('term')
         };
 
+        var options = {
+            type: this.collection.type,
+            directory: this.collection.directory
+        };
+
         console.log(opts);
-        var originalCollection = new Movies(this.collections.originalModels);
+        var originalCollection = new Files(this.collections.originalModels, options);
         this.resetCollection( originalCollection.filterAndSortBy(opts) );
+    },
+
+    refreshCollection: function() {
+        this.collections.originalModels = this.collection.models;
+        this.collections.lastModels = this.collection.models;
     },
 
     // Touch event handlers
@@ -82,7 +122,7 @@ module.exports = FilterPanelView.extend({
         var modal = new SearchModalView( { term: this.model.get('term') } );
         modal.on('media-pictures:search', function(criteria) {
             this.performSearch(criteria);
-            this.refreshDisplayedMovies();
+            this.refreshDisplayedPictures();
         }, this);
 
         app.modal.show(modal);
@@ -91,6 +131,6 @@ module.exports = FilterPanelView.extend({
     clearMobile: function() {
         this.filter = {};
         this.performSearch('');
-        this.refreshDisplayedMovies();
+        this.refreshDisplayedPictures();
     }
 });

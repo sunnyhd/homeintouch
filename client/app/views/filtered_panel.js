@@ -25,6 +25,20 @@ module.exports = Backbone.Marionette.ItemView.extend({
             term = this.$('input[name=search]').val();
         }   
         this.model.set('term', term);
+
+        if (term !== '') {
+            this.hideSearchIcon();
+        } else {
+            this.showSearchIcon();
+        }
+    },
+
+    showSearchIcon: function() {
+        this.$('button.clear').hide();
+        this.$('button.search').show();
+    },
+
+    hideSearchIcon: function() {
         this.$('button.clear').show();
         this.$('button.search').hide();
     },
@@ -44,8 +58,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
         this.$('input[name=search]').val('');
         this.model.set('term', '');
 
-        this.$('button.clear').hide();
-        this.$('button.search').show();
+        this.showSearchIcon();
     }
     
 });

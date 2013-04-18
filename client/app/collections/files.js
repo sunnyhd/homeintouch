@@ -1,6 +1,6 @@
 var File = require('models/file');
 
-module.exports = Backbone.Collection.extend({
+var Files = module.exports = Backbone.Collection.extend({
 
     model: File,
 
@@ -41,6 +41,33 @@ module.exports = Backbone.Collection.extend({
         } else {
             return '/' + parts.join('/') + '/';
         }
+    },
+
+    /**
+     * It returns a new collection applying filters and sort parameters.
+     */
+    filterAndSortBy: function(opts) {
+
+        // Ensures the filter and sort parameters
+        opts.criteria       || (opts.criteria = '');
+
+        var items = this.models;
+
+        // Search criteria
+        if (opts.criteria !== '') {
+            var regexp = new RegExp(opts.criteria, "i");
+
+            items = _.filter(items, function(i) { 
+                return regexp.test(i.get('label'));
+            });
+        }
+
+        var options = {
+            type: this.type,
+            directory: this.directory
+        };
+
+        return new Files(items, options);
     }
 
 });
