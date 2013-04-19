@@ -98,7 +98,7 @@ exports.close = function() {
 
 // Events
 // ---------------
-
+/*
 players.on('activate', function(player) {
     player.run();
 
@@ -142,7 +142,7 @@ app.vent.on('xbmc:player:onstop', function(data) {
         exports.removePlayer(player);
     });
 });
-
+*/
 // Helpers
 // ---------------
 

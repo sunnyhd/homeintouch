@@ -32,7 +32,7 @@ exports.show = function(req, res, next) {
     var playerid = parseInt(req.params.player, 10);
     var params = {
         playerid: playerid,
-        properties: ['thumbnail']
+        properties: ['thumbnail', 'title']
     };
 
     xbmc.rpc('Player.GetItem', params, function(err, results) {

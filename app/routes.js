@@ -62,6 +62,8 @@ module.exports = function(app) {
     app.get('/api/players/:player', controllers.players.show);
     app.del('/api/players/:player', controllers.players.destroy);
 
+    app.post('/api/players/:player/commands', controllers.player_commands.create);
+
     app.get('/api/imports', controllers.imports.show);
     app.post('/api/imports', controllers.imports.create);
 

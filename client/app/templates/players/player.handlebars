@@ -1,15 +1,16 @@
 {{ item.label }}
 <br>
+
 {{#if hasSpan}}
-    {{ currentTime }} / {{ totalTime }}
+    <span class="playerTime">{{ currentTime }}</span> / {{ totalTime }}
     <br>
 {{/if}}
 
 <a class="stop" href="#">Stop</a>
 {{#if playing}}
-    <a class="pause" href="#">Pause</a>
+    <a class="toggle pause" href="#">Pause</a>
 {{else}}
-    <a class="pause" href="#">Play</a>
+    <a class="toggle play" href="#">Play</a>
 {{/if}}
 <br>
 

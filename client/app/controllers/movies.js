@@ -104,6 +104,15 @@ exports.loadMovies = function(onlyFilters) {
     exports.loading = $.when(loadingMovies, loadingGenres, loadingYears);
 }
 
+exports.findMovie = function(id) {
+    var movie = exports.movies.get(id);
+    if(!movie) {
+        movie = new Movie({ movieid: id });
+        exports.movies.add(movie);
+        return movie.fetch();
+    }
+    return $.when(movie);
+};
 
 // Helper methods
 

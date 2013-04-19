@@ -18,6 +18,12 @@ exports.normalizeTime = function(time) {
     return time;
 };
 
+exports.timeToSeconds = function(time) {
+    time = exports.normalizeTime(time);
+
+    return time.seconds + time.minutes * 60 + time.hours * 3600;
+}
+
 exports.formatTime = function(time) {
     if (!time) return '';
 
