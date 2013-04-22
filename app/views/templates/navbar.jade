@@ -27,7 +27,7 @@ script(id="floor-list-template", type="text/template")
 script(id="room-item-template", type="text/template")
     a(href='#') <%= name %>
 
-script(id="edit-style-template", type="text/template")
+script(id="edit-floor-style-template", type="text/template")
   .modal-header
     h2 Edit <%= type %> Styles
   .modal-body
@@ -36,7 +36,9 @@ script(id="edit-style-template", type="text/template")
         li.active
           a(href="#tab1", data-toggle="tab") Body
         li
-          a(href="#tab2", data-toggle="tab") My Rooms
+          a(href="#tab2", data-toggle="tab") My Rooms Title
+        li
+          a(href="#tab3", data-toggle="tab") My Rooms Body
       .tab-content
         .tab-pane.active#tab1
           form.form-horizontal
@@ -51,6 +53,27 @@ script(id="edit-style-template", type="text/template")
                 .controls
                   #holder
         .tab-pane#tab2
+          form.form-horizontal
+            <% _.each(myRoomsTitleFields, function(field){ %>
+            .control-group.
+              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
+              <div class="controls">
+                <% if (field.type !== 'class-list') { %>
+                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
+                <% } else { %>
+                <select id="<%= field.id %>">
+                  <% _.each(field.options, function(option) { %>
+                  <% if (option.value === field.value) { %>
+                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
+                  <% } else { %>
+                  <option value="<%= option.value %>"> <%= option.label %> </option>
+                  <% } %>
+                  <% }) %> 
+                </select>
+              <% } %>
+              </div>
+            <% }) %>
+        .tab-pane#tab3
           form.form-horizontal
             <% _.each(myRoomsFields, function(field){ %>
             .control-group.

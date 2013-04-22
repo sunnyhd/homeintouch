@@ -102,6 +102,11 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
             app.loadIcons('#my-rooms');
         }
 
+        if (this.model.has('myRoomsTitleConfiguration')) {
+            var myRoomsTitleModel = this.model.get('myRoomsTitleConfiguration');
+            this.applyStyle('myRoomsTitleConfiguration');
+        }
+
         this.initScrollBar();
     },
 
@@ -269,7 +274,7 @@ exports.EditFloorForm = Backbone.Marionette.ItemView.extend({
 
 exports.EditStyleFloorForm = StyleConfigurationView.extend({
 
-    template: "#edit-style-template",
+    template: "#edit-floor-style-template",
 
     events: {
         "click .cancel.btn": "cancelClicked",
@@ -286,9 +291,11 @@ exports.EditStyleFloorForm = StyleConfigurationView.extend({
 
         data.bodyFields = this.model.get("bodyFields");
         data.myRoomsFields = this.model.get("myRoomsFields");
+        data.myRoomsTitleFields = this.model.get("myRoomsTitleFields");
 
         this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
         this.addStyleValues(data.myRoomsFields, this.model.get("myRoomsConfiguration"));
+        this.addStyleValues(data.myRoomsTitleFields, this.model.get("myRoomsTitleConfiguration"));
 
         return data;
     },
@@ -301,7 +308,7 @@ exports.EditStyleFloorForm = StyleConfigurationView.extend({
     editClicked: function(e){
         e.preventDefault();
 
-        var formFields = _.union(_.pluck(this.model.get("titleFields"), 'id'), _.pluck(this.model.get("bodyFields"), 'id'), _.pluck(this.model.get("myRoomsFields"), 'id'));
+        var formFields = _.union(_.pluck(this.model.get("titleFields"), 'id'), _.pluck(this.model.get("bodyFields"), 'id'), _.pluck(this.model.get("myRoomsFields"), 'id'), _.pluck(this.model.get("myRoomsTitleFields"), 'id'));
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
@@ -319,6 +326,7 @@ exports.EditStyleFloorForm = StyleConfigurationView.extend({
                     data['body-background-image'] = 'url(' + imagePath + ')';
                     that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
                     that.updateStyleConfiguration(data, that.model.myRoomsPrefix, that.model.myRoomsSelector, "myRoomsConfiguration");
+                    that.updateStyleConfiguration(data, that.model.myRoomsTitlePrefix, that.model.myRoomsTitleSelector, "myRoomsTitleConfiguration");
 
                     that.result = {
                         status: "OK"
@@ -330,6 +338,7 @@ exports.EditStyleFloorForm = StyleConfigurationView.extend({
         } else {
             this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
             this.updateStyleConfiguration(data, this.model.myRoomsPrefix, this.model.myRoomsSelector, "myRoomsConfiguration");
+            this.updateStyleConfiguration(data, this.model.myRoomsTitlePrefix, this.model.myRoomsTitleSelector, "myRoomsTitleConfiguration");
 
             this.result = {
                 status: "OK"

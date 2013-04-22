@@ -25,7 +25,7 @@ module.exports = BaseModel.extend({
         'background-image': {'background-size' : 'cover'} 
     },
 
-    myRoomsSelector: {context: '#my-rooms', selector: ['.hit-title', '.hit-icon']},
+    myRoomsSelector: {context: '#my-rooms', selector: ['.hit-icon']},
 
     myRoomsPrefix: 'my-rooms-',
 
@@ -36,7 +36,21 @@ module.exports = BaseModel.extend({
     ],
 
     myRoomsDefaultStyle: {
-        'class-background-image': 'blue'
+        'class-background-color': 'blue'
+    },
+
+    myRoomsTitleSelector: {context: '#my-rooms', selector: ['.hit-title']},
+
+    myRoomsTitlePrefix: 'my-rooms-title-',
+
+    myRoomsTitleFields: [
+        {name: "Text Color", id: "my-rooms-title-color"}, 
+        {name: "Background Color", id: "my-rooms-title-class-background-color", type: "class-list", options: app.colorClasses}, 
+        {name: "Opacity", id: "my-rooms-title-opacity"}
+    ],
+
+    myRoomsTitleDefaultStyle: {
+        'class-background-color': 'blue'
     },
 
     defaults: {
@@ -66,7 +80,7 @@ module.exports = BaseModel.extend({
 
         this.set("bodyFields", _.clone(this.bodyFields));
 
-         // Initialize My Rooms Configuration
+        // Initialize My Rooms Configuration
         var myRoomsConfiguration = new Configuration();
         if (this.has("myRoomsConfiguration")) {
             myRoomsConfiguration.set(this.get("myRoomsConfiguration"));
@@ -77,6 +91,18 @@ module.exports = BaseModel.extend({
         this.set("myRoomsConfiguration", myRoomsConfiguration);
 
         this.set("myRoomsFields", _.clone(this.myRoomsFields));  
+
+        // Initialize My Rooms Title Configuration
+        var myRoomsTitleConfiguration = new Configuration();
+        if (this.has("myRoomsTitleConfiguration")) {
+            myRoomsTitleConfiguration.set(this.get("myRoomsTitleConfiguration"));
+        }            
+
+        myRoomsTitleConfiguration.set('selector', this.myRoomsTitleSelector);
+        myRoomsTitleConfiguration.set('defaultStyle', this.myRoomsTitleDefaultStyle);
+        this.set("myRoomsTitleConfiguration", myRoomsTitleConfiguration);
+
+        this.set("myRoomsTitleFields", _.clone(this.myRoomsTitleFields));  
     },
 
     defaultRoom: function() { 
@@ -104,12 +130,17 @@ module.exports = BaseModel.extend({
             json.bodyConfiguration = this.get("bodyConfiguration").toJSON();
         }
 
-         if (this.has("myRoomsConfiguration")) {
+        if (this.has("myRoomsConfiguration")) {
             json.myRoomsConfiguration = this.get("myRoomsConfiguration").toJSON();
+        }
+
+        if (this.has("myRoomsTitleConfiguration")) {
+            json.myRoomsTitleConfiguration = this.get("myRoomsTitleConfiguration").toJSON();
         }
 
         delete json.bodyFields;
         delete json.myRoomsFields;
+        delete json.myRoomsTitleFields;
 
         return json;
     }
