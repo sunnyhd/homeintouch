@@ -52,6 +52,35 @@ module.exports = BaseModel.extend({
         {name: "Background Pattern", id: "pattern-background-image", type: "list", options: app.backgroundPatterns}
     ],
 
+    // Favorite widget body and title
+    favoritesTitleSelector: '.hit-title',
+
+    favoritesTitlePrefix: 'widget-title-',
+
+    favoritesBodySelector: '.hit-icon',
+
+    favoritesBodyPrefix: 'widget-body-',
+
+    favoritesTitleFields: [
+        {name: "Background Color", id: "widget-title-class-background-color", type: "class-list", options: app.colorClasses}, 
+        {name: "Text Color", id: "widget-title-color"}, 
+        {name: "Opacity", id: "widget-title-opacity"}
+    ],
+
+    favoritesTitleDefaultStyle: {
+        'class-background-image': 'blue'
+    },
+
+    favoritesBodyFields: [
+        {name: "Background Color", id: "widget-body-class-background-color", type: "class-list", options: app.colorClasses}, 
+        {name: "Text Color", id: "widget-body-color"}, 
+        {name: "Opacity", id: "widget-body-opacity"}
+    ],
+
+    favoritesBodyDefaultStyle: {
+        'class-background-image': 'blue'
+    },
+
     // Time and Weather
     timeWheaterDefaults: {'location': 'EUR|DE|GM003|BERLIN', 'locationLabel': 'Berlin, DE'},
     
@@ -122,6 +151,26 @@ module.exports = BaseModel.extend({
         favoritesPatternConfiguration.set('selector', this.favoritesPatternSelector);
         this.set("favoritesPatternConfiguration", favoritesPatternConfiguration);
 
+        // Initialize Favorites Widget Title Configuration
+        var favoritesTitleConfiguration = new Configuration();
+        if (this.has("favoritesTitleConfiguration")) {
+            favoritesTitleConfiguration.set(this.get("favoritesTitleConfiguration"));
+        }
+        favoritesTitleConfiguration.set('selector', this.favoritesTitleSelector);
+        favoritesTitleConfiguration.set('defaultStyle', this.favoritesTitleDefaultStyle);
+        favoritesTitleConfiguration.set('fixedStyle', this.favoritesTitleFixedStyle);
+        this.set("favoritesTitleConfiguration", favoritesTitleConfiguration);
+
+        // Initialize Favorites Widget Body Configuration
+        var favoritesBodyConfiguration = new Configuration();
+        if (this.has("favoritesBodyConfiguration")) {
+            favoritesBodyConfiguration.set(this.get("favoritesBodyConfiguration"));
+        }
+        favoritesBodyConfiguration.set('selector', this.favoritesBodySelector);
+        favoritesBodyConfiguration.set('defaultStyle', this.favoritesBodyDefaultStyle);
+        favoritesBodyConfiguration.set('fixedStyle', this.favoritesBodyFixedStyle);
+        this.set("favoritesBodyConfiguration", favoritesBodyConfiguration);
+
         // Initialize Start Page Configuration
         if (!this.has('startPage')) {
             this.set('startPage', ('home-' + this.id));
@@ -132,6 +181,9 @@ module.exports = BaseModel.extend({
         this.set("timeWheaterFields", _.clone(this.timeWheaterFields));
         this.set("favoritesFields", _.clone(this.favoritesFields));
         this.set("favoritesPatternFields", _.clone(this.favoritesPatternFields));
+
+        this.set("favoritesTitleFields", _.clone(this.favoritesTitleFields));
+        this.set("favoritesBodyFields", _.clone(this.favoritesBodyFields));
     },
 
     initializeWidgets: function() {
@@ -279,11 +331,21 @@ module.exports = BaseModel.extend({
             json.favoritesPatternConfiguration = this.get("favoritesPatternConfiguration").toJSON();
         }
 
+        if (this.has("favoritesTitleConfiguration")) {
+            json.favoritesTitleConfiguration = this.get("favoritesTitleConfiguration").toJSON();
+        }
+
+        if (this.has("favoritesBodyConfiguration")) {
+            json.favoritesBodyConfiguration = this.get("favoritesBodyConfiguration").toJSON();
+        }
+
         delete json.bodyFields;
         delete json.bodyPatternFields;
         delete json.timeWheaterDefaults;
         delete json.favoritesFields;
         delete json.favoritesPatternFields;
+        delete json.favoritesTitleFields;
+        delete json.favoritesBodyFields;
 
         return json;
     }

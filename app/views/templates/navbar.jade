@@ -183,6 +183,10 @@ script(id="edit-favorite-style-template", type="text/template")
           a(href="#tab1", data-toggle="tab") Style
         li
           a(href="#tab2", data-toggle="tab") Widget Order
+        li
+          a(href="#tab3", data-toggle="tab") Title
+        li
+          a(href="#tab4", data-toggle="tab") Body
       .tab-content
         .tab-pane.active#tab1
           form.form-horizontal
@@ -221,6 +225,48 @@ script(id="edit-favorite-style-template", type="text/template")
             <% _.each(widgets, function(widget) { %>
             li(data-model-id!="<%= widget.type %>")
               a(href="#") <%= widget.name %>
+            <% }) %>
+        .tab-pane#tab3
+          form.form-horizontal
+            <% _.each(favoritesTitleFields, function(field){ %>
+            .control-group.
+              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
+              <div class="controls">
+                <% if (field.type !== 'class-list') { %>
+                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
+                <% } else { %>
+                <select id="<%= field.id %>">
+                  <% _.each(field.options, function(option) { %>
+                  <% if (option.value === field.value) { %>
+                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
+                  <% } else { %>
+                  <option value="<%= option.value %>"> <%= option.label %> </option>
+                  <% } %>
+                  <% }) %> 
+                </select>
+              <% } %>
+              </div>
+            <% }) %>
+        .tab-pane#tab4
+          form.form-horizontal
+            <% _.each(favoritesBodyFields, function(field){ %>
+            .control-group.
+              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
+              <div class="controls">
+                <% if (field.type !== 'class-list') { %>
+                <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
+                <% } else { %>
+                <select id="<%= field.id %>">
+                  <% _.each(field.options, function(option) { %>
+                  <% if (option.value === field.value) { %>
+                  <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
+                  <% } else { %>
+                  <option value="<%= option.value %>"> <%= option.label %> </option>
+                  <% } %>
+                  <% }) %> 
+                </select>
+              <% } %>
+              </div>
             <% }) %>
   .modal-footer
     a(href="#").pull-left.btn#clear-background Clear background
