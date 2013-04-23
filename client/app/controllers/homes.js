@@ -41,7 +41,9 @@ exports.startPage = function() {
                 }
             }
         } else if (startPageType === 'home') {
-            exports.showCurrent();    
+            if (!app.main.currentView || (app.main.currentView.model !== exports.currentHome)) {
+                exports.showCurrent();    
+            }
         }
 
         // Start Page Timeout (expressed in seconds).
@@ -52,7 +54,9 @@ exports.startPage = function() {
         }
 
     } else {
-        exports.showCurrent();
+        if (!app.main.currentView || (app.main.currentView.model !== exports.currentHome)) {
+            exports.showCurrent();    
+        }
     }
 };
 
