@@ -24,10 +24,11 @@ exports.startPage = function() {
         if (startPageType === 'floor') {
             var startPageId = startPageArray[1];
             var floor = home.getFloorById(startPageId);
-            if (floor !== null && !_.isUndefined(floor)) {
+            if (floor !== null && !_.isUndefined(floor)) { 
                 if (!app.main.currentView || (app.main.currentView.model !== floor)) {
                     exports.setHomeData(home);
                     app.vent.trigger('floor:selected', floor);
+                    resetStartPage();
                 }
             }    
         } else if (startPageType === 'room') {
@@ -41,12 +42,14 @@ exports.startPage = function() {
                         exports.setHomeData(home);
                         app.vent.trigger('floor:setData', floor);
                         app.vent.trigger('room:selected', room);
+                        resetStartPage();
                     }
                 }
             }
         } else if (startPageType === 'home') {
             if (!app.main.currentView || (app.main.currentView.model !== exports.currentHome)) {
-                exports.showCurrent();    
+                exports.showCurrent();
+                resetStartPage();
             }
         }
 
@@ -59,9 +62,15 @@ exports.startPage = function() {
 
     } else {
         if (!app.main.currentView || (app.main.currentView.model !== exports.currentHome)) {
-            exports.showCurrent();    
+            exports.showCurrent();
+            resetStartPage();
         }
     }
+};
+
+var resetStartPage = function() {
+    $('#desktop-top-opts').removeClass('open');
+    app.modal.close();
 };
 
 exports.showCurrent = function() {
