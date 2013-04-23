@@ -123,8 +123,8 @@ exports.save = function(home){
     });
 };
 
-exports.destroy = function(home){
-    home.destroy();
+exports.destroy = function(home, options){
+    home.destroy(options);
 };
 
 /**
@@ -266,4 +266,16 @@ app.vent.on("home:saved", function(newHome) {
 
 app.vent.on('home:showStartPage', function() {
     exports.startPage();
+});
+
+app.vent.on('home:delete', function(home) {
+
+    var deleteOptions = {
+        success: function(model, response) {
+            exports.homes.remove(model);
+            exports.showHome(exports.homes.defaultHome());
+        }
+    };
+
+    exports.destroy(home, deleteOptions);
 });

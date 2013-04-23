@@ -348,6 +348,10 @@ module.exports = BaseModel.extend({
         delete json.favoritesBodyFields;
 
         return json;
+    },
+
+    destroy: function(options) {
+        Backbone.Model.prototype.destroy.apply(this, [options]);
     }
 
 });

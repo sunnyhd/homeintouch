@@ -19,12 +19,13 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     events: {
         'click a.add-floor': 'addFloorHandler',
         'click a#home-settings' : 'editHomeHandler',
-        'click a#editStyle': 'editStyle'
+        'click a#editStyle': 'editStyle',
+        'click a#deleteHome': 'deleteHome'
     },
 
     addFloorHandler: function(e) {
-        e.preventDefault();
         app.vent.trigger("floor:add");
+        return false;
     },
 
     editHomeHandler: function(e) {
@@ -35,6 +36,24 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     editStyle: function() {
         app.vent.trigger("home:editStyle", this);
         return false;
+    },
+
+    deleteHome: function(e) {
+        var $target = $(e.currentTarget);
+        var $targetParent = $target.parent();
+
+        if (!$targetParent.hasClass('disabled')) {
+            $('#desktop-top-opts').removeClass('open');
+            app.vent.trigger('home:delete', homesController.currentHome);          
+        }
+        return false;
+    },
+
+    onRender: function() {
+        if (homesController.homes.length === 1) {
+            // There is only one home, it can't be deleted
+            this.$('#deleteHome').parent().addClass('disabled');
+        }
     }
 });
 
