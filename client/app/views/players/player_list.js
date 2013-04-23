@@ -1,5 +1,5 @@
-var PlayerView = require('views/players2/player');
-var playersController = require('controllers/players2');
+var PlayerView = require('views/players/player');
+var playersController = require('controllers/players');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
 

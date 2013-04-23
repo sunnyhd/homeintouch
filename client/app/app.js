@@ -315,8 +315,8 @@ app.addInitializer(function(options) {
 });
 
 app.addInitializer(function(options) {
-    app.controller('players2');
-    app.controller('players2').showPlayers();
+    app.controller('players');
+    app.controller('players').showPlayers();
 });
 
 app.addInitializer(function() {

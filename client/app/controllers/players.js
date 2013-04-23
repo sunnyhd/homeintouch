@@ -1,7 +1,7 @@
 var app = require('app');
-var Players = require('collections/players2');
-var Player = require('models/player2');
-var PlayerList = require('views/players2/player_list');
+var Players = require('collections/players');
+var Player = require('models/player');
+var PlayerList = require('views/players/player_list');
 
 var movieController = require('controllers/movies');
 var musicController = require('controllers/music');
