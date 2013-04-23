@@ -122,7 +122,8 @@ var Player = Backbone.Model.extend({
         if(!item) return false;
 
         var type = item.type || item.getType();
-        var id = item.id;
+        // When the item is a picture, there is a file attribute but no id
+        var id = item.id || item.file;
         if(!id || !type) return false;
 
         var currentItem = this.get('item');
@@ -131,7 +132,7 @@ var Player = Backbone.Model.extend({
 
     togglePlaying: function() {
          // Sends a setSpeed command
-        return Command.setSpeed(this.id, this.isPlaying() ? 0 : 1);
+        return Command.setSpeed(this, this.isPlaying() ? 0 : 1);
     },
 
     hasSpan: function() {
@@ -147,11 +148,17 @@ var Player = Backbone.Model.extend({
     },
 
     currentTime: function() {
-        return helpers.formatTime(this.get('time'));
+        var time = this.get('time');
+        if(time) return helpers.formatTime(this.get('time'));
+
+        return '';
     },
 
     totalTime: function() {
-        return helpers.formatTime(this.get('totaltime'));
+        var tt = this.get('totaltime');
+        if(tt) return helpers.formatTime(tt);
+
+        return '';
     },
 
     thumbnail: function() {
@@ -167,7 +174,7 @@ var Player = Backbone.Model.extend({
     seek: function(percentage) {
     	var value = Math.round(percentage * 100);
         // Sends a seek command
-    	return Command.seek(this.id, value);
+    	return Command.seek(this, value);
     },
 
     play: function() {
@@ -180,7 +187,7 @@ var Player = Backbone.Model.extend({
     
     stop: function() {
         // Sends a stop command
-        return Command.stop(this.id);
+        return Command.stop(this);
     },
 
     toJSON: function() {
@@ -192,7 +199,7 @@ var Player = Backbone.Model.extend({
         data.playing = this.isPlaying();
         data.thumbnail = this.thumbnail();
         data.hasSpan = this.hasSpan();
-        data.label = this.get('item').get('label');
+        data.label = this.get('item').getLabel();
 
         return data;
     }

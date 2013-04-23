@@ -1,5 +1,7 @@
 module.exports = Backbone.Model.extend({
 
+    idAttribute: 'file',
+
     isDirectory: function() {
         return this.get('filetype') === 'directory';
     },
@@ -21,6 +23,19 @@ module.exports = Backbone.Model.extend({
         } else {
             return parts.join('/') + '/';
         }
+    },
+
+    getType: function() {
+        return this.get('type');
+    },
+
+    getLabel: function() {
+        var label = this.get('label');
+        if(label) return label;
+
+        var path = this.get('file');
+
+        return _.last(path.split('/'));
     },
 
     toJSON: function() {

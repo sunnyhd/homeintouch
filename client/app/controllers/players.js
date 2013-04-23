@@ -6,6 +6,7 @@ var PlayerList = require('views/players/player_list');
 var movieController = require('controllers/movies');
 var musicController = require('controllers/music');
 var tvShowController = require('controllers/tvshows');
+var pictureController = require('controllers/pictures');
 
 var players = exports.players = new Players();
 exports.ids = {};
@@ -92,6 +93,8 @@ function loadPlayerItem(item) {
 		case 'song':
 			loader = musicController.findSong;
 			break;
+		case 'picture':
+			return pictureController.getPicture(item);
 	}
 
 	return loader(item.id);

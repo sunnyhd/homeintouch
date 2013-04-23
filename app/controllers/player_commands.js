@@ -1,9 +1,14 @@
 var xbmc = require('../../lib/xbmc');
 
-function getParameters(action, params) {
+function getParameters(action, playerType, params) {
 	switch(action) {
 		case "speed":
-			return buildPayload("Player.SetSpeed", {speed: params});
+			// the picture player doesnt support setSpeed, so we use PlayPause for that case
+			if(playerType.toLowerCase() === 'picture' && (params === 0 || params === 1)) {
+				return buildPayload("Player.PlayPause");
+			} else {
+				return buildPayload("Player.SetSpeed", {speed: params});
+			}
 		case "seek":
 			return buildPayload("Player.Seek", {value: params});
 		case "stop":
@@ -19,7 +24,7 @@ function buildPayload(method, params) {
 };
 
 exports.create = function(req, res, next) {
-	var command = getParameters(req.body.action, req.body.params);
+	var command = getParameters(req.body.action, req.body.playerType, req.body.params);
 
     command.params.playerid = parseInt(req.params.player, 10);
 

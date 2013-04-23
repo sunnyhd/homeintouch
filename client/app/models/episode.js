@@ -25,6 +25,10 @@ var Episode = module.exports = Backbone.Model.extend({
         return this.get('type');
     },
 
+    getLabel: function() {
+        return this.get('label');
+    },
+
     getEpisodeNumber: function() {
 
         var episodeString = '';

@@ -8,19 +8,19 @@
 
 });
 
-Command.send = function(playerid, action, params) {
-	var cmd = new Command({playerid: playerid, action: action, params: params});
+Command.send = function(player, action, params) {
+	var cmd = new Command({playerid: player.id, playerType: player.get('type').toLowerCase(), action: action, params: params});
 	return cmd.send();
 } 
 
-Command.setSpeed = function(playerid, speed) {
-	return Command.send(playerid, 'speed', speed);
+Command.setSpeed = function(player, speed) {
+	return Command.send(player, 'speed', speed);
 }
-Command.seek = function(playerid, value) {
-	return Command.send(playerid, 'seek', value);
+Command.seek = function(player, value) {
+	return Command.send(player, 'seek', value);
 }
-Command.stop = function(playerid) {
-	return Command.send(playerid, 'stop');
+Command.stop = function(player) {
+	return Command.send(player, 'stop');
 }
 
 module.exports = Command;

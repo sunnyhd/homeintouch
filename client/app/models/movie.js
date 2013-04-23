@@ -32,6 +32,10 @@ var Movie = module.exports = Backbone.Model.extend({
         return this.get('type');
     },
 
+    getLabel: function() {
+        return this.get('label');
+    },
+
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         data.thumbnail = this.thumbnail();
