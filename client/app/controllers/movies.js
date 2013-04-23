@@ -1,10 +1,8 @@
 var app = require('app');
 var Movies = require('collections/movies');
 var Movie = require('models/movie');
-var Player = require('models/player');
 var MovieContainerView = require('views/movies/movie_container');
 var homesController = require('controllers/homes');
-var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 var MovieDetailView = require('views/movies/movie_detail');
 var MediaConfigurationOptionsView = require('views/settings/media_configuration_options');
@@ -81,11 +79,12 @@ exports.play = function(movie) {
 
 exports.resume = function(movie) {
     movie.play().then(function() {
-        var playerid = playersController.getPlayerId('video');
+        
+        /*var playerid = playersController.getPlayerId('video');
         var player = new Player({ playerid: playerid });
 
         var command = player.seekCommand(movie.getResumePercentage());
-        command.send();
+        command.send();*/
     });
 };
 

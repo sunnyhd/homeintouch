@@ -13,7 +13,6 @@ var TVShowContainerView = require('views/tvshows/tvshow_container');
 var TVShowSeasonListView = require('views/tvshows/tvshow_season_list');
 var MediaConfigurationOptionsView = require('views/settings/media_configuration_options');
 
-var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 
 exports.shows = new TVShows();
@@ -76,8 +75,8 @@ exports.play = function(episode) {
 };
 
 exports.resume = function(episode) {
-    var playerid = playersController.getPlayerId('video');
-    episode.resume(playerid);
+    /*var playerid = playersController.getPlayerId('video');
+    episode.resume(playerid);*/
 };
 
 exports.addToPlaylist = function(episode) {

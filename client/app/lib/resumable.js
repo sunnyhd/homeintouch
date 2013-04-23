@@ -1,5 +1,4 @@
 var helpers = require('lib/helpers');
-var Player = require('models/player');
 
 module.exports = function() {
     this.resumeData = function() {
@@ -28,9 +27,9 @@ module.exports = function() {
         var self = this;
 
         this.play().then(function() {
-            var player = new Player({ playerid: playerid });
+            /*var player = new Player({ playerid: playerid });
             var command = player.seekCommand(self.getResumePercentage());
-            command.send();
+            command.send();*/
         });
     }
 };

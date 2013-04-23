@@ -293,7 +293,7 @@ app.addInitializer(function() {
     app.controller('floors');
     app.controller('homes');
     app.controller('rooms');
-    app.controller('players');
+    
     app.controller('playlists');
     app.controller('movies');
     app.controller('music');
@@ -311,11 +311,6 @@ app.addInitializer(function(options) {
     app.controller('device_types').deviceTypes.reset(options.deviceTypes);
     app.controller('homes').homes.reset(options.homes);
     
-    /*
-    if (options.players) {
-        app.controller('players').ids = options.players;
-    }
-*/
     app.loadMediaData();
 });
 
