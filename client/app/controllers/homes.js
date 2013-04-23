@@ -25,8 +25,10 @@ exports.startPage = function() {
             var startPageId = startPageArray[1];
             var floor = home.getFloorById(startPageId);
             if (floor !== null && !_.isUndefined(floor)) {
-                exports.setHomeData(home);
-                app.vent.trigger('floor:selected', floor);
+                if (!app.main.currentView || (app.main.currentView.model !== floor)) {
+                    exports.setHomeData(home);
+                    app.vent.trigger('floor:selected', floor);
+                }
             }    
         } else if (startPageType === 'room') {
             var floorId = startPageArray[1];
@@ -35,9 +37,11 @@ exports.startPage = function() {
                 var startPageId = startPageArray[2];
                 var room = floor.getRoomById(startPageId);
                 if (room !== null && !_.isUndefined(room)) {
-                    exports.setHomeData(home);
-                    app.vent.trigger('floor:setData', floor);
-                    app.vent.trigger('room:selected', room);
+                    if (!app.main.currentView || (app.main.currentView.model !== room)) {
+                        exports.setHomeData(home);
+                        app.vent.trigger('floor:setData', floor);
+                        app.vent.trigger('room:selected', room);
+                    }
                 }
             }
         } else if (startPageType === 'home') {
