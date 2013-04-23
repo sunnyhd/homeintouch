@@ -38,6 +38,7 @@ module.exports = function(app) {
     app.get('/api/episodes', controllers.episodes.index);
     app.get('/api/episodes/last/:n', controllers.episodes.lastN);
     app.get('/api/episodes/label', controllers.episodes.label);
+    app.get('/api/episodes/:episodeid', controllers.episodes.get);
 
     app.get('/api/artists', controllers.artists.index);
     app.get('/api/artists/:artist', controllers.artists.show);

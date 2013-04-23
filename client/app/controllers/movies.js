@@ -104,14 +104,20 @@ exports.loadMovies = function(onlyFilters) {
     exports.loading = $.when(loadingMovies, loadingGenres, loadingYears);
 }
 
+/**
+ * Retrieves the movie by id, either from the client if it has already been loaded
+ * or from the server
+ */
 exports.findMovie = function(id) {
     var movie = exports.movies.get(id);
     if(!movie) {
         movie = new Movie({ movieid: id });
-        exports.movies.add(movie);
-        return movie.fetch();
+        return Q.when(movie.fetch()).then(function() {
+            exports.movies.add(movie);
+            return movie;
+        });
     }
-    return $.when(movie);
+    return Q.when(movie);
 };
 
 // Helper methods

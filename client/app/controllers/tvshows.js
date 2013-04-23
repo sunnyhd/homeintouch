@@ -6,6 +6,7 @@ var Seasons = require('collections/seasons');
 
 var TVShow = require('models/tvshow');
 var Season = require('models/season');
+var Episode = require('models/episode');
 
 var SeasonEpisodeListView = require('views/tvshows/season_episode_list');
 var TVShowContainerView = require('views/tvshows/tvshow_container');
@@ -90,6 +91,17 @@ exports.loadShows = function(onlyFilters) {
 
     exports.loading = $.when(loadingSeries, loadingSeriesGenres, loadingEpisodeNames);
 }
+
+/**
+ * Loads the episode by id from the server
+ */
+exports.findEpisode = function(id) {
+    //TODO see how to cache the episode
+    var ep = new Episode({ episodeid: id });
+    return Q.when(ep.fetch()).then(function() {
+        return ep;
+    });
+};
 
 function updateNavs () {
     // Removes previous link texts

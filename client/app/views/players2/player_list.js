@@ -8,9 +8,12 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     itemView: PlayerView,
 
     initialize: function() {
-        this.bindTo(this.collection, 'change', this.render, this);
         this.bindTo(this.collection, 'activate', this.activated, this);
         this.bindTo(this.collection, 'deactivate', this.deactivated, this);
+    },
+
+    doRender: function() {
+        this.render();
     },
 
     appendHtml: function(cv, iv) {

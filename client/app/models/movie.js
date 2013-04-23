@@ -7,6 +7,10 @@ var Movie = module.exports = Backbone.Model.extend({
 
     idAttribute: 'movieid',
 
+     defaults: {
+        type: 'movie'
+    },
+
     url: function() {
         return '/api/movies/' + this.get('movieid');
     },
@@ -24,9 +28,14 @@ var Movie = module.exports = Backbone.Model.extend({
         }
     },
 
+    getType: function() {
+        return this.get('type');
+    },
+
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         data.thumbnail = this.thumbnail();
+        data.label = this.get('label');
         _.extend(data, this.resumeData());
         return data;
     }

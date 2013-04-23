@@ -1,6 +1,9 @@
 var helpers = require('lib/helpers');
 var Command = require('models/player_command');
 
+/**
+ * Updates the player's percentage based of the time
+ */
 function updatePercentage(player, time) {
 	var currentTime = helpers.timeToSeconds(time);
 	var total = helpers.timeToSeconds(player.get("totaltime"));
@@ -8,6 +11,9 @@ function updatePercentage(player, time) {
 	player.set("percentage", currentTime/total * 100);
 };
 
+/**
+ * Turns on or off the player according to the new speed
+ */
 function onSpeedChanged(player, speed) {
     if(this.isPlaying()) 
         this.turnOn();
@@ -16,6 +22,9 @@ function onSpeedChanged(player, speed) {
 };
 
 
+/**
+ * Turns on the timer that updates the current play time (every 1 second)
+ */
 function turnOnTimer(player) {
     if(player.timerTime) turnOffTimer(player);
 
@@ -23,11 +32,15 @@ function turnOnTimer(player) {
     player.timerTime = setInterval(function() {
         var time = _.clone(self.get('time'));
         if (!time) return;
+        // Updates the seconds according to the current player speed
         time.seconds += self.get("speed");
         self.set('time', helpers.normalizeTime(time));
     }, 1000);
 };
 
+/**
+ * Stops the timer
+ */
 function turnOffTimer(player) {
     if(player.timerTime){
         clearInterval(player.timerTime);
@@ -50,14 +63,24 @@ var Player = Backbone.Model.extend({
     initialize: function() {
     	this.on('change:time', updatePercentage);
         this.on('change:speed', onSpeedChanged);
+        
         //this.on('change', function() { alert("a") });
+    },
+
+    /**
+     * Starts the player by turning it on
+     */
+    start: function() {
         if(this.isPlaying()) this.turnOn();
     },
 
+    /**
+     * Activates the player (turns on the timer)
+     */
     turnOn: function() {
     	turnOnTimer(this);
         
-        this.turnOff();
+        /*this.turnOff();
         var self = this;
         this.timerAdjust = setInterval(function() {
             
@@ -72,9 +95,12 @@ var Player = Backbone.Model.extend({
             });
             
             //
-        }, 5000);
+        }, 5000);*/
     },
 
+    /**
+     * Turns off the player
+     */
     turnOff: function() {
     	turnOffTimer(this);
 
@@ -88,7 +114,23 @@ var Player = Backbone.Model.extend({
         return this.get('speed') !== 0;
     },
 
+    /**
+     * Verifies is the item passed is the same as the item being played by
+     * this player. It checks the id and the type of the item
+     */
+    isCurrentItem: function(item) {
+        if(!item) return false;
+
+        var type = item.type || item.getType();
+        var id = item.id;
+        if(!id || !type) return false;
+
+        var currentItem = this.get('item');
+        return (currentItem.id === id && currentItem.getType() === type);
+    },
+
     togglePlaying: function() {
+         // Sends a setSpeed command
         return Command.setSpeed(this.id, this.isPlaying() ? 0 : 1);
     },
 
@@ -124,6 +166,7 @@ var Player = Backbone.Model.extend({
 
     seek: function(percentage) {
     	var value = Math.round(percentage * 100);
+        // Sends a seek command
     	return Command.seek(this.id, value);
     },
 
@@ -136,6 +179,7 @@ var Player = Backbone.Model.extend({
     },
     
     stop: function() {
+        // Sends a stop command
         return Command.stop(this.id);
     },
 
@@ -148,6 +192,7 @@ var Player = Backbone.Model.extend({
         data.playing = this.isPlaying();
         data.thumbnail = this.thumbnail();
         data.hasSpan = this.hasSpan();
+        data.label = this.get('item').get('label');
 
         return data;
     }
