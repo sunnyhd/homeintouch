@@ -556,7 +556,8 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
     events: {
         "click .floor-item-list": "floorClicked",
         "click .custom-item-list": "customItemClicked",
-        "click a.add-floor": "addFloorHandler"
+        "click a.add-floor": "addFloorHandler",
+        "click .main-left-container .tabbable li.disabled": "tabDisabledClicked"
     },
 
     initialize: function() {
@@ -578,6 +579,11 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
         e.preventDefault();
         var page = ($(e.currentTarget).data('item-id'));
         app.vent.trigger("custom-page:" + page, this.model);
+    },
+
+    tabDisabledClicked: function(e) {
+        e.preventDefault;
+        return false;
     },
 
     addFloorHandler: function(e) {
@@ -690,15 +696,30 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
     onRender: function() {
         this.setScrollbarOverview();
 
-        var location = this.model.get('timeWheaterConfiguration').get('location');
+        var timeWheaterWidget = this.collection.where({'type': 'time-wheater'})[0];
 
-        $('#digiclock-desktop', this.$el).jdigiclock({
-            proxyUrl: 'api/jdigiclock/proxy',
-            dayCallback: $.proxy(this.displayCurrentDate, this),
-            loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
-            weatherLocationCode: location,
-            jdigiclockType: 'big'
-        });
+        if (timeWheaterWidget.get('visible')) {
+            var location = this.model.get('timeWheaterConfiguration').get('location');
+
+            $('#digiclock-desktop', this.$el).jdigiclock({
+                proxyUrl: 'api/jdigiclock/proxy',
+                dayCallback: $.proxy(this.displayCurrentDate, this),
+                loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
+                weatherLocationCode: location,
+                jdigiclockType: 'big'
+            });
+        } else {
+            var timeWheaterhref = '#desktop-time-weather';
+            var $tabContent = this.$('.main-left-container .tabbable .tab-content');
+
+            var $timeWheaterNavPill = this.$('a[href="' + timeWheaterhref + '"]').parent();
+            $timeWheaterNavPill.addClass('disabled').removeClass('active');
+            $(timeWheaterhref, $tabContent).removeClass('active');
+
+            $timeWheaterNavPill.next().addClass('active');
+            var secondHref = $($timeWheaterNavPill.next()[0].firstChild).attr('href');
+            $(secondHref, $tabContent).addClass('active');
+        }
     },
 
     displayCurrentDate: function(date) {
