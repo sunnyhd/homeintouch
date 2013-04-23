@@ -55,7 +55,7 @@ module.exports = Backbone.Router.extend({
         },
 
         players: function() {
-            this.app.controller('players').showPlayers();
+            //this.app.controller('players').showPlayers();
         },
 
         playlists: function() {

@@ -1,4 +1,4 @@
-var Player = require('models/player');
+var Player = require('models/player2');
 
 module.exports = Backbone.Collection.extend({
 

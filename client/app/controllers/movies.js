@@ -1,10 +1,8 @@
 var app = require('app');
 var Movies = require('collections/movies');
 var Movie = require('models/movie');
-var Player = require('models/player');
 var MovieContainerView = require('views/movies/movie_container');
 var homesController = require('controllers/homes');
-var playersController = require('controllers/players');
 var playlistsController = require('controllers/playlists');
 var MovieDetailView = require('views/movies/movie_detail');
 var MediaConfigurationOptionsView = require('views/settings/media_configuration_options');
@@ -81,11 +79,12 @@ exports.play = function(movie) {
 
 exports.resume = function(movie) {
     movie.play().then(function() {
-        var playerid = playersController.getPlayerId('video');
+        
+        /*var playerid = playersController.getPlayerId('video');
         var player = new Player({ playerid: playerid });
 
         var command = player.seekCommand(movie.getResumePercentage());
-        command.send();
+        command.send();*/
     });
 };
 
@@ -104,6 +103,21 @@ exports.loadMovies = function(onlyFilters) {
     exports.loading = $.when(loadingMovies, loadingGenres, loadingYears);
 }
 
+/**
+ * Retrieves the movie by id, either from the client if it has already been loaded
+ * or from the server
+ */
+exports.findMovie = function(id) {
+    var movie = exports.movies.get(id);
+    if(!movie) {
+        movie = new Movie({ movieid: id });
+        return Q.when(movie.fetch()).then(function() {
+            exports.movies.add(movie);
+            return movie;
+        });
+    }
+    return Q.when(movie);
+};
 
 // Helper methods
 

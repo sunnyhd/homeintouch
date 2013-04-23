@@ -1,4 +1,4 @@
-var playersController = require('controllers/players');
+
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -16,7 +16,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     playerClicked: function(e) {
         e.preventDefault();
-        playersController.activatePlayer(this.model);
+        //playersController.activatePlayer(this.model);
     }
 
 });

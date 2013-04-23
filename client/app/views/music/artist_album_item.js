@@ -1,6 +1,5 @@
 var Playable = require('models/playable');
 var musicController = require('controllers/music');
-var playersController = require('controllers/players');
 
 module.exports = Backbone.Marionette.ItemView.extend({
 
@@ -20,9 +19,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     play: function() {
         musicController.addAlbumToPlaylist(this.model, 0);
 
-        var playlistid = playersController.getPlayerId('audio');
+        /*var playlistid = playersController.getPlayerId('audio');
         var playable = new Playable({ item: { playlistid: playlistid, position: 0 }});
-        playable.save();
+        playable.save();*/
     }
     
 });

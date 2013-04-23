@@ -4,6 +4,7 @@ var Artists = require('collections/artists');
 var Songs = require('collections/songs');
 var Album = require('models/album');
 var Artist = require('models/artist');
+var Song = require('models/song');
 var ArtistAlbumListView = require('views/music/artist_album_list');
 var playlistsController = require('controllers/playlists');
 var ArtistDetailView = require('views/music/artist_detail_container');
@@ -87,6 +88,22 @@ exports.loadMusic = function() {
 
     exports.loading = $.when(loadingArtists, loadingAlbums, loadingSongs, loadingAlbumsGenres, loadingAlbumsYears, loadingArtistsGenres);
 }
+
+/**
+ * Retrieves the song by id, either from the client if it has already been loaded
+ * or from the server
+ */
+exports.findSong = function(id) {
+    var song = exports.songs.get(id);
+    if(!song) {
+        song = new Song({ songid: id });
+        return Q.when(song.fetch()).then(function() {
+            exports.songs.add(song);
+            return song;
+        });
+    }
+    return Q.when(song);
+};
 
 var updateListNav = function(title, url) {
 

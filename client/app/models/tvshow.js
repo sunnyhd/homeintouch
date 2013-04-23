@@ -6,6 +6,10 @@ module.exports = Backbone.Model.extend({
 
     urlRoot: '/api/tvshows',
 
+    defaults: {
+        type: 'tvshow'
+    },
+
     initialize: function() {
         this.seasons = new Seasons();
     },
@@ -23,6 +27,10 @@ module.exports = Backbone.Model.extend({
         if (id) {
             return '/api/images/' + this.get('thumbnailid');
         }
+    },
+
+    getType: function() {
+        return this.get('type');
     },
 
     fanartImage: function() {
@@ -46,6 +54,7 @@ module.exports = Backbone.Model.extend({
         data.thumbnail = this.thumbnail();
         data.banner = this.banner();
         data.fanartImage = this.fanartImage();
+        data.label = this.get('label');
         return data;
     }
 

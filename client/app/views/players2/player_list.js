@@ -1,15 +1,19 @@
-var playersController = require('controllers/players');
-var PlayerTabsItemView = require('views/players/player_tabs_item');
+var PlayerView = require('views/players2/player');
+var playersController = require('controllers/players2');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
 
     template: require('templates/players/player_tabs_list'),
 
-    itemView: PlayerTabsItemView,
+    itemView: PlayerView,
 
     initialize: function() {
         this.bindTo(this.collection, 'activate', this.activated, this);
         this.bindTo(this.collection, 'deactivate', this.deactivated, this);
+    },
+
+    doRender: function() {
+        this.render();
     },
 
     appendHtml: function(cv, iv) {

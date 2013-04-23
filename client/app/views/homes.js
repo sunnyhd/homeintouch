@@ -1,7 +1,6 @@
 var app = require('app');
 
 var homesController = require('controllers/homes');
-var playersController = require('controllers/players');
 
 var Home = require('models/home');
 var Configuration = require('models/configuration');
