@@ -13,7 +13,7 @@ module.exports = FilteredListView.extend({
     },
     
     appendHtml: function(cv, iv) {
-        var movieStyleSettings = app.controller('settings').mediaSettings.getMovieStyleSettings();
+        var movieStyleSettings = app.controller('settings').mediaSettings ? app.controller('settings').mediaSettings.getMovieStyleSettings() : {};
         if (movieStyleSettings.hide_watched) {
             if (iv.model.get('playcount') === 0) {
                 this.$('.movies').append(iv.el);

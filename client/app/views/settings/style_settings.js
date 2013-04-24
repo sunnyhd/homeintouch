@@ -72,7 +72,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
         this.$('#body-background-image').parents('.control-group').show();
     },
 
-    previewUrl: function(url) {
+    previewUrl: function(url, holderSelector) {
+
+        holderSelector || (holderSelector = '#holder');
 
         var parsedUrl = url;
 
@@ -80,16 +82,17 @@ module.exports = Backbone.Marionette.ItemView.extend({
             parsedUrl = url.substr((url.lastIndexOf('(') + 1)).replace(')', '');
         }
 
-        this.resetPreviewHolder(); 
+        this.resetPreviewHolder(holderSelector); 
 
         var $image = $('<img>');
         $image.attr('src', parsedUrl);
         $image.attr('width', 150);
-        this.$('#holder').append($image);
+        this.$(holderSelector).append($image);
     },
 
-    resetPreviewHolder: function() {
-        this.$('#holder').children().remove();
+    resetPreviewHolder: function(holderSelector) {
+        holderSelector || (holderSelector = '#holder');
+        this.$(holderSelector).children().remove();
     },
 
     previewFile: function(file) {
@@ -123,7 +126,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
         var styleData = _.pick(formData, styleNames);
         var newStyleData = {};
         _.each(styleData, function(value, key){
-            if (value != null && value != '') {
+            if (value !== null && value !== '') {
                 newStyleData[key.substr(prefix.length)] = value;
             }
         }, this);

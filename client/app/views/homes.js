@@ -321,7 +321,7 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
         "click .cancel.btn": "cancelClicked",
         "click .edit.btn": "editClicked",
         "change #body-background-image" : "loadFile",
-        "change #pattern-background-image": "processBackgroundPattern",
+        "change #pattern-background-image": "processDefaultBackgroundPattern",
         "click a#clear-background" : "clearBackgroundClicked"
     },
 
@@ -346,32 +346,26 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
 
     loadFile: function(event) {
         StyleConfigurationView.prototype.loadFile.apply(this, [event]);
-        this.hideBackgroundPatternInput();
-    },
-
-    hideBackgroundPatternInput: function() {
-        this.$('#pattern-background-image').parents('.control-group').hide();
-    },
-
-    showBackgroundPatternInput: function() {
-        this.$('#pattern-background-image').parents('.control-group').show();
     },
 
     clearBackgroundClicked: function() {
         StyleConfigurationView.prototype.clearBackgroundClicked.apply(this);
-        this.showBackgroundPatternInput();
     },
 
     setFileUploadSettings: function() {
+        this.resetPreviewHolder();
+        this.previewLoadedImage();
+        this.previewDefaultBackgroundPattern();
+    },
+
+    previewDefaultBackgroundPattern: function() {
         var url = this.$('#pattern-background-image').val();
+        var holderSelector = '#holder-tab2';
         if (url === 'none') {
-            this.resetPreviewHolder();
-            this.showBackgroundFileInput();
-            this.previewLoadedImage();
+            this.resetPreviewHolder(holderSelector);
         } else {
             if (!_.isUndefined(url)) {
-                this.hideBackgroundFileInput();
-                this.previewUrl(url);
+                this.previewUrl(url, holderSelector);
             }
         }
     },
@@ -380,13 +374,13 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
         this.setFileUploadSettings();
     },
 
+    processDefaultBackgroundPattern: function (event) {
+        this.previewDefaultBackgroundPattern();
+    },
+
     updateModelData: function(data) {
         this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
         this.updateStyleConfiguration(data, this.model.bodyPatternPrefix, this.model.bodyPatternSelector, "bodyPatternConfiguration");
-
-        if (this.model.get('bodyPatternConfiguration').hasStyleAttributes()) {
-            this.model.get('bodyConfiguration').unsetFileAttribute();
-        }
     },
 
     clearStyleModel: function() {
@@ -414,8 +408,7 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
                 success: function (response) {
                     var imagePath = response.imagePath;
                     data['body-background-image'] = 'url(' + imagePath + ')';
-                    that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
-                    that.updateStyleConfiguration(data, that.model.bodyPatternPrefix, that.model.bodyPatternSelector, "bodyPatternConfiguration");
+                    that.updateModelData(data);
 
                     that.result = {
                         status: "OK"
@@ -636,7 +629,7 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
         $rowContainer.append(iv.el);
     },
 
-    applyStyle: function(styleConfigurationName, createStylesheet) {
+    applyStyle: function(styleConfigurationName, createStylesheet, defaultStyleConfigurationName) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -662,8 +655,8 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
 
         app.hitIcons(this.$el);
 
-        this.applyStyle('bodyConfiguration', true);
         this.applyStyle('bodyPatternConfiguration');
+        this.applyStyle('bodyConfiguration', true);
 
         _.each(_.values(this.children), function(itemView){
             itemView.refreshIcon();
