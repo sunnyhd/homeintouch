@@ -7,7 +7,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     events: {
         'click .stop': 'stopPlayer',
         'click .pause': 'pausePlayer',
-        'click .play': 'playPlayer'
+        'click .play': 'playPlayer',
+        'click .previous': 'goPrevious',
+        'click .next': 'goNext'
     },
 
     initialize: function() {
@@ -85,6 +87,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
         e.preventDefault();
         this.refreshForPlay();
         this.model.play();
+    },
+    
+    goPrevious: function(e) {
+        e.preventDefault();
+        this.model.previous();
+    },
+    goNext: function(e) {
+        e.preventDefault();
+        this.model.next();
     }
 
 });

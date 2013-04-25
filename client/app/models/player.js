@@ -132,7 +132,10 @@ var Player = Backbone.Model.extend({
 
     togglePlaying: function() {
          // Sends a setSpeed command
-        return Command.setSpeed(this, this.isPlaying() ? 0 : 1);
+        if(this.isPlaying()) 
+            return Command.pause(this);
+        else 
+            return Command.play(this);
     },
 
     hasSpan: function() {
@@ -188,6 +191,16 @@ var Player = Backbone.Model.extend({
     stop: function() {
         // Sends a stop command
         return Command.stop(this);
+    },
+
+    next: function() {
+        // Sends a next command
+        return Command.next(this);
+    },
+
+    previous: function() {
+        // Sends a next command
+        return Command.previous(this);
     },
 
     toJSON: function() {
