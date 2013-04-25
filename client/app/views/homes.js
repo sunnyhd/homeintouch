@@ -353,7 +353,6 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
     },
 
     setFileUploadSettings: function() {
-        this.resetPreviewHolder();
         this.previewLoadedImage();
         this.previewDefaultBackgroundPattern();
     },
@@ -629,7 +628,7 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
         $rowContainer.append(iv.el);
     },
 
-    applyStyle: function(styleConfigurationName, createStylesheet, defaultStyleConfigurationName) {
+    applyStyle: function(styleConfigurationName, createStylesheet, defaultStyleConfiguration) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -641,10 +640,10 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
                     $(selector).addClass(className);
                 }
                 if (createStylesheet) {
-                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes());
+                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes(defaultStyleConfiguration));
                     app.addStyleTag(stylesheet);
                 } else {
-                    $(selector).css(configuration.getStyleAttributes());    
+                    $(selector).css(configuration.getStyleAttributes(defaultStyleConfiguration));    
                 }
                 
             });
@@ -655,8 +654,9 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
 
         app.hitIcons(this.$el);
 
-        this.applyStyle('bodyPatternConfiguration');
-        this.applyStyle('bodyConfiguration', true);
+        var bodyPatternConfiguration = this.model.getDefaultBackgroundStyle();
+
+        this.applyStyle('bodyConfiguration', true, bodyPatternConfiguration);
 
         _.each(_.values(this.children), function(itemView){
             itemView.refreshIcon();

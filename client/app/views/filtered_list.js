@@ -18,6 +18,34 @@ module.exports = Backbone.Marionette.CompositeView.extend({
         // }
     },
 
+    onRender: function() {
+        var app = require('app');
+        var bodyPatternConfiguration = app.controller('homes').currentHome.getDefaultBackgroundStyle();
+        this.applyStyle(bodyPatternConfiguration, true);
+    },
+
+    applyStyle: function(styleConfiguration, createStylesheet) {
+
+        if (styleConfiguration) {
+            var app = require('app');
+            var selectorArray = styleConfiguration.getSelectors();
+            _.each(selectorArray, function(selector){
+                $(selector).removeAttr('style');
+                var className = styleConfiguration.getClassesToApply();
+                if (className !== '') {
+                    $(selector).addClass(className);
+                }
+                if (createStylesheet) {
+                    var stylesheet = app.generateStylesheet(selector, styleConfiguration.getStyleAttributes());
+                    app.addStyleTag(stylesheet);
+                } else {
+                    $(selector).css(styleConfiguration.getStyleAttributes());
+                }
+                
+            });
+        }
+    },
+
     // filter: function(item) {
     //     var strip = function(str) {
     //         return str.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ');

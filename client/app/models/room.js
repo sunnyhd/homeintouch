@@ -5,7 +5,7 @@ var Configuration = require('models/configuration');
 
 module.exports = BaseModel.extend({
 
-    bodySelector: 'body:before',
+    bodySelector: 'body',
 
     bodyPrefix: 'body-',
 
@@ -22,7 +22,7 @@ module.exports = BaseModel.extend({
 
     // Use to add a particular fixed style when a parameter is set.
     bodyFixedStyle: {
-        'background-image': {'background-size' : 'cover'} 
+        'background-image': {'background-size' : 'cover', 'background-attachment': 'fixed'}
     },
 
     defaults: {

@@ -1278,7 +1278,7 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         });
     },
 
-    applyStyle: function(styleConfigurationName, createStylesheet) {
+    applyStyle: function(styleConfigurationName, createStylesheet, defaultStyleConfiguration) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -1290,10 +1290,10 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
                     $(selector).addClass(className);
                 }
                 if (createStylesheet) {
-                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes());
+                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes(defaultStyleConfiguration));
                     app.addStyleTag(stylesheet);
                 } else {
-                    $(selector).css(configuration.getStyleAttributes());    
+                    $(selector).css(configuration.getStyleAttributes(defaultStyleConfiguration));
                 }
                 
             });
@@ -1301,7 +1301,8 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
     },
 
     applyStyles: function() {
-        this.applyStyle('bodyConfiguration', true);
+        var bodyPatternConfiguration = app.controller('homes').currentHome.getDefaultBackgroundStyle();
+        this.applyStyle('bodyConfiguration', true, bodyPatternConfiguration);
     },
 
     bindItemViewEvents: function(itemView) {
@@ -1435,11 +1436,12 @@ exports.FavoriteRoomLayout = exports.RoomLayout.extend({
     applyStyles: function() {
         var currentModel = this.model;
         this.model = this.model.parentHome;
-        exports.RoomLayout.prototype.applyStyle.apply(this, ['favoritesConfiguration', true]);
-        exports.RoomLayout.prototype.applyStyle.apply(this, ['favoritesPatternConfiguration']);
 
-        exports.RoomLayout.prototype.applyStyle.apply(this, ['favoritesTitleConfiguration']);
-        exports.RoomLayout.prototype.applyStyle.apply(this, ['favoritesBodyConfiguration']);
+        var bodyPatternConfiguration = this.model.getDefaultBackgroundStyle();
+
+        this.applyStyle('favoritesConfiguration', true, bodyPatternConfiguration);
+        this.applyStyle('favoritesTitleConfiguration');
+        this.applyStyle('favoritesBodyConfiguration');
 
         this.model = currentModel;
     }
@@ -1457,7 +1459,6 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
         "click .cancel.btn": "cancelClicked",
         "click .edit.btn": "editClicked",
         "change #body-background-image" : "loadFile",
-        "change #pattern-background-image": "processBackgroundPattern",
         "click a#clear-background" : "clearBackgroundClicked",
         "show a[data-toggle='tab'][href='#tab1']" : 'showStyleTab',
         "show a[data-toggle='tab'][href='#tab2']" : 'showOrderTab'
@@ -1474,13 +1475,11 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
 
         data.type = 'Favorites';
         data.bodyFields = this.model.get("favoritesFields");
-        data.bodyPatternFields = this.model.get("favoritesPatternFields");
 
         data.favoritesTitleFields = this.model.get("favoritesTitleFields");
         data.favoritesBodyFields = this.model.get("favoritesBodyFields");
 
         this.addStyleValues(data.bodyFields, this.model.get("favoritesConfiguration"));
-        this.addStyleValues(data.bodyPatternFields, this.model.get("favoritesPatternConfiguration"));
 
         this.addStyleValues(data.favoritesTitleFields, this.model.get("favoritesTitleConfiguration"));
         this.addStyleValues(data.favoritesBodyFields, this.model.get("favoritesBodyConfiguration"));
@@ -1508,50 +1507,21 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
 
     loadFile: function(event) {
         StyleConfigurationView.prototype.loadFile.apply(this, [event]);
-        this.hideBackgroundPatternInput();
-    },
-
-    hideBackgroundPatternInput: function() {
-        this.$('#pattern-background-image').parents('.control-group').hide();
-    },
-
-    showBackgroundPatternInput: function() {
-        this.$('#pattern-background-image').parents('.control-group').show();
     },
 
     clearBackgroundClicked: function() {
         StyleConfigurationView.prototype.clearBackgroundClicked.apply(this);
-        this.showBackgroundPatternInput();
     },
 
     setFileUploadSettings: function() {
-        var url = this.$('#pattern-background-image').val();
-        if (url === 'none') {
-            this.resetPreviewHolder();
-            this.showBackgroundFileInput();
-            this.previewLoadedImage();
-        } else {
-            if (!_.isUndefined(url)) {
-                this.hideBackgroundFileInput();
-                this.previewUrl(url);    
-            }
-        }
-    },
-
-    processBackgroundPattern: function (event) {
-        this.setFileUploadSettings();
+        this.previewLoadedImage();
     },
 
     updateModelData: function(data) {
         this.updateStyleConfiguration(data, this.model.favoritesPrefix, this.model.favoritesSelector, "favoritesConfiguration");
-        this.updateStyleConfiguration(data, this.model.favoritesPatternPrefix, this.model.favoritesPatternSelector, "favoritesPatternConfiguration");
 
         this.updateStyleConfiguration(data, this.model.favoritesTitlePrefix, this.model.favoritesTitleSelector, "favoritesTitleConfiguration");
         this.updateStyleConfiguration(data, this.model.favoritesBodyPrefix, this.model.favoritesBodySelector, "favoritesBodyConfiguration");
-
-        if (this.model.get('favoritesPatternConfiguration').hasStyleAttributes()) {
-            this.model.get('favoritesConfiguration').unsetFileAttribute();
-        }
 
         this.updateOrderData();
     },
@@ -1575,7 +1545,6 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
         e.preventDefault();
 
         var formFields = _.union(_.pluck(this.model.get("favoritesFields"), 'id'),
-                                 _.pluck(this.model.get("favoritesPatternFields"), 'id'),
                                  _.pluck(this.model.get("favoritesTitleFields"), 'id'),
                                  _.pluck(this.model.get("favoritesBodyFields"), 'id'));
 
@@ -1594,7 +1563,6 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
                     var imagePath = response.imagePath;
                     data['body-background-image'] = 'url(' + imagePath + ')';
                     that.updateStyleConfiguration(data, that.model.favoritesPrefix, that.model.favoritesSelector, "favoritesConfiguration");
-                    that.updateStyleConfiguration(data, that.model.favoritesPatternPrefix, that.model.favoritesPatternSelector, "favoritesPatternConfiguration");
                     
                     that.updateStyleConfiguration(data, that.model.favoritesTitlePrefix, that.model.favoritesTitleSelector, "favoritesTitleConfiguration");
                     that.updateStyleConfiguration(data, that.model.favoritesBodyPrefix, that.model.favoritesBodySelector, "favoritesBodyConfiguration");

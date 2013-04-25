@@ -210,25 +210,6 @@ script(id="edit-favorite-style-template", type="text/template")
               .controls
                 input(id!="<%= field.id %>", placeHolder!="<%= field.name %>", value!="<%= field.value %>", type!="<%= field.type %>") 
             <% }) %>
-            <% _.each(bodyPatternFields, function(field){ %>
-            .control-group.
-              <label for="<%= field.id %>" class="control-label"> <%= field.name %> </label>
-                <div class="controls">
-                  <% if (field.type !== 'list') { %>
-                  <input id="<%= field.id %>" type="text" placeHolder="<%= field.name %>" value="<%= field.value %>"/>
-                  <% } else { %>
-                  <select id="<%= field.id %>">
-                    <% _.each(field.options, function(option) { %>
-                    <% if (option.value === field.value) { %>
-                    <option value="<%= option.value %>" selected="selected"> <%= option.label %> </option>
-                    <% } else { %>
-                    <option value="<%= option.value %>"> <%= option.label %> </option>
-                    <% } %>
-                    <% }) %> 
-                  </select>
-                <% } %>          
-                </div>
-            <% }) %>
             .control-group
               label(for="holder").control-label Background Preview
                 .controls

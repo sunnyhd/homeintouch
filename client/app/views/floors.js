@@ -69,7 +69,7 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
         $(e.currentTarget).data('transitioning', false);
     },
 
-    applyStyle: function(styleConfigurationName, createStylesheet) {
+    applyStyle: function(styleConfigurationName, createStylesheet, defaultStyleConfiguration) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -81,10 +81,10 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
                     $(selector).addClass(className);
                 }
                 if (createStylesheet) {
-                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes());
+                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes(defaultStyleConfiguration));
                     app.addStyleTag(stylesheet);
                 } else {
-                    $(selector).css(configuration.getStyleAttributes());    
+                    $(selector).css(configuration.getStyleAttributes(defaultStyleConfiguration));
                 }
                 
             });
@@ -92,7 +92,9 @@ exports.FloorDashboardView = Backbone.Marionette.ItemView.extend({
     },
 
     applyStyles: function() {
-        this.applyStyle('bodyConfiguration', true);
+
+        var bodyPatternConfiguration = app.controller('homes').currentHome.getDefaultBackgroundStyle();
+        this.applyStyle('bodyConfiguration', true, bodyPatternConfiguration);
 
         if (this.model.has('myRoomsConfiguration')) {
             var myRoomsModel = this.model.get('myRoomsConfiguration');
