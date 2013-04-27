@@ -444,21 +444,46 @@ exports.ShutterDeviceView = exports.DeviceView.extend({
     }
 });
 
+
+exports.ThermostatModeModalView = Backbone.Marionette.ItemView.extend({
+
+    template: "#thermostat-mode-template",
+
+    events: {
+        "click .changeMode": "changeMode",
+        "click a.close": "close"
+    },
+
+    initialize: function(opts) {
+        this.defaultMode = opts.mode;
+    },
+
+    onRender: function() {
+        $('select option[value="' + this.defaultMode + '"]', this.$el).attr('selected', true);
+    },
+
+    changeMode: function() {
+        this.trigger( 'thermostatModeChanged', $('select option:selected').val() );
+        this.close();
+    }
+
+});
+
 exports.ThermostatDeviceView = exports.DeviceView.extend({
 
     template: "#device-list-thermostat-item-template",
     className: "hit-icon-wrapper",
 
     formEvents: {
-        "click a[data-mode]": "modeClicked",
-        "click .thermostat-control a": "setpointChanged"
+        "click a[data-mode]": "modeClicked", // mode click, open modal
+        "click .thermostat-control a[data-value]": "setpointChanged" // minus and plus buttons
     },
 
     modes: {
-        1: "comfort",
-        2: "standby",
-        3: "night",
-        4: "frost"
+        'comfort': 'img/svg/devices/thermostat/comfort-white.svg',
+        'standby': 'img/svg/devices/thermostat/standby-white.svg',
+        'night': 'img/svg/devices/thermostat/night-white.svg',
+        'frost': 'img/svg/devices/thermostat/frost-white.svg'
     },
 
     initialize: function(){
@@ -475,24 +500,31 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         this.readSetPoint.on("change", this.updateSetPoint, this);
     },
 
-    modeClicked: function(e){
+    modeClicked: function(e) {
         e.preventDefault();
         var mode = $(e.currentTarget).data("mode");
+        var modal = new exports.ThermostatModeModalView( {mode: mode} );
+        modal.on('thermostatModeChanged', this.writeThermostatMode, this);
+        app.modal.show(modal);
+    },
+
+    writeThermostatMode: function(mode) {
         var address = this.writeMode.get("address");
         app.vent.trigger("device:write", this.writeMode, mode);
-
         this.updateModeButton(mode);
     },
 
     updateModeButton: function(mode) {
-        this.$('a[data-mode]').removeClass('selected');
-        this.$('a[data-mode="' + mode + '"]').addClass('selected');
+        var $moreOpts = this.$('a[data-value]');
 
-        if (mode !== "comfort") {
-            this.$('.thermostat-control a').addClass('disabled');
+        if (mode == 'comfort') {
+            $moreOpts.removeClass('hidden');
         } else {
-            this.$('.thermostat-control a').removeClass('disabled');
+            $moreOpts.addClass('hidden');
         }
+
+        this.$('a[data-mode]').data('mode', mode);
+        this.$('a[data-mode] img').attr('src', this.modes[mode]);
     },
 
     setpointChanged: function(e){
