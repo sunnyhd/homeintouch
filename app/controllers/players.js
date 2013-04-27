@@ -38,7 +38,7 @@ exports.show = function(req, res, next) {
     xbmc.rpc('Player.GetItem', params, function(err, results) {
         if (err) return next(err);
 
-        params.properties = ['time', 'percentage', 'totaltime', 'repeat', 'shuffled', 'playlistid', 'speed', 'type'];
+        params.properties = ['time', 'percentage', 'totaltime', 'repeat', 'shuffled', 'playlistid', 'speed', 'type', 'position'];
 
         xbmc.rpc('Player.GetProperties', params, function(err, properties) {
             if (err) return next(err);

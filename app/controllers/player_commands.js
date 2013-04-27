@@ -2,6 +2,8 @@ var xbmc = require('../../lib/xbmc');
 
 function getParameters(action, playerType, params) {
 	switch(action) {
+		case "open":
+			return buildPayload('Player.Open', {item: params});
 		case "play":
 			return buildSpeedCommand(playerType, 1);
 		case "pause":
@@ -14,7 +16,7 @@ function getParameters(action, playerType, params) {
 			return buildPayload("Player.Stop");
 		case "next":
 		case "previous":
-			return buildPayload("Player.GoTo", {"to": action});
+			return buildPayload("Player.GoTo", {to: action});
 	}
 }; 
 
@@ -34,10 +36,19 @@ function buildPayload(method, params) {
 	};
 };
 
-exports.create = function(req, res, next) {
+exports.executeActionOnPlayer = function(req, res, next) {
 	var command = getParameters(req.body.action, req.body.playerType, req.body.params);
 
     command.params.playerid = parseInt(req.params.player, 10);
+
+    xbmc.rpc(command.method, command.params || {}, function(err, results) {
+        if (err) return next(err);
+        res.json(results);
+    });
+};
+
+exports.executeAction = function(req, res, next) {
+	var command = getParameters(req.body.action, req.body.playerType, req.body.params);
 
     xbmc.rpc(command.method, command.params || {}, function(err, results) {
         if (err) return next(err);

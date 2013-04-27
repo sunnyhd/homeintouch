@@ -7,6 +7,8 @@ module.exports = Backbone.Collection.extend({
     url: '/api/playlists',
 
     getDefault: function() {
+        if(this.isEmpty()) return null;
+        
         return this.at(0);
     },
 
@@ -16,7 +18,7 @@ module.exports = Backbone.Collection.extend({
     },
 
     getSelected: function() {
-        return this.selected;
+        return this.selected || this.getDefault();
     }
 
 });

@@ -316,7 +316,8 @@ app.addInitializer(function(options) {
 
 app.addInitializer(function(options) {
     if (options.players) {
-        app.controller('players').ids = options.players;
+        app.controller('players').setPlayerIds(options.players);
+        app.controller('playlists').init(options.players);
     }
     
     app.controller('players').showPlayers();

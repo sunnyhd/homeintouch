@@ -3,7 +3,7 @@ var xbmc = require('../../lib/xbmc');
 exports.index = function(req, res, next) {
     var playlistid = parseInt(req.params.playlist, 10);
     
-    xbmc.rpc('Playlist.GetItems', { playlistid: playlistid }, function(err, results) {
+    xbmc.rpc('Playlist.GetItems', { playlistid: playlistid, properties: ['file'] }, function(err, results) {
         if (err) return next(err);
         res.json(results);
     });

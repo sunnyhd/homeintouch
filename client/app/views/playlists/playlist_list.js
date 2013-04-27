@@ -6,6 +6,10 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     itemView: PlaylistItemView,
 
+    initialize: function() {
+        this.bindTo(this.collection, 'add remove reset', this.render, this);
+    },
+
     appendHtml: function(cv, iv) {
         this.$('.items').append(iv.el);
     }

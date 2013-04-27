@@ -9,10 +9,27 @@ var tvShowController = require('controllers/tvshows');
 var pictureController = require('controllers/pictures');
 
 var players = exports.players = new Players();
-exports.ids = {};
+var ids = {};
+
+exports.loading = Q.when(true);
+
+exports.setPlayerIds = function(players) {
+    players.forEach(function(player) {
+        ids[player.type] = player.playlistid;
+    });
+};
 
 exports.getPlayerId = function(type) {
-    return exports.ids[type];
+    return ids[type];
+};
+
+exports.findPlayerForPlaylist = function(playlist) {
+	var id = exports.getPlayerId(playlist.get('type'));
+
+	return exports.loading.then(function() {
+		return players.get(id);
+	});
+	
 };
 
 /**
@@ -43,7 +60,7 @@ exports.close = function() {
  */
 exports.loadActivePlayers = function() {
 	// Get all the players
-	return Q.when(players.fetch()).then(function() {
+	exports.loading = Q.when(players.fetch()).then(function() {
 		// Load the detailed information of all the players 
 		var promises = players.map(function(player) {
 			return exports.loadPlayerDetails(player);
@@ -52,6 +69,7 @@ exports.loadActivePlayers = function() {
 		// The returned promises will be resolved when all the players are loaded
 		return Q.allResolved(promises);
 	});
+	return exports.loading;
 };
 
 /**
@@ -64,6 +82,10 @@ exports.loadPlayerDetails = function(player) {
 			// When the speed and time is retrieved, start the player (timer) and fill the item info
 			player.start();
 			return loadPlayerItem(player.get("item"));
+		}, function(error) {
+			console.log('Error while retrieving the player: ' + JSON.stringify(e));
+			// We will consider an error here as the player no being active
+			return null;
 		})
 		.then(function(item) {
 			// Update the item info in the player
@@ -187,7 +209,7 @@ function destroyPlayer(id) {
  */
 app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
 	// Get the player
-    exports.findPlayer(data.player.playerid)
+    exports.loading = exports.findPlayer(data.player.playerid)
 	    .then(function(player) {
 	    	if(player.isCurrentItem(data.item)) {
 	    		// if the player is already playing the current item, just update the speed
@@ -229,7 +251,7 @@ app.vent.on('xbmc:player:onstop', function(data) {
  */
 app.vent.on('xbmc:player:onseek', function(data) {
     
-    exports.findPlayer(data.player.playerid)
+    exports.loading = exports.findPlayer(data.player.playerid)
 	    .then(function(player) {
 	    	player.set('time', data.player.time);
 	    })
@@ -241,7 +263,7 @@ app.vent.on('xbmc:player:onseek', function(data) {
  */
 app.vent.on('xbmc:player:onspeedchanged', function(data) {
     
-    exports.findPlayer(data.player.playerid)
+    exports.loading = exports.findPlayer(data.player.playerid)
 	    .then(function(player) {
 	    	// If the speed was actually changed, refresh the player to sync the time
 	    	if(player.get('speed') !== data.player.speed) {

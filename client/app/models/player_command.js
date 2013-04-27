@@ -9,7 +9,9 @@
 });
 
 Command.send = function(player, action, params) {
-	var cmd = new Command({playerid: player.id, playerType: player.get('type').toLowerCase(), action: action, params: params});
+	var type = (player.get)?player.get('type'):player.type;
+	type = type.toLowerCase();
+	var cmd = new Command({playerid: player.id, playerType: type, action: action, params: params});
 	return cmd.send();
 } 
 Command.play = function(player) {
@@ -32,6 +34,12 @@ Command.next = function(player) {
 }
 Command.previous = function(player) {
 	return Command.send(player, 'previous');
+}
+Command.openAt = function(playlist, position) {
+	Command.send({id: 'any', type: playlist.get('type')}, 'open', {playlistid: playlist.id, position: position});
+}
+Command.openFile = function(path) {
+	Command.send({id: 'any', type: ''}, 'open', {path: path});
 }
 
 module.exports = Command;
