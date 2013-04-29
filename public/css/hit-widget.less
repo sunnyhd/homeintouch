@@ -253,19 +253,34 @@
 }
 
 /** Shutter styles */
-.hit-icon.device-widget[data-widget-type="shutter"] input[type="range"] {
-	-webkit-appearance: slider-vertical;
-	height: 70px;
-	width: 10px;
-	position: absolute;
-	right: 15px;
-	top: 20px;
+.hit-icon.device-widget[data-widget-type="shutter"] {
+
+	background-position: 50% 40%;
+
+	input[type="range"] {
+		-webkit-appearance: slider-vertical;
+		height: 70px;
+		width: 10px;
+		position: absolute;
+		right: 15px;
+		top: 20px;
+	}
+
+	ul.device-btn-group {
+		margin-top: 7px;
+	}
+
+	div.shutter-container {
+		margin-top: 7px;
+		height: 84px;
+		overflow: hidden;
+	}
 }
+
+.hit-widget.medium .hit-icon.device-widget[data-widget-type="shutter"] .widget-opts { height: 20%; }
+
 .shutter-detail {
 	font-size: 1.2em;
-}
-.hit-icon.device-widget[data-widget-type="shutter"] ul.device-btn-group {
-	margin-top: 7px;
 }
 
 /** Camera styles */

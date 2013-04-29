@@ -6,6 +6,9 @@ var Configuration = require('models/configuration');
 var DPT_Transfomer = require('lib/dpt');
 var StyleConfigurationView = require('views/settings/style_settings');
 
+exports.DeviceView = require('views/devices/abstract_device');
+exports.ShutterDeviceView = require('views/devices/shutter');
+
 exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     template: "#context-menu-room-opts",
 
@@ -53,37 +56,6 @@ exports.NoRoomsView = Backbone.Marionette.ItemView.extend({
 
 exports.NoDeviceGroupView = Backbone.Marionette.ItemView.extend({
     template: "#no-device-group-template",
-});
-
-// Base view for device items in the list
-exports.DeviceView = Backbone.Marionette.ItemView.extend({
-
-    events: function(){
-        var events = {
-            "click .device-name": "deviceClicked"
-        };
-        return _.extend(events, this.formEvents);
-    },
-
-    constructor: function(){
-        Backbone.Marionette.ItemView.prototype.constructor.apply(this, arguments);
-        this.model.addresses.each(function(address){
-            var type = address.get("type");
-            var address = address.get("address");
-            if (/read.*/.test(type)){
-                app.vent.trigger("device:read", address);
-            }
-        });
-    },
-
-    deviceClicked: function(e){
-        e.preventDefault();
-        app.vent.trigger("device:selected", this.model);
-        return false;
-    },
-
-    refreshIcon: function() {
-    }
 });
 
 exports.SwitchDeviceView = exports.DeviceView.extend({
@@ -299,148 +271,6 @@ exports.DimmerDeviceView = exports.DeviceView.extend({
             stop: onSliderStop,
             slide: onSliderMoving
         });        
-    }
-});
-
-exports.ShutterDeviceView = exports.DeviceView.extend({
-
-    template: "#device-list-shutter-item-template",
-    className: "hit-icon-wrapper",
-
-    formEvents: {
-        "click a[data-value='up']": "upClicked",
-        "click a[data-value='down']": "downClicked",
-        "click a[data-value='stop']": "stopClicked"
-    },
-
-    initialize: function(){
-        this.readPosition = this.model.getAddressByType("read_position");
-        this.writePosition = this.model.getAddressByType("write_position");
-        this.writeSwitch = this.model.getAddressByType("write_switch");
-        this.writeStop = this.model.getAddressByType("write_stop");
-
-        this.positionChanged = _.debounce(this.positionChanged, 500);
-
-        this.bindTo(this.readPosition, "change:value", this.showPosition, this);
-    },
-
-    upClicked: function(e){
-        e.preventDefault();
-        this.switchUpDown(Number(this.model.get('min_value')) < Number(this.model.get('max_value')));
-    },
-
-    downClicked: function(e){
-        e.preventDefault();
-        this.switchUpDown(Number(this.model.get('min_value')) > Number(this.model.get('max_value')));
-    },
-
-    stopClicked: function(e){
-        e.preventDefault();
-        var address = this.writeStop.get("address");
-        app.vent.trigger("device:write", this.writeStop, 1);
-    },
-
-    positionChanged: function(e){
-        console.log('Shutter positionChanged called');
-        var $position = this.$el.find(".slider-vertical");
-        var value = parseInt($position.slider("value"));
-        var actualValue = this.calculateShutterValue(value);
-        var address = this.writePosition.get("address");
-        app.vent.trigger("device:write", this.writePosition, actualValue);
-        this.updateShutterDetails(actualValue);
-    },
-
-    switchUpDown: function(up){
-        var address = this.writeSwitch.get("address");
-        app.vent.trigger("device:write", this.writeSwitch, (up ? 1 : 0));
-    },
-
-    showPosition: function(address, value){
-        $sliderEl = this.$el.find('.slider-vertical');
-
-        if ( $sliderEl.length > 0 && $sliderEl.slider() ) {
-            var actualValue = this.calculateShutterValue(value);
-            this.$el.find('.slider-vertical').slider("value", actualValue);
-            this.updateShutterDetails(value);
-        }
-    },
-
-    updateShutterDetails: function(shutterValue) {
-        this.refreshIcon(shutterValue);
-        this.$('.shutter-detail').html(Math.ceil(shutterValue) + '%');
-    },
-
-    refreshIcon: function(value) {
-        var $widget = $('.hit-icon', this.$el);
-        
-        if (value) {
-            if (value < 100 && value >= 80) {
-                console.log('Shutter icon in 80, value: '+ value);
-                value = 80;
-            } else if (value < 80 && value >= 60) {
-                console.log('Shutter icon in 60, value: '+ value);
-                value = 60;
-            } else if (value < 60 && value >= 40) {
-                console.log('Shutter icon in 40, value: '+ value);
-                value = 40;
-            } else if (value < 40 && value >= 20) {
-                console.log('Shutter icon in 20, value: '+ value);
-                value = 20;
-            } else if (value < 20 && value >= 0) {
-                console.log('Shutter icon in 0, value: '+ value);
-                value = 0;
-            }
-            /*
-            if (this.model.get('max_value') < this.model.get('min_value')) {
-                value = this.model.get('min_value') - value;
-            }
-*/
-            $widget.data('hit-icon-type', 'devices.shutterOpen' + value);
-        }
-
-        app.changeIconState($widget, '#FFFFFF');
-    },
-
-    onSliderStart: function(e, ui) {
-        this.$el.find(".slider-vertical").data('sliding', 'true');
-    },
-    onSliderStop: function(e, ui) {
-        this.$el.find(".slider-vertical").data('sliding', 'false');
-        this.positionChanged(e);
-    },
-    onSliderMoving: function(e, ui) {
-        var value = Number(ui.value);
-        var actualValue = this.calculateShutterValue(value);
-        this.updateShutterDetails(actualValue);
-    },
-
-    onRender: function(){
-        var position = this.readPosition.get("value");
-
-        var onSliderStart = $.proxy(this.onSliderStart, this);
-        var onSliderStop = $.proxy(this.onSliderStop, this);
-        var onSliderMoving = $.proxy(this.onSliderMoving, this);
-        this.$el.find(".slider-vertical").slider({
-            orientation: "vertical",
-            range: "max", min: 0, max: 100,
-            start: onSliderStart,
-            stop: onSliderStop,
-            slide: onSliderMoving
-        });
-
-
-        this.showPosition(null, position);
-    },
-
-    calculateShutterValue: function(value) {
-
-        var shutterValue = value;
-
-        if (this.model.get('max_value') < this.model.get('min_value')) {
-            shutterValue = this.model.get('min_value') - value;
-        }
-
-        return shutterValue;        
     }
 });
 
