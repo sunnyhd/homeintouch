@@ -19,6 +19,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
         this.bindTo(this.model, 'change:time', this.updateTime, this);
         this.bindTo(this.model, 'change:speed', this.updateButtons, this);
         this.bindTo(this.model, 'destroy', this.close, this);
+
+        this.playMarkup = '<i class="icon-play icon-white"></i>';
+        this.pauseMarkup = '<i class="icon-pause icon-white"></i>';
     },
 
     /**
@@ -68,13 +71,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
     refreshForPause: function() {
         var btn = this.$(".toggle");
         btn.addClass( "play" ).removeClass( "pause" );
-        btn.html("Play");
+        btn.html(this.playMarkup);
     },
 
     refreshForPlay: function() {
         var btn = this.$(".toggle");
         btn.addClass( "pause" ).removeClass( "play" );
-        btn.html("Pause");
+        btn.html(this.pauseMarkup);
     },
 
     pausePlayer: function(e) {

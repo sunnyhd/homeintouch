@@ -1,0 +1,87 @@
+/**
+* hit-players.less
+* */
+
+// General container
+.players-container {
+
+	header {
+		color: @yellow;
+	}
+
+	ul.players {
+		border: none;
+	}
+
+}
+
+.player {
+
+	padding: 10px;
+
+	.borderRadius(5px);
+	background-color: rgba(51, 51, 51, 0.8);
+
+	.player-controls {
+
+		.player-buttons {
+			.clearfix();
+
+			a {
+				display: block;
+				float: left;
+				text-align: center;
+
+				background-color: gray;
+				text-decoration: none;
+				cursor: pointer;
+
+				height: 30px;
+				width: 32px;
+				margin: 0 3px;
+
+				.borderRadius(3px);
+
+				i {
+					margin-top: 7px;
+				}
+			}
+		}
+
+		.player-time {
+			float: right;
+			margin-top: 5px;
+		}
+	}
+
+	.playing-item {
+
+		margin: 10px 0 0 0;
+		padding: 10px 0;
+		.borderRadius(5px);
+		div {
+			min-height: 0px;
+		}
+
+		background-color: rgba(25, 25, 25, 0.5);
+		border: 1px solid #999;
+
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba(51, 51, 51, 0.6);
+		}
+
+		img {
+			display: block;
+			max-width: 100px;
+			max-height: 100px;
+			margin: 0 auto;
+		}
+
+		h4 {
+			color: @yellow;
+			margin-left: 10px;
+		}
+	}	
+}
