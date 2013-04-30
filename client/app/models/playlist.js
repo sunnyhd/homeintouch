@@ -57,14 +57,12 @@ module.exports = Backbone.Model.extend({
         if(this.items.loaded) {
             this.items.add(item, {at: pos});
         }
-        return this.loadItems();
     },
 
     remove: function(item) {
         if(this.items.loaded) {
             this.items.remove(item.id);
         }
-        return this.loadItems();
     },
 
     removeAt: function(pos) {
@@ -72,7 +70,6 @@ module.exports = Backbone.Model.extend({
             var item = this.items.at(pos);
             if(item) this.items.remove(item.id);
         }
-        return this.loadItems();
     },
 
     title: function() {
