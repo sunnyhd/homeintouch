@@ -1,5 +1,6 @@
 var PlaylistItems = require('collections/playlist_items');
 var Command = require('models/player_command');
+var app = require('app');
 
 module.exports = Backbone.Model.extend({
 
@@ -36,6 +37,8 @@ module.exports = Backbone.Model.extend({
     },
 
     open: function(position) {
+        app.vent.trigger('playlist:open', {playlist: this, position: position});
+
         if(this.get('type').toLowerCase() === 'picture') {
             var item = this.items.at(position);
             if(item) Command.openFile(item.get('file'));
@@ -51,25 +54,25 @@ module.exports = Backbone.Model.extend({
     },
 
     add: function(pos, item) {
-        var self = this;
-        this.loadItems().then(function() {
-            self.items.add(item, {at: pos});
-        });
+        if(this.items.loaded) {
+            this.items.add(item, {at: pos});
+        }
+        return this.loadItems();
     },
 
     remove: function(item) {
-        var self = this;
-        this.loadItems().then(function() {
-            self.items.remove(item.id);
-        });
+        if(this.items.loaded) {
+            this.items.remove(item.id);
+        }
+        return this.loadItems();
     },
 
     removeAt: function(pos) {
-        var self = this;
-        this.loadItems().then(function() {
-            var item = self.items.at(pos);
-            if(item) self.items.remove(item.id);
-        });
+        if(this.items.loaded) {
+            var item = this.items.at(pos);
+            if(item) this.items.remove(item.id);
+        }
+        return this.loadItems();
     },
 
     title: function() {

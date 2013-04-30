@@ -29,7 +29,7 @@ module.exports = Backbone.Model.extend({
     },
 
     removeFromPlaylist: function() {
-        return this.destroy();//.collection.destroyAt(this.index());
+        return this.collection.destroyAt(this.index());
     }
 
 });

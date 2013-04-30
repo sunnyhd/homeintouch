@@ -205,6 +205,33 @@ function destroyPlayer(id) {
 // Notifications
 
 /**
+ * when a player is stopped
+ */
+app.vent.on('player:onstop', function(id) {
+	if(!id) {
+		// If no player is specified, remove all
+		players.forEach(function(player) {
+			destroyPlayer(player.id);
+		});
+	} else {
+		// If the player is specified, remove it
+		destroyPlayer(id);
+	}
+});
+
+/**
+ * When an item is played from THIS app's playlist, manually stop the picture player.
+ * This is required because the player is stopped on xbmc but no notification is received 
+ */
+app.vent.on('playlist:open', function(data) {
+    if(data.playlist.get('type') !== 'picture') {
+    	var id = exports.getPlayerId('picture')
+
+    	if(players.get(id)) app.vent.trigger('player:onstop', id);
+    }
+});
+
+/**
  * on Media center play/pause
  */
 app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
@@ -227,23 +254,16 @@ app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
  * when an item is unloaded from the player (without stopping it)
  */
 app.vent.on('xbmc:playlist:onclear', function(data) {
-    destroyPlayer(data.playlistid);
+    app.vent.trigger('player:onstop', data.playlistid);
 });
 
 /**
  * when an item is stopped
  */
 app.vent.on('xbmc:player:onstop', function(data) {
-	
-	if(!data.player || !data.player.playerid) {
-		// If no player is specified, remove all
-		players.forEach(function(player) {
-			destroyPlayer(player.id);
-		});
-	} else {
-		// If the player is specified, remove it
-		destroyPlayer(data.player.playerid);
-	}
+	if(!data.player) data.player = {};
+
+	app.vent.trigger('player:onstop', data.player.playerid);
 });
 
 /**

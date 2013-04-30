@@ -45,10 +45,16 @@ module.exports = Backbone.Collection.extend({
     },
 
     destroyAt: function(index) {
-        var item = this.at(index);
-
-        item.url = this.url + '/' + index;
-        return item.destroy();
+        if(this.at(index)) {
+            // We need to call DELETE on the server 
+            // without updating the collection yet (we do it on the 'onRemove' notification)
+            // So we create a new item set an "made up" id (to make backbone call the server) and set the correct URL
+            var item = new PlaylistItem();
+            item.id = this.playlist.id + '.' + index;  
+            item.url = this.url() + '/' + index;  
+            return item.destroy();
+        }
+        return Q.when(false);
     }
 
 });

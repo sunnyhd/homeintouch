@@ -5,6 +5,11 @@ var Playlist = require('models/playlist');
 var PlaylistListView = require('views/playlists/playlist_list');
 var PlaylistTabsListView = require('views/playlists/playlist_tabs_list');
 
+var movieController = require('controllers/movies');
+var musicController = require('controllers/music');
+var tvShowController = require('controllers/tvshows');
+var pictureController = require('controllers/pictures');
+
 var playlists = exports.playlists = new Playlists();
 var playlistIds = {};
 
@@ -81,6 +86,28 @@ exports.removeFromPlaylist = function(item) {
     }
 };
 
+/**
+ * Loads the item details from the appropriate controller based on the type
+ */
+function loadPlaylistItem(item) {
+    var loader;
+    switch(item.type.toLowerCase()) {
+        case 'movie':
+            loader = movieController.findMovie;
+            break;
+        case 'episode':
+            loader = tvShowController.findEpisode;
+            break;
+        case 'song':
+            loader = musicController.findSong;
+            break;
+        case 'picture':
+            return pictureController.getPicture(item);
+    }
+
+    return loader(item.id);
+} 
+
 // Events
 // ---------------
 
@@ -111,7 +138,10 @@ app.vent.on('xbmc:playlist:onclear', function(data) {
 app.vent.on('xbmc:playlist:onadd', function(data) {
     var playlist = playlists.get(data.playlistid);
     if(playlist) {
-        playlist.add(data.position, data.item);
+        // We need more info on the item, so we grab it from the appropriate controller
+        loadPlaylistItem(data.item).then(function(item) {
+            playlist.add(data.position, item);
+        });
     }
 });
 
