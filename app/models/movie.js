@@ -6,7 +6,7 @@ var Movie = new mongoose.Schema({
     movieid: { type: Number, index: true, unique: true },
     director: String,
     fanart: String,
-    fanartid: ObjectId,
+    fanartUrl:String,
     file: String,
     genre: String,
     imdbnumber: String,
@@ -17,7 +17,7 @@ var Movie = new mongoose.Schema({
     runtime: String,
     studio: String,
     thumbnail: String,
-    thumbnailid: ObjectId,
+    thumbnailUrl: String,
     trailer: String,
     votes: String,
     year: Number,
@@ -29,8 +29,8 @@ var Movie = new mongoose.Schema({
 });
 
 helpers.cacheImages(Movie, [
-    { src: 'thumbnail', dest: 'thumbnailid' },
-    { src: 'fanart', dest: 'fanartid' }
+    { src: 'thumbnail', dest: 'thumbnailUrl', newCache: true},
+    { src: 'fanart', dest: 'fanartUrl', newCache: true}
 ]);
 
 module.exports = mongoose.model('Movie', Movie);

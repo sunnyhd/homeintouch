@@ -1,7 +1,9 @@
+
 var async = require('async');
 var request = require('request');
 var images = require('../../lib/images');
 var settings = require('../../data/settings');
+var url = require('url');
 
 exports.cacheImages = function(Model, fields) {
 
@@ -68,24 +70,51 @@ exports.cacheImages = function(Model, fields) {
 
                 console.log('Caching Image - Image URL: ' + options.url);
 
-                // Make HTTP request for image
-                request(options, function(err, res, body) {
-                    if (err) return callback(err);
+                if(attrs.newCache){
 
-                    // Siliently ignore failed image downloads
-                    if (res.statusCode !== 200 || !body) return callback();
-
-                    var options = { content_type: res.headers['content-type'] };
-
-                    // Store in GridFS
-                    images.put(new Buffer(body), options, function(err, image) {
+                     var predefinedWidths = {
+                        fanart: 1024,
+                        thumbnail: 186,
+                        'art.banner': 758
+                    };
+                    var width = predefinedWidths[attrs.src];
+                      //Save images in cache server
+                    var imageId = url.parse(imageUrl).pathname;
+                    var uploadUrl = settings.cache.url + "/upload?source=" + imageUrl + "&widths=" + width;
+                   
+                    request(uploadUrl, function(err,res,body){
+                        if (res.statusCode !== 200){
+                            console.log('Uploading image Failed');
+                            return callback(); 
+                        } 
+                        self[attrs.dest] = settings.cache.url + "/static" + imageId;
+                        console.log('Image uploaded succesfully. url: ' + self[attrs.dest]);
+                        callback();
+                    });  
+                }else{
+                    // Make HTTP request for image
+                    request(options, function(err, res, body) {
                         if (err) return callback(err);
 
-                        // Save image id
-                        self[attrs.dest] = image._id;
-                        callback()
+                        // Siliently ignore failed image downloads
+                        if (res.statusCode !== 200 || !body) return callback();
+
+                        var options = { content_type: res.headers['content-type'] };
+
+                        // Store in GridFS
+                        images.put(new Buffer(body), options, function(err, image) {
+                            if (err) return callback(err);
+
+                            // Save image id
+                            self[attrs.dest] = image._id;
+                            callback()
+                         });
                     });
-                });
+
+                }
+                
+
+                
             }
         });
 
