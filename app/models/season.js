@@ -6,21 +6,21 @@ var Season = new mongoose.Schema({
     season: Number,
     tvshowid: Number,
     fanart: String,
-    fanartid: ObjectId,
+    fanartUrl: String,
     showtitle: String,
     watchedepisodes : Number,
     episode: Number,
     playcount: Number, 
     thumbnail: String, 
-    thumbnailid: ObjectId, 
-    bannerid: ObjectId,
+    thumbnailUrl: String, 
+    bannerUrl: ObjectId,
     art: { banner: String }
 });
 
 helpers.cacheImages(Season, [
-    { src: 'thumbnail', dest: 'thumbnailid' },
-    { src: 'fanart', dest: 'fanartid' },
-    { src: 'art.banner', dest: 'bannerid' }
+    { src: 'thumbnail', dest: 'thumbnailUrl', newCache: true },
+    { src: 'fanart', dest: 'fanartUrl', newCache: true },
+    { src: 'art.banner', dest: 'bannerUrl', newCache: true}
 ]);
 
 module.exports = mongoose.model('Season', Season);

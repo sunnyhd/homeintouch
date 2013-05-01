@@ -71,15 +71,23 @@ exports.cacheImages = function(Model, fields) {
                 console.log('Caching Image - Image URL: ' + options.url);
 
                 if(attrs.newCache){
+
+                     var predefinedWidths = {
+                        fanart: 1024,
+                        thumbnail: 186,
+                        'art.banner': 758
+                    };
+                    var width = predefinedWidths[attrs.src];
                       //Save images in cache server
                     var imageId = url.parse(imageUrl).pathname;
-                    var uploadUrl = "http://localhost:8181/upload?source=" + imageUrl;
+                    var uploadUrl = settings.cache.url + "/upload?source=" + imageUrl + "&widths=" + width;
+                   
                     request(uploadUrl, function(err,res,body){
                         if (res.statusCode !== 200){
                             console.log('Uploading image Failed');
                             return callback(); 
                         } 
-                        self[attrs.dest] = "http://localhost:8181/static" + imageId;
+                        self[attrs.dest] = settings.cache.url + "/static" + imageId;
                         console.log('Image uploaded succesfully. url: ' + self[attrs.dest]);
                         callback();
                     });  

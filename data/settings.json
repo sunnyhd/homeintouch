@@ -8,7 +8,10 @@
     "mongodb": "mongodb://localhost:27017/hit"
   },
   "images": {
-    "url": "http://localhost:8080/vfs/"
+    "url": "http://192.168.1.102:8888/vfs/"
+  },
+  "cache": {
+    "url":"http://192.168.1.109:8181"
   },
   "hosts": {
     "web": {
@@ -16,7 +19,7 @@
       "port": 8081
     },
     "hit": {
-      "hostname": "localhost",
+      "hostname": "192.168.1.102",
       "port": 8090,
       "timeout": 30000
     }

@@ -17,11 +17,7 @@ var Movie = module.exports = Backbone.Model.extend({
     },
 
     thumbnail: function() {
-        var id = this.get('thumbnailid');
-
-        if (id) {
-            return '/api/images/' + this.get('thumbnailid');
-        }
+        return this.get('thumbnailUrl');
     },
 
     toJSON: function() {
