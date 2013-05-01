@@ -22,6 +22,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         this.playMarkup = '<i class="icon-play icon-white"></i>';
         this.pauseMarkup = '<i class="icon-pause icon-white"></i>';
+
+        // console.log('Initialization PlayerView instance: ' + this.cid);
+    },
+
+    onClose: function () {
+        // console.log('Closing PlayerView instance: ' + this.cid);
     },
 
     /**

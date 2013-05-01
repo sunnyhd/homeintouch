@@ -698,6 +698,9 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
             weatherLocationCode: location,
             jdigiclockType: 'big'
         });
+
+        // Loads and displays player information
+        app.controller('players').showPlayers();
     },
 
     displayCurrentDate: function(date) {

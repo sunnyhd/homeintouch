@@ -315,12 +315,12 @@ app.addInitializer(function(options) {
 });
 
 app.addInitializer(function(options) {
+
+    // Initializes the player and playlist modules
     if (options.players) {
         app.controller('players').setPlayerIds(options.players);
         app.controller('playlists').init(options.players);
     }
-    
-    app.controller('players').showPlayers();
 });
 
 app.addInitializer(function() {

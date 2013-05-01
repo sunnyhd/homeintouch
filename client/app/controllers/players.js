@@ -29,13 +29,17 @@ exports.findPlayerForPlaylist = function(playlist) {
 	return exports.loading.then(function() {
 		return players.get(id);
 	});
-	
 };
 
 /**
  * Loads and shows the players in the dashboard
  */
 exports.showPlayers = function() {
+
+	// Closes previous PlayerListView if exist
+	app.desktopNowPlaying.close();
+	app.addRegions ( { desktopNowPlaying: '#desktop-now-playing' } );
+
 	exports.loadActivePlayers().then(function() {
 		var view = new PlayerList({ collection: players });
 		app.desktopNowPlaying.show(view);
@@ -52,15 +56,16 @@ exports.close = function() {
         players.deactivate(player);
         player.turnOff();
     }
-
 };
 
 /**
  * Loads all the active players
  */
 exports.loadActivePlayers = function() {
+
 	// Get all the players
 	exports.loading = Q.when(players.fetch()).then(function() {
+		
 		// Load the detailed information of all the players 
 		var promises = players.map(function(player) {
 			return exports.loadPlayerDetails(player);
@@ -76,6 +81,7 @@ exports.loadActivePlayers = function() {
  * Loads the player details and fills the item information
  */
 exports.loadPlayerDetails = function(player) {
+
 	// Refresh the player
 	return Q.when(player.fetch({silent:true}))
 		.then(function() {
