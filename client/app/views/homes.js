@@ -20,7 +20,8 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
         'click a.add-floor': 'addFloorHandler',
         'click a#home-settings' : 'editHomeHandler',
         'click a#editStyle': 'editStyle',
-        'click a#deleteHome': 'deleteHome'
+        'click a#deleteHome': 'deleteHome',
+        'click #startXbmc': 'startXbmc'
     },
 
     addFloorHandler: function(e) {
@@ -47,6 +48,11 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
             app.vent.trigger('home:delete', homesController.currentHome);          
         }
         return false;
+    },
+
+    startXbmc: function() {
+        var command = 'start';
+        app.vent.trigger('xbmc:command', command);
     },
 
     onRender: function() {

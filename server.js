@@ -39,6 +39,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('eib:set', eib.set);
     socket.on('eib:get', eib.get);
     socket.on('eib:command:send', eib.commandSend);
+    socket.on('xbmc:command:send', xbmc.execute);
 });
 
 eib.on('address', function(id, value) {
@@ -69,7 +70,7 @@ importer.on('error', function(err) {
 
 dataStore.init(settings.database.path);
 mongoose.connect(settings.database.mongodb);
-//eib.connect();
+eib.connect();
 xbmc.connect();
 
 app.listen(settings.hosts.web.port, function() {

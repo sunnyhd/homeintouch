@@ -272,6 +272,10 @@ app.vent.on('device:camera:command', function(address, value){
     socket.emit('eib:command:send', value);
 });
 
+app.vent.on('xbmc:command', function(command) {
+    socket.emit('xbmc:command:send', command);
+});
+
 var controllers = {};
 app.controller = function(name) {
     if (!controllers[name]) {
@@ -344,6 +348,10 @@ app.addInitializer(function() {
     socket.on('media:data-changed', function() {
         console.log('Media data changed on server.');
         app.vent.trigger('media:data-changed');
+    });
+
+    socket.on('xbmc:error', function(data) {
+        console.log('xbmc:error', data);
     });
 });
 
