@@ -15,10 +15,10 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     onRender: function() {
 
         // Fanart background
-        var fanArt = this.model.get('fanartid');
+        var fanArt = this.model.get('fanartUrl');
         var src = 'img/cinema-background.jpg';
         if (fanArt && fanArt !== '') {
-            src = 'api/images/' + fanArt;
+            src = fanArt;
         }
         app.setRepeatBackgroundImg( src );
     },
