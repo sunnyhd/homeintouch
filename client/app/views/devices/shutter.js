@@ -46,7 +46,7 @@ module.exports = DeviceView.extend({
         // Create Touch Handlers
 
         var touchStartHandler = function(event) {   
-            if( 2 === event.touches.length )
+            if( 1 === event.touches.length )
             {
                 this.proxyShutterMouseDown(event.touches[0]);
                 event.stopPropagation();
