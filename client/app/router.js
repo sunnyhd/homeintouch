@@ -6,8 +6,8 @@ module.exports = Backbone.Router.extend({
 
         'media-control': 'mediaControl',
         'media-control/remote': 'mediaControlRemote',
-        'media-control/playlists': 'playlists',
-        'media-control/players': 'players',
+        'media-control/playlists': 'mediaControlPlaylists',
+        'media-control/players': 'mediaControlPlayers',
 
         'movies': 'movies',
         'movies/cover-view': 'movies',
@@ -57,20 +57,20 @@ module.exports = Backbone.Router.extend({
             var home = this.app.controller('homes').showCurrent();
         },
 
-        players: function() {
-            //this.app.controller('players').showPlayers();
-        },
-
-        playlists: function() {
-            this.app.controller('playlists').showPlaylists();
-        },
-
         mediaControl: function() {
             this.app.controller('mediacontrol').showHomeView();
         },
 
         mediaControlRemote: function() {
-            this.app.controller('mediacontrol').showRemoteControlView();  
+            this.app.controller('mediacontrol').showRemoteControlView();
+        },
+
+        mediaControlPlaylists: function() {
+            this.app.controller('mediacontrol').showPlaylistsView();
+        },
+
+        mediaControlPlayers: function() {
+            this.app.controller('mediacontrol').showPlayersView();
         },
         
         movies: function() {

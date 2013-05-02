@@ -32,3 +32,29 @@ exports.showRemoteControlView = function() {
 	var view = new RemoteControlView();
     app.main.show(view);
 };
+
+exports.showPlaylistsView = function() {
+
+	UtilsNavigation.updateNavbar( {
+		title: 'Playlists',
+		action: '#media-control/playlists'
+	}, { 
+		title: 'Media Control', 
+		action: '#media-control'
+	});
+
+	app.controller('playlists').showPlaylists();
+};
+
+exports.showPlayersView = function() {
+
+	UtilsNavigation.updateNavbar( {
+		title: 'Players',
+		action: '#media-control/players'
+	}, { 
+		title: 'Media Control',
+		action: '#media-control'
+	});
+
+	app.controller('players').showPlayersOnRegion( app.main );
+};

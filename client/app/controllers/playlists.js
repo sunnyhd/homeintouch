@@ -57,11 +57,6 @@ exports.showPlaylists = function() {
     app.main.show(view);
 
     exports.selectPlaylist(playlists.getSelected());
-    /*playlists.fetch().then(function() {
-        var playlist = playlists.getSelected() || playlists.getDefault();
-        exports.selectPlaylist(playlist);
-    });*/
-
 };
 
 exports.selectPlaylist = function(playlist) {

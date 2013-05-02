@@ -32,7 +32,7 @@ exports.findPlayerForPlaylist = function(playlist) {
 };
 
 /**
- * Loads and shows the players in the dashboard
+ * Loads and shows the players
  */
 exports.showPlayers = function() {
 
@@ -40,9 +40,18 @@ exports.showPlayers = function() {
 	app.desktopNowPlaying.close();
 	app.addRegions ( { desktopNowPlaying: '#desktop-now-playing' } );
 
+	// Displays the players on the region
+	exports.showPlayersOnRegion(app.desktopNowPlaying);
+};
+
+/**
+ * Loads and shows the players in a specific region
+ */
+exports.showPlayersOnRegion = function(region) {
+	
 	exports.loadActivePlayers().then(function() {
 		var view = new PlayerList({ collection: players });
-		app.desktopNowPlaying.show(view);
+		region.show(view);
 	});
 };
 
