@@ -3,8 +3,11 @@ module.exports = Backbone.Router.extend({
     routes: {
         '': 'startPage',
         'home': 'home',
-        'players': 'players',
-        'playlists': 'playlists',
+
+        'media-control': 'mediaControl',
+        'media-control/remote': 'mediaControlRemote',
+        'media-control/playlists': 'playlists',
+        'media-control/players': 'players',
 
         'movies': 'movies',
         'movies/cover-view': 'movies',
@@ -60,6 +63,14 @@ module.exports = Backbone.Router.extend({
 
         playlists: function() {
             this.app.controller('playlists').showPlaylists();
+        },
+
+        mediaControl: function() {
+            this.app.controller('mediacontrol').showHomeView();
+        },
+
+        mediaControlRemote: function() {
+            this.app.controller('mediacontrol').showRemoteControlView();  
         },
         
         movies: function() {

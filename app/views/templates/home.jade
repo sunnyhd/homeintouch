@@ -157,6 +157,8 @@ script(id="my-library-template", type="text/template")
           i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview
+        .hit-icon(data-hit-icon-href="#media-control", data-hit-icon-type="media.mediaControl")
+          span Media Control
         .hit-icon(data-hit-icon-href="#movies", data-hit-icon-type="media.movies")
           span Movies
         .hit-icon(data-hit-icon-href="#tvshows", data-hit-icon-type="media.series")
@@ -165,8 +167,8 @@ script(id="my-library-template", type="text/template")
           span Music
         .hit-icon(data-hit-icon-href="#pictures", data-hit-icon-type="media.photos")
           span Photos
-        .hit-icon(data-hit-icon-href="#files", data-hit-icon-type="media.files")
-          span Files
+        #.hit-icon(data-hit-icon-href="#files", data-hit-icon-type="media.files")
+        #  span Files
     .scrollbar
       .track
         .thumb
