@@ -2,13 +2,7 @@
 	<h3>{{ type }} Player</h3>
 </header>
 
-<div class="player-controls">
-
-	{{#if hasSpan}}
-		<div class="player-time">
-	    	<span class="playerTime">{{ currentTime }}</span> / {{ totalTime }}
-	    </div>
-	{{/if}}
+<div class="player-controls row-fluid">
 
 	<div class="player-buttons">
 
@@ -37,20 +31,26 @@
 
 	</div>
 
+	{{#if hasSpan}}
+		<div class="player-time">
+	    	<span class="playerTime">{{ currentTime }}</span> / {{ totalTime }}
+	    </div>
+	{{/if}}
+
 </div>
 
 <div class="playing-item row-fluid">
 
 	{{#if thumbnail}}
-	<div class="span4">
+	<div class="playing-item-thumb">
 	    <img src="{{ thumbnail }}">
 	</div>
-	<div class="span8">
+	<div class="playing-item-data">
 		<h4>{{ label }}</h4>
 	</div>
 
 	{{else}}
-	<div class="span12">
+	<div class="playing-item-data">
 		<h4>{{ label }}</h4>
 	</div>
 	{{/if}}
