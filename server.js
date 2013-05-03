@@ -129,12 +129,7 @@ importer.on('error', function(err) {
 
 // Bootstrap
 // ---------------
-var data = dataStore.init(settings.database.path);
-
-// Set client configuration
-data.compileLess = settings.client.compileLess;
-data.cache = settings.client.cache;
-
+dataStore.init(settings.database.path);
 mongoose.connect(settings.database.mongodb);
 
 eib.connect();

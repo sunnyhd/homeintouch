@@ -34,7 +34,7 @@ html(lang='en')
     link(href='/css/jquery.jdigiclock.css', rel='stylesheet')
     // link(href='/css/video-js.min.css', rel='stylesheet')
 
-    if data.compileLess
+    if data.config.compileLess
       // Compiled LESS
       link(href='/css/hit-compiled.css', rel='stylesheet')
     else
@@ -163,7 +163,7 @@ html(lang='en')
                 ul.dropdown-menu
 
     // App Initialization
-    if data.cache
+    if data.config.clientCache
       script(src='/application-min.js')
     else
       script(src='/application.js')
