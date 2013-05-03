@@ -12,7 +12,6 @@ var fs = require('fs');
 
 var app = express.createServer();
 var io = socket.listen(app);
-var uglifyjs = require('uglify-js');
 
 var removeFile = function(filePath) {
     var fileExists = fs.existsSync(filePath);
@@ -66,6 +65,8 @@ app.configure(function() {
             fs.writeFile(clientPath, source, function (err) {
                 if (err) throw err;
                 console.log('Compiled application.js');
+
+                var uglifyjs = require('uglify-js');
 
                 removeFile(minClientPath);
                 var result = uglifyjs.minify(clientPath, {mangle: false});
