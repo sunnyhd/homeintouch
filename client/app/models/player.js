@@ -54,6 +54,12 @@ var Player = Backbone.Model.extend({
 
     urlRoot: '/api/players',
 
+    urlDetailsByType: {
+        'video': 'movies/details/<%= id %>',
+        'audio': 'music/albums/<%= id %>',
+        'picture': 'pictures/cover-view/file/<%= id %>'
+    },
+
     defaults: {
         item: {
             label: ''
@@ -63,8 +69,6 @@ var Player = Backbone.Model.extend({
     initialize: function() {
     	this.on('change:time', updatePercentage);
         this.on('change:speed', onSpeedChanged);
-        
-        //this.on('change', function() { alert("a") });
     },
 
     /**
@@ -79,23 +83,6 @@ var Player = Backbone.Model.extend({
      */
     turnOn: function() {
     	turnOnTimer(this);
-        
-        /*this.turnOff();
-        var self = this;
-        this.timerAdjust = setInterval(function() {
-            
-            var item = self.get('item');
-            
-            self.fetch({silent: true})
-            .then(function() {
-                self.set('item', item, {silent: true});
-                turnOffTimer(self);
-                turnOnTimer(self);
-                //self.trigger('change');    
-            });
-            
-            //
-        }, 5000);*/
     },
 
     /**
@@ -143,6 +130,13 @@ var Player = Backbone.Model.extend({
 
         if (!tt) return false;
         return !(tt.hours === 0 && tt.minutes === 0 && tt.seconds === 0 && tt.milliseconds === 0);
+    },
+
+    getDetailsUrl: function() {
+        var type = this.get('type').toLowerCase();
+        var urlTemplate = this.urlDetailsByType[type];
+
+        return _.template(urlTemplate, {id: this.get('item').id} );
     },
 
     type: function() {
@@ -213,6 +207,7 @@ var Player = Backbone.Model.extend({
         data.thumbnail = this.thumbnail();
         data.hasSpan = this.hasSpan();
         data.label = this.get('item').getLabel();
+        data.detailsUrl = this.getDetailsUrl();
 
         return data;
     }

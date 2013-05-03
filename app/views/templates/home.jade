@@ -222,19 +222,15 @@ script(id="recently-added-template", type="text/template")
           .end
 
 script(id="album-recently-added", type="text/template")
-  <% if (!_.isUndefined(data.thumbnailid)) { %>
-  .hit-icon.mediaWidget(data-hit-icon-href="#")
+  .hit-icon.mediaWidget(data-hit-icon-href="#", data-media-action!="music/albums/<%= data.albumid %>")
     span.mediaTitle <%=data.artist%>
     .mediaThumbnail
+      <% if (!_.isUndefined(data.thumbnailid)) { %>
       img(src!="<%= 'api/images/' + data.thumbnailid %>")
-    span.mediaSubtitle <%=data.label%>
-  <% } else { %>
-  .hit-icon.mediaWidget(data-hit-icon-href="#")
-    span.mediaTitle <%=data.artist%>
-    .mediaThumbnail
+      <% } else { %>
       img(src="img/svg/media/recently/albums.svg")
+      <% } %>
     span.mediaSubtitle <%=data.label%>
-  <% } %>
 
 script(id="movie-recently-added", type="text/template")
   .hit-icon.mediaWidget(data-hit-icon-href="#", data-media-action!="movies/details/<%= data.movieid %>")
