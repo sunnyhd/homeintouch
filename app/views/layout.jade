@@ -163,7 +163,10 @@ html(lang='en')
                 ul.dropdown-menu
 
     // App Initialization
-    script(src='/application.js')
+    if data.cache
+      script(src='/application-min.js')
+    else
+      script(src='/application.js')
     script
       $(function() {
         var app = require('app');

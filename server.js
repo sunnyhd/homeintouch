@@ -54,15 +54,34 @@ app.configure(function() {
 
     if (settings.client.cache) {
         var clientPath = './public/application.js';
-        var fileExists = fs.existsSync(client);
+        var minClientPath = './public/application-min.js';
+        var fileExists = fs.existsSync(clientPath);
         if (fileExists) {
             fs.unlinkSync(clientPath);
         }
 
         client.assets.compile(function (err, source) {
-            fs.writeFile('./public/application.js', source, function (err) {
+            fs.writeFile(clientPath, source, function (err) {
                 if (err) throw err;
                 console.log('Compiled application.js');
+
+                var fileExists = fs.existsSync(minClientPath);
+                if (fileExists) {
+                    fs.unlinkSync(minClientPath);
+                }
+
+                var compressor = require('node-minify');
+
+                // Using UglifyJS for JS
+                new compressor.minify({
+                    type: 'uglifyjs',
+                    fileIn: clientPath,
+                    fileOut: minClientPath,
+                    callback: function(err) {
+                        if (err) throw err;
+                        console.log('Application file minified');
+                    }
+                });
             });
         });
     } else {
@@ -114,6 +133,7 @@ var data = dataStore.init(settings.database.path);
 
 // Set client configuration
 data.compileLess = settings.client.compileLess;
+data.cache = settings.client.cache;
 
 mongoose.connect(settings.database.mongodb);
 
