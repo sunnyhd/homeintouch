@@ -52,6 +52,8 @@ module.exports = function(app) {
 
     app.get('/api/songs', controllers.songs.index);
 
+    app.post('/api/remotecontrol/commands', controllers.remote_control.executeCommand);
+
     app.get('/api/playlists', controllers.playlists.index);
 
     app.get('/api/playlists/:playlist/items', controllers.playlistitems.index);

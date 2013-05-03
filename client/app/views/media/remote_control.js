@@ -1,4 +1,5 @@
 var app = require('app');
+var RemoteControl = require('models/remote_control')
 
 module.exports = Backbone.Marionette.ItemView.extend({
     
@@ -11,6 +12,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     actionClicked: function(el) {
         var action = $(el.currentTarget).data('action');
     	console.log('Action [' + action + ']');
+
+    	RemoteControl.execute(action);
     }
 
 });
