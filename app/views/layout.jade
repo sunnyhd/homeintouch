@@ -34,8 +34,13 @@ html(lang='en')
     link(href='/css/jquery.jdigiclock.css', rel='stylesheet')
     // link(href='/css/video-js.min.css', rel='stylesheet')
 
-    // Custom css & lesscss
-    link(href='/css/hit.less', rel='stylesheet/less')
+    if data.compileLess
+      // Compiled LESS
+      link(href='/css/hit-compiled.css', rel='stylesheet')
+    else
+      // Custom css & lesscss
+      link(href='/css/hit.less', rel='stylesheet/less')
+
     link(href='/css/hit-general.css', rel='stylesheet')
     link(href='/css/hit-forms.css', rel='stylesheet')
     link(href='/css/hit-devices.css', rel='stylesheet')

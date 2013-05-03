@@ -24,10 +24,35 @@ app.configure(function() {
 
     //app.use(express.basicAuth(settings.credentials.username, settings.credentials.password));
     app.use(express.bodyParser());
-    
-    app.use(express.static(__dirname + '/public'));
 
-    if (settings.cache) {
+    if (settings.client.compileLess) {
+        // Compile less files into one css file
+
+        var compiledStylePath = './public/css/hit-compiled.css';
+        var fileExists = fs.existsSync(client);
+        if (fileExists) {
+            fs.unlinkSync(compiledStylePath);
+        }
+
+        var less = require('less');
+        var parser = new(less.Parser)({
+            paths: ['./public/css'],
+            filename: 'hit.less'
+        });
+
+        fs.readFile('./public/css/hit.less',function(error, data) {
+            if (error) throw error;
+            data = data.toString();
+            parser.parse(data, function (e, tree) {
+                fs.writeFile(compiledStylePath, tree.toCSS({ compress: true }), function(err){
+                    if (err) throw err;
+                    console.log('LESS compilation done.');
+                });
+            });
+        });
+    }
+
+    if (settings.client.cache) {
         var clientPath = './public/application.js';
         var fileExists = fs.existsSync(client);
         if (fileExists) {
@@ -43,7 +68,8 @@ app.configure(function() {
     } else {
         app.get('/application.js', client.assets.createServer());
     }
-    
+
+    app.use(express.static(__dirname + '/public'));
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
@@ -84,8 +110,13 @@ importer.on('error', function(err) {
 
 // Bootstrap
 // ---------------
-dataStore.init(settings.database.path);
+var data = dataStore.init(settings.database.path);
+
+// Set client configuration
+data.compileLess = settings.client.compileLess;
+
 mongoose.connect(settings.database.mongodb);
+
 eib.connect();
 xbmc.connect();
 
