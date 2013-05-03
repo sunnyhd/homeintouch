@@ -10,13 +10,13 @@ function getParameters(action) {
 		case "up": return buildPayload('Input.Up');
 		case "right": return buildPayload('Input.Right');
 		case "down": return buildPayload('Input.Down');
+		case "select": return buildPayload('Input.Select');
 
-		case 'step-backward': return buildAction('stepback');
-		case 'backward': return buildAction('skipprevious');
-		case 'forward': return buildAction('skipnext');
-		case 'step-forward': return buildAction('stepforward');
-		case 'play': return buildAction('play');
-		case 'pause': return buildAction('pause');
+		case 'step-backward': return buildAction('skipprevious');
+		case 'backward': return buildAction('rewind');
+		case 'forward': return buildAction('fastforward');
+		case 'step-forward': return buildAction('skipnext');
+		case 'playpause': return buildAction('playpause');
 		case 'stop': return buildAction('stop');
 
 		case "mute": return buildAction('mute');//return buildPayload('Application.SetMute', {mute: 'toggle'});
@@ -28,7 +28,7 @@ function getParameters(action) {
 function buildAction(action) {
 	return {
 		method: 'Input.ExecuteAction',
-		action: action
+		params: {action: action}
 	};
 };
 
