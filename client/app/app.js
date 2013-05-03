@@ -598,5 +598,7 @@ app.backgroundPatterns = [{label: "None", value: "none"},
                           {label: "Diagonal Waves", value: "url(img/bkg-pattern/diagonal_waves.png)"},
                           {label: "Nasty Fabric", value: "url(img/bkg-pattern/nasty_fabric.png)"},
                           {label: "Otis Redding", value: "url(img/bkg-pattern/otis_redding.png)"},
+                          {label: "Slice Black", value: "url(img/bkg-pattern/slice_black.jpg)"},
                           {label: "Twinkle Twinkle", value: "url(img/bkg-pattern/twinkle_twinkle.png)"},
-                          {label: "Wild Oliva", value: "url(img/bkg-pattern/wild_oliva.png)"}];
+                          {label: "Wild Oliva", value: "url(img/bkg-pattern/wild_oliva.png)"},                          
+                          {label: "Wood Dark", value: "url(img/bkg-pattern/wood_dark.jpg)"}];
