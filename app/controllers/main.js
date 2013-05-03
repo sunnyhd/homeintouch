@@ -6,11 +6,8 @@ var settings = require('../../config');
 
 exports.index = function(req, res, next) {
 
-    var configData = {};
-
     // Set client configuration
-    configData.compileLess = settings.client.compileLess;
-    configData.clientCache = settings.client.cache;
+    var configData = settings.client;
 
     xbmc.rpc('Playlist.GetPlaylists', function(err, results) {
 

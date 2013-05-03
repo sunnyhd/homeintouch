@@ -12,6 +12,14 @@ var fs = require('fs');
 
 var app = express.createServer();
 var io = socket.listen(app);
+var uglifyjs = require('uglify-js');
+
+var removeFile = function(filePath) {
+    var fileExists = fs.existsSync(filePath);
+    if (fileExists) {
+        fs.unlinkSync(filePath);
+    }
+};
 
 // Config
 // ---------------
@@ -29,10 +37,7 @@ app.configure(function() {
         // Compile less files into one css file
 
         var compiledStylePath = './public/css/hit-compiled.css';
-        var fileExists = fs.existsSync(client);
-        if (fileExists) {
-            fs.unlinkSync(compiledStylePath);
-        }
+        removeFile(compiledStylePath);
 
         var less = require('less');
         var parser = new(less.Parser)({
@@ -55,32 +60,19 @@ app.configure(function() {
     if (settings.client.cache) {
         var clientPath = './public/application.js';
         var minClientPath = './public/application-min.js';
-        var fileExists = fs.existsSync(clientPath);
-        if (fileExists) {
-            fs.unlinkSync(clientPath);
-        }
+        removeFile(clientPath);
 
         client.assets.compile(function (err, source) {
             fs.writeFile(clientPath, source, function (err) {
                 if (err) throw err;
                 console.log('Compiled application.js');
 
-                var fileExists = fs.existsSync(minClientPath);
-                if (fileExists) {
-                    fs.unlinkSync(minClientPath);
-                }
+                removeFile(minClientPath);
+                var result = uglifyjs.minify(clientPath, {mangle: false});
 
-                var compressor = require('node-minify');
-
-                // Using UglifyJS for JS
-                new compressor.minify({
-                    type: 'uglifyjs',
-                    fileIn: clientPath,
-                    fileOut: minClientPath,
-                    callback: function(err) {
-                        if (err) throw err;
-                        console.log('Application file minified');
-                    }
+                fs.writeFile(minClientPath, result.code, function (err) {
+                    if (err) throw err;
+                    console.log('Application file minified');
                 });
             });
         });
