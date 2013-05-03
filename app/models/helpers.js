@@ -1,8 +1,7 @@
-
 var async = require('async');
 var request = require('request');
 var images = require('../../lib/images');
-var settings = require('../../data/settings');
+var settings = require('../../config');
 var url = require('url');
 
 exports.cacheImages = function(Model, fields) {

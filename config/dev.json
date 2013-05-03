@@ -20,8 +20,9 @@
     },
     "hit": {
       "hostname": "localhost",
-      "port": 8090,
+      "port": 8091,
       "timeout": 30000
     }
-  }
+  },
+  "cache": false
 }

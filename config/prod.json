@@ -1,0 +1,28 @@
+{
+  "credentials": {
+    "username": "admin",
+    "password": "admin"
+  },
+  "database": {
+    "path": "./data/homes.db",
+    "mongodb": "mongodb://localhost:27017/hit"
+  },
+  "images": {
+    "url": "http://localhost:8888/vfs/"
+  },
+  "cache": {
+    "url":"http://localhost:8181"
+  },
+  "hosts": {
+    "web": {
+      "hostname": "localhost",
+      "port": 8081
+    },
+    "hit": {
+      "hostname": "localhost",
+      "port": 8090,
+      "timeout": 30000
+    }
+  },
+  "cache": true
+}

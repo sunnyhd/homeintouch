@@ -1,13 +1,14 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var socket = require('socket.io');
-var settings = require('./data/settings');
 var client = require('./lib/client');
 var dataStore = require('./lib/dataStore');
 var eib = require('./lib/eib');
 var importer = require('./lib/importer');
 var routes = require('./app/routes');
 var xbmc = require('./lib/xbmc');
+var settings = require('./config');
+var fs = require('fs');
 
 var app = express.createServer();
 var io = socket.listen(app);
@@ -23,9 +24,25 @@ app.configure(function() {
 
     //app.use(express.basicAuth(settings.credentials.username, settings.credentials.password));
     app.use(express.bodyParser());
-
-    app.get('/application.js', client.assets.createServer());
+    
     app.use(express.static(__dirname + '/public'));
+
+    if (settings.cache) {
+        var clientPath = './public/application.js';
+        var fileExists = fs.existsSync(client);
+        if (fileExists) {
+            fs.unlinkSync(clientPath);
+        }
+
+        client.assets.compile(function (err, source) {
+            fs.writeFile('./public/application.js', source, function (err) {
+                if (err) throw err;
+                console.log('Compiled application.js');
+            });
+        });
+    } else {
+        app.get('/application.js', client.assets.createServer());
+    }
     
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
@@ -67,7 +84,6 @@ importer.on('error', function(err) {
 
 // Bootstrap
 // ---------------
-
 dataStore.init(settings.database.path);
 mongoose.connect(settings.database.mongodb);
 eib.connect();

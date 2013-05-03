@@ -1,10 +1,10 @@
 var fs = require('fs');
+var settings = require('../../config');
 
 var protocol = 'mongodb';
 var dbname = 'hit';
 
 exports.get = function(req, res) {
-  var settings = require('../../data/settings');
 
   var urlRegex = new RegExp(protocol + '://' + '(.*)' + '/' + dbname, 'i');
   var urlArray = urlRegex.exec(settings.database.mongodb);
@@ -23,13 +23,12 @@ exports.get = function(req, res) {
 exports.save = function(req, res) {
 
   var object = req.body;
-  var settings = require('../../data/settings');
 
   settings.database.mongodb = protocol + '://' + object.ip + ':' + object.port + '/' + dbname;
 
   var settingsString = JSON.stringify(settings, null, 2);
 
-  fs.writeFile('./data/settings.json', settingsString, function(err) {
+  fs.writeFile(settings.configFile, settingsString, function(err) {
     if (err) {
       console.log(err);
     } else {
