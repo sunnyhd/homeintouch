@@ -1,3 +1,7 @@
+
+// Utils
+var UtilsNavigation = require('utils/navigation');
+
 module.exports = Backbone.Marionette.ItemView.extend({
 
     className: 'player',
@@ -28,6 +32,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     onClose: function () {
         // console.log('Closing PlayerView instance: ' + this.cid);
+    },
+
+    onRender: function() {
+        // var $mediaItem = $('[data-media-action]', this.$el);
+        // UtilsNavigation.addNavigateHandler( $mediaItem, $mediaItem.data('media-action') );
     },
 
     /**

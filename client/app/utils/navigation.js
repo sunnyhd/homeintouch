@@ -31,3 +31,14 @@ exports.updateNavbar = function(current, previous) {
         }
     });
 };
+
+/**
+ * Adds the click handler to navigate a specified route
+ */
+exports.addNavigateHandler = function($el, url) {
+
+    $el.click(function() {
+        app.router.navigate('#' + url, {trigger: true});
+        return false;
+    });
+};
