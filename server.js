@@ -9,16 +9,10 @@ var routes = require('./app/routes');
 var xbmc = require('./lib/xbmc');
 var settings = require('./config');
 var fs = require('fs');
+var compressor = require('node-minify');
 
 var app = express.createServer();
 var io = socket.listen(app);
-
-var removeFile = function(filePath) {
-    var fileExists = fs.existsSync(filePath);
-    if (fileExists) {
-        fs.unlinkSync(filePath);
-    }
-};
 
 // Config
 // ---------------
@@ -33,50 +27,13 @@ app.configure(function() {
     app.use(express.bodyParser());
 
     if (settings.client.compileLess) {
-        // Compile less files into one css file
-
-        var compiledStylePath = './public/css/hit-compiled.css';
-        removeFile(compiledStylePath);
-
-        var less = require('less');
-        var parser = new(less.Parser)({
-            paths: ['./public/css'],
-            filename: 'hit.less'
-        });
-
-        fs.readFile('./public/css/hit.less',function(error, data) {
-            if (error) throw error;
-            data = data.toString();
-            parser.parse(data, function (e, tree) {
-                fs.writeFile(compiledStylePath, tree.toCSS({ compress: true }), function(err){
-                    if (err) throw err;
-                    console.log('LESS compilation done.');
-                });
-            });
-        });
+        client.compileLess();
     }
 
+    client.buildCssLibrary();
+
     if (settings.client.cache) {
-        var clientPath = './public/application.js';
-        var minClientPath = './public/application-min.js';
-        removeFile(clientPath);
-
-        client.assets.compile(function (err, source) {
-            fs.writeFile(clientPath, source, function (err) {
-                if (err) throw err;
-                console.log('Compiled application.js');
-
-                var uglifyjs = require('uglify-js');
-
-                removeFile(minClientPath);
-                var result = uglifyjs.minify(clientPath, {mangle: false});
-
-                fs.writeFile(minClientPath, result.code, function (err) {
-                    if (err) throw err;
-                    console.log('Application file minified');
-                });
-            });
-        });
+        client.minifyJS();
     } else {
         app.get('/application.js', client.assets.createServer());
     }

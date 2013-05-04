@@ -27,6 +27,7 @@
   "client" : {
     "cache": false,
     "compileLess": false,
-    "minify": false
+    "minify": false,
+    "minifyCssLibrary": false
   }
 }
