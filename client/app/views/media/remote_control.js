@@ -7,6 +7,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 		'click [data-action]': 'actionClicked'
     },
 
+    className: 'remote-control',
+
     template: require('templates/media/remote_control'),
 
     actionClicked: function(el) {

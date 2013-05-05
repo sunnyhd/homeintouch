@@ -1,29 +1,48 @@
-<div>
-	<button class="btn" data-action="shut-down"><i class="icon-off"></i></button>
+
+<div class="rc-header">
 	<button class="btn" data-action="home"><i class="icon-home"></i></button>
-	<button class="btn" data-action="back"><i class="icon-arrow-left"></i></button>
+	<button class="btn" data-action="back"><i class="icon-arrow-left"></i><span> Back</span></button>
+	<button class="btn pull-right" data-action="shut-down"><i class="icon-off"></i></button>
+</header>
 
-	<br>
+<div class="rc-navigate">
 
-	<button class="btn" data-action="left"><i class="icon-chevron-left"></i></button>
-	<button class="btn" data-action="up"><i class="icon-chevron-up"></i></button>
-	<button class="btn" data-action="right"><i class="icon-chevron-right"></i></button>
-	<button class="btn" data-action="down"><i class="icon-chevron-down"></i></button>
-	<button class="btn" data-action="select"><i class="icon-ok"></i></button>
+	<div class="rc-nav-top">
+		<button class="btn" data-action="up"><i class="icon-chevron-up"></i></button>
+	</div>
 
-	<br>
+	<div class="rc-nav-middle">
+		<button class="btn" data-action="left"><i class="icon-chevron-left"></i></button>
+		<button class="btn" data-action="select">OK</button>
+		<button class="btn pull-right" data-action="right"><i class="icon-chevron-right"></i></button>
+	</div>
 
-	<button class="btn" data-action="step-backward"><i class="icon-step-backward"></i></button>
-	<button class="btn" data-action="backward"><i class="icon-backward"></i></button>
-	<button class="btn" data-action="forward"><i class="icon-forward"></i></button>
-	<button class="btn" data-action="step-forward"><i class="icon-step-forward"></i></button>
-	<button class="btn" data-action="playpause"><i class="icon-play"></i><i class="icon-pause"></i></button>
-	<button class="btn" data-action="stop"><i class="icon-stop"></i></button>
+	<div class="rc-nav-down">
+		<button class="btn" data-action="down"><i class="icon-chevron-down"></i></button>
+	</div>
+</div>
 
-	<br>
-	
-	<button class="btn" data-action="mute"><i class="icon-volume-off"></i></button>
-	<button class="btn" data-action="volume-down"><i class="icon-volume-down"></i></button>
-	<button class="btn" data-action="volume-up"><i class="icon-volume-up"></i></button>
+<div class="row-fluid">
+	<div class="rc-controls span8">
 
+		<div class="visible-phone">
+			<button class="btn" data-action="playpause"><i class="icon-play"></i><i class="icon-pause"></i></button>
+			<button class="btn" data-action="stop"><i class="icon-stop"></i></button>
+		</div>
+
+		<button class="btn" data-action="step-backward"><i class="icon-step-backward"></i></button>
+		<button class="btn" data-action="backward"><i class="icon-backward"></i></button>
+		
+		<button class="btn hidden-phone" data-action="playpause"><i class="icon-play"></i><i class="icon-pause"></i></button>
+		<button class="btn hidden-phone" data-action="stop"><i class="icon-stop"></i></button>
+
+		<button class="btn" data-action="forward"><i class="icon-forward"></i></button>
+		<button class="btn" data-action="step-forward"><i class="icon-step-forward"></i></button>
+	</div>
+
+	<div class="rc-volume span4">
+		<button class="btn" data-action="mute"><i class="icon-volume-off"></i></button>
+		<button class="btn" data-action="volume-down"><i class="icon-volume-down"></i></button>
+		<button class="btn" data-action="volume-up"><i class="icon-volume-up"></i></button>
+	</div>
 </div>
