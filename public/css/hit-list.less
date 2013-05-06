@@ -1,0 +1,21 @@
+
+ul.hit-list {
+	margin: 0;
+	
+	li {
+		list-style: none;
+		padding: 6px;
+		cursor: pointer;
+		.with-border-color (#666);
+
+		&:nth-child(even) {
+			.background-white-overlay (0.1);
+		}
+		&:nth-child(odd) {
+			.background-white-overlay (0.2);
+		}
+	}
+	li~li {
+		margin-top: 7px;
+	}
+}

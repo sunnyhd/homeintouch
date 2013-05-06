@@ -7,8 +7,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     template: require('templates/playlists/playlist_item'),
 
     events: {
-        'click .play': 'play',
-        'click .remove': 'removeFromPlaylist'
+        'click [data-action=play]': 'play',
+        'click [data-action=remove]': 'removeFromPlaylist'
     },
 
     initialize: function() {
