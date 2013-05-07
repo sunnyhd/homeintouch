@@ -18,8 +18,8 @@ var Album = new mongoose.Schema({
     displayartist: String
 });
 
-helpers.cacheImages(Album, [
+/*helpers.cacheImages(Album, [
     { src: 'thumbnail', dest: 'thumbnailid' }
-]);
+]);*/
 
 module.exports = mongoose.model('Album', Album);
