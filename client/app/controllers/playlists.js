@@ -1,14 +1,23 @@
 var app = require('app');
-var playerController = require('controllers/players');
+
+// Collections
 var Playlists = require('collections/playlists');
+
+// Models
 var Playlist = require('models/playlist');
+
+// Views
+var LoadingView = require('views/loading_content');
 var PlaylistListView = require('views/playlists/playlist_list');
 var PlaylistTabsListView = require('views/playlists/playlist_tabs_list');
 
+// Controllers
+var playerController = require('controllers/players');
 var movieController = require('controllers/movies');
 var musicController = require('controllers/music');
 var tvShowController = require('controllers/tvshows');
 var pictureController = require('controllers/pictures');
+
 
 var playlists = exports.playlists = new Playlists();
 var playlistIds = {};

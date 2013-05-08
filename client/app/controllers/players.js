@@ -1,8 +1,16 @@
 var app = require('app');
+
+// Collections
 var Players = require('collections/players');
+
+// Models
 var Player = require('models/player');
+
+// Views
+var LoadingView = require('views/loading_content');
 var PlayerList = require('views/players/player_list');
 
+// Controllers
 var movieController = require('controllers/movies');
 var musicController = require('controllers/music');
 var tvShowController = require('controllers/tvshows');
@@ -53,6 +61,7 @@ exports.showPlayersOnRegion = function(region) {
 		var view = new PlayerList({ collection: players });
 		region.show(view);
 	});
+	region.show(new LoadingView());
 };
 
 /**

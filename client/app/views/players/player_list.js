@@ -11,12 +11,28 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     initialize: function() {
         this.bindTo(this.collection, 'activate', this.activated, this);
         this.bindTo(this.collection, 'deactivate', this.deactivated, this);
+
+        this.on('render', this.togglePlayers, this);
+        this.bindTo(this.collection, 'add remove reset', this.togglePlayers, this);
         
         // console.log('Initialization PlayerListView instance: ' + this.cid);
     },
 
     appendHtml: function(cv, iv) {
         this.$('.players').append(iv.el);
+    },
+
+    togglePlayers: function() {
+        var $noPlayers = this.$el.find('.no-players-container');
+        var $players = this.$el.find('.players-list-container');
+
+        if (this.collection.size() > 0) {
+            $noPlayers.hide();
+            $players.show();
+        } else {
+            $noPlayers.show();
+            $players.hide();
+        }
     },
 
     onClose: function() {

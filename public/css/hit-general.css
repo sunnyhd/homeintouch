@@ -69,9 +69,9 @@ ul.hit-nav-right li a:hover {
 	border-radius: 10px;
 	background-color: rgba(0, 0, 0, 0.5);
 }
-.main-left-container * {
+/*.main-left-container * {
 	color: white;
-}
+}*/
 .main-left-container .tabbable {
 	margin: 10px;
 }
@@ -100,6 +100,13 @@ ul.hit-nav-right li a:hover {
 	}
 }
 /************************ END New Layout ************************/
+
+.loading-content-container {
+	width: 50%;
+	height: 50px;
+	margin: 0 auto;
+	margin-top: 100px;
+}
 
 .modal.loading-spinner {
 	background-color: initial;
