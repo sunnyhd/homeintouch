@@ -1,4 +1,4 @@
-var PlayableFile = require('lib/playable_file');
+var Command = require('models/player_command');
 
 var File = module.exports = Backbone.Model.extend({
 
@@ -44,7 +44,10 @@ var File = module.exports = Backbone.Model.extend({
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         data.directory = this.isDirectory();
         return data;
+    },
+
+    play: function() {
+        return Command.openFile(this.get('file'));
     }
 });
 
-PlayableFile.call(File.prototype);

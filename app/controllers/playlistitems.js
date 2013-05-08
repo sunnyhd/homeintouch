@@ -28,7 +28,7 @@ exports.create = function(req, res, next) {
     });
 };
 
-exports.destroy = function(req, res, next) {
+exports.remove = function(req, res, next) {
     var params = {
         playlistid: parseInt(req.params.playlist, 10),
         position: parseInt(req.params.index, 10)

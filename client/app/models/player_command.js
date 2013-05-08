@@ -8,6 +8,14 @@
 
 });
 
+/**
+ * Used when opening an item
+ */
+var playlistIds;
+Command.setPlaylistIds = function(ids) {
+	playlistIds = ids;
+}
+
 Command.send = function(player, action, params) {
 	var type = (player.get)?player.get('type'):player.type;
 	type = type.toLowerCase();
@@ -42,7 +50,36 @@ Command.openFile = function(path) {
 	Command.send({id: 'any', type: ''}, 'open', {file: path});
 }
 Command.openDirectory = function(path) {
-	Command.send({id: 'any', type: ''}, 'open', {path: path});
+    Command.send({id: 'any', type: ''}, 'open', {path: path});
 }
+Command.openItem = function(type, item) {
+	var playlistId = getPlaylistIdForItemType(type);
+	Command.send({id: playlistId, type: ''}, 'open', item);
+}
+
+function getPlaylistIdForItemType(type) {
+    return playlistIds[itemTypeToPlaylistType(type)];
+};
+
+function itemTypeToPlaylistType(type) {
+    switch(type.toLowerCase()) {
+        case 'movie':
+        case 'episode':
+        case 'season':
+        case 'tvshow':
+            return 'video';
+
+        case 'album':
+        case 'artist':
+        case 'song':
+            return 'audio';
+
+        case 'file':
+        case 'picture':
+            return 'picture';
+    }
+
+    return '';
+};
 
 module.exports = Command;

@@ -38,7 +38,7 @@ module.exports = Backbone.Marionette.Layout.extend({
 
     playAlbum: function() {
         console.log('Play albumid: ' + this.model.get('albumid'));
-        musicController.addAlbumToPlaylist(this.model, 0);
+        this.model.play();
     },
 
     addAlbumToPlaylist: function() {

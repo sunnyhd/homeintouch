@@ -1,6 +1,8 @@
 var Command = require('models/player_command');
 module.exports = function() {
     this.play = function() {
-        return Command.openFile(this.get('file'));
+    	var item = {};
+    	item[this.idAttribute] = this.id;
+        return Command.openItem(this.getType(), item);
     };
 };

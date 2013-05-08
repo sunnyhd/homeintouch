@@ -17,11 +17,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     play: function() {
-        musicController.addAlbumToPlaylist(this.model, 0);
-
-        /*var playlistid = playersController.getPlayerId('audio');
-        var playable = new Playable({ item: { playlistid: playlistid, position: 0 }});
-        playable.save();*/
+        this.model.play();
     }
     
 });

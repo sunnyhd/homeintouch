@@ -58,7 +58,7 @@ module.exports = function(app) {
 
     app.get('/api/playlists/:playlist/items', controllers.playlistitems.index);
     app.post('/api/playlists/:playlist/items', controllers.playlistitems.create);
-    app.del('/api/playlists/:playlist/items/:index', controllers.playlistitems.destroy);
+    app.del('/api/playlists/:playlist/items/:index', controllers.playlistitems.remove);
 
     app.get('/api/players', controllers.players.index);
     app.post('/api/players', controllers.players.create);

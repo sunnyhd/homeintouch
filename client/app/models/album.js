@@ -1,6 +1,7 @@
+var PlayableFile = require('lib/playable_file');
 var Songs = require('collections/songs');
 
-module.exports = Backbone.Model.extend({
+var Album = module.exports = Backbone.Model.extend({
 
     idAttribute: 'albumid',
 
@@ -25,6 +26,10 @@ module.exports = Backbone.Model.extend({
         return res;
     },
 
+    getType: function() {
+        return 'album';
+    },
+
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         data.thumbnail = this.thumbnail();
@@ -32,3 +37,5 @@ module.exports = Backbone.Model.extend({
     }
 
 });
+
+PlayableFile.call(Album.prototype);
