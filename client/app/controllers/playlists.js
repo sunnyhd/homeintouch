@@ -13,6 +13,8 @@ var pictureController = require('controllers/pictures');
 var playlists = exports.playlists = new Playlists();
 var playlistIds = {};
 
+var pendingItems = {};
+
 exports.getPlaylistId = function(type) {
     return playlistIds[type];
 };
@@ -67,6 +69,16 @@ exports.addToPlaylist = function(type, options) {
     var playlistid = exports.getPlaylistId(type);
     var playlist = new Playlist({ playlistid: playlistid });
     return playlist.items.create(options);
+};
+
+exports.addToPlaylistAndPlay = function(type, idField, id) {
+    pendingItems[type] = id;
+    var item = {};
+    item[idField] = id;
+
+    var playlistid = exports.getPlaylistId(type);
+    var playlist = new Playlist({ playlistid: playlistid });
+    return playlist.items.create({item: item});
 };
 
 exports.removeFromPlaylist = function(item) {
@@ -140,6 +152,13 @@ app.vent.on('xbmc:playlist:onadd', function(data) {
         // We need more info on the item, so we grab it from the appropriate controller
         loadPlaylistItem(playlist, data.item).then(function(item) {
             playlist.add(data.position, item);
+
+            // If the item was pending to be played, do it now.
+            var type = playlist.get('type');
+            if(pendingItems[type] === item.id) {
+                playlist.open(data.position);
+                pendingItems[type] = null;
+            }
         });
     }
 });
