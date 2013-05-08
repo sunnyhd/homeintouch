@@ -40,6 +40,9 @@ There will not be any media data initially so you'll need to trigger an import. 
     
 The import process runs in the background.
 
+All the images are saved using another application. The application is located in `image-cache`. Inside there is a shell script to run the server. It needs to be executed along with the HiT client.
+More details about this application are in: https://github.com/ezequiel-parada/image-cache-server
+
 Config
 ------
 
