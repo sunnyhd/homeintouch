@@ -1,4 +1,6 @@
-module.exports = Backbone.Model.extend({
+var PlayableFile = require('lib/playable_file');
+
+var File = module.exports = Backbone.Model.extend({
 
     idAttribute: 'file',
 
@@ -43,5 +45,6 @@ module.exports = Backbone.Model.extend({
         data.directory = this.isDirectory();
         return data;
     }
-
 });
+
+PlayableFile.call(File.prototype);

@@ -16,7 +16,18 @@ module.exports = Backbone.Collection.extend({
         return Backbone.Collection.prototype.fetch.call(this, arguments);
     },
 
+    /**
+     * Parses the items to set the item position as the id. 
+     * This is done in order to allow playlist to have the same item more than once
+     */
     parse: function(res) {
+        var i = 0;
+        _.forEach(res.items, function(item) {
+            item.itemId = item.id;
+            item.id = i;
+            i++;
+        });
+
         return res.items;
     },
 

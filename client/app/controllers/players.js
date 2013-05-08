@@ -96,8 +96,8 @@ exports.loadPlayerDetails = function(player) {
 		.then(function() {
 			// When the speed and time is retrieved, start the player (timer) and fill the item info
 			player.start();
-			return loadPlayerItem(player.get("item"));
-		}, function(error) {
+			return loadPlayerItem(player, player.get("item"));
+		}, function(e) {
 			console.log('Error while retrieving the player: ' + JSON.stringify(e));
 			// We will consider an error here as the player no being active
 			return null;
@@ -118,15 +118,19 @@ exports.loadPlayerDetails = function(player) {
 /**
  * Loads the played item details from the appropriate controller based on the type
  */
-function loadPlayerItem(item) {
+function loadPlayerItem(player, item) {
 	var loader;
-	switch(item.type.toLowerCase()) {
+	var type = (item.type.toLowerCase() === 'unknown')?player.get('type'):item.type;
+	
+	switch(type.toLowerCase()) {
+		case 'video':
 		case 'movie':
 			loader = movieController.findMovie;
 			break;
 		case 'episode':
 			loader = tvShowController.findEpisode;
 			break;
+		case 'audio':
 		case 'song':
 			loader = musicController.findSong;
 			break;

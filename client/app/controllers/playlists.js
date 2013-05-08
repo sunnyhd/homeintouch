@@ -84,15 +84,19 @@ exports.removeFromPlaylist = function(item) {
 /**
  * Loads the item details from the appropriate controller based on the type
  */
-function loadPlaylistItem(item) {
+function loadPlaylistItem(pl, item) {
     var loader;
-    switch(item.type.toLowerCase()) {
+    var type = (item.type.toLowerCase() === 'unknown')?pl.get('type'):item.type;
+
+    switch(type.toLowerCase()) {
+        case 'video':
         case 'movie':
             loader = movieController.findMovie;
             break;
         case 'episode':
             loader = tvShowController.findEpisode;
             break;
+        case 'audio':
         case 'song':
             loader = musicController.findSong;
             break;
@@ -134,7 +138,7 @@ app.vent.on('xbmc:playlist:onadd', function(data) {
     var playlist = playlists.get(data.playlistid);
     if(playlist) {
         // We need more info on the item, so we grab it from the appropriate controller
-        loadPlaylistItem(data.item).then(function(item) {
+        loadPlaylistItem(playlist, data.item).then(function(item) {
             playlist.add(data.position, item);
         });
     }

@@ -3,10 +3,7 @@ module.exports = Backbone.Model.extend({
         active: false
     },
 
-    url: function() {
-        if(!this.collection) return null;
-        return this.collection.url() + '/' + this.index();
-    },
+    idAttribute: 'id',
 
     playlist: function() {
         return this.collection.playlist;

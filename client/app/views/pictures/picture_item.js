@@ -1,5 +1,4 @@
 var app = require('app');
-var Playable = require('models/playable');
 var PictureSlideshowView = require('views/pictures/picture_slideshow');
 var picturesController = require('controllers/pictures');
 var Files = require('collections/files');
@@ -32,19 +31,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     play: function() {
-        var playable = new Playable({ item: { path: this.model.get('file') }});
-        playable.save();
-
-        return false;
+        return this.model.play();
     },
 
     playSlideshow: function() {
-        if (this.model.get('filetype') === 'directory') {
-            var playable = new Playable({ item: { path: this.model.get('file') }});
-            playable.save();
+        if (this.model.isDirectory()) {
+            return this.model.play();
         }
 
-        return false;
+        return Q.when(false);
     },
 
     watchSlideshow: function() {

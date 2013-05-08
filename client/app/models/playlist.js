@@ -1,4 +1,5 @@
 var PlaylistItems = require('collections/playlist_items');
+var PlaylistItem = require('models/playlist_item');
 var Command = require('models/player_command');
 var app = require('app');
 
@@ -55,7 +56,9 @@ module.exports = Backbone.Model.extend({
 
     add: function(pos, item) {
         if(this.items.loaded) {
-            this.items.add(item, {at: pos});
+            // position is used as id so the same item can be in the playlist more than once.
+            var plItem = new PlaylistItem({id: pos, itemId: item.id, type: item.get('type'), file: item.get('file'), label: item.get('label')})
+            this.items.add(plItem, {at: pos});
         }
     },
 

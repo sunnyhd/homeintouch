@@ -1,4 +1,5 @@
 var File = require('models/file');
+var Command = require('models/player_command');
 
 var Files = module.exports = Backbone.Collection.extend({
 
@@ -13,6 +14,10 @@ var Files = module.exports = Backbone.Collection.extend({
         if (this.directory && this.directory[0] !== '/') {
             this.directory = '/' + this.directory;
         }
+    },
+
+    play: function() {
+        return Command.openDirectory(this.directory.substring(1));
     },
 
     fetch: function(options) {

@@ -1,5 +1,5 @@
 var helpers = require('lib/helpers');
-var Playable = require('models/playable');
+var Command = require('models/player_command');
 var PlayableFile = require('lib/playable_file');
 var Resumable = require('lib/resumable');
 
@@ -16,8 +16,7 @@ var Movie = module.exports = Backbone.Model.extend({
     },
 
     playTrailer: function() {
-        var playable = new Playable({ item: { file: this.get('trailer') }});
-        return playable.save();
+        return Command.openFile(this.get('trailer'));
     },
 
     thumbnail: function() {

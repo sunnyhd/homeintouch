@@ -1,8 +1,6 @@
-var Playable = require('models/playable');
-
+var Command = require('models/player_command');
 module.exports = function() {
     this.play = function() {
-        var playable = new Playable({ item: { file: this.get('file') }});
-        return playable.save();
+        return Command.openFile(this.get('file'));
     };
 };

@@ -39,6 +39,9 @@ Command.openAt = function(playlist, position) {
 	Command.send({id: 'any', type: playlist.get('type')}, 'open', {playlistid: playlist.id, position: position});
 }
 Command.openFile = function(path) {
+	Command.send({id: 'any', type: ''}, 'open', {file: path});
+}
+Command.openDirectory = function(path) {
 	Command.send({id: 'any', type: ''}, 'open', {path: path});
 }
 

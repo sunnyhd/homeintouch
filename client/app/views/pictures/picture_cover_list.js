@@ -50,8 +50,7 @@ module.exports = FilteredListView.extend({
     },
 
     playSlideshow: function() {
-        var playable = new Playable({ item: { path: this.collection.directory }});
-        playable.save();
+        this.collection.play();
 
         this.$('.dropdown-toggle').parent().removeClass('open');
 
