@@ -5,7 +5,7 @@ var Song = new mongoose.Schema({
     album: String,
     albumid: Number,
     artist: String,
-    artistid: Number,
+    artistid: [Number],
     file: String,
     track: Number
 });

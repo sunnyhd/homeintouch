@@ -4,6 +4,17 @@ var images = require('../../lib/images');
 var settings = require('../../config');
 var url = require('url');
 
+var removeLastSlash = function(path) {
+    var lastCharIndex = path.length - 1;
+    var lastChar = path.charAt(lastCharIndex);
+
+    if (lastChar === '/') {
+        return path.slice(0, -1);
+    } else {
+        return path;
+    }
+};
+
 exports.cacheImages = function(Model, fields) {
 
     Model.pre('remove', function(next) {
@@ -51,16 +62,21 @@ exports.cacheImages = function(Model, fields) {
                     if (tempURL.indexOf('http') === 0) {
                         imageUrl = decodeURIComponent(tempURL);
                     } else {
+
+                        var tempPath = decodeURIComponent(tempURL);
+
+                        if (tempPath.indexOf('\\') > 0) {
+                            tempPath = tempPath.replace(/\\/g, '/');
+                        }
+
+                        tempPath = removeLastSlash(tempPath);
+
+                        tempURL = encodeURIComponent(tempPath);
                         imageUrl = settings.images.url + tempURL;
                     }
                 }
 
-                var lastCharIndex = imageUrl.length - 1;
-                var lastChar = imageUrl.charAt(lastCharIndex);
-
-                if (lastChar === '/') {
-                    imageUrl = imageUrl.slice(0, -1);
-                }
+                imageUrl = removeLastSlash(imageUrl);
 
                 var options = {
                     url: imageUrl,
@@ -69,7 +85,7 @@ exports.cacheImages = function(Model, fields) {
 
                 console.log('Caching Image - Image URL: ' + options.url);
 
-                if(attrs.newCache){
+                if (attrs.newCache) {
 
                      var predefinedWidths = {
                         fanart: 1024,
@@ -90,7 +106,7 @@ exports.cacheImages = function(Model, fields) {
                         console.log('Image uploaded succesfully. url: ' + self[attrs.dest]);
                         callback();
                     });  
-                }else{
+                } else {
                     // Make HTTP request for image
                     request(options, function(err, res, body) {
                         if (err) return callback(err);
