@@ -8,7 +8,7 @@ var musicExtensions = ['m4a', 'mp3'];
 
 var predefinedWidths = {
     fanart: 1024,
-    thumbnail: 186,
+    thumbnail: 250,
     'art.banner': 758
 };
 
@@ -26,7 +26,7 @@ var removeLastSlash = function(path) {
 var isMusicExtension = function(path) {
 
     var pathArray = removeLastSlash(path).split('\.');
-    var fileExtension = pathArray[pathArray.length - 1];
+    var fileExtension = (pathArray[pathArray.length - 1]).toLowerCase();
     if (fileExtension.length === 3) {
         // Is a valid extension
         return musicExtensions.indexOf(fileExtension) != -1;
