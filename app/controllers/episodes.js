@@ -9,6 +9,14 @@ exports.index = function(req, res, next) {
     });
 };
 
+exports.get = function(req, res, next) {
+    Episode.findOne( { episodeid: req.params.episodeid }, function(err, ep) {
+        if (err) return next(err);
+        if (!ep) return next(new Error('No such episode'));
+        res.json(ep);
+    });
+};
+
 exports.label = function(req, res, next) {
 	Episode.find({}, ['label', 'tvshowid'], function(err, episodes) {
         if (err) return next(err);
@@ -18,7 +26,8 @@ exports.label = function(req, res, next) {
 };
 
 exports.lastN = function(req, res, next) {
-    q.lastN(Episode, req.params.n, function(err, episodes) {
+    var episodeProperties = ['showtitle', 'season', 'thumbnailUrl', 'label'];
+    q.lastN(Episode, req.params.n, episodeProperties, function(err, episodes) {
         if (err) return next(err);
         res.json(episodes);
     });

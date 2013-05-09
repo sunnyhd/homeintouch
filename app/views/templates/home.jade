@@ -105,7 +105,6 @@ script(id="dashboard-home", type="text/template")
         #desktop-time-weather.tab-pane.active
           #digiclock-desktop.hit-clock-desktop
         #desktop-now-playing.tab-pane
-          p Now playing
         #desktop-more.tab-pane
           p MORE...
   .main-right-container
@@ -158,6 +157,8 @@ script(id="my-library-template", type="text/template")
           i.icon-cog.icon-white
     .hit-icon-container.viewport
       .overview
+        .hit-icon(data-hit-icon-href="#media-control", data-hit-icon-type="media.mediaControl")
+          span Media Control
         .hit-icon(data-hit-icon-href="#movies", data-hit-icon-type="media.movies")
           span Movies
         .hit-icon(data-hit-icon-href="#tvshows", data-hit-icon-type="media.series")
@@ -166,8 +167,8 @@ script(id="my-library-template", type="text/template")
           span Music
         .hit-icon(data-hit-icon-href="#pictures", data-hit-icon-type="media.photos")
           span Photos
-        .hit-icon(data-hit-icon-href="#files", data-hit-icon-type="media.files")
-          span Files
+        #.hit-icon(data-hit-icon-href="#files", data-hit-icon-type="media.files")
+        #  span Files
     .scrollbar
       .track
         .thumb
@@ -221,26 +222,22 @@ script(id="recently-added-template", type="text/template")
           .end
 
 script(id="album-recently-added", type="text/template")
-  <% if (!_.isUndefined(data.thumbnailid)) { %>
-  .hit-icon.mediaWidget(data-hit-icon-href="#")
+  .hit-icon.mediaWidget(data-hit-icon-href="#", data-media-action!="music/albums/<%= data.albumid %>")
     span.mediaTitle <%=data.artist%>
     .mediaThumbnail
-      img(src!="<%= 'api/images/' + data.thumbnailid %>")
-    span.mediaSubtitle <%=data.label%>
-  <% } else { %>
-  .hit-icon.mediaWidget(data-hit-icon-href="#")
-    span.mediaTitle <%=data.artist%>
-    .mediaThumbnail
+      <% if (!_.isUndefined(data.thumbnailUrl)) { %>
+      img(src!="<%= data.thumbnailUrl %>")
+      <% } else { %>
       img(src="img/svg/media/recently/albums.svg")
+      <% } %>
     span.mediaSubtitle <%=data.label%>
-  <% } %>
 
 script(id="movie-recently-added", type="text/template")
   .hit-icon.mediaWidget(data-hit-icon-href="#", data-media-action!="movies/details/<%= data.movieid %>")
     span.mediaTitle <%= data.label %>
     .mediaThumbnail
-      <% if (!_.isUndefined(data.thumbnailid)) { %>
-      img(src!="<%= 'api/images/' + data.thumbnailid %>")
+      <% if (!_.isUndefined(data.thumbnailUrl)) { %>
+      img(src!="<%= data.thumbnailUrl %>")
       <% } else { %>
       img(src="img/svg/media/recently/movies.svg")
       <% } %>
@@ -250,8 +247,8 @@ script(id="episode-recently-added", type="text/template")
   .hit-icon.mediaWidget(data-hit-icon-href="#")
     span.mediaTitle <%=data.showtitle + ' - ' + data.season%>
     .mediaThumbnail
-      <% if (!_.isUndefined(data.thumbnailid)) { %>
-      img(src!="<%= 'api/images/' + data.thumbnailid %>")
+      <% if (!_.isUndefined(data.thumbnailUrl)) { %>
+      img(src!="<%= data.thumbnailUrl %>")
       <% } else { %>
       img(src="img/svg/media/recently/episodes.svg")
       <% } %>
