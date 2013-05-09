@@ -38,23 +38,7 @@
 			float: left;
 
 			a {
-				display: block;
-				float: left;
-				text-align: center;
-
-				background-color: gray;
-				text-decoration: none;
-				cursor: pointer;
-
-				height: 30px;
-				width: 32px;
-				margin: 0 3px;
-
-				.borderRadius(3px);
-
-				i {
-					margin-top: 7px;
-				}
+				.player-button();
 			}
 		}
 
@@ -104,6 +88,27 @@
 #desktop-now-playing .player {
 
 	background-color: rgba(51, 51, 51, 0.8);
+}
+
+// Player button component
+.player-button {
+	display: block;
+	float: left;
+	text-align: center;
+
+	background-color: gray;
+	text-decoration: none;
+	cursor: pointer;
+
+	height: 30px;
+	width: 32px;
+	margin: 0 3px;
+
+	.borderRadius(3px);
+
+	i {
+		margin-top: 7px;
+	}
 }
 
 

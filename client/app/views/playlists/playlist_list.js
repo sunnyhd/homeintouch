@@ -1,3 +1,4 @@
+
 var PlaylistItemView = require('views/playlists/playlist_item');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
@@ -14,7 +15,22 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     },
 
     appendHtml: function(cv, iv) {
+
+        // Add listeners to the item view
+        this.bindTo(iv, 'clear-more-opts', this.clearMoreOptions, this);
+
         this.$('.items').append(iv.el);
+    },
+
+    clearMoreOptions: function() {
+        var $moreOpts = this.$el.find('.more-opts-container');
+        var $liEl = $moreOpts.closest('li');
+
+        var $icon = $liEl.find('[data-action="more"] i');
+        $icon.removeClass('icon-chevron-up');
+        $icon.addClass('icon-chevron-down');
+
+        $moreOpts.remove();
     },
 
     togglePlaylists: function() {

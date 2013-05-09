@@ -1,6 +1,7 @@
 #!/bin/bash
 CONFIG="server.port=8181 mongo.url=localhost mongo.dbname=storage"
-JAVA_CMD=/opt/tools/java/jdk1.7.0_17/bin/java
+#JAVA_CMD=/opt/tools/java/jdk1.7.0_17/bin/java
+JAVA_CMD=java
 APP_HOME=`dirname $0`
 APP_PID=$APP_HOME/image-cache-server.pid
 
