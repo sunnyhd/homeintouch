@@ -11,7 +11,7 @@ var Episode = new mongoose.Schema({
     rating: Number,
     firstaired: String,
     thumbnail: String,
-    thumbnailid: ObjectId,
+    thumbnailUrl: String,
     episode: Number,
     season: Number,
     playcount: Number,
@@ -35,7 +35,7 @@ Episode.pre('save', function(next) {
 });
 
 helpers.cacheImages(Episode, [
-    { src: 'thumbnail', dest: 'thumbnailid' }
+    { src: 'thumbnail', dest: 'thumbnailUrl', newCache: true }
 ]);
 
 module.exports = mongoose.model('Episode', Episode);
