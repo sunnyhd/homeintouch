@@ -4,3 +4,9 @@ node_modules
 
 *.sublime-project
 *.sublime-workspace
+
+image-cache/image-cache-server.pid
+public/application-min.js
+public/application.js
+public/css/hit-compiled.css
+public/css/hit-library.min.css
