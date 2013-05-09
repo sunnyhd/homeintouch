@@ -8,26 +8,32 @@ script(id="device-list-thermostat-item-template", type="text/template")
         span.setpoint
         span.measure C&deg;
     .widget-opts
-      ul.device-btn-group.four.clearfix
-        li.device-btn
-          a.blue(href="#", data-mode="comfort")
-            img(src="img/svg/devices/thermostat/comfort-white.svg")
-        li.device-btn
-          a.blue(href="#", data-mode="standby")
-            img(src="img/svg/devices/thermostat/standby-white.svg")
-        li.device-btn
-          a.blue(href="#", data-mode="night")
-            img(src="img/svg/devices/thermostat/night-white.svg")
-        li.device-btn
-          a.blue(href="#", data-mode="frost")
-            img(src="img/svg/devices/thermostat/frost-white.svg")
-      ul.device-btn-group.two.clearfix.thermostat-control
-        li.device-btn
-          a.blue(href="#", data-value="plus")
-            i.icon-plus.icon-white
+      ul.device-btn-group.three.thermostat-control.clearfix
         li.device-btn
           a.blue(href="#", data-value="minus")
             i.icon-minus.icon-white
+        li.device-btn
+          a.blue(href="#", data-mode="comfort")
+            img(src="img/svg/devices/thermostat/comfort-white.svg", class="thermostat-icon-mode")
+        li.device-btn
+          a.blue(href="#", data-value="plus")
+            i.icon-plus.icon-white
+
+script(id="thermostat-mode-template", type="text/template")
+  .modal-header
+    a.close(href="#") x
+    h2 Change Thermostat Mode
+
+  .modal-body.content-centered
+    form
+      select
+        option(value="comfort") Confort
+        option(value="standby") Stand By
+        option(value="night") Night
+        option(value="frost") Frost
+
+  .modal-footer
+    button.btn.btn-primary.changeMode Change Mode
 
 script(id="device-add-thermostat-template", type="text/template")
   .modal-header

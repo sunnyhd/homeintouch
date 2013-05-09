@@ -30,12 +30,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
         var src = 'img/cinema-background.jpg';
         var movieStyleSettings = app.controller('settings').mediaSettings.getMovieStyleSettings();
         if (movieStyleSettings.fanart_bkg) {
-            var fanArt = this.model.get('fanartid');
-            if (fanArt && fanArt !== '') {
-                src = 'api/images/' + fanArt;
-            }
+            var fanArt = this.model.get('fanartUrl');
+            // if (fanArt && fanArt !== '') {
+            //     src = 'api/images/' + fanArt;
+            // }
         }
-        app.setBackgroundImg( src );
+        app.setBackgroundImg( fanArt );
 
         // Actions icons for mobile devices
         var actionsView = new MovieActionsView( {model: this.model} );

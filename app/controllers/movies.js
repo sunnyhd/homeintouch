@@ -32,7 +32,8 @@ exports.get = function(req, res, next) {
 };
 
 exports.lastN = function(req, res, next) {
-	q.lastN(Movie, req.params.n, function(err, movies) {
+	var movieProperties = ['movieid', 'label', 'genre', 'thumbnailUrl'];
+	q.lastN(Movie, req.params.n, movieProperties, function(err, movies) {
         if (err) return next(err);
         res.json(movies);
     });

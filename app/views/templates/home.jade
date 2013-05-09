@@ -225,8 +225,8 @@ script(id="album-recently-added", type="text/template")
   .hit-icon.mediaWidget(data-hit-icon-href="#", data-media-action!="music/albums/<%= data.albumid %>")
     span.mediaTitle <%=data.artist%>
     .mediaThumbnail
-      <% if (!_.isUndefined(data.thumbnailid)) { %>
-      img(src!="<%= 'api/images/' + data.thumbnailid %>")
+      <% if (!_.isUndefined(data.thumbnailUrl)) { %>
+      img(src!="<%= data.thumbnailUrl %>")
       <% } else { %>
       img(src="img/svg/media/recently/albums.svg")
       <% } %>
@@ -236,8 +236,8 @@ script(id="movie-recently-added", type="text/template")
   .hit-icon.mediaWidget(data-hit-icon-href="#", data-media-action!="movies/details/<%= data.movieid %>")
     span.mediaTitle <%= data.label %>
     .mediaThumbnail
-      <% if (!_.isUndefined(data.thumbnailid)) { %>
-      img(src!="<%= 'api/images/' + data.thumbnailid %>")
+      <% if (!_.isUndefined(data.thumbnailUrl)) { %>
+      img(src!="<%= data.thumbnailUrl %>")
       <% } else { %>
       img(src="img/svg/media/recently/movies.svg")
       <% } %>
@@ -247,8 +247,8 @@ script(id="episode-recently-added", type="text/template")
   .hit-icon.mediaWidget(data-hit-icon-href="#")
     span.mediaTitle <%=data.showtitle + ' - ' + data.season%>
     .mediaThumbnail
-      <% if (!_.isUndefined(data.thumbnailid)) { %>
-      img(src!="<%= 'api/images/' + data.thumbnailid %>")
+      <% if (!_.isUndefined(data.thumbnailUrl)) { %>
+      img(src!="<%= data.thumbnailUrl %>")
       <% } else { %>
       img(src="img/svg/media/recently/episodes.svg")
       <% } %>
@@ -331,6 +331,10 @@ script(id="context-menu-home-opts", type="text/template")
     a#home-settings(href="#") Settings
   li
     a#editStyle(href="#") Edit Styles
+  li
+    a#deleteHome(href="#") Delete Home
+  li
+    a#startXbmc(href="#") Start XBMC
 
 script(id="edit-time-weather-settings-template", type="text/template")
   .modal-header

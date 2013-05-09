@@ -23,9 +23,19 @@ module.exports = BaseModel.extend({
 		}
 	},
 
-	getStyleAttributes: function() {
+	getStyleAttributes: function(defaultStyleConfiguration) {
 		var styleKeys = this.getStyleKeys();
 		var styleAttributes = _.pick(this.attributes, styleKeys);
+
+		var filteredStyleAttributes = {};
+
+		_.each(styleAttributes, function(value, key) {
+			if (value.toLowerCase() !== 'none') {
+				filteredStyleAttributes[key] = value;
+			}
+		});
+
+		styleAttributes = filteredStyleAttributes;
 
 		if (this.has('fixedStyle')) {
 			var fixedStyle = this.get('fixedStyle');
@@ -45,6 +55,10 @@ module.exports = BaseModel.extend({
 
 		if (this.has('defaultStyle')) {
 			_.extend(this.get('defaultStyle'), styleAttributes);
+		}
+
+		if (defaultStyleConfiguration) {
+			styleAttributes = _.defaults(styleAttributes, defaultStyleConfiguration.getStyleAttributes());
 		}
 
 		return styleAttributes;

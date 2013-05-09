@@ -27,7 +27,8 @@ exports.show = function(req, res, next) {
 };
 
 exports.lastN = function(req, res, next) {
-    q.lastN(Album, req.params.n, function(err, albums) {
+    var albumProperties = ['albumid', 'artist', 'thumbnailUrl', 'label'];
+    q.lastN(Album, req.params.n, albumProperties, function(err, albums) {
         if (err) return next(err);
         res.json(albums);
     });

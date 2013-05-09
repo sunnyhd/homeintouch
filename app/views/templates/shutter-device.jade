@@ -1,19 +1,10 @@
 script(id="device-list-shutter-item-template", type="text/template")
-  .hit-icon.device-widget(data-widget-type="shutter", data-hit-icon-type="devices.shutterOpen0")
+  .hit-icon.device-widget(data-widget-type="shutter", data-hit-icon-type="devices.shutterFrame")
     span.device-name <%= name %>
-    .slider-vertical(data-sliding="false")
+    div.shutter-container
+      img(src!="<%= shutterUrl %>")
     .widget-opts
       .shutter-detail 0% 
-      ul.device-btn-group.three.clearfix
-        li.device-btn
-          a.blue(href="#", data-value="up")
-            i.icon-chevron-up.icon-white
-        li.device-btn
-          a.blue(href="#", data-value="stop")
-            i.icon-stop.icon-white
-        li.device-btn
-          a.blue(href="#", data-value="down")
-            i.icon-chevron-down.icon-white
 
 script(id="device-add-shutter-template", type="text/template")
   .modal-header

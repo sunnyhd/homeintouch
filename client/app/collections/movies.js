@@ -84,6 +84,7 @@ var Movies = module.exports = Backbone.Collection.extend({
         } else {
             ascending = true;
         }
+        
         return result * (ascending ? 1 : (-1));
     }
 });

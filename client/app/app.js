@@ -275,6 +275,10 @@ app.vent.on('device:camera:command', function(address, value){
     socket.emit('eib:command:send', value);
 });
 
+app.vent.on('xbmc:command', function(command) {
+    socket.emit('xbmc:command:send', command);
+});
+
 var controllers = {};
 app.controller = function(name) {
     if (!controllers[name]) {
@@ -353,6 +357,10 @@ app.addInitializer(function() {
     socket.on('media:data-changed', function() {
         console.log('Media data changed on server.');
         app.vent.trigger('media:data-changed');
+    });
+
+    socket.on('xbmc:error', function(data) {
+        console.log('xbmc:error', data);
     });
 });
 
@@ -599,5 +607,7 @@ app.backgroundPatterns = [{label: "None", value: "none"},
                           {label: "Diagonal Waves", value: "url(img/bkg-pattern/diagonal_waves.png)"},
                           {label: "Nasty Fabric", value: "url(img/bkg-pattern/nasty_fabric.png)"},
                           {label: "Otis Redding", value: "url(img/bkg-pattern/otis_redding.png)"},
+                          {label: "Slice Black", value: "url(img/bkg-pattern/slice_black.jpg)"},
                           {label: "Twinkle Twinkle", value: "url(img/bkg-pattern/twinkle_twinkle.png)"},
-                          {label: "Wild Oliva", value: "url(img/bkg-pattern/wild_oliva.png)"}];
+                          {label: "Wild Oliva", value: "url(img/bkg-pattern/wild_oliva.png)"},                          
+                          {label: "Wood Dark", value: "url(img/bkg-pattern/wood_dark.jpg)"}];

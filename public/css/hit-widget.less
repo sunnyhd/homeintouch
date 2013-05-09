@@ -244,28 +244,66 @@
 	margin-top: 30px;
 	font-size: 2.5em;
 	font-weight: bold;
-}
-.thermostat-detail span.measure { font-size: 0.5em; }
 
-.thermostat-detail div span.setpoint {
-	font-size: 0.6em; 
-	font-weight: normal;
+	span.measure { font-size: 0.5em; }
+
+	div span.setpoint {
+		font-size: 0.6em; 
+		font-weight: normal;
+	}
+
+	span.temperature {
+		left: 10px;
+	}
 }
+
+.thermostat-control {
+
+	margin-top: 15px;
+
+	.thermostat-icon-mode {
+		height: 30px;
+	}
+
+	&.device-btn-group .device-btn a {
+		padding: 7px 0;
+	}
+
+	a[data-value] {
+		padding: 13px 0 !important;
+	}
+}
+
 
 /** Shutter styles */
-.hit-icon.device-widget[data-widget-type="shutter"] input[type="range"] {
-	-webkit-appearance: slider-vertical;
-	height: 70px;
-	width: 10px;
-	position: absolute;
-	right: 15px;
-	top: 20px;
+.hit-icon.device-widget[data-widget-type="shutter"] {
+
+	background-position: 50% 40%;
+
+	input[type="range"] {
+		-webkit-appearance: slider-vertical;
+		height: 70px;
+		width: 10px;
+		position: absolute;
+		right: 15px;
+		top: 20px;
+	}
+
+	ul.device-btn-group {
+		margin-top: 7px;
+	}
+
+	div.shutter-container {
+		margin-top: 7px;
+		height: 84px;
+		overflow: hidden;
+	}
 }
+
+.hit-widget.medium .hit-icon.device-widget[data-widget-type="shutter"] .widget-opts { height: 20%; }
+
 .shutter-detail {
 	font-size: 1.2em;
-}
-.hit-icon.device-widget[data-widget-type="shutter"] ul.device-btn-group {
-	margin-top: 7px;
 }
 
 /** Camera styles */

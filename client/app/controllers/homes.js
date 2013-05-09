@@ -24,9 +24,12 @@ exports.startPage = function() {
         if (startPageType === 'floor') {
             var startPageId = startPageArray[1];
             var floor = home.getFloorById(startPageId);
-            if (floor !== null && !_.isUndefined(floor)) {
-                exports.setHomeData(home);
-                app.vent.trigger('floor:selected', floor);
+            if (floor !== null && !_.isUndefined(floor)) { 
+                if (!app.main.currentView || (app.main.currentView.model !== floor)) {
+                    exports.setHomeData(home);
+                    app.vent.trigger('floor:selected', floor);
+                    resetStartPage();
+                }
             }    
         } else if (startPageType === 'room') {
             var floorId = startPageArray[1];
@@ -35,13 +38,19 @@ exports.startPage = function() {
                 var startPageId = startPageArray[2];
                 var room = floor.getRoomById(startPageId);
                 if (room !== null && !_.isUndefined(room)) {
-                    exports.setHomeData(home);
-                    app.vent.trigger('floor:setData', floor);
-                    app.vent.trigger('room:selected', room);
+                    if (!app.main.currentView || (app.main.currentView.model !== room)) {
+                        exports.setHomeData(home);
+                        app.vent.trigger('floor:setData', floor);
+                        app.vent.trigger('room:selected', room);
+                        resetStartPage();
+                    }
                 }
             }
         } else if (startPageType === 'home') {
-            exports.showCurrent();    
+            if (!app.main.currentView || (app.main.currentView.model !== exports.currentHome)) {
+                exports.showCurrent();
+                resetStartPage();
+            }
         }
 
         // Start Page Timeout (expressed in seconds).
@@ -52,8 +61,16 @@ exports.startPage = function() {
         }
 
     } else {
-        exports.showCurrent();
+        if (!app.main.currentView || (app.main.currentView.model !== exports.currentHome)) {
+            exports.showCurrent();
+            resetStartPage();
+        }
     }
+};
+
+var resetStartPage = function() {
+    $('#desktop-top-opts').removeClass('open');
+    app.modal.close();
 };
 
 exports.showCurrent = function() {
@@ -106,8 +123,8 @@ exports.save = function(home){
     });
 };
 
-exports.destroy = function(home){
-    home.destroy();
+exports.destroy = function(home, options){
+    home.destroy(options);
 };
 
 /**
@@ -249,4 +266,16 @@ app.vent.on("home:saved", function(newHome) {
 
 app.vent.on('home:showStartPage', function() {
     exports.startPage();
+});
+
+app.vent.on('home:delete', function(home) {
+
+    var deleteOptions = {
+        success: function(model, response) {
+            exports.homes.remove(model);
+            exports.showHome(exports.homes.defaultHome());
+        }
+    };
+
+    exports.destroy(home, deleteOptions);
 });
