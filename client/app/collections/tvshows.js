@@ -49,7 +49,7 @@ var TvShows = module.exports = Backbone.Collection.extend({
         var show2Label = show2.get('label');
 
         var result = show1Label < show2Label ? -1 : show1Label > show2Label ? 1 : 0;
-        var sortSettings = app.controller('settings').mediaSettings.getSortSettings();
+        var sortSettings = (app.controller('settings').mediaSettings) ? app.controller('settings').mediaSettings.getSortSettings() : {};
         var ascending = sortSettings['tvshows_order'];
         return result * (ascending ? 1 : (-1));
     }

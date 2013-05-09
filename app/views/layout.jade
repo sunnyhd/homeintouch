@@ -27,20 +27,17 @@ html(lang='en')
     link(href='img/ios/apple-touch-startup-image-640x1096.png', media='(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)', rel='apple-touch-startup-image')
     
     // Libraries
-    link(href='/css/bootstrap.2.0.4.css', rel='stylesheet')
-    link(href='/css/bootstrap-responsive.2.0.4.css', rel='stylesheet')
-    link(href='/css/scrollbar.css', rel='stylesheet')
-    link(href='/css/jquery-ui-1.8.17.custom.css', rel='stylesheet')
-    link(href='/css/jquery.jdigiclock.css', rel='stylesheet')
-    // link(href='/css/video-js.min.css', rel='stylesheet')
+    if data.config.minifyCssLibrary
+      link(href='/css/hit-library.min.css', rel='stylesheet')
+    else
+      link(href='/css/hit-library.css', rel='stylesheet')
 
-    // Custom css & lesscss
-    link(href='/css/hit.less', rel='stylesheet/less')
-    link(href='/css/hit-general.css', rel='stylesheet')
-    link(href='/css/hit-forms.css', rel='stylesheet')
-    link(href='/css/hit-devices.css', rel='stylesheet')
-    link(href='/css/hit-slider.css', rel='stylesheet')
-    link(href='/css/hit-jqueryui.css', rel='stylesheet')
+    if data.config.compileLess
+      // Compiled LESS
+      link(href='/css/hit-compiled.css', rel='stylesheet')
+    else
+      // Custom css & lesscss
+      link(href='/css/hit.less', rel='stylesheet/less')   
 
     //if lt IE 9
     script(src='http://html5shim.googlecode.com/svn/trunk/html5.js')
@@ -158,7 +155,10 @@ html(lang='en')
                 ul.dropdown-menu
 
     // App Initialization
-    script(src='/application.js')
+    if data.config.cache
+      script(src='/application-min.js')
+    else
+      script(src='/application.js')
     script
       $(function() {
         var app = require('app');

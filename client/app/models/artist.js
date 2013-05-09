@@ -11,20 +11,12 @@ module.exports = Backbone.Model.extend({
     },
 
     thumbnail: function() {
-        var id = this.get('thumbnailid');
-
-        if (id) {
-            return '/api/images/' + this.get('thumbnailid');
-        }
+        return this.get('thumbnailUrl');
     },
 
     fanart: function() {
-        var id = this.get('fanartid');
-
-        if (id) {
-            return '/api/images/' + this.get('fanartid');
-        }
-    },
+        return this.get('fanartUrl');
+    },    
 
     parse: function(res) {
         this.albums || (this.albums = new Albums());

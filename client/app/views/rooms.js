@@ -6,6 +6,10 @@ var Configuration = require('models/configuration');
 var DPT_Transfomer = require('lib/dpt');
 var StyleConfigurationView = require('views/settings/style_settings');
 
+exports.DeviceView = require('views/devices/abstract_device');
+exports.ShutterDeviceView = require('views/devices/shutter');
+exports.DimmerDeviceView = require('views/devices/dimmer');
+
 exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     template: "#context-menu-room-opts",
 
@@ -53,37 +57,6 @@ exports.NoRoomsView = Backbone.Marionette.ItemView.extend({
 
 exports.NoDeviceGroupView = Backbone.Marionette.ItemView.extend({
     template: "#no-device-group-template",
-});
-
-// Base view for device items in the list
-exports.DeviceView = Backbone.Marionette.ItemView.extend({
-
-    events: function(){
-        var events = {
-            "click .device-name": "deviceClicked"
-        };
-        return _.extend(events, this.formEvents);
-    },
-
-    constructor: function(){
-        Backbone.Marionette.ItemView.prototype.constructor.apply(this, arguments);
-        this.model.addresses.each(function(address){
-            var type = address.get("type");
-            var address = address.get("address");
-            if (/read.*/.test(type)){
-                app.vent.trigger("device:read", address);
-            }
-        });
-    },
-
-    deviceClicked: function(e){
-        e.preventDefault();
-        app.vent.trigger("device:selected", this.model);
-        return false;
-    },
-
-    refreshIcon: function() {
-    }
 });
 
 exports.SwitchDeviceView = exports.DeviceView.extend({
@@ -154,294 +127,28 @@ exports.SwitchDeviceView = exports.DeviceView.extend({
 
 });
 
-exports.DimmerDeviceView = exports.DeviceView.extend({
+exports.ThermostatModeModalView = Backbone.Marionette.ItemView.extend({
 
-    template: "#device-list-dimmer-item-template",
-    className: "hit-icon-wrapper",
+    template: "#thermostat-mode-template",
 
-    formEvents: {
-        "click .hit-icon": "switchClicked"
+    events: {
+        "click .changeMode": "changeMode",
+        "click a.close": "close"
     },
 
-    initialize: function(){
-        this.readSwitch = this.model.getAddressByType("read_switch");
-        this.writeSwitch = this.model.getAddressByType("write_switch");
-        this.readDimmer = this.model.getAddressByType("read_dimmer");
-        this.writeDimmer = this.model.getAddressByType("write_dimmer");
-
-        this.dimmerChanged = _.debounce(this.dimmerChanged, 500);
-
-        this.setReadValue = true;
-        console.log('initialize: this.setReadValue = ' + this.setReadValue);
-
-        this.bindTo(this.readDimmer, "change", this.changeReadDimmer, this);
-
-        this.bindTo(this.writeDimmer, "change:value", this.selectDimmer, this);
-        this.bindTo(this.readSwitch, "change:value", this.updateSwitch, this);
+    initialize: function(opts) {
+        this.defaultMode = opts.mode;
     },
 
-    switchClicked: function (e) {
-        e.preventDefault();
-        var widget = $(e.currentTarget);
-        
-        var currentValue = widget.data('value');
-        var on = widget.data('on-value');
-        var off = widget.data('off-value');
-
-        // Gets the new value to be set
-        var value = (currentValue === on) ? off : on;
-        this.flipSwitch(value);
-
-        this.setReadValue = true;
-        console.log('switchClicked: this.setReadValue = ' + this.setReadValue);
+    onRender: function() {
+        $('select option[value="' + this.defaultMode + '"]', this.$el).attr('selected', true);
     },
 
-    dimmerChanged: function(e){
-        var $dimmer = this.$el.find('.slider-horizontal');
-        var value = parseInt( $dimmer.slider("value") );
-        var address = this.writeDimmer.get("address");
-
-        this.updateDimmerDetail(value);
-        app.vent.trigger("device:write", this.writeDimmer, value);
-    },
-
-    flipSwitch: function(value){
-        app.vent.trigger("device:write", this.writeSwitch, value);
-    },
-
-    updateDimmerSlider: function(value) {
-        this.$el.find('.slider-horizontal').slider("value", value);
-    },
-
-    updateDimmerDetail: function(value) {
-        $('.dimmer-detail', this.$el).html(Math.ceil(value) + '%');
-    },
-
-    selectSwitch: function(value){
-        $('.hit-icon', this.$el).data('value', value);
-        this.refreshIcon(value);
-    },
-
-    isSwitchOn: function() {
-        return (this.$('.hit-icon').data('value') === Number(this.model.get('on_value')));
-    },
-
-    refreshIcon: function() {
-        this.updateIconColor(this.isSwitchOn());
-    },
-
-    updateIconColor: function(on) {
-        var $widget = $('.hit-icon', this.$el);
-        if (on) {
-            app.changeIconState($widget, '#FF9522');
-        } else {
-            app.changeIconState($widget, 'gray');
-        }
-    },
-
-    updateSwitch: function(address, value){
-        this.selectSwitch(Number(value));
-        this.setReadValue = true;
-    },
-
-    selectDimmer: function(address, value){
-        if (this.dimmerTimeout) return;
-
-        this.updateDimmerSlider(value);
-        this.updateDimmerDetail(value);
-    },
-
-    changeReadDimmer: function(address){
-
-        console.log('changeReadDimmer: this.setReadValue = ' + this.setReadValue);
-        if (this.setReadValue) {
-            this.updateDimmerSlider(address.get('value'));
-            this.updateDimmerDetail(address.get('value'));    
-        }
-        this.setReadValue = false;
-    },
-
-    onSliderStart: function(e, ui) {
-        this.$el.find(".slider-horizontal").data('sliding', 'true');
-    },
-    onSliderStop: function(e, ui) {
-        this.$el.find(".slider-horizontal").data('sliding', 'false');
-        this.dimmerChanged(e);
-    },
-    onSliderMoving: function(e, ui) {
-        var value = Number(ui.value);
-
-        this.currentMovsAmount++;
-        this.updateDimmerDetail(value);
-
-        if (this.currentMovsAmount >= 3) { // Send to the HIT server each 5 slider movements
-            this.currentMovsAmount = 0;
-            var $dimmer = this.$el.find(".slider-horizontal");
-            $dimmer.data('sliding', 'false');
-            $dimmer.slider("value", value);
-            this.dimmerChanged(e);
-        }
-    },
-
-    onRender: function(){
-        var value = this.readSwitch.get("value");
-
-        this.updateSwitch(null, value);
-
-        this.currentMovsAmount = 0;
-
-        var onSliderStart = $.proxy(this.onSliderStart, this);
-        var onSliderStop = $.proxy(this.onSliderStop, this);
-        var onSliderMoving = $.proxy(this.onSliderMoving, this);
-        this.$el.find(".slider-horizontal").slider({
-            range: "min", min: 0, max: 100,
-            start: onSliderStart,
-            stop: onSliderStop,
-            slide: onSliderMoving
-        });        
+    changeMode: function() {
+        this.trigger( 'thermostatModeChanged', $('select option:selected').val() );
+        this.close();
     }
-});
 
-exports.ShutterDeviceView = exports.DeviceView.extend({
-
-    template: "#device-list-shutter-item-template",
-    className: "hit-icon-wrapper",
-
-    formEvents: {
-        "click a[data-value='up']": "upClicked",
-        "click a[data-value='down']": "downClicked",
-        "click a[data-value='stop']": "stopClicked"
-    },
-
-    initialize: function(){
-        this.readPosition = this.model.getAddressByType("read_position");
-        this.writePosition = this.model.getAddressByType("write_position");
-        this.writeSwitch = this.model.getAddressByType("write_switch");
-        this.writeStop = this.model.getAddressByType("write_stop");
-
-        this.positionChanged = _.debounce(this.positionChanged, 500);
-
-        this.bindTo(this.readPosition, "change:value", this.showPosition, this);
-    },
-
-    upClicked: function(e){
-        e.preventDefault();
-        this.switchUpDown(Number(this.model.get('min_value')) < Number(this.model.get('max_value')));
-    },
-
-    downClicked: function(e){
-        e.preventDefault();
-        this.switchUpDown(Number(this.model.get('min_value')) > Number(this.model.get('max_value')));
-    },
-
-    stopClicked: function(e){
-        e.preventDefault();
-        var address = this.writeStop.get("address");
-        app.vent.trigger("device:write", this.writeStop, 1);
-    },
-
-    positionChanged: function(e){
-        console.log('Shutter positionChanged called');
-        var $position = this.$el.find(".slider-vertical");
-        var value = parseInt($position.slider("value"));
-        var actualValue = this.calculateShutterValue(value);
-        var address = this.writePosition.get("address");
-        app.vent.trigger("device:write", this.writePosition, actualValue);
-        this.updateShutterDetails(actualValue);
-    },
-
-    switchUpDown: function(up){
-        var address = this.writeSwitch.get("address");
-        app.vent.trigger("device:write", this.writeSwitch, (up ? 1 : 0));
-    },
-
-    showPosition: function(address, value){
-        $sliderEl = this.$el.find('.slider-vertical');
-
-        if ( $sliderEl.length > 0 && $sliderEl.slider() ) {
-            var actualValue = this.calculateShutterValue(value);
-            this.$el.find('.slider-vertical').slider("value", actualValue);
-            this.updateShutterDetails(value);
-        }
-    },
-
-    updateShutterDetails: function(shutterValue) {
-        this.refreshIcon(shutterValue);
-        this.$('.shutter-detail').html(Math.ceil(shutterValue) + '%');
-    },
-
-    refreshIcon: function(value) {
-        var $widget = $('.hit-icon', this.$el);
-        
-        if (value) {
-            if (value < 100 && value >= 80) {
-                console.log('Shutter icon in 80, value: '+ value);
-                value = 80;
-            } else if (value < 80 && value >= 60) {
-                console.log('Shutter icon in 60, value: '+ value);
-                value = 60;
-            } else if (value < 60 && value >= 40) {
-                console.log('Shutter icon in 40, value: '+ value);
-                value = 40;
-            } else if (value < 40 && value >= 20) {
-                console.log('Shutter icon in 20, value: '+ value);
-                value = 20;
-            } else if (value < 20 && value >= 0) {
-                console.log('Shutter icon in 0, value: '+ value);
-                value = 0;
-            }
-            /*
-            if (this.model.get('max_value') < this.model.get('min_value')) {
-                value = this.model.get('min_value') - value;
-            }
-*/
-            $widget.data('hit-icon-type', 'devices.shutterOpen' + value);
-        }
-
-        app.changeIconState($widget, '#FFFFFF');
-    },
-
-    onSliderStart: function(e, ui) {
-        this.$el.find(".slider-vertical").data('sliding', 'true');
-    },
-    onSliderStop: function(e, ui) {
-        this.$el.find(".slider-vertical").data('sliding', 'false');
-        this.positionChanged(e);
-    },
-    onSliderMoving: function(e, ui) {
-        var value = Number(ui.value);
-        var actualValue = this.calculateShutterValue(value);
-        this.updateShutterDetails(actualValue);
-    },
-
-    onRender: function(){
-        var position = this.readPosition.get("value");
-
-        var onSliderStart = $.proxy(this.onSliderStart, this);
-        var onSliderStop = $.proxy(this.onSliderStop, this);
-        var onSliderMoving = $.proxy(this.onSliderMoving, this);
-        this.$el.find(".slider-vertical").slider({
-            orientation: "vertical",
-            range: "max", min: 0, max: 100,
-            start: onSliderStart,
-            stop: onSliderStop,
-            slide: onSliderMoving
-        });
-
-
-        this.showPosition(null, position);
-    },
-
-    calculateShutterValue: function(value) {
-
-        var shutterValue = value;
-
-        if (this.model.get('max_value') < this.model.get('min_value')) {
-            shutterValue = this.model.get('min_value') - value;
-        }
-
-        return shutterValue;        
-    }
 });
 
 exports.ThermostatDeviceView = exports.DeviceView.extend({
@@ -450,15 +157,15 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
     className: "hit-icon-wrapper",
 
     formEvents: {
-        "click a[data-mode]": "modeClicked",
-        "click .thermostat-control a": "setpointChanged"
+        "click a[data-mode]": "modeClicked", // mode click, open modal
+        "click .thermostat-control a[data-value]": "setpointChanged" // minus and plus buttons
     },
 
     modes: {
-        1: "comfort",
-        2: "standby",
-        3: "night",
-        4: "frost"
+        'comfort': 'img/svg/devices/thermostat/comfort-white.svg',
+        'standby': 'img/svg/devices/thermostat/standby-white.svg',
+        'night': 'img/svg/devices/thermostat/night-white.svg',
+        'frost': 'img/svg/devices/thermostat/frost-white.svg'
     },
 
     initialize: function(){
@@ -475,24 +182,31 @@ exports.ThermostatDeviceView = exports.DeviceView.extend({
         this.readSetPoint.on("change", this.updateSetPoint, this);
     },
 
-    modeClicked: function(e){
+    modeClicked: function(e) {
         e.preventDefault();
         var mode = $(e.currentTarget).data("mode");
+        var modal = new exports.ThermostatModeModalView( {mode: mode} );
+        modal.on('thermostatModeChanged', this.writeThermostatMode, this);
+        app.modal.show(modal);
+    },
+
+    writeThermostatMode: function(mode) {
         var address = this.writeMode.get("address");
         app.vent.trigger("device:write", this.writeMode, mode);
-
         this.updateModeButton(mode);
     },
 
     updateModeButton: function(mode) {
-        this.$('a[data-mode]').removeClass('selected');
-        this.$('a[data-mode="' + mode + '"]').addClass('selected');
+        var $moreOpts = this.$('a[data-value]');
 
-        if (mode !== "comfort") {
-            this.$('.thermostat-control a').addClass('disabled');
+        if (mode == 'comfort') {
+            $moreOpts.removeClass('hidden');
         } else {
-            this.$('.thermostat-control a').removeClass('disabled');
+            $moreOpts.addClass('hidden');
         }
+
+        this.$('a[data-mode]').data('mode', mode);
+        this.$('a[data-mode] img').attr('src', this.modes[mode]);
     },
 
     setpointChanged: function(e){
@@ -1278,7 +992,7 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
         });
     },
 
-    applyStyle: function(styleConfigurationName, createStylesheet) {
+    applyStyle: function(styleConfigurationName, createStylesheet, defaultStyleConfiguration) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -1290,10 +1004,10 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
                     $(selector).addClass(className);
                 }
                 if (createStylesheet) {
-                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes());
+                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes(defaultStyleConfiguration));
                     app.addStyleTag(stylesheet);
                 } else {
-                    $(selector).css(configuration.getStyleAttributes());    
+                    $(selector).css(configuration.getStyleAttributes(defaultStyleConfiguration));
                 }
                 
             });
@@ -1301,7 +1015,8 @@ exports.RoomLayout = Backbone.Marionette.CompositeView.extend({
     },
 
     applyStyles: function() {
-        this.applyStyle('bodyConfiguration', true);
+        var bodyPatternConfiguration = app.controller('homes').currentHome.getDefaultBackgroundStyle();
+        this.applyStyle('bodyConfiguration', true, bodyPatternConfiguration);
     },
 
     bindItemViewEvents: function(itemView) {
@@ -1435,8 +1150,12 @@ exports.FavoriteRoomLayout = exports.RoomLayout.extend({
     applyStyles: function() {
         var currentModel = this.model;
         this.model = this.model.parentHome;
-        exports.RoomLayout.prototype.applyStyle.apply(this, ['favoritesConfiguration', true]);
-        exports.RoomLayout.prototype.applyStyle.apply(this, ['favoritesPatternConfiguration']);
+
+        var bodyPatternConfiguration = this.model.getDefaultBackgroundStyle();
+
+        this.applyStyle('favoritesConfiguration', true, bodyPatternConfiguration);
+        this.applyStyle('favoritesTitleConfiguration');
+        this.applyStyle('favoritesBodyConfiguration');
 
         this.model = currentModel;
     }
@@ -1454,7 +1173,6 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
         "click .cancel.btn": "cancelClicked",
         "click .edit.btn": "editClicked",
         "change #body-background-image" : "loadFile",
-        "change #pattern-background-image": "processBackgroundPattern",
         "click a#clear-background" : "clearBackgroundClicked",
         "show a[data-toggle='tab'][href='#tab1']" : 'showStyleTab',
         "show a[data-toggle='tab'][href='#tab2']" : 'showOrderTab'
@@ -1471,10 +1189,14 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
 
         data.type = 'Favorites';
         data.bodyFields = this.model.get("favoritesFields");
-        data.bodyPatternFields = this.model.get("favoritesPatternFields");
+
+        data.favoritesTitleFields = this.model.get("favoritesTitleFields");
+        data.favoritesBodyFields = this.model.get("favoritesBodyFields");
 
         this.addStyleValues(data.bodyFields, this.model.get("favoritesConfiguration"));
-        this.addStyleValues(data.bodyPatternFields, this.model.get("favoritesPatternConfiguration"));
+
+        this.addStyleValues(data.favoritesTitleFields, this.model.get("favoritesTitleConfiguration"));
+        this.addStyleValues(data.favoritesBodyFields, this.model.get("favoritesBodyConfiguration"));
 
         data.widgets = this.room.deviceGroups.toJSON();
 
@@ -1499,47 +1221,21 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
 
     loadFile: function(event) {
         StyleConfigurationView.prototype.loadFile.apply(this, [event]);
-        this.hideBackgroundPatternInput();
-    },
-
-    hideBackgroundPatternInput: function() {
-        this.$('#pattern-background-image').parents('.control-group').hide();
-    },
-
-    showBackgroundPatternInput: function() {
-        this.$('#pattern-background-image').parents('.control-group').show();
     },
 
     clearBackgroundClicked: function() {
         StyleConfigurationView.prototype.clearBackgroundClicked.apply(this);
-        this.showBackgroundPatternInput();
     },
 
     setFileUploadSettings: function() {
-        var url = this.$('#pattern-background-image').val();
-        if (url === 'none') {
-            this.resetPreviewHolder();
-            this.showBackgroundFileInput();
-            this.previewLoadedImage();
-        } else {
-            if (!_.isUndefined(url)) {
-                this.hideBackgroundFileInput();
-                this.previewUrl(url);    
-            }
-        }
-    },
-
-    processBackgroundPattern: function (event) {
-        this.setFileUploadSettings();
+        this.previewLoadedImage();
     },
 
     updateModelData: function(data) {
         this.updateStyleConfiguration(data, this.model.favoritesPrefix, this.model.favoritesSelector, "favoritesConfiguration");
-        this.updateStyleConfiguration(data, this.model.favoritesPatternPrefix, this.model.favoritesPatternSelector, "favoritesPatternConfiguration");
 
-        if (this.model.get('favoritesPatternConfiguration').hasStyleAttributes()) {
-            this.model.get('favoritesConfiguration').unsetFileAttribute();
-        }
+        this.updateStyleConfiguration(data, this.model.favoritesTitlePrefix, this.model.favoritesTitleSelector, "favoritesTitleConfiguration");
+        this.updateStyleConfiguration(data, this.model.favoritesBodyPrefix, this.model.favoritesBodySelector, "favoritesBodyConfiguration");
 
         this.updateOrderData();
     },
@@ -1563,7 +1259,8 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
         e.preventDefault();
 
         var formFields = _.union(_.pluck(this.model.get("favoritesFields"), 'id'),
-                                 _.pluck(this.model.get("favoritesPatternFields"), 'id'));
+                                 _.pluck(this.model.get("favoritesTitleFields"), 'id'),
+                                 _.pluck(this.model.get("favoritesBodyFields"), 'id'));
 
         var data = Backbone.FormHelpers.getFormData(this, formFields);
 
@@ -1580,7 +1277,9 @@ exports.EditStyleFavoriteForm = StyleConfigurationView.extend({
                     var imagePath = response.imagePath;
                     data['body-background-image'] = 'url(' + imagePath + ')';
                     that.updateStyleConfiguration(data, that.model.favoritesPrefix, that.model.favoritesSelector, "favoritesConfiguration");
-                    that.updateStyleConfiguration(data, that.model.favoritesPatternPrefix, that.model.favoritesPatternSelector, "favoritesPatternConfiguration");
+                    
+                    that.updateStyleConfiguration(data, that.model.favoritesTitlePrefix, that.model.favoritesTitleSelector, "favoritesTitleConfiguration");
+                    that.updateStyleConfiguration(data, that.model.favoritesBodyPrefix, that.model.favoritesBodySelector, "favoritesBodyConfiguration");
 
                     that.updateOrderData();
 

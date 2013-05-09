@@ -13,7 +13,7 @@ Run
 
 The Node application connects to a "HIT" server from which it syncs home automation and media data.  Since this server is not exposed directly to the internet you'll need to forward some of your local ports through an SSH tunnel.
 
-The Node app connects to the following local ports (the values can be changed in `data/settings.json`):
+The Node app connects to the following local ports (the values can be changed in `config/dev.json`):
 
 * 8090 - used to communicate with the HIT server via a text-based socket protocol
 * 8080 - used to transfer image assets from the HIT server
@@ -22,17 +22,36 @@ To forward these ports to the HIT server run the following command and leave the
 
     ssh -N -L 8080:localhost:8080 -L 8090:localhost:8090 user@marisamigliazzi.selfhost.eu
     
-The Node app caches media data in a local MongoDB database (you can set the database to which the server connects in `data/settings.json`).  With MongoDB running we can start the Node server (listens on port 8081).
+The Node app caches media data in a local MongoDB database (you can set the database to which the server connects in `config/dev.json`).  With MongoDB running we can start the Node server (listens on port 8081).
     
 In another shell, run:
 
     node server.js
+ 
+The application can also be run using the following files (.sh on Linux, .cmd on Windows):
+
+    startDev
+    startProd
+    startEnv <custom-environment>
     
 There will not be any media data initially so you'll need to trigger an import.  This can either be done via the web UI (login is admin/admin) or by running:
 
     curl -X POST http://admin:admin@localhost:8081/api/imports
     
 The import process runs in the background.
+
+All the images are saved using another application. The application is located in `image-cache`. Inside there is a shell script to run the server. It needs to be executed along with the HiT client.
+* To run the server execute `./image-cache-server.sh start` on Linux, and `./image-cache-server.cmd start` on Windows.
+* To stop the server execute the command `./image-cache-server.sh stop` on Linux and `./image-cache-server.cmd stop` on Windows.
+More details about this application are in: https://github.com/ezequiel-parada/image-cache-server
+
+Config
+------
+
+The application has a per environment configuration. The default environments are **dev** and **prod**, but custom environments can be created.
+To have a configuration for the custom environment, a file with the environment name has to be created in the folder `config`, eg: You want to create a new environment called **stage**:
+ * You have to execute the application using `startEnv stage`
+ * You have to create a file called `config/stage.json`
 
 Flow
 ----

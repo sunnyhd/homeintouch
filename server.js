@@ -1,7 +1,6 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var socket = require('socket.io');
-var settings = require('./data/settings');
 var client = require('./lib/client');
 var dataStore = require('./lib/dataStore');
 var eib = require('./lib/eib');
@@ -9,6 +8,9 @@ var mediaManager = require('./lib/media_manager');
 
 var routes = require('./app/routes');
 var xbmc = require('./lib/xbmc');
+var settings = require('./config');
+var fs = require('fs');
+var compressor = require('node-minify');
 
 var app = express.createServer();
 var io = socket.listen(app);
@@ -25,9 +27,19 @@ app.configure(function() {
     //app.use(express.basicAuth(settings.credentials.username, settings.credentials.password));
     app.use(express.bodyParser());
 
-    app.get('/application.js', client.assets.createServer());
+    if (settings.client.compileLess) {
+        client.compileLess();
+    }
+
+    client.buildCssLibrary();
+
+    if (settings.client.cache) {
+        client.minifyJS();
+    } else {
+        app.get('/application.js', client.assets.createServer());
+    }
+
     app.use(express.static(__dirname + '/public'));
-    
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
@@ -40,6 +52,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('eib:set', eib.set);
     socket.on('eib:get', eib.get);
     socket.on('eib:command:send', eib.commandSend);
+    socket.on('xbmc:command:send', xbmc.execute);
 });
 
 eib.on('address', function(id, value) {
@@ -71,7 +84,6 @@ mediaManager.on('error', function(err) {
 
 // Bootstrap
 // ---------------
-
 dataStore.init(settings.database.path);
 mongoose.connect(settings.database.mongodb);
 eib.connect();

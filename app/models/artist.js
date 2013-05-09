@@ -7,16 +7,16 @@ var Artist = new mongoose.Schema({
     artist: String,
     description: String,
     fanart: String,
-    fanartid: ObjectId,
+    fanartUrl:String,
     genre: String,
     label: String,
     thumbnail: String,
-    thumbnailid: ObjectId
+    thumbnailUrl: String
 });
 
 helpers.cacheImages(Artist, [
-    { src: 'thumbnail', dest: 'thumbnailid' },
-    { src: 'fanart', dest: 'fanartid' }
+    { src: 'thumbnail', dest: 'thumbnailUrl', newCache: true},
+    { src: 'fanart', dest: 'fanartUrl', newCache: true}
 ]);
 
 module.exports = mongoose.model('Artist', Artist);

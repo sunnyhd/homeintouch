@@ -15,7 +15,7 @@ module.exports = BaseModel.extend({
     urlRoot: '/api/homes',
 
     // Body 
-    bodySelector: 'body:before',
+    bodySelector: 'body',
     bodyPrefix: 'body-',
     bodyFields: [
         {name: "Background Color", id: "body-background-color", type: "text"}, 
@@ -24,17 +24,19 @@ module.exports = BaseModel.extend({
         {name: "Background Image", id: "body-background-image", type: "file"}
     ],
     bodyDefaultStyle: { 'background-image': 'none' },
-    bodyFixedStyle: { 'background-image': {'background-size' : 'cover'} }, // Use to add a particular fixed style when a parameter is set.
+    // Use to add a particular fixed style when a parameter is set.
+    bodyFixedStyle: { 'background-image': {'background-size' : 'cover', 'background-attachment': 'fixed'} }, 
 
     // Body pattern
     bodyPatternSelector: 'body',
     bodyPatternPrefix: 'pattern-',
+    bodyPatternDefaultStyle: { 'background-image': 'none' },
     bodyPatternFields: [
         {name: "Background Pattern", id: "pattern-background-image", type: "list", options: app.backgroundPatterns}
     ],
 
     // Favorites Body
-    favoritesSelector: 'body:before',
+    favoritesSelector: 'body',
     favoritesPrefix: 'body-',
     favoritesFields: [
         {name: "Background Color", id: "body-background-color", type: "text"}, 
@@ -43,14 +45,37 @@ module.exports = BaseModel.extend({
         {name: "Background Image", id: "body-background-image", type: "file"}
     ],
     favoritesDefaultStyle: { 'background-image': 'none' },
-    favoritesFixedStyle: { 'background-image': {'background-size' : 'cover'} }, // Use to add a particular fixed style when a parameter is set.
+    // Use to add a particular fixed style when a parameter is set.
+    favoritesFixedStyle: { 'background-image': {'background-size' : 'cover', 'background-attachment': 'fixed'} }, 
 
-    // Favorites Body pattern
-    favoritesPatternSelector: 'body',
-    favoritesPatternPrefix: 'pattern-',
-    favoritesPatternFields: [
-        {name: "Background Pattern", id: "pattern-background-image", type: "list", options: app.backgroundPatterns}
+    // Favorite widget body and title
+    favoritesTitleSelector: '.hit-title',
+
+    favoritesTitlePrefix: 'widget-title-',
+
+    favoritesBodySelector: '.hit-icon',
+
+    favoritesBodyPrefix: 'widget-body-',
+
+    favoritesTitleFields: [
+        {name: "Background Color", id: "widget-title-class-background-color", type: "class-list", options: app.colorClasses}, 
+        {name: "Text Color", id: "widget-title-color"}, 
+        {name: "Opacity", id: "widget-title-opacity"}
     ],
+
+    favoritesTitleDefaultStyle: {
+        'class-background-image': 'blue'
+    },
+
+    favoritesBodyFields: [
+        {name: "Background Color", id: "widget-body-class-background-color", type: "class-list", options: app.colorClasses}, 
+        {name: "Text Color", id: "widget-body-color"}, 
+        {name: "Opacity", id: "widget-body-opacity"}
+    ],
+
+    favoritesBodyDefaultStyle: {
+        'class-background-image': 'blue'
+    },
 
     // Time and Weather
     timeWheaterDefaults: {'location': 'EUR|DE|GM003|BERLIN', 'locationLabel': 'Berlin, DE'},
@@ -87,6 +112,7 @@ module.exports = BaseModel.extend({
             bodyPatternConfiguration.set(this.get("bodyPatternConfiguration"));
         }
         bodyPatternConfiguration.set('selector', this.bodyPatternSelector);
+        bodyPatternConfiguration.set('defaultStyle', this.bodyPatternDefaultStyle);
         this.set("bodyPatternConfiguration", bodyPatternConfiguration);
 
         // Initialize Time and Weather Configuration
@@ -114,13 +140,25 @@ module.exports = BaseModel.extend({
         favoritesConfiguration.set('fixedStyle', this.favoritesFixedStyle);
         this.set("favoritesConfiguration", favoritesConfiguration);
 
-        // Initialize Body Pattern Configuration
-        var favoritesPatternConfiguration = new Configuration();
-        if (this.has("favoritesPatternConfiguration")) {
-            favoritesPatternConfiguration.set(this.get("favoritesPatternConfiguration"));
+        // Initialize Favorites Widget Title Configuration
+        var favoritesTitleConfiguration = new Configuration();
+        if (this.has("favoritesTitleConfiguration")) {
+            favoritesTitleConfiguration.set(this.get("favoritesTitleConfiguration"));
         }
-        favoritesPatternConfiguration.set('selector', this.favoritesPatternSelector);
-        this.set("favoritesPatternConfiguration", favoritesPatternConfiguration);
+        favoritesTitleConfiguration.set('selector', this.favoritesTitleSelector);
+        favoritesTitleConfiguration.set('defaultStyle', this.favoritesTitleDefaultStyle);
+        favoritesTitleConfiguration.set('fixedStyle', this.favoritesTitleFixedStyle);
+        this.set("favoritesTitleConfiguration", favoritesTitleConfiguration);
+
+        // Initialize Favorites Widget Body Configuration
+        var favoritesBodyConfiguration = new Configuration();
+        if (this.has("favoritesBodyConfiguration")) {
+            favoritesBodyConfiguration.set(this.get("favoritesBodyConfiguration"));
+        }
+        favoritesBodyConfiguration.set('selector', this.favoritesBodySelector);
+        favoritesBodyConfiguration.set('defaultStyle', this.favoritesBodyDefaultStyle);
+        favoritesBodyConfiguration.set('fixedStyle', this.favoritesBodyFixedStyle);
+        this.set("favoritesBodyConfiguration", favoritesBodyConfiguration);
 
         // Initialize Start Page Configuration
         if (!this.has('startPage')) {
@@ -131,7 +169,9 @@ module.exports = BaseModel.extend({
         this.set("bodyPatternFields", _.clone(this.bodyPatternFields));
         this.set("timeWheaterFields", _.clone(this.timeWheaterFields));
         this.set("favoritesFields", _.clone(this.favoritesFields));
-        this.set("favoritesPatternFields", _.clone(this.favoritesPatternFields));
+
+        this.set("favoritesTitleFields", _.clone(this.favoritesTitleFields));
+        this.set("favoritesBodyFields", _.clone(this.favoritesBodyFields));
     },
 
     initializeWidgets: function() {
@@ -162,6 +202,10 @@ module.exports = BaseModel.extend({
         this.floors.add(floor);
         this.trigger("change:floors", this.floors);
         this.trigger("change:floor:add", floor);
+    },
+
+    getDefaultBackgroundStyle: function() {
+        return this.get('bodyPatternConfiguration');
     },
 
     getFavorites: function() {
@@ -275,17 +319,26 @@ module.exports = BaseModel.extend({
             json.favoritesConfiguration = this.get("favoritesConfiguration").toJSON();
         }
 
-        if (this.has("favoritesPatternConfiguration")) {
-            json.favoritesPatternConfiguration = this.get("favoritesPatternConfiguration").toJSON();
+        if (this.has("favoritesTitleConfiguration")) {
+            json.favoritesTitleConfiguration = this.get("favoritesTitleConfiguration").toJSON();
+        }
+
+        if (this.has("favoritesBodyConfiguration")) {
+            json.favoritesBodyConfiguration = this.get("favoritesBodyConfiguration").toJSON();
         }
 
         delete json.bodyFields;
         delete json.bodyPatternFields;
         delete json.timeWheaterDefaults;
         delete json.favoritesFields;
-        delete json.favoritesPatternFields;
+        delete json.favoritesTitleFields;
+        delete json.favoritesBodyFields;
 
         return json;
+    },
+
+    destroy: function(options) {
+        Backbone.Model.prototype.destroy.apply(this, [options]);
     }
 
 });

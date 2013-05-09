@@ -11,15 +11,15 @@ var Album = new mongoose.Schema({
     genre: String, 
     rating: Number, 
     thumbnail: String,
-    thumbnailid: ObjectId, 
+    thumbnailUrl: String,
     year: String, 
     mood: String,
     style: String,
     displayartist: String
 });
 
-/*helpers.cacheImages(Album, [
-    { src: 'thumbnail', dest: 'thumbnailid' }
-]);*/
+helpers.cacheImages(Album, [
+    { src: 'thumbnail', dest: 'thumbnailUrl', newCache: true }
+]);
 
 module.exports = mongoose.model('Album', Album);

@@ -18,12 +18,14 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     events: {
         'click a.add-floor': 'addFloorHandler',
         'click a#home-settings' : 'editHomeHandler',
-        'click a#editStyle': 'editStyle'
+        'click a#editStyle': 'editStyle',
+        'click a#deleteHome': 'deleteHome',
+        'click #startXbmc': 'startXbmc'
     },
 
     addFloorHandler: function(e) {
-        e.preventDefault();
         app.vent.trigger("floor:add");
+        return false;
     },
 
     editHomeHandler: function(e) {
@@ -34,6 +36,29 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     editStyle: function() {
         app.vent.trigger("home:editStyle", this);
         return false;
+    },
+
+    deleteHome: function(e) {
+        var $target = $(e.currentTarget);
+        var $targetParent = $target.parent();
+
+        if (!$targetParent.hasClass('disabled')) {
+            $('#desktop-top-opts').removeClass('open');
+            app.vent.trigger('home:delete', homesController.currentHome);          
+        }
+        return false;
+    },
+
+    startXbmc: function() {
+        var command = 'start';
+        app.vent.trigger('xbmc:command', command);
+    },
+
+    onRender: function() {
+        if (homesController.homes.length === 1) {
+            // There is only one home, it can't be deleted
+            this.$('#deleteHome').parent().addClass('disabled');
+        }
     }
 });
 
@@ -301,7 +326,7 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
         "click .cancel.btn": "cancelClicked",
         "click .edit.btn": "editClicked",
         "change #body-background-image" : "loadFile",
-        "change #pattern-background-image": "processBackgroundPattern",
+        "change #pattern-background-image": "processDefaultBackgroundPattern",
         "click a#clear-background" : "clearBackgroundClicked"
     },
 
@@ -326,32 +351,25 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
 
     loadFile: function(event) {
         StyleConfigurationView.prototype.loadFile.apply(this, [event]);
-        this.hideBackgroundPatternInput();
-    },
-
-    hideBackgroundPatternInput: function() {
-        this.$('#pattern-background-image').parents('.control-group').hide();
-    },
-
-    showBackgroundPatternInput: function() {
-        this.$('#pattern-background-image').parents('.control-group').show();
     },
 
     clearBackgroundClicked: function() {
         StyleConfigurationView.prototype.clearBackgroundClicked.apply(this);
-        this.showBackgroundPatternInput();
     },
 
     setFileUploadSettings: function() {
+        this.previewLoadedImage();
+        this.previewDefaultBackgroundPattern();
+    },
+
+    previewDefaultBackgroundPattern: function() {
         var url = this.$('#pattern-background-image').val();
+        var holderSelector = '#holder-tab2';
         if (url === 'none') {
-            this.resetPreviewHolder();
-            this.showBackgroundFileInput();
-            this.previewLoadedImage();
+            this.resetPreviewHolder(holderSelector);
         } else {
             if (!_.isUndefined(url)) {
-                this.hideBackgroundFileInput();
-                this.previewUrl(url);
+                this.previewUrl(url, holderSelector);
             }
         }
     },
@@ -360,13 +378,13 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
         this.setFileUploadSettings();
     },
 
+    processDefaultBackgroundPattern: function (event) {
+        this.previewDefaultBackgroundPattern();
+    },
+
     updateModelData: function(data) {
         this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
         this.updateStyleConfiguration(data, this.model.bodyPatternPrefix, this.model.bodyPatternSelector, "bodyPatternConfiguration");
-
-        if (this.model.get('bodyPatternConfiguration').hasStyleAttributes()) {
-            this.model.get('bodyConfiguration').unsetFileAttribute();
-        }
     },
 
     clearStyleModel: function() {
@@ -394,8 +412,7 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
                 success: function (response) {
                     var imagePath = response.imagePath;
                     data['body-background-image'] = 'url(' + imagePath + ')';
-                    that.updateStyleConfiguration(data, that.model.bodyPrefix, that.model.bodySelector, "bodyConfiguration");
-                    that.updateStyleConfiguration(data, that.model.bodyPatternPrefix, that.model.bodyPatternSelector, "bodyPatternConfiguration");
+                    that.updateModelData(data);
 
                     that.result = {
                         status: "OK"
@@ -555,7 +572,8 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
     events: {
         "click .floor-item-list": "floorClicked",
         "click .custom-item-list": "customItemClicked",
-        "click a.add-floor": "addFloorHandler"
+        "click a.add-floor": "addFloorHandler",
+        "click .main-left-container .tabbable li.disabled": "tabDisabledClicked"
     },
 
     initialize: function() {
@@ -577,6 +595,11 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
         e.preventDefault();
         var page = ($(e.currentTarget).data('item-id'));
         app.vent.trigger("custom-page:" + page, this.model);
+    },
+
+    tabDisabledClicked: function(e) {
+        e.preventDefault;
+        return false;
     },
 
     addFloorHandler: function(e) {
@@ -610,7 +633,7 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
         $rowContainer.append(iv.el);
     },
 
-    applyStyle: function(styleConfigurationName, createStylesheet) {
+    applyStyle: function(styleConfigurationName, createStylesheet, defaultStyleConfiguration) {
 
         if (this.model.has(styleConfigurationName)) {
             var configuration = this.model.get(styleConfigurationName);
@@ -622,10 +645,10 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
                     $(selector).addClass(className);
                 }
                 if (createStylesheet) {
-                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes());
+                    var stylesheet = app.generateStylesheet(selector, configuration.getStyleAttributes(defaultStyleConfiguration));
                     app.addStyleTag(stylesheet);
                 } else {
-                    $(selector).css(configuration.getStyleAttributes());    
+                    $(selector).css(configuration.getStyleAttributes(defaultStyleConfiguration));    
                 }
                 
             });
@@ -636,8 +659,9 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
 
         app.hitIcons(this.$el);
 
-        this.applyStyle('bodyConfiguration', true);
-        this.applyStyle('bodyPatternConfiguration');
+        var bodyPatternConfiguration = this.model.getDefaultBackgroundStyle();
+
+        this.applyStyle('bodyConfiguration', true, bodyPatternConfiguration);
 
         _.each(_.values(this.children), function(itemView){
             itemView.refreshIcon();
@@ -689,15 +713,30 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
     onRender: function() {
         this.setScrollbarOverview();
 
-        var location = this.model.get('timeWheaterConfiguration').get('location');
+        var timeWheaterWidget = this.collection.where({'type': 'time-wheater'})[0];
+        
+        if (timeWheaterWidget.get('visible')) {
+            var location = this.model.get('timeWheaterConfiguration').get('location');
 
-        $('#digiclock-desktop', this.$el).jdigiclock({
-            proxyUrl: 'api/jdigiclock/proxy',
-            dayCallback: $.proxy(this.displayCurrentDate, this),
-            loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
-            weatherLocationCode: location,
-            jdigiclockType: 'big'
-        });
+            $('#digiclock-desktop', this.$el).jdigiclock({
+                proxyUrl: 'api/jdigiclock/proxy',
+                dayCallback: $.proxy(this.displayCurrentDate, this),
+                loadedCallback: $.proxy(this.refreshTimeWeatherStyles, this),
+                weatherLocationCode: location,
+                jdigiclockType: 'big'
+            });
+        } else {
+            var timeWheaterhref = '#desktop-time-weather';
+            var $tabContent = this.$('.main-left-container .tabbable .tab-content');
+
+            var $timeWheaterNavPill = this.$('a[href="' + timeWheaterhref + '"]').parent();
+            $timeWheaterNavPill.addClass('disabled').removeClass('active');
+            $(timeWheaterhref, $tabContent).removeClass('active');
+
+            $timeWheaterNavPill.next().addClass('active');
+            var secondHref = $($timeWheaterNavPill.next()[0].firstChild).attr('href');
+            $(secondHref, $tabContent).addClass('active');
+        }
 
         // Loads and displays player information
         app.controller('players').showPlayers();
