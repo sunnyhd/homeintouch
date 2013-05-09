@@ -5,12 +5,28 @@ var Episode = module.exports = Backbone.Model.extend({
 
     idAttribute: 'episodeid',
 
+    defaults: {
+        type: 'episode'
+    },
+
+    url: function() {
+        return '/api/episodes/' + this.get('episodeid');
+    },
+
     thumbnailImage: function() {
         var id = this.get('thumbnailid');
 
         if (id) {
             return '/api/images/' + this.get('thumbnailid');
         }
+    },
+
+    getType: function() {
+        return this.get('type');
+    },
+
+    getLabel: function() {
+        return this.get('label');
     },
 
     getEpisodeNumber: function() {

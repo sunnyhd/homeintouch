@@ -18,17 +18,11 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     play: function() {
-        var playable = new Playable({ item: { path: this.model.get('file') }});
-        playable.save();
-
-        return false;
+        return this.model.play();
     },
 
     playSlideshow: function() {
-        var playable = new Playable({ item: { path: this.model.get('file') }});
-        playable.save();
-
-        return false;
+        return this.model.play();
     },
 
     parent: function() {

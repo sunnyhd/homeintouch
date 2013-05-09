@@ -1,5 +1,6 @@
 var app = require('app');
 var Files = require('collections/files');
+var File = require('models/file');
 var PictureDetailView = require('views/pictures/picture_detail');
 var PictureSlideshowView = require('views/pictures/picture_slideshow');
 var PictureContainerView = require('views/pictures/picture_container');
@@ -61,6 +62,10 @@ exports.showSlideshowView = function(path, mode) {
 
         exports.pictures.fetch(options);
     }
+};
+
+exports.getPicture = function(item) {
+    return Q.when(new File(item));
 };
 
 var buildBreadcrumb = function(path) {

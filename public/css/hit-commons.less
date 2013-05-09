@@ -29,6 +29,10 @@
   .background-color-overlay (0, 0, 0, @a);
 }
 
+.background-gray-overlay (@a: 0.5) {
+  .background-color-overlay (128, 128, 128, @a);
+}
+
 .background-white-overlay (@a: 0.5) {
   .background-color-overlay (255, 255, 255, @a);
 }
@@ -37,4 +41,20 @@
 .square-size (@size) {
   width: @size;
   height: @size;
+}
+
+.borderRadius (@radius) {
+  -webkit-border-radius: @radius;
+     -moz-border-radius: @radius;
+          border-radius: @radius;
+}
+
+.img-polaroid {
+  padding: 4px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

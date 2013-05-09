@@ -1,18 +1,58 @@
-{{ item.label }}
-<br>
-{{#if hasSpan}}
-    {{ currentTime }} / {{ totalTime }}
-    <br>
-{{/if}}
+<header>
+	<h3>{{ type }} Player</h3>
+</header>
 
-<a class="stop" href="#">Stop</a>
-{{#if playing}}
-    <a class="pause" href="#">Pause</a>
-{{else}}
-    <a class="pause" href="#">Play</a>
-{{/if}}
-<br>
+<div class="player-controls row-fluid">
 
-{{#if thumbnail}}
-    <img src="{{ thumbnail }}">
-{{/if}}
+	<div class="player-buttons">
+
+		<a class="previous" href="#">
+			<i class="icon-step-backward icon-white"></i>
+		</a>
+
+		{{#if playing}}
+		    <a class="toggle pause" href="#">
+		    	<i class="icon-pause icon-white"></i>
+		    </a>
+
+		{{else}}
+		    <a class="toggle play" href="#">
+		    	<i class="icon-play icon-white"></i>
+		    </a>
+		{{/if}}
+
+		<a class="stop" href="#">
+			<i class="icon-stop icon-white"></i>
+		</a>
+
+		<a class="next" href="#">
+			<i class="icon-step-forward icon-white"></i>
+		</a>
+
+	</div>
+
+	{{#if hasSpan}}
+		<div class="player-time">
+	    	<span class="playerTime">{{ currentTime }}</span> / {{ totalTime }}
+	    </div>
+	{{/if}}
+
+</div>
+
+<div class="playing-item row-fluid" data-media-action="{{ detailsUrl }}">
+
+	{{#if thumbnail}}
+	<div class="playing-item-thumb">
+	    <img src="{{ thumbnail }}">
+	</div>
+	<div class="playing-item-data">
+		<h4>{{ label }}</h4>
+	</div>
+
+	{{else}}
+	<div class="playing-item-data">
+		<h4>{{ label }}</h4>
+	</div>
+	{{/if}}
+
+</div>

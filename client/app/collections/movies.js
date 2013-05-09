@@ -75,8 +75,15 @@ var Movies = module.exports = Backbone.Collection.extend({
         var movie2Label = movie2.get('label');
 
         var result = movie1Label < movie2Label ? -1 : movie1Label > movie2Label ? 1 : 0;
-        var sortSettings = app.controller('settings').mediaSettings.getSortSettings();
-        var ascending = sortSettings['movies_order'];
+        var ascending;
+
+        //TODO For some reason mediasettings is sometimes undefined, temporal fix
+        if(app.controller('settings').mediaSettings) {
+            var sortSettings = app.controller('settings').mediaSettings.getSortSettings();
+            ascending = sortSettings['movies_order'];
+        } else {
+            ascending = true;
+        }
         return result * (ascending ? 1 : (-1));
     }
 });

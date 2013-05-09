@@ -7,13 +7,21 @@ module.exports = Backbone.Marionette.ItemView.extend({
     template: require('templates/playlists/playlist_item'),
 
     events: {
-        'click .play': 'play',
-        'click .remove': 'removeFromPlaylist'
+        'click [data-action=play]': 'play',
+        'click [data-action=remove]': 'removeFromPlaylist'
+    },
+
+    initialize: function() {
+        this.bindTo(this.model, 'change', this.render, this);
     },
 
     onRender: function() {
-        if (this.model.isActive()) {
-            this.$el.addClass('active');
+        if (this.model.get('active')) {
+           this.$el.addClass('active');
+           //TODO REMOVE
+           this.$el.css({'font-weight': 'bold', 'color': '#FFF'});
+        } else {
+            this.$el.css({'font-weight': 'normal', 'color': ''});
         }
     },
 

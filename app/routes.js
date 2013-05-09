@@ -38,6 +38,7 @@ module.exports = function(app) {
     app.get('/api/episodes', controllers.episodes.index);
     app.get('/api/episodes/last/:n', controllers.episodes.lastN);
     app.get('/api/episodes/label', controllers.episodes.label);
+    app.get('/api/episodes/:episodeid', controllers.episodes.get);
 
     app.get('/api/artists', controllers.artists.index);
     app.get('/api/artists/:artist', controllers.artists.show);
@@ -51,16 +52,21 @@ module.exports = function(app) {
 
     app.get('/api/songs', controllers.songs.index);
 
+    app.post('/api/remotecontrol/commands', controllers.remote_control.executeCommand);
+
     app.get('/api/playlists', controllers.playlists.index);
 
     app.get('/api/playlists/:playlist/items', controllers.playlistitems.index);
     app.post('/api/playlists/:playlist/items', controllers.playlistitems.create);
-    app.del('/api/playlists/:playlist/items/:index', controllers.playlistitems.destroy);
+    app.del('/api/playlists/:playlist/items/:index', controllers.playlistitems.remove);
 
     app.get('/api/players', controllers.players.index);
     app.post('/api/players', controllers.players.create);
     app.get('/api/players/:player', controllers.players.show);
     app.del('/api/players/:player', controllers.players.destroy);
+
+    app.post('/api/players/any/commands', controllers.player_commands.executeAction);
+    app.post('/api/players/:player/commands', controllers.player_commands.executeActionOnPlayer);
 
     app.get('/api/imports', controllers.imports.show);
     app.post('/api/imports', controllers.imports.create);

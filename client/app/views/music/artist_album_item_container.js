@@ -2,7 +2,6 @@ var AlbumDetailView = require('views/music/artist_album_item');
 var SongListView = require('views/music/album_song_list');
 
 var musicController = require('controllers/music');
-var playersController = require('controllers/players');
 var Playable = require('models/playable');
 
 module.exports = Backbone.Marionette.Layout.extend({
@@ -39,11 +38,7 @@ module.exports = Backbone.Marionette.Layout.extend({
 
     playAlbum: function() {
         console.log('Play albumid: ' + this.model.get('albumid'));
-        musicController.addAlbumToPlaylist(this.model, 0);
-
-        var playlistid = playersController.getPlayerId('audio');
-        var playable = new Playable({ item: { playlistid: playlistid, position: 0 }});
-        playable.save();
+        this.model.play();
     },
 
     addAlbumToPlaylist: function() {

@@ -1,6 +1,9 @@
-var Playable = require('models/playable');
-
 module.exports = Backbone.Model.extend({
+    defaults: {
+        active: false
+    },
+
+    idAttribute: 'id',
 
     playlist: function() {
         return this.collection.playlist;
@@ -19,10 +22,7 @@ module.exports = Backbone.Model.extend({
     },
 
     play: function() {
-        var item = { playlistid: this.playlist().id, position: this.index() };
-        var playable = new Playable({ item: item });
-
-        return playable.save();
+        this.playlist().open(this.index());
     },
 
     removeFromPlaylist: function() {

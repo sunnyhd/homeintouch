@@ -1,0 +1,40 @@
+
+.hit-nav-pills {
+	margin-bottom: 10px;
+
+	li {
+		a {
+			margin: 2px 4px;
+			color: white;
+			background: rgba(51, 51, 51, 0.8);
+			&:hover {
+				color: white;
+				background: rgba(51, 51, 51, 1);
+			}
+		}
+	}
+	li.active > a {
+		background: rgba(122, 122, 122, 0.8);
+		&:hover {
+			background: rgba(122, 122, 122, 0.8);
+		}
+	}
+}
+
+// Pills desktop/tables width
+.hit-nav-pills {
+	li {
+		width: 150px;
+		text-align: center;
+	}
+}
+
+// Pills phones width
+@media (max-width: 480px) {
+	
+	.hit-nav-pills {
+		li {
+			width: 85px;
+		}
+	}
+}

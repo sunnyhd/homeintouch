@@ -1,4 +1,8 @@
-module.exports = Backbone.Model.extend({
+var Command = require('models/player_command');
+
+var File = module.exports = Backbone.Model.extend({
+
+    idAttribute: 'file',
 
     isDirectory: function() {
         return this.get('filetype') === 'directory';
@@ -23,10 +27,27 @@ module.exports = Backbone.Model.extend({
         }
     },
 
+    getType: function() {
+        return this.get('type');
+    },
+
+    getLabel: function() {
+        var label = this.get('label');
+        if(label) return label;
+
+        var path = this.get('file');
+
+        return _.last(path.split('/'));
+    },
+
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         data.directory = this.isDirectory();
         return data;
-    }
+    },
 
+    play: function() {
+        return Command.openFile(this.get('file'));
+    }
 });
+

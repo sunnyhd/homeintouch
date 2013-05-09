@@ -5,7 +5,8 @@ var settings = require('./data/settings');
 var client = require('./lib/client');
 var dataStore = require('./lib/dataStore');
 var eib = require('./lib/eib');
-var importer = require('./lib/importer');
+var mediaManager = require('./lib/media_manager');
+
 var routes = require('./app/routes');
 var xbmc = require('./lib/xbmc');
 
@@ -49,19 +50,23 @@ eib.on('address', function(id, value) {
 xbmc.on('notification', function(data) {
     console.log('xbmc:notification', JSON.stringify(data));
     
-    // Let the importer try to process the notification first, and then notify the client app.
-    importer.notification(data, function(notificationData) {
+    // Let the media manager try to process the notification first, and then notify the client app.
+    mediaManager.onMediaCenterLibraryUpdate(data)
+    .then(function(notificationData) {
         io.sockets.emit('xbmc:notification', notificationData);
+    })
+    .fail(function(err) {
+        console.log('Error while processing xbmc notification: ' + err);
     });
 });
 
-importer.on('done', function(time) {
-    console.log('importer:done', time);
+mediaManager.on('done', function(time) {
+    console.log('mediaManager:done', time);
     io.sockets.emit('media:data-changed'); // Notifies the client that the media data has changed
 });
 
-importer.on('error', function(err) {
-    console.log('importer:error', err);
+mediaManager.on('error', function(err) {
+    console.log('mediaManager:error', err);
 });
 
 // Bootstrap
@@ -69,7 +74,7 @@ importer.on('error', function(err) {
 
 dataStore.init(settings.database.path);
 mongoose.connect(settings.database.mongodb);
-//eib.connect();
+eib.connect();
 xbmc.connect();
 
 app.listen(settings.hosts.web.port, function() {

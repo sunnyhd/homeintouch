@@ -24,6 +24,7 @@ app.addRegions({
     desktopTopConfig: '#desktop-top-config ul.dropdown-menu',
     desktopTopOpts: '#desktop-top-opts ul.dropdown-menu',
     desktopTopSwitch: '#desktop-top-switch',
+    desktopNowPlaying: '#desktop-now-playing',
 
     // Touch device (tablets & phones) regions
     touchBottomContent: '#navbar-bottom-content',
@@ -43,6 +44,8 @@ app.closeRegions = function() {
     app.desktopTopConfig.close();
     app.desktopTopOpts.close();
     app.desktopTopSwitch.close();
+    app.desktopNowPlaying.close();
+
     app.touchBottomContent.close();
     app.touchBottomConfig.close();
     app.touchTopOpts.close();
@@ -307,11 +310,17 @@ app.addInitializer(function(options) {
     // Load bootstrapped data
     app.controller('device_types').deviceTypes.reset(options.deviceTypes);
     app.controller('homes').homes.reset(options.homes);
-    if (options.players) {
-        app.controller('players').ids = options.players;
-    }
-
+    
     app.loadMediaData();
+});
+
+app.addInitializer(function(options) {
+
+    // Initializes the player and playlist modules
+    if (options.players) {
+        app.controller('players').setPlayerIds(options.players);
+        app.controller('playlists').init(options.players);
+    }
 });
 
 app.addInitializer(function() {

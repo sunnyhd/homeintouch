@@ -1,7 +1,6 @@
 var app = require('app');
 
 var homesController = require('controllers/homes');
-var playersController = require('controllers/players');
 
 var Home = require('models/home');
 var Configuration = require('models/configuration');
@@ -699,6 +698,9 @@ exports.HomeDashboardView = Backbone.Marionette.CompositeView.extend({
             weatherLocationCode: location,
             jdigiclockType: 'big'
         });
+
+        // Loads and displays player information
+        app.controller('players').showPlayers();
     },
 
     displayCurrentDate: function(date) {

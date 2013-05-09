@@ -15,7 +15,7 @@ exports.index = function(req, res, next) {
 
         res.render('index', {
             data: dataStore.getAll(),
-            players: players
+            players: results
         });
     });
 };

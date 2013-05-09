@@ -1,8 +1,8 @@
-var importer = require('../../lib/importer');
+var mediaManager = require('../../lib/media_manager');
 
 exports.create = function(req, res, next) {
-    importer.start();
-    res.json({ state: importer.state });
+    mediaManager.import();
+    res.json({ state: 'importing...' });
 };
 
 exports.show = function(req, res, next) {
