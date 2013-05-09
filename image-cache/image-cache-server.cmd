@@ -10,13 +10,13 @@ IF "%1" == "start" (
 	echo Starting Image Cache Server
 	start "Image Cache Server" /B %JAVA_CMD% -jar %APP_HOME%/image-cache-server.jar %CONFIG_PORT% %CONFIG_URL% %CONFIG_DB%
 	echo Image Cache Server Started. 
-	for /F "TOKENS=1,2,*" %%a in ('tasklist /FI "IMAGENAME eq java.exe"') do echo %%b > %APP_HOME%/app.pid
+	for /F "TOKENS=1,2,*" %%a in ('tasklist /FI "IMAGENAME eq java.exe"') do echo %%b > %APP_HOME%/image-cache-server.pid
 	GOTO END
 )
 
 IF "%1" == "stop" (
 	echo "Stopping Image Cache Server..."
-	for /f "delims=" %%x in (app.pid) do taskkill /F /PID %%x
+	for /f "delims=" %%x in (image-cache-server.pid) do taskkill /F /PID %%x
 	GOTO END
 )
 
