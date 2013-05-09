@@ -28,7 +28,7 @@ In another shell, run:
 
     node server.js
  
-The application can also be run using the following files:
+The application can also be run using the following files (.sh on Linux, .cmd on Windows):
 
     startDev
     startProd
@@ -41,6 +41,8 @@ There will not be any media data initially so you'll need to trigger an import. 
 The import process runs in the background.
 
 All the images are saved using another application. The application is located in `image-cache`. Inside there is a shell script to run the server. It needs to be executed along with the HiT client.
+* To run the server execute `./image-cache-server.sh start` on Linux, and `./image-cache-server.cmd start` on Windows.
+* To stop the server execute the command `./image-cache-server.sh stop` on Linux and `./image-cache-server.cmd stop` on Windows.
 More details about this application are in: https://github.com/ezequiel-parada/image-cache-server
 
 Config
