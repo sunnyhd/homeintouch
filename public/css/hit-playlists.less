@@ -17,3 +17,34 @@
 		cursor: pointer;
 	}
 }
+
+// Button to display the more options container
+.song-item-options {
+	padding: 5px 20px;
+    margin: -5px -5px 0 0;
+
+    .background-black-overlay();
+    border-radius: 0 10px 10px 0;
+}
+
+// More options container
+.more-opts-container {
+
+	.clearfix();
+	cursor: auto;
+	text-align: center;
+	padding: 2px;
+	margin: 6px -5px -5px -5px;	
+	.background-black-overlay();
+    .borderRadius(10px);
+
+    .player-button {
+    	margin: 5px 0;
+    	float: none;
+    	display: inline-block;
+
+    	&~.player-button {
+    		margin-left: 20%;
+    	}
+    }
+}
