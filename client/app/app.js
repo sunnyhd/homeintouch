@@ -314,6 +314,9 @@ app.addInitializer(function(options) {
     // Load bootstrapped data
     app.controller('device_types').deviceTypes.reset(options.deviceTypes);
     app.controller('homes').homes.reset(options.homes);    
+
+    // URL of XBMC VFS
+    app.vfsURL = options.vfsURL;
 });
 
 app.addInitializer(function(options) {
@@ -411,7 +414,7 @@ Handlebars.registerHelper('toFixed', function(value, n) {
 });
 
 Handlebars.registerHelper('image', function(url) {
-    return 'http://localhost:8080/vfs/' + url;
+    return app.vfsURL + url;
 });
 
 // Extensions

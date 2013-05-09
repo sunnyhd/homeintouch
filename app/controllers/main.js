@@ -21,6 +21,7 @@ exports.index = function(req, res, next) {
 
         var resultData = dataStore.getAll();
         resultData.config = configData;
+        resultData.vfsURL = settings.images.url;
 
         res.render('index', {
             data: resultData,

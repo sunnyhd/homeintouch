@@ -1,1 +1,1 @@
-./image-cache/image-cache-server.sh start && tail -f ./image-cache/logs/image-cache-server.log
+./image-cache-server.sh start && tail -f ./logs/image-cache-server.log

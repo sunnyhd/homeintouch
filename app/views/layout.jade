@@ -163,6 +163,7 @@ html(lang='en')
       $(function() {
         var app = require('app');
         app.start({
+          vfsURL: '!{data.vfsURL}',
           homes: !{JSON.stringify(data.homes)},
           deviceTypes: !{JSON.stringify(data.deviceTypes)},
           players: !{JSON.stringify(players)}
