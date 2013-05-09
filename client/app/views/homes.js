@@ -11,6 +11,7 @@ var Albums = require('collections/albums');
 
 var StyleConfigurationView = require('views/settings/style_settings');
 
+exports.EditTimeWeatherForm = require('views/homes/edit_time_wheater');
 
 exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     template: "#context-menu-home-opts",
@@ -431,134 +432,6 @@ exports.EditStyleHomeForm = StyleConfigurationView.extend({
 
             this.close();
         }
-    }
-});
-
-exports.EditStyleWidgetForm = StyleConfigurationView.extend({
-
-    template: "#edit-widget-style-template",
-
-    events: {
-        "click .cancel.btn": "cancelClicked",
-        "click .edit.btn": "editClicked"
-    },
-
-    serializeData: function(){
-
-        var data = StyleConfigurationView.prototype.serializeData.apply(this);
-
-        data.bodyFields = this.model.get("bodyFields");
-        data.titleFields = this.model.get("titleFields");
-
-        this.addStyleValues(data.bodyFields, this.model.get("bodyConfiguration"));
-        this.addStyleValues(data.titleFields, this.model.get("titleConfiguration"));
-
-        return data;
-    },
-
-    getFormFields: function() {
-        return _.union(_.pluck(this.model.get("titleFields"), 'id'),
-                       _.pluck(this.model.get("bodyFields"), 'id'));
-    },
-
-    updateModel: function(data) {
-        this.updateStyleConfiguration(data, this.model.bodyPrefix, this.model.bodySelector, "bodyConfiguration");
-        this.updateStyleConfiguration(data, this.model.titlePrefix, this.model.titleSelector, "titleConfiguration");
-    },
-
-    editClicked: function(e){
-        e.preventDefault();
-
-        var formFields = this.getFormFields();
-
-        var data = Backbone.FormHelpers.getFormData(this, formFields);
-
-        this.updateModel(data);
-
-        this.result = {
-            status: "OK"
-        }
-
-        this.close();
-    }
-});
-
-exports.EditTimeWeatherForm = exports.EditStyleWidgetForm.extend({
-
-    template: "#edit-time-weather-settings-template",
-
-    events: {
-        "click .cancel.btn": "cancelClicked",
-        "click .edit.btn": "editClicked"
-    },
-
-    initialize: function() {
-        this.homeModel = this.model.collection.parentHome;
-    },
-
-    serializeData: function(){
-        var data = exports.EditStyleWidgetForm.prototype.serializeData.apply(this);
-
-        data.timeWheaterFields = this.homeModel.get("timeWheaterFields");
-        data.timeWheaterConfiguration = this.homeModel.get("timeWheaterConfiguration").toJSON();
-
-        return data;
-    },
-
-    onRender: function() {
-        var $autocompleteEl = $('#locationLabel', this.$el);
-        $autocompleteEl.autocomplete({
-            minLength: 2,
-            source: cities,
-            focus: function( e, ui ) {
-                if (ui.item) {
-                    $("#locationLabel").val( ui.item.label );
-                }
-                return false;
-            },
-            select: function( e, ui ) {
-                if (ui.item) {
-                    $("#locationLabel").val( ui.item.label );
-                    $("#location").val( ui.item.value );
-                }
-                return false;
-            }
-        });
-
-        $autocompleteEl.data("autocomplete")._renderItem = function(ul, item) {
-            return $( "<li>" )
-                .data( "item.autocomplete", item )
-                .append( "<a>" + item.label + "</a>" )
-                .appendTo( ul );
-        };
-
-        $autocompleteEl.data("autocomplete")._renderMenu = function(ul, items) {
-            var self = this;
-            var subItems = _.first(items, 15);
-            $.each(subItems, function(index, item) {
-                self._renderItem(ul, item);
-            });
-            
-            $("<li class='ui-menu-item'></li>")
-            .append("<span class='ui-autocomplete-result-item'>Showing <b>" + subItems.length + "</b> of <b>" + items.length + "</b> results</span>")
-            .appendTo(ul);
-        };
-    },
-
-    getFormFields: function() {
-        var formFields = exports.EditStyleWidgetForm.prototype.getFormFields.apply(this);
-        formFields = _.union(formFields, _.pluck(this.model.get("timeWheaterFields"), 'id'));
-        formFields.push('location');
-        formFields.push('locationLabel');
-
-        return formFields;
-    },
-
-    updateModel: function(data) {
-        exports.EditStyleWidgetForm.prototype.updateModel.apply(this, [data]);
-
-        this.homeModel.get("timeWheaterConfiguration").set('location', data.location);
-        this.homeModel.get("timeWheaterConfiguration").set('locationLabel', data.locationLabel);
     }
 });
 

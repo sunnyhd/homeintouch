@@ -6,6 +6,8 @@ module.exports = function(app) {
 
     app.get('/api/jdigiclock/proxy', controllers.jdigiclock.proxy);
 
+    app.get('/api/cities', controllers.cities.index);
+
     app.put('/api/homes/:home', controllers.homes.update);
     app.del('/api/homes/:home', controllers.homes.destroy);
 
