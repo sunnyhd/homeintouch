@@ -24,6 +24,8 @@ exports.filters.episodeLabels = null;
 
 exports.showTVShowList = function() {
 
+    exports.loadShows();
+
     exports.loading.done(function() {
 
         updateNavs();
@@ -84,11 +86,15 @@ exports.addToPlaylist = function(episode) {
 };
 
 exports.loadShows = function(onlyFilters) {
-    var loadingSeries = (onlyFilters)? true : exports.shows.fetch();
-    var loadingSeriesGenres = $.get('/api/genres/tvshows').done(function (data) { exports.filters.genres = data; });
-    var loadingEpisodeNames = $.get('/api/episodes/label').done(function (data) { exports.filters.episodeLabels = data; });
 
-    exports.loading = $.when(loadingSeries, loadingSeriesGenres, loadingEpisodeNames);
+    if (!onlyFilters && _.isNull(exports.loading)) {
+
+        var loadingSeries = (onlyFilters) ? true : exports.shows.fetch();
+        var loadingSeriesGenres = $.get('/api/genres/tvshows').done(function (data) { exports.filters.genres = data; });
+        var loadingEpisodeNames = $.get('/api/episodes/label').done(function (data) { exports.filters.episodeLabels = data; });
+
+        exports.loading = $.when(loadingSeries, loadingSeriesGenres, loadingEpisodeNames);
+    }
 }
 
 /**

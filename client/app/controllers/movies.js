@@ -19,6 +19,8 @@ exports.filters.genres = null;
 
 exports.showMovieCoverView = function() {
 
+    exports.loadMovies();
+
     exports.loading.done(function() {
 
         updateNavs();
@@ -29,6 +31,8 @@ exports.showMovieCoverView = function() {
 };
 
 exports.showMovieListView = function() {
+
+    exports.loadMovies();
 
     exports.loading.done(function() {
 
@@ -94,13 +98,16 @@ exports.addToPlaylist = function(movie) {
 
 exports.loadMovies = function(onlyFilters) {
      // Loads movie colletion, genres and years
-    
-    var loadingMovies = (onlyFilters)? true : exports.movies.fetch();
-    var loadingGenres = $.get('/api/genres/movies').done(function(data) { exports.filters.genres = data; });
-    var loadingYears  = $.get('/api/years/movies').done(function(data) { exports.filters.years = data; });
 
-    // When the three sources were loaded
-    exports.loading = $.when(loadingMovies, loadingGenres, loadingYears);
+    if (!onlyFilters && _.isNull(exports.loading)) {
+
+        var loadingMovies = (onlyFilters) ? true : exports.movies.fetch();
+        var loadingGenres = $.get('/api/genres/movies').done(function(data) { exports.filters.genres = data; });
+        var loadingYears  = $.get('/api/years/movies').done(function(data) { exports.filters.years = data; });
+
+        // When the three sources were loaded
+        exports.loading = $.when(loadingMovies, loadingGenres, loadingYears);
+    }
 }
 
 /**

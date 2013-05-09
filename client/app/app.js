@@ -313,9 +313,7 @@ app.addInitializer(function() {
 app.addInitializer(function(options) {
     // Load bootstrapped data
     app.controller('device_types').deviceTypes.reset(options.deviceTypes);
-    app.controller('homes').homes.reset(options.homes);
-    
-    app.loadMediaData();
+    app.controller('homes').homes.reset(options.homes);    
 });
 
 app.addInitializer(function(options) {
@@ -390,9 +388,11 @@ app.loadMediaData = function () {
     var moviesController = app.controller('movies');
     moviesController.loadMovies();
 
+    // TV Shows media data
     var tvShowsController = app.controller('tvshows');
     tvShowsController.loadShows();
 
+    // Music media data
     var musicController = app.controller('music');
     musicController.loadMusic();
 }

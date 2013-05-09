@@ -60,6 +60,8 @@ exports.showHomeView = function() {
 
 exports.showArtistCoverView = function() {
 
+    exports.loadMusic();
+
     exports.loading.done(function(){
 
         updateListNav('Artists', '#music/artists');
@@ -70,6 +72,8 @@ exports.showArtistCoverView = function() {
 
 exports.showArtistListView = function() {
 
+    exports.loadMusic();
+
     exports.loading.done(function(){
 
         updateListNav('Artists', '#music/artists');
@@ -78,15 +82,43 @@ exports.showArtistListView = function() {
     });
 };
 
-exports.loadMusic = function() {
-    var loadingArtists = exports.artists.fetch();
-    var loadingAlbums = exports.albums.fetch();
-    var loadingSongs = exports.songs.fetch();
-    var loadingAlbumsGenres = $.get('/api/genres/albums').done(function (data) { exports.filters.album.genres = data; });
-    var loadingAlbumsYears = $.get('/api/years/albums').done(function (data) { exports.filters.album.years = data; });
-    var loadingArtistsGenres = $.get('/api/genres/artists').done(function (data) { exports.filters.artist.genres = data; });
+exports.showAlbumList = function() {
 
-    exports.loading = $.when(loadingArtists, loadingAlbums, loadingSongs, loadingAlbumsGenres, loadingAlbumsYears, loadingArtistsGenres);
+    exports.loadMusic();
+
+    exports.loading.done(function(){
+
+        updateListNav('Albums', '#music/albums');
+        var view = new AlbumContainerView({ collection: exports.albums});
+        app.main.show(view);
+    });
+};
+
+exports.showSongList = function() {
+
+    exports.loadMusic();
+
+    exports.loading.done(function(){
+
+        updateListNav('Songs', '#music/songs');
+        var view = new SongContainerView({ collection: exports.songs });
+        app.main.show(view);
+    });
+};
+
+exports.loadMusic = function() {
+
+    if (_.isNull(exports.loading)) {
+
+        var loadingArtists = exports.artists.fetch();
+        var loadingAlbums = exports.albums.fetch();
+        var loadingSongs = exports.songs.fetch();
+        var loadingAlbumsGenres = $.get('/api/genres/albums').done(function (data) { exports.filters.album.genres = data; });
+        var loadingAlbumsYears = $.get('/api/years/albums').done(function (data) { exports.filters.album.years = data; });
+        var loadingArtistsGenres = $.get('/api/genres/artists').done(function (data) { exports.filters.artist.genres = data; });
+
+        exports.loading = $.when(loadingArtists, loadingAlbums, loadingSongs, loadingAlbumsGenres, loadingAlbumsYears, loadingArtistsGenres);
+    }
 }
 
 /**
@@ -127,26 +159,6 @@ var updateListNav = function(title, url) {
             app.router.navigate('#music', {trigger: true});
             return false;
         }
-    });
-};
-
-exports.showAlbumList = function() {
-
-    exports.loading.done(function(){
-
-        updateListNav('Albums', '#music/albums');
-        var view = new AlbumContainerView({ collection: exports.albums});
-        app.main.show(view);
-    });
-};
-
-exports.showSongList = function() {
-
-    exports.loading.done(function(){
-
-        updateListNav('Songs', '#music/songs');
-        var view = new SongContainerView({ collection: exports.songs });
-        app.main.show(view);
     });
 };
 
@@ -235,7 +247,7 @@ exports.showAlbumSongList = function(albumid) {
     // Show the loading view
     app.showLoading(loadingArtist);
 
-    // When the artist instace is loaded, displays its data
+    // When the artist instance is loaded, displays its data
     loadingArtist.done(function() {
 
         $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
