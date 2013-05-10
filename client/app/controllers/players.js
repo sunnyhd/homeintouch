@@ -118,8 +118,13 @@ exports.loadPlayerDetails = function(player) {
 			return player; 
 		})
 		.fail(function(e) {
+			// Item not found on local DB
 			console.log(JSON.stringify(e));
-			throw e;
+			
+			// Add the required getType method to the existing item
+			player.get('item').getType = function() {
+				return player.get('item').type;
+			};
 			//TODO see what to do if the item is not found 
 		});
 };

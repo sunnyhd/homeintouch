@@ -82,6 +82,11 @@ exports.addToPlaylist = function(type, options) {
     return playlist.items.create(options);
 };
 
+exports.clearPlaylist = function(playlist) {
+    var pl = new Playlist({ playlistid: playlist.id });
+    return pl.destroy();
+};
+
 exports.removeFromPlaylist = function(item) {
     var type = item.getType() || item.type;
 

@@ -6,3 +6,18 @@ exports.index = function(req, res, next) {
         res.json(results);
     });
 };
+
+exports.clear = function(req, res, next) {
+    var playlistid = parseInt(req.params.playlist, 10);
+
+	Promise.asPromise(xbmc, xbmc.rpc, 'Playlist.Clear', { playlistid: playlistid })
+	.then(function(results) {
+		res.json(results);
+	})
+	.fail(function(err) {
+		return next(err);
+	})
+	.done();
+};
+
+	
