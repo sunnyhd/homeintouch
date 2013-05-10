@@ -1,4 +1,6 @@
 var helpers = require('../lib/helpers');
+var settings = require('../config');
+
 var controllers = helpers.autoload(__dirname + '/controllers');
 
 module.exports = function(app) {
@@ -75,7 +77,10 @@ module.exports = function(app) {
 
     app.get('/api/images/:image', controllers.images.show);
     app.post('/api/images', controllers.images.create);
+
     app.get('/api/svg/:color/:image', controllers.images.svgGet);
+
+    app.get(settings.cache.localUrl + '/*', controllers.images.getFromCache);
 
     app.get('/api/files', controllers.files.index);
 };

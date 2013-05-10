@@ -126,7 +126,7 @@ exports.cacheImages = function(Model, fields) {
                             console.log('Uploading image Failed');
                             return callback(); 
                         } 
-                        self[attrs.dest] = settings.cache.url + "/static" + imageId;
+                        self[attrs.dest] = settings.cache.localUrl + imageId;
                         console.log('Image uploaded succesfully. url: ' + self[attrs.dest]);
                         callback();
                     });  
