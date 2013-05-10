@@ -83,7 +83,9 @@ exports.addToPlaylist = function(type, options) {
 };
 
 exports.clearPlaylist = function(playlist) {
+    // Create a new one so the actual playlist is not removed.
     var pl = new Playlist({ playlistid: playlist.id });
+    pl.urlRoot = playlists.url; 
     return pl.destroy();
 };
 

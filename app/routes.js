@@ -55,10 +55,12 @@ module.exports = function(app) {
     app.get('/api/years/albums', controllers.albums.years);
 
     app.get('/api/songs', controllers.songs.index);
+    app.get('/api/songs/:songid', controllers.songs.get);
 
     app.post('/api/remotecontrol/commands', controllers.remote_control.executeCommand);
 
     app.get('/api/playlists', controllers.playlists.index);
+    app.del('/api/playlists/:playlist', controllers.playlists.clear);
 
     app.get('/api/playlists/:playlist/items', controllers.playlistitems.index);
     app.post('/api/playlists/:playlist/items', controllers.playlistitems.create);

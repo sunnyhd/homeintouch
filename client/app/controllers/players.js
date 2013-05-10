@@ -123,7 +123,7 @@ exports.loadPlayerDetails = function(player) {
 			
 			// Add the required getType method to the existing item
 			player.get('item').getType = function() {
-				return player.get('item').type;
+				return this.type;
 			};
 			//TODO see what to do if the item is not found 
 		});

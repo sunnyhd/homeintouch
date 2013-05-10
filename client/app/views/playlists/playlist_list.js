@@ -1,11 +1,16 @@
 
 var PlaylistItemView = require('views/playlists/playlist_item');
+var playlistsController = require('controllers/playlists');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
 
     template: require('templates/playlists/playlist_list'),
 
     itemView: PlaylistItemView,
+
+    events: {
+        'click [data-action=clear]': 'clear',
+    },
 
     initialize: function() {
         this.bindTo(this.collection, 'add remove reset', this.render, this);
@@ -31,6 +36,10 @@ module.exports = Backbone.Marionette.CompositeView.extend({
         $icon.addClass('icon-chevron-down');
 
         $moreOpts.remove();
+    },
+
+    clear: function() {
+        return playlistsController.clearPlaylist(this.model);
     },
 
     togglePlaylists: function() {
