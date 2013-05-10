@@ -11,7 +11,8 @@
     "url": "http://localhost:8888/vfs/"
   },
   "cache": {
-    "url":"http://localhost:8181"
+    "url": "http://localhost:8181",
+    "localUrl": "/api/image-cache"
   },
   "hosts": {
     "web": {

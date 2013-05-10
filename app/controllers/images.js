@@ -1,6 +1,9 @@
 var images = require('../../lib/images');
+var request = require('request');
 var fs = require('fs');
 var svgImageCache = {};
+
+var settings = require('../../config');
 
 exports.show = function(req, res, next) {
     images.get(req.params.image, function(err, buffer) {
@@ -42,6 +45,12 @@ exports.svgGet = function(req, res, next) {
             res.end(result, 'binary');
         });
     }
+};
 
+exports.getFromCache = function(req, res, next) {
 
+    var imageId = req.path.substring(settings.cache.localUrl.length);
+    var imageURL = settings.cache.url + "/static" + imageId;
+
+    request.get(imageURL).pipe(res);
 }
