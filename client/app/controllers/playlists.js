@@ -5,6 +5,7 @@ var Playlists = require('collections/playlists');
 
 // Models
 var Playlist = require('models/playlist');
+var PlaylistItem = require('models/playlist_item');
 
 // Views
 var LoadingView = require('views/loading_content');
@@ -56,13 +57,19 @@ var setPlaylists = function(pls) {
     playlists.forEach(function(playlist) {
         playlistIds[playlist.get('type')] = playlist.id;
 
-        playerController.findPlayerForPlaylist(playlist).then(function(player) {
-            var pos = (!player)? -1: player.get('position'); 
-            playlist.setCurrent(pos);
-        });
+        updatePlaylistPosition(playlist);
     });
 	// Set the playlist ids in the Command module
     Command.setPlaylistIds(playlistIds);
+};
+
+function updatePlaylistPosition(playlist) {
+   playerController.findPlayerForPlaylist(playlist)
+        .then(function(player) {
+            var pos = (!player)? -1: player.get('position'); 
+            playlist.setCurrent(pos);
+        })
+        .done();
 };
 
 exports.showPlaylists = function() {
@@ -81,6 +88,35 @@ exports.addToPlaylist = function(type, options) {
     var playlist = new Playlist({ playlistid: playlistid });
     return playlist.items.create(options);
 };
+
+exports.swapItems = function(playlist, pos1, pos2) {
+    if(playlist.items.at(pos1) && playlist.items.at(pos2)) {
+        // We need to call PUT on the server 
+        // without updating the collection (we'll refresh it afterwards)
+        // So we create a new item outside the playlist and set the correct URL
+        var item = new PlaylistItem({id: pos1, newPosition: pos2});
+        item.urlRoot = playlist.items.url();
+        return Q.when(item.save())
+            .then(function(result) {
+                return loadPlaylistItems(playlist, true);
+            })
+            .then(function() {
+                // After loading the items, get the player
+                return playerController.findPlayerForPlaylist(playlist);
+            })
+            .then(function(player) {
+                // If a player exists and its current position was one of the swapped, update it.
+                if(player) {
+                    var currentPos = player.get('position');
+                    if(currentPos === pos1) player.set('position', pos2);
+                    if(currentPos === pos2) player.set('position', pos1);
+                }
+                return playlist;
+            });
+    }
+    return Q.when(false);
+};
+
 
 exports.clearPlaylist = function(playlist) {
     // Create a new one so the actual playlist is not removed.
@@ -132,9 +168,16 @@ function loadPlaylistItem(pl, item) {
 
 exports.playlists.on('select', function(playlist) {
     //showPlaylist(playlist);
-    playlist.loadItems();
+    loadPlaylistItems(playlist).done();
 });
 
+function loadPlaylistItems(playlist, force) {
+    return playlist.loadItems(force)
+    .then(function() {
+        updatePlaylistPosition(playlist);
+        return playlist;
+    });
+};
 
 // Helpers
 // ---------------

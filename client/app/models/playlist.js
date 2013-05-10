@@ -26,8 +26,8 @@ module.exports = Backbone.Model.extend({
         this.items.setActive(pos);
     },
 
-    loadItems: function() {
-        if(this.items.loaded) {
+    loadItems: function(force) {
+        if(this.items.loaded && !force) {
             return Q.when(this.items);
         } else {
             var self = this;

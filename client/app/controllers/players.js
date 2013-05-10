@@ -21,7 +21,16 @@ var ids = {};
 
 exports.loading = Q.when(true);
 
-exports.setPlayerIds = function(players) {
+function getLoading() {
+	return ((exports.loading)? exports.loading : Q.when(true));
+}
+
+exports.init = function(players) {
+	setPlayerIds(players);
+	exports.loadActivePlayers();
+};
+
+function setPlayerIds(players) {
     players.forEach(function(player) {
         ids[player.type] = player.playlistid;
     });
@@ -34,7 +43,7 @@ exports.getPlayerId = function(type) {
 exports.findPlayerForPlaylist = function(playlist) {
 	var id = exports.getPlayerId(playlist.get('type'));
 
-	return exports.loading.then(function() {
+	return getLoading().then(function() {
 		return players.get(id);
 	});
 };
@@ -80,19 +89,20 @@ exports.close = function() {
  * Loads all the active players
  */
 exports.loadActivePlayers = function() {
+	if(!players.loaded) {
+		// Get all the players
+		exports.loading = Q.when(players.fetch()).then(function() {
+			
+			// Load the detailed information of all the players 
+			var promises = players.map(function(player) {
+				return exports.loadPlayerDetails(player);
+			});
 
-	// Get all the players
-	exports.loading = Q.when(players.fetch()).then(function() {
-		
-		// Load the detailed information of all the players 
-		var promises = players.map(function(player) {
-			return exports.loadPlayerDetails(player);
+			// The returned promises will be resolved when all the players are loaded
+			return Q.allResolved(promises);
 		});
-
-		// The returned promises will be resolved when all the players are loaded
-		return Q.allResolved(promises);
-	});
-	return exports.loading;
+	}
+	return getLoading();
 };
 
 /**
@@ -306,7 +316,7 @@ app.vent.on('xbmc:player:onseek', function(data) {
     
     exports.loading = exports.findPlayer(data.player.playerid)
 	    .then(function(player) {
-	    	player.set('time', data.player.time);
+	    	return player.set('time', data.player.time);
 	    })
 	    .done();
 });
@@ -322,6 +332,7 @@ app.vent.on('xbmc:player:onspeedchanged', function(data) {
 	    	if(player.get('speed') !== data.player.speed) {
 	    		return exports.loadPlayerDetails(player);	
 	    	}
+	    	return Q.when(true);
 	    })
 	    .done();
 });

@@ -10,6 +10,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     events: {
         'click [data-action=clear]': 'clear',
+        'click [data-action=swap]': 'swap'
     },
 
     initialize: function() {
@@ -40,6 +41,10 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     clear: function() {
         return playlistsController.clearPlaylist(this.model);
+    },
+
+    swap: function() {
+        return playlistsController.swapItems(this.model, 1, 2);
     },
 
     togglePlaylists: function() {

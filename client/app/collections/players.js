@@ -3,8 +3,14 @@ var Player = require('models/player');
 module.exports = Backbone.Collection.extend({
 
     model: Player,
-
+    loaded: false,
     url: '/api/players',
+
+    fetch: function() {
+        this.loaded = true;
+        
+        return Q.when(Backbone.Collection.prototype.fetch.call(this, arguments));
+    },
 
     getDefault: function() {
         return this.at(0);
