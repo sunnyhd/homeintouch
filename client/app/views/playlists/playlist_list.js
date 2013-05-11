@@ -8,22 +8,23 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     itemView: PlaylistItemView,
 
-    events: {
-        'click [data-action=clear]': 'clear',
-        'click [data-action=swap]': 'swap'
-    },
-
     initialize: function() {
         this.bindTo(this.collection, 'add remove reset', this.render, this);
 
         this.on('render', this.togglePlaylists, this);
         this.bindTo(this.collection, 'add remove reset', this.togglePlaylists, this);
+
+        this.on('clear', this.clear, this);
+        this.on('edit-order', this.editOrderView, this);
+        this.on('edit-order-ok', this.editOrderDone, this);
     },
 
     appendHtml: function(cv, iv) {
 
         // Add listeners to the item view
         this.bindTo(iv, 'clear-more-opts', this.clearMoreOptions, this);
+        this.bindTo(iv, 'swap-up', this.swapUp, this);
+        this.bindTo(iv, 'swap-down', this.swapDown, this);
 
         this.$('.items').append(iv.el);
     },
@@ -43,8 +44,39 @@ module.exports = Backbone.Marionette.CompositeView.extend({
         return playlistsController.clearPlaylist(this.model);
     },
 
-    swap: function() {
-        return playlistsController.swapItems(this.model, 1, 2);
+    // Swap item methods
+
+    swapUp: function(id) {
+        var prevId = id - 1;
+        this.swap(prevId, id);
+    }, 
+
+    swapDown: function(id) {
+        var nextId = id + 1;
+        this.swap(id, nextId);
+    },
+
+    swap: function(firstId, secondId) {
+        return playlistsController.swapItems(this.model, firstId, secondId);
+    },
+
+    editOrderView: function() {
+        this.clearMoreOptions();
+
+        // Hides more buttons
+        this.$el.find('[data-action="more"]').hide();
+
+        // Displays swap buttons
+        this.$el.find('.swap-button').show();
+    },
+
+    editOrderDone: function() {
+
+        // Displays more buttons
+        this.$el.find('[data-action="more"]').show();
+
+        // Hides swap buttons
+        this.$el.find('.swap-button').hide();
     },
 
     togglePlaylists: function() {

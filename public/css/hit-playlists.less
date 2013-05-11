@@ -18,13 +18,60 @@
 	}
 }
 
+// Item list
+.playlist-list-container ul {
+
+	li:first-child .swap-up {
+		visibility: hidden;
+	}
+
+	li:last-child .swap-down {
+		visibility: hidden;
+	}
+
+	div[data-action="play"] {
+
+		.clearfix();
+
+		.song-name {
+			white-space: nowrap;
+			max-width: 70%;
+			display: block;
+			overflow: hidden;
+			float: left;
+		}
+	}
+}
+
+// Playlist header, general options
+.playlists-general-options {
+	text-align: right;
+	.player-button {
+		margin: 2px 0;
+		padding: 0 4px;
+    	float: none;
+    	display: inline-block;
+	}
+}
+
 // Button to display the more options container
 .song-item-options {
 	padding: 5px 20px;
-    margin: -5px -5px 0 0;
-
+    margin: -5px -5px -5px 0;
     .background-black-overlay();
     border-radius: 0 10px 10px 0;
+}
+
+// Swap buttons
+.swap-button {
+	padding: 5px 10px;
+    margin: -5px -5px -5px 0;
+    .background-black-overlay();
+    border-radius: 10px;
+
+    &~.swap-button {
+    	margin-right: 1px;
+    }
 }
 
 // More options container
@@ -47,4 +94,16 @@
     		margin-left: 20%;
     	}
     }
+}
+
+// RESPONSIVE STYLES
+
+/* Portrait phones */
+@media (max-width: 480px) {
+
+	ul.nav > li.pull-right.playlists-general-options {
+		float: none;
+		text-align: left;
+		width: 100px;
+	}
 }
