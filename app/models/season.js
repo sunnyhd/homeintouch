@@ -13,7 +13,7 @@ var Season = new mongoose.Schema({
     playcount: Number, 
     thumbnail: String, 
     thumbnailUrl: String, 
-    bannerUrl: ObjectId,
+    bannerUrl: String,
     art: { banner: String }
 });
 

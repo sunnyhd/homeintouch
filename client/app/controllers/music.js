@@ -162,6 +162,66 @@ var updateListNav = function(title, url) {
     });
 };
 
+var updateArtistNav = function(artist) {
+
+    $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'inner-room',
+        name: artist.get('label'), 
+        handler: function(e) {
+            app.router.navigate('#music/artists/' + artist.get('artistid'), {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: artist.get('label'), 
+        previous: 'Artist',
+        handler: function(e) {
+            app.router.navigate('#music/artists', {trigger: true});
+            return false;
+        }
+    });
+};
+
+var updateAlbumNav = function(artist) {
+
+    var album = artist.albums.models[0];
+
+    $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'inner-room',
+        name: album.get('label'), 
+        handler: function(e) {
+            app.router.navigate('#music/albums/' + album.get('albumid'), {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: album.get('label'), 
+        previous: 'Albums',
+        handler: function(e) {
+            app.router.navigate('#music/albums', {trigger: true});
+            return false;
+        }
+    });
+};
+
+var getArtistAlbums = function(artistid) {
+    var albumList = _.filter(exports.albums.models, function(album) {
+        return (album.get('artistid').indexOf(artistid) >= 0);
+    });
+
+    return new Albums(albumList);
+};
+
+var loadAlbumSongs = function(album) {
+    album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
+    album.songs.comparator = function(song) { return song.get('track'); };
+    album.songs.sort({silent: true});
+};
+
 exports.showArtistDetailsView = function(artistid) {
 
     var artist = null;
@@ -174,25 +234,7 @@ exports.showArtistDetailsView = function(artistid) {
     // When the artist instace is loaded, displays its data
     loadingArtist.done(function() {
 
-        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
-        app.updateDesktopBreadcrumbNav( { 
-            itemType: 'inner-room',
-            name: artist.get('label'), 
-            handler: function(e) {
-                app.router.navigate('#music/artists/' + artist.get('artistid'), {trigger: true});
-                return false;
-            }
-        });
-
-        app.updateTouchNav({
-            name: artist.get('label'), 
-            previous: 'Artist',
-            handler: function(e) {
-                app.router.navigate('#music/artists', {trigger: true});
-                return false;
-            }
-        });
-
+        updateArtistNav(artist);
         var view = new ArtistDetailView({ model: artist, mode: 'artist' });
         app.main.show(view);
     });
@@ -200,11 +242,9 @@ exports.showArtistDetailsView = function(artistid) {
     // If the collection is loaded
     if (!_.isUndefined(exports.artists) && exports.artists.models.length > 0) {
         artist = exports.artists.get(artistid);
-        artist.albums = new Albums(exports.albums.where({'artistid' : artist.get('artistid')}));
+        artist.albums = getArtistAlbums(artist.get('artistid'));
         _.each(artist.albums.models, function(album) {
-            album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
-            album.songs.comparator = function(song) { return song.get('track'); };
-            album.songs.sort({silent: true});
+            loadAlbumSongs(album);
         });
         def.resolve();
 
@@ -226,11 +266,9 @@ exports.showArtistDetailsView = function(artistid) {
         }
 
         fetchingArtistDetails.done(function() {
-            artist.albums = new Albums(exports.albums.where({'artistid' : artist.get('artistid')}));
+            artist.albums = getArtistAlbums(artist.get('artistid'));
             _.each(artist.albums.models, function(album) {
-                album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
-                album.songs.comparator = function(song) { return song.get('track'); };
-                album.songs.sort({silent: true});
+                loadAlbumSongs(album);
             });
             def.resolve();
         });
@@ -250,37 +288,16 @@ exports.showAlbumSongList = function(albumid) {
     // When the artist instance is loaded, displays its data
     loadingArtist.done(function() {
 
-        $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
-        app.updateDesktopBreadcrumbNav( { 
-            itemType: 'inner-room',
-            name: artist.albums.models[0].get('label'), 
-            handler: function(e) {
-                app.router.navigate('#music/albums/' + albumid, {trigger: true});
-                return false;
-            }
-        });
-
-        app.updateTouchNav({
-            name: artist.albums.models[0].get('label'), 
-            previous: 'Albums',
-            handler: function(e) {
-                app.router.navigate('#music/albums', {trigger: true});
-                return false;
-            }
-        });
-
+        updateAlbumNav(artist);
         var view = new ArtistDetailView({ model: artist, mode: 'album' });
         app.main.show(view);
     });
 
     if (!_.isUndefined(exports.albums) && exports.albums.models.length > 0) {
         var album = exports.albums.get(albumid);
-        artist = exports.artists.where({'artistid' : album.get('artistid')})[0];
+        artist = exports.artists.where({'artistid' : album.get('artistid')[0]})[0];
         artist.albums = new Albums([album]);
-
-        album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
-        album.songs.comparator = function(song) { return song.get('track'); };
-        album.songs.sort({silent: true});
+        loadAlbumSongs(album);
         def.resolve();
     } else {
         artist = new Artist({ artistid: artistid });
@@ -301,9 +318,7 @@ exports.showAlbumSongList = function(albumid) {
 
         fetchingArtistDetails.done(function() {
             artist.albums = new Albums([album]);
-            album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
-            album.songs.comparator = function(song) { return song.get('track'); };
-            album.songs.sort({silent: true});
+            loadAlbumSongs(album);
             def.resolve();
         });
     }

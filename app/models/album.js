@@ -5,7 +5,7 @@ var ObjectId = mongoose.Schema.ObjectId;
 var Album = new mongoose.Schema({
     albumid: { type: Number, index: true, unique: true },
     artist: String,
-    artistid: Number,
+    artistid: [Number],
     label: String,
     playcount: Number, 
     genre: String, 
