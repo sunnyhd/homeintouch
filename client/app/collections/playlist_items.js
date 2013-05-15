@@ -12,8 +12,13 @@ module.exports = Backbone.Collection.extend({
     },
 
     fetch: function() {
-        this.loaded = true;
-        return Backbone.Collection.prototype.fetch.call(this, arguments);
+        var self = this;
+        this.loaded = false;
+        
+        return Q.when(Backbone.Collection.prototype.fetch.call(this, arguments)).then(function(result) {
+            self.loaded = true;
+            return result;
+        });
     },
 
     /**
@@ -67,5 +72,4 @@ module.exports = Backbone.Collection.extend({
         }
         return Q.when(false);
     }
-
 });

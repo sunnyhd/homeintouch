@@ -27,3 +27,22 @@ exports.index = function(req, res, next) {
         });
     });
 };
+
+exports.get = function(req, res, next) {
+    Song.findOne( { songid: req.params.songid }, function(err, song) {
+        if (err) return next(err);
+        if (!song) return next(new Error('No such song'));
+        
+        Album.findOne({ albumid: song.albumid }, function(err, album) {
+	        if (err) return next(err);
+	        if (!album) return next(new Error('No such album'));
+
+	        song.year = album.year;
+        	song.genre = album.genre;
+        	song.thumbnailid = album.thumbnailid;
+        	song.thumbnail = album.thumbnail;	
+
+	        res.json(song);
+    	});
+    });
+};

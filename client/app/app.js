@@ -14,8 +14,21 @@ var Modal = ModalManager.extend({ el: "#modal" });
 var Iframe = ModalManager.extend({ el: "#iframe" });
 var Loading = ModalManager.extend({ el: "#loading" });
 
+var originalUrl = window.location.href;
+
+// Ensure the url root without any other URL
+if ( originalUrl.indexOf('#') > -1 ) {
+    originalUrl = originalUrl.substring(0, originalUrl.indexOf('#'));
+}
+
 $('.hit-refresh').click(function() {
-    window.location.reload();
+    var url = window.location.href;
+
+    if (url.indexOf('#') > -1) {
+       window.location.href = originalUrl;
+    } else {
+       window.location.reload();
+    }
 });
 
 app.addRegions({
@@ -323,7 +336,7 @@ app.addInitializer(function(options) {
 
     // Initializes the player and playlist modules
     if (options.players) {
-        app.controller('players').setPlayerIds(options.players);
+        app.controller('players').init(options.players);
         app.controller('playlists').init(options.players);
     }
 });

@@ -12,7 +12,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
     events: {
         'click [data-action=play]': 'play',
         'click [data-action=remove]': 'removeFromPlaylist',
-        'click [data-action=more]': 'showMoreOptions'
+        'click [data-action=more]': 'showMoreOptions',
+        'click [data-action=swap-up]': 'swapUp',
+        'click [data-action=swap-down]': 'swapDown'
     },
 
     initialize: function() {
@@ -21,6 +23,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     onRender: function() {
         this.activeChanged();
+
+        // Hides swap buttons by default
+        this.$el.find('.swap-button').hide();
     },
 
     activeChanged: function() {
@@ -79,6 +84,16 @@ module.exports = Backbone.Marionette.ItemView.extend({
         this.model.removeFromPlaylist();
 
         this.close();
+    },
+
+    swapUp: function() {
+        this.trigger('swap-up', this.model.id);
+        return false;
+    }, 
+
+    swapDown: function() {
+        this.trigger('swap-down', this.model.id);
+        return false;
     }
 
 });

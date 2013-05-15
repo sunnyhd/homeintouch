@@ -28,6 +28,21 @@ exports.create = function(req, res, next) {
     });
 };
 
+exports.swap = function(req, res, next) {
+    var params = {
+        playlistid: parseInt(req.params.playlist, 10),
+        position1: parseInt(req.params.index, 10),
+        position2: req.body.newPosition
+    };
+
+    var method = 'Playlist.Swap';
+
+    xbmc.rpc(method, params, function(err, results) {
+        if (err) return next(err);
+        res.json(results);
+    });
+};
+
 exports.remove = function(req, res, next) {
     var params = {
         playlistid: parseInt(req.params.playlist, 10),
