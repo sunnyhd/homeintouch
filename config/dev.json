@@ -8,7 +8,8 @@
     "mongodb": "mongodb://localhost:27017/hit"
   },
   "images": {
-    "url": "http://localhost:8888/vfs/"
+    "url": "http://localhost:8080/vfs/",
+    "importUrl": "http://localhost:8080/image/"
   },
   "cache": {
     "url": "http://localhost:8181",

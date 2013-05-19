@@ -4,13 +4,13 @@ var images = require('../../lib/images');
 var settings = require('../../config');
 var url = require('url');
 
-var musicExtensions = ['m4a', 'mp3'];
-
 var predefinedWidths = {
     fanart: 1024,
     thumbnail: 250,
     'art.banner': 758
 };
+
+var imagePrefix = 'image://';
 
 var removeLastSlash = function(path) {
     var lastCharIndex = path.length - 1;
@@ -21,18 +21,6 @@ var removeLastSlash = function(path) {
     } else {
         return path;
     }
-};
-
-var isMusicExtension = function(path) {
-
-    var pathArray = removeLastSlash(path).split('\.');
-    var fileExtension = (pathArray[pathArray.length - 1]).toLowerCase();
-    if (fileExtension.length === 3) {
-        // Is a valid extension
-        return musicExtensions.indexOf(fileExtension) != -1;
-    }
-
-    return false;
 };
 
 var retrieveSourceUrl = function(self, attrs, callback) {
@@ -53,16 +41,14 @@ var retrieveSourceUrl = function(self, attrs, callback) {
 }
 
 var buildImageUrl = function(url) {
-    var tempURL = removeLastSlash(url);
 
-    var tempPath = decodeURIComponent(tempURL);
+    var tempURL = url.substring(imagePrefix.length);
+    tempURL = removeLastSlash(tempURL);
+    var imagePath = encodeURIComponent(tempURL);
+    // The URL is encoded again because it is decoded in Image Cache Server
+    imagePath = encodeURIComponent(imagePath);
 
-    if (tempPath.indexOf('\\') > 0) {
-        tempPath = tempPath.replace(/\\/g, '/');
-    }
-
-    tempURL = encodeURIComponent(tempPath);
-    return settings.images.url + tempURL;
+    return settings.images.importUrl + imagePrefix + imagePath;
 };
 
 exports.cacheImages = function(Model, fields) {
@@ -93,19 +79,9 @@ exports.cacheImages = function(Model, fields) {
                 var imageUrl;
 
                 var urlFromXbmc = source;
-                if (urlFromXbmc.indexOf('image://') === 0) {
-                    var tempURL = urlFromXbmc.substring('image://'.length);
-                    if (tempURL.indexOf('http') === 0) {
-                        imageUrl = decodeURIComponent(tempURL);
-                    } else {
-
-                        if (isMusicExtension(tempURL)) return callback();
-
-                        imageUrl = buildImageUrl(tempURL);
-                    }
+                if (urlFromXbmc.indexOf(imagePrefix) === 0) {
+                    imageUrl = buildImageUrl(urlFromXbmc);
                 }
-
-                imageUrl = removeLastSlash(imageUrl);
 
                 var options = {
                     url: imageUrl,
