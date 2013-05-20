@@ -24,6 +24,9 @@
       "hostname": "localhost",
       "port": 8090,
       "timeout": 60000
+    },
+    "xbmc": {
+      "concurrency": 50
     }
   },
   "client" : {
