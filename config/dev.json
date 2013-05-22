@@ -26,7 +26,7 @@
       "timeout": 30000
     },
     "xbmc": {
-      "concurrency": 50
+      "concurrency": 10
     }
   },
   "client" : {
