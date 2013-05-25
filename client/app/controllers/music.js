@@ -300,15 +300,15 @@ exports.showAlbumSongList = function(albumid) {
         loadAlbumSongs(album);
         def.resolve();
     } else {
-        artist = new Artist({ artistid: artistid });
-        var album = new Album({ albumid: albumid})
-        var fetchingArtist = artist.fetch();
-        var fetchingAlbums = null;
+        var album = new Album({ albumid: albumid });
+        
+        var fetchingAlbums = album.fetch();
+        var fetchingArtist = null;
         var fetchingSongs = null;
-        var fetchingArtistDetails = fetchingArtist;
-        if (_.isUndefined(exports.albums) || exports.albums.models.length == 0) {
-            fetchingAlbums = album.fetch();
-            if (_.isUndefined(exports.songs) || exports.songs.models.length == 0) {
+        var fetchingArtistDetails = fetchingAlbums;
+        if (_.isUndefined(exports.artists) || exports.artists.models.length === 0) {
+            fetchingArtist = exports.artists.fetch();
+            if (_.isUndefined(exports.songs) || exports.songs.models.length === 0) {
                 fetchingSongs = exports.songs.fetch();
                 fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums, fetchingSongs);
             } else {
@@ -317,6 +317,7 @@ exports.showAlbumSongList = function(albumid) {
         }
 
         fetchingArtistDetails.done(function() {
+            artist = exports.artists.where({'artistid' : album.get('artistid')[0]})[0];
             artist.albums = new Albums([album]);
             loadAlbumSongs(album);
             def.resolve();
