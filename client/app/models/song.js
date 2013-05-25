@@ -25,13 +25,13 @@ var Song = module.exports = Backbone.Model.extend({
     },
 
     getLabel: function() {
-        return this.get('label');
+        return this.get('title');
     },
 
     toJSON: function() {
         var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
         data.thumbnail = this.thumbnail();
-        data.label = this.get('label');
+        data.title = this.get('title');
         return data;
     }
 
