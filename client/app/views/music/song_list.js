@@ -6,6 +6,10 @@ module.exports = FilteredListView.extend({
     template: require('templates/music/song_list'),
     
     itemView: SongItemView,
+
+    events: {
+        'click a[data-action="next-page"]': 'nextPage'
+    },
     
     appendHtml: function(cv, iv) {
         this.$('.songs').append(iv.el);
@@ -17,6 +21,11 @@ module.exports = FilteredListView.extend({
             song.get('album'),
             song.get('artist')
         ];
+    },
+
+    nextPage: function() {
+        this.collection.nextPage();
+        return false;
     }
     
 });

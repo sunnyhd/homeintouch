@@ -4,9 +4,15 @@ var Songs = module.exports = Backbone.Collection.extend({
 
     model: Song,
 
-    url: '/api/songs',
+    url: function() {
+        if (this.albumid) {
+            return '/api/albums/' + this.albumid + '/songs';
+        } else {
+            return '/api/songs'
+        }
+    },
 
-        /**
+    /**
      * It returns a new collection applying filters and sort parameters.
      */
     filterAndSortBy: function(opts) {

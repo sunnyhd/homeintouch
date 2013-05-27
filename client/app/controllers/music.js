@@ -2,6 +2,7 @@ var app = require('app');
 var Albums = require('collections/albums');
 var Artists = require('collections/artists');
 var Songs = require('collections/songs');
+var PaginatedSongs = require('collections/songs_paginated');
 var Album = require('models/album');
 var Artist = require('models/artist');
 var Song = require('models/song');
@@ -17,6 +18,7 @@ var MusicHomeView = require('views/music/home');
 exports.artists = new Artists();
 exports.albums = new Albums();
 exports.songs = new Songs();
+exports.paginatedSongs = new PaginatedSongs();
 
 // Filter for albums
 exports.filters = {
@@ -29,6 +31,9 @@ exports.filters.album.years = null;
 exports.filters.artist.genres = null;
 
 exports.loading = null;
+
+exports.loadingArtistData = null;
+exports.loadingAlbumData = null;
 
 exports.showHomeView = function() {
 
@@ -60,9 +65,9 @@ exports.showHomeView = function() {
 
 exports.showArtistCoverView = function() {
 
-    exports.loadMusic();
+    loadArtistData();
 
-    exports.loading.done(function(){
+    exports.loadingArtistData.done(function(){
 
         updateListNav('Artists', '#music/artists');
         var view = new ArtistContainerView({ collection: exports.artists, mode: 'cover'});
@@ -72,9 +77,9 @@ exports.showArtistCoverView = function() {
 
 exports.showArtistListView = function() {
 
-    exports.loadMusic();
+    loadArtistData();
 
-    exports.loading.done(function(){
+    exports.loadingArtistData.done(function(){
 
         updateListNav('Artists', '#music/artists');
         var view = new ArtistContainerView({ collection: exports.artists, mode: 'list'});
@@ -84,9 +89,9 @@ exports.showArtistListView = function() {
 
 exports.showAlbumList = function() {
 
-    exports.loadMusic();
+    loadAlbumData();
 
-    exports.loading.done(function(){
+    exports.loadingAlbumData.done(function(){
 
         updateListNav('Albums', '#music/albums');
         var view = new AlbumContainerView({ collection: exports.albums});
@@ -96,30 +101,37 @@ exports.showAlbumList = function() {
 
 exports.showSongList = function() {
 
-    exports.loadMusic();
+    var loadingPaginatedSongs = exports.paginatedSongs.fetch();
 
-    exports.loading.done(function(){
+    loadingPaginatedSongs.done(function(){
 
         updateListNav('Songs', '#music/songs');
-        var view = new SongContainerView({ collection: exports.songs });
+        var view = new SongContainerView({ collection: exports.paginatedSongs });
         app.main.show(view);
     });
 };
 
-exports.loadMusic = function() {
+loadArtistData = function() {
 
-    if (_.isNull(exports.loading)) {
-
+    if (_.isNull(exports.loadingArtistData)) {
         var loadingArtists = exports.artists.fetch();
+        var loadingArtistsGenres = $.get('/api/genres/artists').done(function (data) { exports.filters.artist.genres = data; });
+    }
+
+    exports.loadingArtistData = $.when(loadingArtists, loadingArtistsGenres);
+};
+
+loadAlbumData = function() {
+
+    if (_.isNull(exports.loadingAlbumData)) {
         var loadingAlbums = exports.albums.fetch();
-        var loadingSongs = exports.songs.fetch();
         var loadingAlbumsGenres = $.get('/api/genres/albums').done(function (data) { exports.filters.album.genres = data; });
         var loadingAlbumsYears = $.get('/api/years/albums').done(function (data) { exports.filters.album.years = data; });
-        var loadingArtistsGenres = $.get('/api/genres/artists').done(function (data) { exports.filters.artist.genres = data; });
-
-        exports.loading = $.when(loadingArtists, loadingAlbums, loadingSongs, loadingAlbumsGenres, loadingAlbumsYears, loadingArtistsGenres);
     }
-}
+
+    exports.loadingAlbumData = $.when(loadingAlbums, loadingAlbumsGenres, loadingAlbumsYears);
+
+};
 
 /**
  * Retrieves the song by id, either from the client if it has already been loaded
@@ -217,9 +229,10 @@ var getArtistAlbums = function(artistid) {
 };
 
 var loadAlbumSongs = function(album) {
-    album.songs = new Songs (exports.songs.where({'albumid' : album.get('albumid')}));
+    album.songs = new Songs ();
+    album.songs.albumid = album.get('albumid');
     album.songs.comparator = function(song) { return song.get('track'); };
-    album.songs.sort({silent: true});
+    return album.songs.fetch();
 };
 
 exports.showArtistDetailsView = function(artistid) {
@@ -243,34 +256,36 @@ exports.showArtistDetailsView = function(artistid) {
     if (!_.isUndefined(exports.artists) && exports.artists.models.length > 0) {
         artist = exports.artists.get(artistid);
         artist.albums = getArtistAlbums(artist.get('artistid'));
+        var loadingSongs = [];
         _.each(artist.albums.models, function(album) {
-            loadAlbumSongs(album);
+            loadingSongs.push(loadAlbumSongs(album));
         });
-        def.resolve();
+
+        $.when.apply($, loadingSongs).done(function() {
+            def.resolve();
+        });
 
     // If not, loads the artist instance
     } else {
         artist = new Artist({ artistid: artistid });
         var fetchingArtist = artist.fetch();
         var fetchingAlbums = null;
-        var fetchingSongs = null;
         var fetchingArtistDetails = fetchingArtist;
         if (_.isUndefined(exports.albums) || exports.albums.models.length == 0) {
             fetchingAlbums = exports.albums.fetch();
-            if (_.isUndefined(exports.songs) || exports.songs.models.length == 0) {
-                fetchingSongs = exports.songs.fetch();
-                fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums, fetchingSongs);
-            } else {
-                fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums);
-            }
+            fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums);
         }
 
         fetchingArtistDetails.done(function() {
             artist.albums = getArtistAlbums(artist.get('artistid'));
+            var loadingSongs = [];
             _.each(artist.albums.models, function(album) {
-                loadAlbumSongs(album);
+                loadingSongs.push(loadAlbumSongs(album));
             });
-            def.resolve();
+            
+            $.when.apply($, loadingSongs).done(function() {
+                def.resolve();
+            });
         });
     }
 };
@@ -297,30 +312,26 @@ exports.showAlbumSongList = function(albumid) {
         var album = exports.albums.get(albumid);
         artist = exports.artists.where({'artistid' : album.get('artistid')[0]})[0];
         artist.albums = new Albums([album]);
-        loadAlbumSongs(album);
-        def.resolve();
+        loadAlbumSongs(album).done(function() {
+            def.resolve();
+        });
     } else {
         var album = new Album({ albumid: albumid });
         
         var fetchingAlbums = album.fetch();
         var fetchingArtist = null;
-        var fetchingSongs = null;
         var fetchingArtistDetails = fetchingAlbums;
         if (_.isUndefined(exports.artists) || exports.artists.models.length === 0) {
             fetchingArtist = exports.artists.fetch();
-            if (_.isUndefined(exports.songs) || exports.songs.models.length === 0) {
-                fetchingSongs = exports.songs.fetch();
-                fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums, fetchingSongs);
-            } else {
-                fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums);
-            }
+            fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums);
         }
 
         fetchingArtistDetails.done(function() {
             artist = exports.artists.where({'artistid' : album.get('artistid')[0]})[0];
             artist.albums = new Albums([album]);
-            loadAlbumSongs(album);
-            def.resolve();
+            loadAlbumSongs(album).done(function() {
+                def.resolve();
+            });
         });
     }
 };

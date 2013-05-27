@@ -1,5 +1,5 @@
 var app = require('app');
-var Songs = require('collections/songs');
+var PaginatedSongs = require('collections/songs_paginated');
 var SongListView = require('views/music/song_list');
 var SongFilterView = require('views/music/song_filter');
 
@@ -18,7 +18,7 @@ module.exports = Backbone.Marionette.Layout.extend({
     onRender: function() {
 
         // Clones the movie collection
-        this.filteredCollection = new Songs( _.map(this.collection.models, function(model) { return model.clone(); }) );
+        this.filteredCollection = this.collection; //new PaginatedSongs( _.map(this.collection.models, function(model) { return model.clone(); }) );
 
         this.filterView = new SongFilterView({ collection: this.filteredCollection });
         // this.filterView.on('searchFired', this.performSearch, this);

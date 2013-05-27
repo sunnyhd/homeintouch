@@ -4,9 +4,21 @@ var q = require('../../lib/queries');
 var _ = require('underscore');
 
 exports.index = function(req, res, next) {
-    Album.find(function(err, albums) {
-        if (err) return next(err);
-        res.json(albums);
+
+    var albumList = [];
+
+    var albumStream = Album.find().batchSize(10000).stream();
+    
+    albumStream.on('data', function(album) {
+        albumList.push(album);
+    });
+
+    albumStream.on('error', function(error) {
+        return next(error);
+    });
+
+    albumStream.on('close', function() {
+        res.json(albumList);
     });
 };
 
@@ -35,25 +47,32 @@ exports.lastN = function(req, res, next) {
 };
 
 exports.genres = function(req, res, next) {
-    Album.find({}, ['genre'], function(err, shows) {
-        if (err) return next(err);
-        var genres = [];
 
-        for (var i = 0; i < shows.length; i++) {
-            if (shows[i].genre) {
-                var genre = shows[i].genre;
-                if (genre.indexOf('/') > 0) {
-                    var subGenres = genre.split('/');
-                    for (var j = 0; j < subGenres.length; j++) {
-                        var subGenre = subGenres[j];
-                        genres.push(subGenre.trim());
-                    }
-                } else {
-                    genres.push(shows[i].genre);    
+    var genres = [];
+
+    var genreStream = Album.find({}, ['genre']).batchSize(10000).stream();
+    
+    genreStream.on('data', function(album) {
+
+        if (album.genre) {
+            var genre = album.genre;
+            if (genre.indexOf('/') > 0) {
+                var subGenres = genre.split('/');
+                for (var j = 0; j < subGenres.length; j++) {
+                    var subGenre = subGenres[j];
+                    genres.push(subGenre.trim());
                 }
+            } else {
+                genres.push(album.genre);    
             }
-        };
+        }
+    });
 
+    genreStream.on('error', function(error) {
+        return next(error);
+    });
+
+    genreStream.on('close', function() {
         genres = _.uniq(genres);
         genres = _.sortBy(genres, _.identity);
         res.json(genres);
@@ -61,22 +80,28 @@ exports.genres = function(req, res, next) {
 };
 
 exports.years = function(req, res, next) {
-    Album.find({}, ['year'], function(err, shows) {
-        if (err) return next(err);
-        var years = [];
 
-        for (var i = 0; i < shows.length; i++) {
-            if (shows[i].year) {
-                var year = shows[i].year.toString();
-                if (year < 2000) {
-                    var yearPrefix = year.slice(0, (year.length - 1));
-                    year = yearPrefix + '0-' + yearPrefix + '9';
-                }
+    var years = [];
 
-                years.push(year);
+    var yearStream = Album.find({}, ['year']).batchSize(10000).stream();
+
+    yearStream.on('data', function(album) {
+        if (album.year) {
+            var year = album.year.toString();
+            if (year < 2000) {
+                var yearPrefix = year.slice(0, (year.length - 1));
+                year = yearPrefix + '0-' + yearPrefix + '9';
             }
-        };
 
+            years.push(year);
+        }
+    });
+
+    yearStream.on('error', function(error) {
+        return next(error);
+    });
+
+    yearStream.on('close', function() {
         years = _.uniq(years);
         years = _.sortBy(years, _.identity);
         res.json(years);

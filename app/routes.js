@@ -54,7 +54,10 @@ module.exports = function(app) {
     app.get('/api/genres/albums', controllers.albums.genres);
     app.get('/api/years/albums', controllers.albums.years);
 
+    app.get('/api/albums/:albumid/songs', controllers.songs.getByAlbum);
+
     app.get('/api/songs', controllers.songs.index);
+    app.get('/api/songpages', controllers.songs.pages);
     app.get('/api/songs/:songid', controllers.songs.get);
 
     app.post('/api/remotecontrol/commands', controllers.remote_control.executeCommand);
