@@ -123,8 +123,7 @@ module.exports = FilterPanelView.extend({
             };
         }
         console.log(opts);
-        var originalCollection = new Songs(this.collections.originalModels);
-        this.resetCollection( originalCollection.filterAndSortBy(opts) );
+        this.trigger('filter-songs', opts);
     },
 
     // Touch event handlers

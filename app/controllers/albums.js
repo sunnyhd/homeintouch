@@ -39,10 +39,19 @@ exports.show = function(req, res, next) {
 };
 
 exports.lastN = function(req, res, next) {
+    var albumList = [];
     var albumProperties = ['albumid', 'artist', 'thumbnailUrl', 'label'];
-    q.lastN(Album, req.params.n, albumProperties, function(err, albums) {
-        if (err) return next(err);
-        res.json(albums);
+    var albumStream = Album.find({}, albumProperties).sort('_id', -1).limit(req.params.n).batchSize(10000).stream();
+    albumStream.on('data', function(album) {
+        albumList.push(album);
+    });
+
+    albumStream.on('error', function(error) {
+        return next(error);
+    });
+
+    albumStream.on('close', function() {
+        res.json(albumList);
     });
 };
 

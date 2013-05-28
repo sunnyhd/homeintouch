@@ -34,6 +34,7 @@ exports.loading = null;
 
 exports.loadingArtistData = null;
 exports.loadingAlbumData = null;
+exports.loadingSongData = null;
 
 exports.showHomeView = function() {
 
@@ -101,9 +102,9 @@ exports.showAlbumList = function() {
 
 exports.showSongList = function() {
 
-    var loadingPaginatedSongs = exports.paginatedSongs.fetch();
+    loadSongData();
 
-    loadingPaginatedSongs.done(function(){
+    exports.loadingSongData.done(function(){
 
         updateListNav('Songs', '#music/songs');
         var view = new SongContainerView({ collection: exports.paginatedSongs });
@@ -125,11 +126,23 @@ loadAlbumData = function() {
 
     if (_.isNull(exports.loadingAlbumData)) {
         var loadingAlbums = exports.albums.fetch();
-        var loadingAlbumsGenres = $.get('/api/genres/albums').done(function (data) { exports.filters.album.genres = data; });
-        var loadingAlbumsYears = $.get('/api/years/albums').done(function (data) { exports.filters.album.years = data; });
+        var loadingAlbumsGenres = _.isNull(exports.filters.album.genres) ? $.get('/api/genres/albums').done(function (data) { exports.filters.album.genres = data; }) : true;
+        var loadingAlbumsYears = _.isNull(exports.filters.album.years) ? $.get('/api/years/albums').done(function (data) { exports.filters.album.years = data; }) : true;
     }
 
     exports.loadingAlbumData = $.when(loadingAlbums, loadingAlbumsGenres, loadingAlbumsYears);
+
+};
+
+loadSongData = function() {
+
+    if (_.isNull(exports.loadingSongData)) {
+        var loadingAlbums = exports.paginatedSongs.fetch();
+        var loadingAlbumsGenres = _.isNull(exports.filters.album.genres) ? $.get('/api/genres/albums').done(function (data) { exports.filters.album.genres = data; }) : true;
+        var loadingAlbumsYears = _.isNull(exports.filters.album.years) ? $.get('/api/years/albums').done(function (data) { exports.filters.album.years = data; }) : true;
+    }
+
+    exports.loadingSongData = $.when(loadingAlbums, loadingAlbumsGenres, loadingAlbumsYears);
 
 };
 

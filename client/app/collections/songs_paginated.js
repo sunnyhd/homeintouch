@@ -37,6 +37,11 @@ var Songs = module.exports = Backbone.Paginator.requestPager.extend({
 		}};
 
 		this.requestNextPage(options);
+	},
+
+	filter: function(opts) {
+		this.server_api.filter = JSON.stringify(opts);
+		this.fetch();
 	}
 
 });

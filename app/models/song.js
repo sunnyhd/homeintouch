@@ -8,7 +8,9 @@ var Song = new mongoose.Schema({
     artist: String,
     artistid: [Number],
     file: String,
-    track: Number
+    track: Number,
+    year: String,
+    genre: String
 });
 
 module.exports = mongoose.model('Song', Song);

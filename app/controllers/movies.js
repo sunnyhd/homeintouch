@@ -32,10 +32,19 @@ exports.get = function(req, res, next) {
 };
 
 exports.lastN = function(req, res, next) {
+	var movieList = [];
 	var movieProperties = ['movieid', 'label', 'genre', 'thumbnailUrl'];
-	q.lastN(Movie, req.params.n, movieProperties, function(err, movies) {
-        if (err) return next(err);
-        res.json(movies);
+	var movieStream = Movie.find({}, movieProperties).sort('_id', -1).limit(req.params.n).batchSize(10000).stream();
+	movieStream.on('data', function(movie) {
+        movieList.push(movie);
+    });
+
+    movieStream.on('error', function(error) {
+        return next(error);
+    });
+
+    movieStream.on('close', function() {
+        res.json(movieList);
     });
 };
 

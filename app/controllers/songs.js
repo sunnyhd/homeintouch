@@ -14,10 +14,7 @@ exports.index = function(req, res, next) {
 	        		var album = albums[j].toObject();
 
 	        		if (album.albumid === song.albumid) {
-		        		song.year = album.year;
-			        	song.genre = album.genre;
-			        	song.thumbnailid = album.thumbnailid;
-			        	song.thumbnail = album.thumbnail;	
+		        		song.thumbnailUrl = album.thumbnailUrl;
 	        		}
 	        	}
 	        	
@@ -35,8 +32,30 @@ exports.pages = function(req, res, next) {
     var pageNum = req.query.page;
     var skipAmount = pageSize * pageNum;
     var sortCriteria = req.query.sort;
+    var queryFilter = {};
 
-    var songStream = Song.find({}, [], {sort: {sortCriteria: 1}}).batchSize(10000).skip(skipAmount).limit(pageSize).stream();
+    if (req.query.filter) {
+        
+        var filter = JSON.parse(req.query.filter).filters;
+
+        if (filter.genre) {
+            queryFilter['genre'] = new RegExp(filter.genre);
+        }
+
+        if (filter.year) {
+            var year = filter.year;
+            if (year.indexOf('-') > 0) {
+                var yearArray = year.split('-');
+                queryFilter['year'] = {$gte: yearArray[0], $lte: yearArray[1]};
+            } else {
+                queryFilter['year'] = year;
+            }
+        }
+    }
+
+    console.log(JSON.stringify(queryFilter));
+
+    var songStream = Song.find(queryFilter, [], {sort: {sortCriteria: 1}}).batchSize(10000).skip(skipAmount).limit(pageSize).stream();
     
     songStream.on('data', function(song) {
 
@@ -44,10 +63,7 @@ exports.pages = function(req, res, next) {
             if (err) return next(err);
             if (!album) return next(new Error('No such album'));
 
-            song.year = album.year;
-            song.genre = album.genre;
-            song.thumbnailid = album.thumbnailid;
-            song.thumbnail = album.thumbnail;   
+            song.thumbnailUrl = album.thumbnailUrl;
         });
 
         songList.push(song);
@@ -67,7 +83,7 @@ exports.getByAlbum = function(req, res, next) {
     var songList = [];
     var songStream = Song.find( { albumid: req.params.albumid } ).batchSize(10000).stream();
 
-    songStream.on('data', function(song) {        
+    songStream.on('data', function(song) {
         songList.push(song);
     });
 
@@ -89,10 +105,7 @@ exports.get = function(req, res, next) {
 	        if (err) return next(err);
 	        if (!album) return next(new Error('No such album'));
 
-	        song.year = album.year;
-        	song.genre = album.genre;
-        	song.thumbnailid = album.thumbnailid;
-        	song.thumbnail = album.thumbnail;	
+	        song.thumbnailUrl = album.thumbnailUrl;
 
 	        res.json(song);
     	});

@@ -2,7 +2,7 @@ var SongItemView = require('views/music/song_item');
 var FilteredListView = require('views/filtered_list');
 
 module.exports = FilteredListView.extend({
-    
+
     template: require('templates/music/song_list'),
     
     itemView: SongItemView,

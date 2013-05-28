@@ -1,6 +1,7 @@
 var app = require('app');
 var PaginatedSongs = require('collections/songs_paginated');
 var SongListView = require('views/music/song_list');
+var SongListPagerView = require('views/music/song_list_pager');
 var SongFilterView = require('views/music/song_filter');
 
 module.exports = Backbone.Marionette.Layout.extend({
@@ -17,18 +18,20 @@ module.exports = Backbone.Marionette.Layout.extend({
 
     onRender: function() {
 
-        // Clones the movie collection
-        this.filteredCollection = this.collection; //new PaginatedSongs( _.map(this.collection.models, function(model) { return model.clone(); }) );
-
-        this.filterView = new SongFilterView({ collection: this.filteredCollection });
-        // this.filterView.on('searchFired', this.performSearch, this);
+        this.filterView = new SongFilterView({ collection: this.collection });
+        this.filterView.on('filter-songs', this.performSearch);
         this.filter.show(this.filterView);
 
-        this.listView = new SongListView({ collection: this.filteredCollection });
-
-        //app.vent.off('refresh-movie-views');
-        //app.vent.on('refresh-movie-views', this.render, this.listView);
+        this.listView = new SongListView({ collection: this.collection });
 
         this.list.show(this.listView);
+
+        var songListPagerView = new SongListPagerView();
+        app.touchBottomContent.show(songListPagerView);
+        songListPagerView.on('show-more', this.listView.nextPage, this.listView);
+    },
+
+    performSearch: function(opts) {
+        this.collection.filter(opts);
     }
 });
