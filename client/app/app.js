@@ -391,6 +391,38 @@ app.addInitializer(function() {
         app.resetStartPageTimeout();
     });
 
+    app.desktopTopConfig.on('view:show', function() {
+        $('#desktop-top-config').show();
+    });
+
+    app.desktopTopConfig.on('view:closed', function() {
+        $('#desktop-top-config').hide();
+    });
+
+    app.touchBottomConfig.on('view:show', function() {
+        $('#touch-bottom-config').show();
+    });
+
+    app.touchBottomConfig.on('view:closed', function() {
+        $('#touch-bottom-config').hide();
+    });
+
+    app.desktopTopOpts.on('view:show', function() {
+        $('#desktop-top-opts').show();
+    });
+
+    app.desktopTopOpts.on('view:closed', function() {
+        $('#desktop-top-opts').hide();
+    });
+
+    app.touchTopOpts.on('view:show', function() {
+        $('#touch-top-opts').show();
+    });
+
+    app.touchTopOpts.on('view:closed', function() {
+        $('#touch-top-opts').hide();
+    });
+
     // Start router
     app.router = new Router({ app: app });
     Backbone.history.start();
