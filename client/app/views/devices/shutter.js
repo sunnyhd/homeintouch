@@ -96,9 +96,25 @@ module.exports = DeviceView.extend({
         }
 
         var shutterPct = 100 - (Math.abs(positionDiff) * 100) / this.shutterHeight;
+
+        if (shutterPct >= 97) {
+            // The shutter indicator is near 100, set pct to 100.
+            console.log('Shutter PCT: ' + shutterPct + ' round to 100');
+            shutterPct = 100;
+            positionDiff = 0;
+        }
+
+        if (shutterPct <= 3) {
+            // The shutter indicator is near 100, set pct to 100.
+            console.log('Shutter PCT: ' + shutterPct + ' round to 0');
+            shutterPct = 0;
+            positionDiff = (-this.shutterHeight);
+        }
+
         this.$shutterDetail.html(Math.ceil(shutterPct) + '%');
         this.$shutterWidget.setPixels('margin-top', positionDiff);
 
+        this.finishedDragging = true;
         return false;
     },
 
@@ -115,7 +131,6 @@ module.exports = DeviceView.extend({
             this.$shutterContainer.unbind('mousemove', this.proxyShutterMouseMove);
         }
 
-        this.finishedDragging = true;
         this.positionChanged(this.getShutterValue());
 
         return false;
