@@ -27,10 +27,6 @@ module.exports = FilteredListView.extend({
         this.$('.pictures').append(iv.el);
     },
 
-    matchers: function(picture) {
-        return picture.get('label');
-    },
-
     buildBreadcrumb: function() {
 
         var breadcrumbList = this.options.breadcrumb;

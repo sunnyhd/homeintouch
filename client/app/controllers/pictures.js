@@ -34,7 +34,13 @@ exports.showPicturesListView = function(path) {
     var view = new PictureContainerView({ collection: exports.pictures, mode: 'list', breadcrumb: exports.breadcrumb });
     app.main.show(view);
 
-    exports.pictures.fetch();
+    var options = {
+        success: function() {
+            view.refreshFilterPanel();
+        }
+    };
+
+    exports.pictures.fetch(options);
 };
 
 exports.showPictureDetailsView = function(path, mode) {

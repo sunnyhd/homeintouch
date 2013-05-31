@@ -10,14 +10,14 @@ module.exports = FilteredListView.extend({
 
     events: {
         'click [data-redirect]' : 'navigateFolder'
-    },
-    
-    appendHtml: function(cv, iv) {
-        this.$('.pictures').append(iv.el);
-    },
+    },      
 
     onRender: function() {
         this.buildBreadcrumb();
+    },
+
+    appendHtml: function(cv, iv) {
+        this.$('.pictures').append(iv.el);
     },
 
     buildBreadcrumb: function() {
