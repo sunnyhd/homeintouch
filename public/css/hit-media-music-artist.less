@@ -73,15 +73,11 @@
 
 .artistsResponsiveCoverView (@proportion: 1) {
 	li.artist {
-	  	// height: 178px * @proportion;
 	  	height: 140px * @proportion;
-	  	// width: 124px * @proportion;
 	  	width: 140px * @proportion;
 	  	margin: 5px * @proportion;
 	  	img, .no-img {
-	  		// width: 114px * @proportion;
 	  		width: 130px * @proportion;
-	  		// height: 168px * @proportion;
 	  		height: 130px * @proportion;
 		  	margin: 5px * @proportion;
 		}
@@ -144,10 +140,10 @@
  
 /* Landscape phones and down */
 @media (max-width: 480px) {
-	.artists.coverView { .artistsResponsiveCoverView(1); }
+	.artists.coverView { .artistsResponsiveCoverView(0.92); }
 }
 
 /* Portrait phones */
 @media (max-width: 320px) {
-	.artists.coverView { .artistsResponsiveCoverView(0.9); }
+	.artists.coverView { .artistsResponsiveCoverView(0.85); }
 }
