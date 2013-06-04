@@ -2,6 +2,7 @@ var images = require('../../lib/images');
 var request = require('request');
 var fs = require('fs');
 var svgImageCache = {};
+var imageCache = require('../../lib/image_cache');
 
 var settings = require('../../config');
 
@@ -48,9 +49,7 @@ exports.svgGet = function(req, res, next) {
 };
 
 exports.getFromCache = function(req, res, next) {
-
     var imageId = req.path.substring(settings.cache.localUrl.length);
-    var imageURL = settings.cache.url + "/static" + imageId;
 
-    request.get(imageURL).pipe(res);
+    imageCache.load(imageId).pipe(res);
 }
