@@ -3,6 +3,7 @@ var request = require('request');
 var images = require('../../lib/images');
 var settings = require('../../config');
 var url = require('url');
+var imageCache = require('../../lib/image_cache');
 
 var predefinedWidths = {
     fanart: 1024,
@@ -93,19 +94,17 @@ exports.cacheImages = function(Model, fields) {
                 if (attrs.newCache) {
 
                     var width = predefinedWidths[attrs.src];
-                      //Save images in cache server
-                    var imageId = url.parse(imageUrl).pathname;
-                    var uploadUrl = settings.cache.url + "/upload?source=" + imageUrl + "&widths=" + width;
-                   
-                    request(uploadUrl, function(err,res,body){
-                        if (res.statusCode !== 200){
-                            console.log('Uploading image Failed');
-                            return callback(); 
-                        } 
+                    //Save images in cache server
+                    
+                    imageCache.save(imageUrl, width)
+                    .then(function(imageId) {
                         self[attrs.dest] = settings.cache.localUrl + imageId;
-                        console.log('Image uploaded succesfully. url: ' + self[attrs.dest]);
                         callback();
-                    });  
+                    })
+                    .fail(function(err) {
+                        callback();
+                    })
+                    .done();  
                 } else {
 
                     // Make HTTP request for image
