@@ -55,6 +55,7 @@ module.exports = DeviceView.extend({
 
     updateDimmerSlider: function(value) {
         try {
+            console.log('updateDimmerSlider: this.setReadValue = ' + this.setReadValue + ', Value: ' + value);
             this.$('.slider-horizontal').slider("value", value);
         } catch(err) {
             console.log('Dimmer Slider is not initialized');
@@ -96,8 +97,6 @@ module.exports = DeviceView.extend({
     },
 
     selectDimmer: function(address, value){
-        if (this.dimmerTimeout) return;
-
         console.log('Select Dimmer, value: ' + value);
 
         this.updateDimmerDetail(value);

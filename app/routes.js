@@ -44,17 +44,19 @@ module.exports = function(app) {
     app.get('/api/episodes/label', controllers.episodes.label);
     app.get('/api/episodes/:episodeid', controllers.episodes.get);
 
+    app.get('/api/artists/:artistid/albums', controllers.albums.getByArtist);
+
     app.get('/api/artists', controllers.artists.index);
     app.get('/api/artists/:artist', controllers.artists.show);
     app.get('/api/genres/artists', controllers.artists.genres);
+
+    app.get('/api/albums/:albumid/songs', controllers.songs.getByAlbum);
 
     app.get('/api/albums', controllers.albums.index);
     app.get('/api/albums/:album', controllers.albums.show);
     app.get('/api/albums/last/:n', controllers.albums.lastN);
     app.get('/api/genres/albums', controllers.albums.genres);
     app.get('/api/years/albums', controllers.albums.years);
-
-    app.get('/api/albums/:albumid/songs', controllers.songs.getByAlbum);
 
     app.get('/api/songs', controllers.songs.index);
     app.get('/api/songpages', controllers.songs.pages);

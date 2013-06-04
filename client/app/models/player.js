@@ -159,10 +159,10 @@ var Player = Backbone.Model.extend({
     },
 
     thumbnail: function() {
-        var id = this.get('item').get('thumbnailid');
+        var url = this.get('item').get('thumbnailUrl');
 
-        if (id) {
-            return '/api/images/' + id;
+        if (url) {
+            return url;
         } else {
             return '';
         }

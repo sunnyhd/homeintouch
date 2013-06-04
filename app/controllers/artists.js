@@ -1,3 +1,4 @@
+var Song = require('../models/song');
 var Album = require('../models/album');
 var Artist = require('../models/artist');
 var _ = require('underscore');

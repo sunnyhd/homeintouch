@@ -28,6 +28,7 @@ exports.index = function(req, res, next) {
 exports.pages = function(req, res, next) {
 
     var songList = [];
+    var songAlbumIdList = [];
     var pageSize = req.query.per_page;
     var pageNum = req.query.page;
     var skipAmount = pageSize * pageNum;
@@ -59,13 +60,7 @@ exports.pages = function(req, res, next) {
     
     songStream.on('data', function(song) {
 
-        Album.findOne({ albumid: song.albumid }, function(err, album) {
-            if (err) return next(err);
-            if (!album) return next(new Error('No such album'));
-
-            song.thumbnailUrl = album.thumbnailUrl;
-        });
-
+        songAlbumIdList.push(song.albumid);
         songList.push(song);
     });
 
@@ -74,7 +69,24 @@ exports.pages = function(req, res, next) {
     });
 
     songStream.on('close', function() {
-        res.json({data: songList});
+
+        var result = [];
+        Album.find({ albumid: {$in: songAlbumIdList} }, function(err, albums) {
+            if (err) return next(err);
+
+            for (var j = songList.length - 1; j >= 0; j--) {
+                var song = songList[j];
+                song = song.toObject();
+                for (var i = albums.length - 1; i >= 0; i--) {
+                    var album = albums[i].toObject();
+                    if (album.albumid === song.albumid) {
+                        song.thumbnailUrl = album.thumbnailUrl;
+                    }
+                }
+                result.push(song);
+            }
+            res.json({data: result});
+        });
     });
 };
 
@@ -105,6 +117,7 @@ exports.get = function(req, res, next) {
 	        if (err) return next(err);
 	        if (!album) return next(new Error('No such album'));
 
+            song = song.toObject();
 	        song.thumbnailUrl = album.thumbnailUrl;
 
 	        res.json(song);

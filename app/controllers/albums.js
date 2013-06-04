@@ -116,3 +116,12 @@ exports.years = function(req, res, next) {
         res.json(years);
     });
 };
+
+exports.getByArtist = function(req, res, next) {
+
+    Album.find({ artistid: req.params.artistid }, function(err, albums) {
+        if (err) return next(err);
+
+        res.json(albums);
+    });
+};

@@ -13,10 +13,10 @@ var Song = module.exports = Backbone.Model.extend({
     },
 
     thumbnail: function() {
-        var id = this.get('thumbnailid');
+        var url = this.get('thumbnailUrl');
 
-        if (id) {
-            return '/api/images/' + this.get('thumbnailid');
+        if (url) {
+            return url;
         }
     },
 

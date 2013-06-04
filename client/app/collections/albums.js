@@ -1,24 +1,34 @@
 var Album = require('models/album');
+var Songs = require('collections/songs');
 
 var Albums = module.exports = Backbone.Collection.extend({
 
     model: Album,
 
-    url: '/api/albums',
+    url: function() {
+
+        if (this.artistid) {
+            return '/api/artists/' + this.artistid + '/albums';
+        } else if (this.lastN) {
+            return '/api/albums/last/' + this.lastN;
+        } else {
+            return '/api/albums';
+        }
+    },
 
     initialize: function(opts) {
     	opts || (opts = {});
     	if (opts.lastN) {
-    		this.url = '/api/albums/last/' + opts.lastN;
+            this.lastN = opts.lastN;
     	}
     },
 
     setLastN: function(amount) {
-        this.url = '/api/albums/last/' + amount;
+        this.lastN = amount;
     },
 
     clearLastN: function() {
-        this.url = '/api/albums';
+        this.lastN = null;
     },
 
     /**

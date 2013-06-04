@@ -234,11 +234,43 @@ var updateAlbumNav = function(artist) {
 };
 
 var getArtistAlbums = function(artistid) {
-    var albumList = _.filter(exports.albums.models, function(album) {
-        return (album.get('artistid').indexOf(artistid) >= 0);
-    });
+    
+    var def = new $.Deferred();
 
-    return new Albums(albumList);
+    if (!_.isUndefined(exports.albums) && exports.albums.models.length > 0) {
+
+        var albumList = _.filter(exports.albums.models, function(album) {
+            return (album.get('artistid').indexOf(artistid) >= 0);
+        });
+
+        exports.currentArtistAlbums = new Albums(albumList);
+
+        var loadingSongs = [];
+        _.each(exports.currentArtistAlbums.models, function(album) {
+            loadingSongs.push(loadAlbumSongs(album));
+        });
+        
+        $.when.apply($, loadingSongs).done(function() {
+            def.resolve();
+        });
+    } else {
+        exports.currentArtistAlbums = new Albums();
+        exports.currentArtistAlbums.artistid = artistid
+        var fetchingAlbums = exports.currentArtistAlbums.fetch();
+
+        fetchingAlbums.done(function() {
+            var loadingSongs = [];
+            _.each(exports.currentArtistAlbums.models, function(album) {
+                loadingSongs.push(loadAlbumSongs(album));
+            });
+            
+            $.when.apply($, loadingSongs).done(function() {
+                def.resolve();
+            });
+        });
+    }
+
+    return def.promise();
 };
 
 var loadAlbumSongs = function(album) {
@@ -246,6 +278,27 @@ var loadAlbumSongs = function(album) {
     album.songs.albumid = album.get('albumid');
     album.songs.comparator = function(song) { return song.get('track'); };
     return album.songs.fetch();
+};
+
+var loadArtist = function(artistid) {
+
+    var def = new $.Deferred();
+    exports.currentArtist = null;
+
+    // If the artists collection is loaded
+    if (!_.isUndefined(exports.artists) && exports.artists.models.length > 0) {
+        exports.currentArtist = exports.artists.where({'artistid' : artistid})[0];
+        def.resolve();
+    } else {
+        exports.currentArtist = new Artist({artistid: artistid});
+        var fetchingArtist = exports.currentArtist.fetch();
+
+        fetchingArtist.done(function() {
+            def.resolve();
+        });
+    }
+
+    return def.promise();
 };
 
 exports.showArtistDetailsView = function(artistid) {
@@ -268,13 +321,10 @@ exports.showArtistDetailsView = function(artistid) {
     // If the collection is loaded
     if (!_.isUndefined(exports.artists) && exports.artists.models.length > 0) {
         artist = exports.artists.get(artistid);
-        artist.albums = getArtistAlbums(artist.get('artistid'));
-        var loadingSongs = [];
-        _.each(artist.albums.models, function(album) {
-            loadingSongs.push(loadAlbumSongs(album));
-        });
+        var loadingAlbums = getArtistAlbums(artist.get('artistid'));
 
-        $.when.apply($, loadingSongs).done(function() {
+        loadingAlbums.done(function() {
+            artist.albums = exports.currentArtistAlbums;
             def.resolve();
         });
 
@@ -282,27 +332,15 @@ exports.showArtistDetailsView = function(artistid) {
     } else {
         artist = new Artist({ artistid: artistid });
         var fetchingArtist = artist.fetch();
-        var fetchingAlbums = null;
-        var fetchingArtistDetails = fetchingArtist;
-        if (_.isUndefined(exports.albums) || exports.albums.models.length == 0) {
-            fetchingAlbums = exports.albums.fetch();
-            fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums);
-        }
 
-        fetchingArtistDetails.done(function() {
-            artist.albums = getArtistAlbums(artist.get('artistid'));
-            var loadingSongs = [];
-            _.each(artist.albums.models, function(album) {
-                loadingSongs.push(loadAlbumSongs(album));
-            });
-            
-            $.when.apply($, loadingSongs).done(function() {
+        fetchingArtist.done(function() {
+            getArtistAlbums(artist.get('artistid')).done(function() {
+                artist.albums = exports.currentArtistAlbums;
                 def.resolve();
             });
         });
     }
 };
-
 
 exports.showAlbumSongList = function(albumid) {
 
@@ -316,35 +354,28 @@ exports.showAlbumSongList = function(albumid) {
     // When the artist instance is loaded, displays its data
     loadingArtist.done(function() {
 
-        updateAlbumNav(artist);
-        var view = new ArtistDetailView({ model: artist, mode: 'album' });
+        updateAlbumNav(exports.currentArtist);
+        var view = new ArtistDetailView({ model: exports.currentArtist, mode: 'album' });
         app.main.show(view);
     });
 
-    if (!_.isUndefined(exports.albums) && exports.albums.models.length > 0) {
-        var album = exports.albums.get(albumid);
-        artist = exports.artists.where({'artistid' : album.get('artistid')[0]})[0];
-        artist.albums = new Albums([album]);
-        loadAlbumSongs(album).done(function() {
-            def.resolve();
-        });
-    } else {
-        var album = new Album({ albumid: albumid });
-        
-        var fetchingAlbums = album.fetch();
-        var fetchingArtist = null;
-        var fetchingArtistDetails = fetchingAlbums;
-        if (_.isUndefined(exports.artists) || exports.artists.models.length === 0) {
-            fetchingArtist = exports.artists.fetch();
-            fetchingArtistDetails = $.when(fetchingArtist, fetchingAlbums);
-        }
+    var album = null;
 
+    var fetchingArtistCallback = function() {
+        loadAlbumSongs(album).done(function() {
+            exports.currentArtist.albums = new Albums([album]);
+            def.resolve();
+        });    
+    };
+
+    if (!_.isUndefined(exports.albums) && exports.albums.models.length > 0) {
+        album = exports.albums.get(albumid);
+        loadArtist(album.get('artistid')[0]).done(fetchingArtistCallback);
+    } else {
+        album = new Album({ albumid: albumid });
+        fetchingArtistDetails = album.fetch();
         fetchingArtistDetails.done(function() {
-            artist = exports.artists.where({'artistid' : album.get('artistid')[0]})[0];
-            artist.albums = new Albums([album]);
-            loadAlbumSongs(album).done(function() {
-                def.resolve();
-            });
+            loadArtist(album.get('artistid')[0]).done(fetchingArtistCallback);
         });
     }
 };
