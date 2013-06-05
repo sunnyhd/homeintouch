@@ -1,4 +1,7 @@
 var xbmc = require('../../lib/xbmc');
+var crc = require('../../lib/crc');
+
+var THUMBNAIL_URL = 'special://profile/Thumbnails/';
 
 exports.index = function(req, res, next) {
     var type = req.query.type;
@@ -38,6 +41,13 @@ exports.index = function(req, res, next) {
             if (files) {
                 files.forEach(function(file) {
                     console.log('Filename: ', file.file);
+                    
+                    if(file.filetype === 'file') {
+                        // Create the path to XBMC thumbnails using the CRC32 of the path
+                        var thumb = crc.generate(file.file.toLowerCase()); 
+                        file.thumbnail = THUMBNAIL_URL + thumb.charAt(0) + '/' + thumb + '.jpg';
+                    }
+
                     if (file.file.indexOf('\\') > 0) {
                         file.file = file.file.replace(/\\/g, '/');
                     }
@@ -45,7 +55,48 @@ exports.index = function(req, res, next) {
             }
 
             res.json(files);
-        })
+		});
+            /*var promises = [Promise.resolve(files)];
+
+            if (files) {
+                promises = files.map(function(file) {
+                    console.log('Filename: ', file.file);
+                    
+                    var path = file.file;
+
+                    if (path.indexOf('\\') > 0) {
+                        path = path.replace(/\\/g, '/');
+                    }
+
+                    if(file.filetype === 'file') {
+                        var thumb = crc.generate(file.file.toLowerCase()); 
+                        file.thumbnail = THUMBNAIL_URL + thumb.charAt(0) + '/' + thumb + '.jpg';
+                        /*file.file = path;
+                        return imageCache.load('http://htpc:8010/image/' + encodeURIComponent(path))
+                            .fail(function() {
+                                return imageCache.save('http://htpc:8010/image/' + encodeURIComponent(path), 240)
+                            })
+                            .then(function() {
+                                file.thumbnail = settings.cache.localUrl + path;
+                                return true;
+                            });
+                    } else {
+                        file.file = path;
+                        
+                    }
+                    return Promise.resolve(true);
+                    
+                });
+            }
+
+            Promise.all(promises).then(function() {
+                res.json(files);    
+            }).fail(function(err) {
+                console.log(err);
+                throw err;
+            }).done();
+            */
+        
     } else {
         xbmc.rpc('Files.GetSources', params, function(err, results) {
             if (err) return next(err);
