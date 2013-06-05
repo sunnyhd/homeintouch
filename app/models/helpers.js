@@ -45,11 +45,15 @@ var buildImageUrl = function(url) {
 
     var tempURL = url.substring(imagePrefix.length);
     tempURL = removeLastSlash(tempURL);
-    var imagePath = encodeURIComponent(tempURL);
-    // The URL is encoded again because it is decoded in Image Cache Server
-    imagePath = encodeURIComponent(imagePath);
-
-    return settings.images.importUrl + imagePrefix + imagePath;
+    
+    if (tempURL.indexOf('http') === 0) {
+        return decodeURIComponent(tempURL);
+    } else {
+        var imagePath = encodeURIComponent(tempURL);
+        // The URL is encoded again because it is decoded in Image Cache Server
+        imagePath = encodeURIComponent(imagePath);
+        return settings.images.importUrl + imagePrefix + imagePath;
+    }
 };
 
 exports.cacheImages = function(Model, fields) {
