@@ -44,6 +44,7 @@ app.addRegions({
     touchBottomConfig: '#touch-bottom-config ul.dropdown-menu',
     touchTopOpts: '#touch-top-opts ul.dropdown-menu',
     touchTopSwitch: '#touch-top-switch',
+    touchShortcutContainer: '.touch-shortcut-container',
 
     // Main & Modal regions
     subnav: '#subnav', // FIXME delete this
@@ -63,11 +64,21 @@ app.closeRegions = function() {
     app.touchBottomConfig.close();
     app.touchTopOpts.close();
     app.touchTopSwitch.close();
+    app.touchShortcutContainer.close();
+
     app.subnav.close(); // FIXME delete this
     app.main.close();
     app.modal.close();
     app.loading.close();
 };
+
+app.vent.on('touch-shortcut:show', function() {
+    $(app.touchShortcutContainer.el).removeClass('hidden');
+});
+
+app.vent.on('touch-shortcut:hide', function() {
+    $(app.touchShortcutContainer.el).addClass('hidden');
+});
 
 app.setBackgroundImg = function(img) {
     var data = {
@@ -379,12 +390,18 @@ app.addInitializer(function() {
 });
 
 app.addInitializer(function() {
+
     $('a').live('click', function(e) {
         if ($(this).attr('href') === '#') {
             e.preventDefault();
         }
-
         return false;
+    });
+
+    $('[data-href]').live('click', function(e) {
+        if ($(this).data('href') !== '') {
+            window.location.href = $(this).data('href');
+        }
     });
 
     $(document).on('click', function(e) {

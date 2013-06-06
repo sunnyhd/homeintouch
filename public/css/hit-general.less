@@ -119,3 +119,26 @@ ul.hit-nav-right li a:hover {
 	margin-left: -100px;
 	z-index: 1050;
 }
+
+// Touch shortcut container (it displays the now playing... on smartphones)
+.touch-shortcut-container {
+	
+	// positioning
+	position: fixed;
+	bottom: 80px;
+	left: 0;
+
+	// styling
+	height: 40px;
+	width: 40px;
+	.borderRadius (0, 10px, 10px, 0);
+	border: 1px solid #222;
+	border-left: none;
+	text-align: center;
+	#gradient.vertical(@startColor: #333333, @endColor: #222222);
+
+	a {
+		padding: 12px 0;
+		display: block;
+	}
+}
