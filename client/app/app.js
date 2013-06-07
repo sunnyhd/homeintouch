@@ -389,6 +389,50 @@ app.addInitializer(function() {
     });
 });
 
+/* 
+ * On touch elements [data-touchable] 
+ */
+var initTouchableAnimations = function() {
+
+    var touchableSelector = '[data-touchable]',
+        $touchableEl = $(touchableSelector),
+        onTouchClass = 'on-touch',
+        defaultClass = 'black',
+        classPrefix = 'on-touch-active-';
+
+    var onTouchStart = function(e) {
+        var $el = $(this),
+            tClass = $el.data('touchable');
+        tClass = (tClass) ? tClass : defaultClass;
+        
+        if (!$el.hasClass(onTouchClass)) {
+            $el.addClass(onTouchClass);
+        }
+
+        // Apply the active class
+        $el.addClass(classPrefix + tClass);
+    };
+
+    var onTouchStop = function(e) {
+        var $el = $(this),
+            classes = $el.attr('class').split(/\s+/);
+        $.each( classes, function(idx, item){
+            if (item.indexOf(classPrefix) == 0) {
+               $el.removeClass(item);
+            }
+        });
+    };
+
+    if (app.isTouchDevice()) {
+        $touchableEl.live('touchstart', onTouchStart);
+        $touchableEl.live('touchend', onTouchStop);
+    } else {
+        $touchableEl.live('mousedown', onTouchStart);
+        $touchableEl.live('mouseup', onTouchStop);
+    }
+}
+
+
 app.addInitializer(function() {
 
     $('a').live('click', function(e) {
@@ -403,6 +447,9 @@ app.addInitializer(function() {
             window.location.href = $(this).data('href');
         }
     });
+
+    initTouchableAnimations();
+
 
     $(document).on('click', function(e) {
         app.resetStartPageTimeout();
@@ -561,6 +608,19 @@ $.fn.getPixels = function(property) {
 $.fn.setPixels = function(property, value) {
     return this.css(property, value + 'px');
 };
+
+jQuery.expr[':'].regex = function(elem, index, match) {
+    var matchParams = match[3].split(','),
+        validLabels = /^(data|css):/,
+        attr = {
+            method: matchParams[0].match(validLabels) ? 
+                        matchParams[0].split(':')[0] : 'attr',
+            property: matchParams.shift().replace(validLabels,'')
+        },
+        regexFlags = 'ig',
+        regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g,''), regexFlags);
+    return regex.test(jQuery(elem)[attr.method](attr.property));
+}
 
 /**
 * Injects the given CSS as string to the head of the document.
