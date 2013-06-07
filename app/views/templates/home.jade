@@ -226,7 +226,7 @@ script(id="album-recently-added", type="text/template")
     span.mediaTitle <%=data.artist%>
     .mediaThumbnail
       <% if (!_.isUndefined(data.thumbnailUrl)) { %>
-      img(src!="<%= data.thumbnailUrl %>")
+      img(src!="<%= data.thumbnailUrl %>", onerror="this.src='img/svg/media/recently/albums.svg'")
       <% } else { %>
       img(src="img/svg/media/recently/albums.svg")
       <% } %>
@@ -237,7 +237,7 @@ script(id="movie-recently-added", type="text/template")
     span.mediaTitle <%= data.label %>
     .mediaThumbnail
       <% if (!_.isUndefined(data.thumbnailUrl)) { %>
-      img(src!="<%= data.thumbnailUrl %>")
+      img(src!="<%= data.thumbnailUrl %>", onerror="this.src='img/svg/media/recently/movies.svg'")
       <% } else { %>
       img(src="img/svg/media/recently/movies.svg")
       <% } %>
@@ -248,7 +248,7 @@ script(id="episode-recently-added", type="text/template")
     span.mediaTitle <%=data.showtitle + ' - ' + data.season%>
     .mediaThumbnail
       <% if (!_.isUndefined(data.thumbnailUrl)) { %>
-      img(src!="<%= data.thumbnailUrl %>")
+      img(src!="<%= data.thumbnailUrl %>", onerror="this.src='img/svg/media/recently/episodes.svg'")
       <% } else { %>
       img(src="img/svg/media/recently/episodes.svg")
       <% } %>

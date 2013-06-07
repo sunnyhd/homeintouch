@@ -13,7 +13,8 @@
   },
   "cache": {
     "url": "http://localhost:8181",
-    "localUrl": "/api/image-cache"
+    "localUrl": "/api/image-cache",
+    "xbmcRoute": "/api/xbmc-image"
   },
   "hosts": {
     "web": {

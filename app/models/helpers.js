@@ -51,8 +51,8 @@ var buildImageUrl = function(url) {
     } else {
         var imagePath = encodeURIComponent(tempURL);
         // The URL is encoded again because it is decoded in Image Cache Server
-        imagePath = encodeURIComponent(imagePath);
-        return settings.images.importUrl + imagePrefix + imagePath;
+        //imagePath = encodeURIComponent(imagePath);
+        return settings.cache.xbmcRoute + '/' + imagePrefix + imagePath;
     }
 };
 
@@ -88,12 +88,22 @@ exports.cacheImages = function(Model, fields) {
                     imageUrl = buildImageUrl(urlFromXbmc);
                 }
 
+                if (imageUrl === '') {
+                    console.log('Skip empty URL');
+                    return callback();
+                }
+
                 var options = {
                     url: imageUrl,
                     encoding: 'binary'
                 };
 
                 console.log('Caching Image - Image URL: ' + options.url);
+
+                if (imageUrl.indexOf(settings.cache.xbmcRoute) === 0) {
+                    self[attrs.dest] = imageUrl;
+                    return callback();
+                }
 
                 if (attrs.newCache) {
 

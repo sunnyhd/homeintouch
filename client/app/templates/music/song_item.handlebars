@@ -1,9 +1,9 @@
 <div class="songContainer clearfix">
     <div class="song-image">
         {{#if thumbnail}}
-            <img src="{{ thumbnail }}">
+            <img src="{{ thumbnail }}" onerror="this.src='img/svg/media/defaultSong.svg'">
         {{else}}
-            <div class="no-img"></div>
+            <img src="img/svg/media/defaultSong.svg">
         {{/if}}
     </div>
 

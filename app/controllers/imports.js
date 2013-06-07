@@ -1,8 +1,13 @@
 var mediaManager = require('../../lib/media_manager');
 
 exports.create = function(req, res, next) {
-    mediaManager.import();
-    res.json({ state: 'importing...' });
+	var importMedia = req.params.media;
+	if (importMedia) {
+	    mediaManager.import(importMedia);
+	    res.json({ state: 'importing...' });
+	} else {
+		res.json({ message: 'You must define a media to import.'});
+	}
 };
 
 exports.show = function(req, res, next) {
