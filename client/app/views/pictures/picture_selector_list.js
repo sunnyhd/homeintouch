@@ -16,7 +16,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     	var $btn = $(e.currentTarget);
         var directory = this.collection.directory ? this.collection.directory : '';
-    	app.router.navigate($btn.attr('href') + directory, {trigger: true});
+    	app.router.navigate ($btn.attr('href') + directory, {trigger: true});
         return false;
     }
     

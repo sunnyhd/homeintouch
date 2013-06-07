@@ -75,16 +75,18 @@ exports.getPicture = function(item) {
 };
 
 var buildBreadcrumb = function(path) {
+
     if (!exports.breadcrumb || !path) {
         exports.breadcrumb = [];
         exports.breadcrumb.push({label: 'Home', path: ''});
+
     } else {
 
         var breadcrumbItem = _.find(exports.breadcrumb, function(item) {
             return (item.path === path);
         });
 
-        if (!breadcrumbItem) {
+        if (!breadcrumbItem && path) {
             exports.breadcrumb.push({label: buildLabel(path), path: path});
         } else {
             var breadcrumbIndex = exports.breadcrumb.indexOf(breadcrumbItem);

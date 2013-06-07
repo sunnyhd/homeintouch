@@ -401,6 +401,7 @@ var initTouchableAnimations = function() {
         classPrefix = 'on-touch-active-';
 
     var onTouchStart = function(e) {
+
         var $el = $(this),
             tClass = $el.data('touchable');
         tClass = (tClass) ? tClass : defaultClass;

@@ -1,5 +1,6 @@
 var app = require('app');
 var PictureItemView = require('views/pictures/picture_item');
+var PictureBreadcrumbView = require('views/pictures/picture_breadcrumb');
 var FilteredListView = require('views/filtered_list');
 
 module.exports = FilteredListView.extend({
@@ -8,43 +9,24 @@ module.exports = FilteredListView.extend({
     
     itemView: PictureItemView,
 
-    events: {
-        'click [data-redirect]' : 'navigateFolder'
-    },      
+    tpls: {
+        'item': '<li><%=  divider %><a href="#" data-redirect="<%= path %>"><%= label %></a></li>',
+        'itemActive': '<li class="active"><%=  divider %><%= label %></li>',
+        'divider': '<span class="divider">/</span>'
+    },
 
     onRender: function() {
-        this.buildBreadcrumb();
+        this.breadcrumb = new PictureBreadcrumbView( {el: 'ul.breadcrumb'} );
+        this.breadcrumb.on('breadcrumb:navigate', this.navigate, this); 
+        this.breadcrumb.build(this.options.breadcrumb);
+    },
+
+    navigate: function(path) {
+        app.router.navigate('#pictures/list-view/' + path, { trigger: true });
     },
 
     appendHtml: function(cv, iv) {
         this.$('.pictures').append(iv.el);
-    },
-
-    buildBreadcrumb: function() {
-
-        var breadcrumbList = this.options.breadcrumb;
-        var $breadcrumb = this.$('.header ul.breadcrumb');
-
-        var breadcrumbItem;
-
-        for (var i = 0; i < (breadcrumbList.length - 1); i++) {
-            breadcrumbItem = breadcrumbList[i];
-            
-            $breadcrumb.append('<li><a href="#" data-redirect="' + breadcrumbItem.path + '">' + breadcrumbItem.label + '</a> <span class="divider">/</span></li>');
-        }
-
-        breadcrumbItem = breadcrumbList[breadcrumbList.length - 1];
-
-        $breadcrumb.append('<li class="active">' + breadcrumbItem.label + '</li>');
-    },
-
-    // Event Handlers
-
-    navigateFolder: function(event) {
-        var $btn = $(event.currentTarget);
-        var path = $btn.data('redirect');
-
-        app.router.navigate('#pictures/cover-view/' + path, { trigger: true });
     }
     
 });
