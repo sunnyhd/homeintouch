@@ -81,7 +81,7 @@ module.exports = function(app) {
     app.post('/api/players/:player/commands', controllers.player_commands.executeActionOnPlayer);
 
     app.get('/api/imports', controllers.imports.show);
-    app.post('/api/imports', controllers.imports.create);
+    app.post('/api/imports/:media', controllers.imports.create);
 
     app.get('/api/images/:image', controllers.images.show);
     app.post('/api/images', controllers.images.create);
@@ -89,6 +89,7 @@ module.exports = function(app) {
     app.get('/api/svg/:color/:image', controllers.images.svgGet);
 
     app.get(settings.cache.localUrl + '/*', controllers.images.getFromCache);
+    app.get(settings.cache.xbmcRoute + '/*', controllers.images.getFromXbmc);
 
     app.get('/api/files', controllers.files.index);
 };

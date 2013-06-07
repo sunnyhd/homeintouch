@@ -1,6 +1,6 @@
 <div class="artistContainer">
     {{#if thumbnail}}
-        <img src="{{ thumbnail }}">
+        <img src="{{ thumbnail }}" onerror="this.src='img/svg/media/defaultArtist.svg'">
     {{else}}
     	<img src="img/svg/media/defaultArtist.svg">
     {{/if}}

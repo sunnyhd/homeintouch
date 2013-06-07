@@ -34,9 +34,11 @@ The application can also be run using the following files (.sh on Linux, .cmd on
     startProd
     startEnv <custom-environment>
     
-There will not be any media data initially so you'll need to trigger an import.  This can either be done via the web UI (login is admin/admin) or by running:
+There will not be any media data initially so you'll need to trigger an import.  This can either be done via the web UI (login is admin/admin) or by running (the import process is divided into three sections):
 
-    curl -X POST http://admin:admin@localhost:8081/api/imports
+    curl -X POST http://admin:admin@localhost:8081/api/imports/music
+    curl -X POST http://admin:admin@localhost:8081/api/imports/tvshow
+    curl -X POST http://admin:admin@localhost:8081/api/imports/movie
     
 The import process runs in the background.
 

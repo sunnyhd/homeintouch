@@ -1,4 +1,5 @@
 var images = require('../../lib/images');
+var Promise = require('../../lib/promise');
 var request = require('request');
 var fs = require('fs');
 var svgImageCache = {};
@@ -52,4 +53,10 @@ exports.getFromCache = function(req, res, next) {
     var imageId = req.path.substring(settings.cache.localUrl.length);
 
     imageCache.loadAndPipe(imageId).pipe(res);
+}
+
+exports.getFromXbmc = function(req, res, next) {
+    var imageId = req.path.substring(settings.cache.xbmcRoute.length);
+
+    imageCache.loadFromXBMCAndPipe(imageId).pipe(res);
 }
