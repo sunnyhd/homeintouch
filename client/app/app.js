@@ -398,7 +398,8 @@ var initTouchableAnimations = function() {
         $touchableEl = $(touchableSelector),
         onTouchClass = 'on-touch',
         defaultClass = 'black',
-        classPrefix = 'on-touch-active-';
+        classPrefix = 'on-touch-active-',
+        $document = $(document);
 
     var onTouchStart = function(e) {
 
@@ -412,27 +413,40 @@ var initTouchableAnimations = function() {
 
         // Apply the active class
         $el.addClass(classPrefix + tClass);
+
+        if (app.isTouchDevice()) {
+            $el.on('touchend', {element: $el}, onTouchStop);
+            $document.on('touchend', {element: $el}, onTouchStop);
+        } else {
+            $el.on('mouseup', {element: $el}, onTouchStop);
+            $document.on('mouseup', {element: $el}, onTouchStop);
+        }
     };
 
     var onTouchStop = function(e) {
-        var $el = $(this),
+        var $el = e.data.element,
             classes = $el.attr('class').split(/\s+/);
         $.each( classes, function(idx, item){
             if (item.indexOf(classPrefix) == 0) {
                $el.removeClass(item);
             }
         });
+
+        if (app.isTouchDevice()) {
+            $el.off('touchend', onTouchStop);
+            $document.off('touchend', onTouchStop);
+        } else {
+            $el.off('mouseup', onTouchStop);
+            $document.off('mouseup', onTouchStop);
+        }
     };
 
     if (app.isTouchDevice()) {
         $touchableEl.live('touchstart', onTouchStart);
-        $touchableEl.live('touchend', onTouchStop);
     } else {
         $touchableEl.live('mousedown', onTouchStart);
-        $touchableEl.live('mouseup', onTouchStop);
     }
 }
-
 
 app.addInitializer(function() {
 
@@ -450,7 +464,6 @@ app.addInitializer(function() {
     });
 
     initTouchableAnimations();
-
 
     $(document).on('click', function(e) {
         app.resetStartPageTimeout();
