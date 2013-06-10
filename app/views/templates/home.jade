@@ -131,10 +131,10 @@ script(id="my-house-template", type="text/template")
       <% } else { %>
       .overview
         <% _.each(floors, function(floor){ %>
-        .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", data-hit-icon-type!="<%= floor.icon %>")
+        .hit-icon.floor-item-list(data-item-id!="<%= floor.id %>", data-hit-icon-type!="<%= floor.icon %>", data-touchable="black")
           span <%= floor.name %>
         <% }) %>
-        .hit-icon.custom-item-list(data-item-id="favorites", data-hit-icon-type="floors.favorite")
+        .hit-icon.custom-item-list(data-item-id="favorites", data-hit-icon-type="floors.favorite", data-touchable="black")
           span Favorites
       <% } %>
     .scrollbar
