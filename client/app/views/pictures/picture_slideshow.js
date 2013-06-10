@@ -26,7 +26,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     },
 
     fullscreen: function() {
-        this.$('#pictureCarousel').get()[0].webkitRequestFullScreen();
+        app.goFullscreen(this.$('#pictureCarousel').get()[0]);
     },
 
     backToFolder: function() {

@@ -252,6 +252,20 @@ app.clearStartPageTimeout = function() {
     }
 };
 
+//Fullscreen mode
+app.goFullscreen = function(elem) {
+    console.log('Going fullscreen');
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen();
+    } else if (elem.webkitRequestFullScreen) {
+      elem.webkitRequestFullScreen();
+    }
+};
+
 // Loading modal message
 app.showLoading = function(promise) {
     var loadingView = new LoadingView({title: 'Loading...'});

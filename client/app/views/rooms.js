@@ -500,7 +500,7 @@ exports.CameraDeviceView = exports.DeviceView.extend({
 
         $img.attr('src', url);
         $img.die().click(function() {
-            this.webkitRequestFullScreen();
+            app.goFullscreen(this);
         });
 
         var refresh = this.model.get('refresh');
@@ -515,7 +515,7 @@ exports.CameraDeviceView = exports.DeviceView.extend({
             var $video = $('video', this.$el);
             $video.attr('autoplay', 'autoplay');
             $video.click(function() {
-                this.webkitRequestFullScreen();
+                app.goFullscreen(this);
             });
         }
     },
