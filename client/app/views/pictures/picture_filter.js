@@ -2,6 +2,7 @@ var app = require('app');
 var Files = require('collections/files');
 var FilterPanelView = require('views/filtered_panel');
 var SearchModalView = require('views/pictures/picture_mobile_search_modal');
+var ActionsModalView = require('views/pictures/picture_mobile_actions_modal');
 var picturesController = app.controller('pictures');
 
 module.exports = FilterPanelView.extend({
@@ -20,6 +21,7 @@ module.exports = FilterPanelView.extend({
 
         // Touch events
         'click .touch-pictures-search': 'openMobileSearchDialog',
+        'click .touch-pictures-actions': 'openMobileActionsDialog',
         'click .touch-pictures-default': 'clearMobile'
 	},
 
@@ -123,6 +125,18 @@ module.exports = FilterPanelView.extend({
         modal.on('media-pictures:search', function(criteria) {
             this.performSearch(criteria);
             this.refreshDisplayedPictures();
+        }, this);
+
+        app.modal.show(modal);
+    },
+
+    openMobileActionsDialog: function() {
+        var modal = new ActionsModalView( { term: this.model.get('term') } );
+        modal.on('media-pictures:slideshow:play', function() {
+             this.collection.play();
+        }, this);
+         modal.on('media-pictures:slideshow:watch', function() {
+            app.router.navigate('pictures/cover-view/slideshow/' + this.collection.directory, { trigger: true });
         }, this);
 
         app.modal.show(modal);

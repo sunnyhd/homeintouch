@@ -52,7 +52,7 @@ exports.showPictureDetailsView = function(path, mode) {
 };
 
 exports.showSlideshowView = function(path, mode) {
-    
+    console.log('Playing slideshow on client for directory', path);
     if (exports.pictures.directory === path) {
         var view = new PictureSlideshowView({collection: exports.pictures, mode: mode});
         app.main.show(view);
