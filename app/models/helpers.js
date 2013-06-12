@@ -59,16 +59,18 @@ var buildImageUrl = function(url) {
 exports.cacheImages = function(Model, fields) {
 
     Model.pre('remove', function(next) {
-        var self = this;
 
-        var funcs = fields.map(function(attrs) {
-            return function(callback) {
-                if (!self[attrs.dest]) return callback();
-                images.delete(self[attrs.dest], callback);
-            };
-        });
+        if (!self[attrs.dest]) return callback();
+        var imageId = this[attrs.dest];
 
-        async.parallel(funcs, next);
+        imageCache.remove(imageId)
+        .then(function() {
+            callback();
+        })
+        .fail(function(err) {
+            callback();
+        })
+        .done();
     });
 
     Model.pre('save', function(next) {
@@ -118,7 +120,7 @@ exports.cacheImages = function(Model, fields) {
                     .fail(function(err) {
                         callback();
                     })
-                    .done();  
+                    .done();
                 } else {
 
                     // Make HTTP request for image
