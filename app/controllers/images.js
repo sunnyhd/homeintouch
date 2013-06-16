@@ -58,5 +58,17 @@ exports.getFromCache = function(req, res, next) {
 exports.getFromXbmc = function(req, res, next) {
     var imageId = req.path.substring(settings.cache.xbmcRoute.length);
 
-    imageCache.loadFromXBMCAndPipe(imageId).pipe(res);
+    var loadPromise = imageCache.loadFromXBMCAndPipe(imageId);
+
+    loadPromise.then(function(response) {
+        if (response.statusCode !== 200) {
+            console.log('Error retrieving XBMC thumbnail');
+            res.send('Sorry, we cannot find that!', 404);
+        } else {
+            request.get(imageURL).pipe(res);
+        }
+    }).fail(function(){
+        console.log('Error retrieving XBMC thumbnail');
+        res.send('Sorry, we cannot find that!', 404);
+    });
 }
