@@ -118,6 +118,7 @@ exports.cacheImages = function(Model, fields) {
                         callback();
                     })
                     .fail(function(err) {
+                        console.log(err);
                         callback();
                     })
                     .done();
