@@ -40,7 +40,7 @@ var retrieveSourceUrl = function(self, attrs, callback) {
         return self[attrs.src];
     }
 }
-
+/*
 var buildImageUrl = function(url) {
 
     var tempURL = url.substring(imagePrefix.length);
@@ -54,6 +54,17 @@ var buildImageUrl = function(url) {
         //imagePath = encodeURIComponent(imagePath);
         return settings.cache.xbmcRoute + '/' + imagePrefix + imagePath;
     }
+};
+*/
+var buildImageUrl = function(url) {
+
+    var tempURL = url.substring(imagePrefix.length);
+    tempURL = removeLastSlash(tempURL);
+    var imagePath = encodeURIComponent(tempURL);
+    // The URL is encoded again because it is decoded in Image Cache Server
+    imagePath = encodeURIComponent(imagePath);
+
+    return settings.images.importUrl + imagePrefix + imagePath;
 };
 
 exports.cacheImages = function(Model, fields) {
