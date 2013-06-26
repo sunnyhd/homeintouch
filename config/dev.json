@@ -7,6 +7,11 @@
     "path": "./data/homes.db",
     "mongodb": "mongodb://localhost:27017/hit"
   },
+  "scrappers": {
+    "last_fm": {
+      "api_key": "a0c1a32c0769397056099fcebcc8cb32"
+    } 
+  },
   "images": {
     "url": "http://localhost:8080/vfs/",
     "importUrl": "http://localhost:8080/image/"
