@@ -18,6 +18,8 @@ module.exports = FilteredListView.extend({
 
     matchers: function(song) {
         return song.get('label');
-    }
+    },
+
+    onRender: function() {}
     
 });

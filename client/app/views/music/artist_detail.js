@@ -13,9 +13,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
         // Fanart background
         var src = 'img/cinema-background.jpg';
-        var fanArt = this.model.get('fanartid');
+        var fanArt = this.model.get('fanartUrl');
         if (fanArt && fanArt !== '') {
-            src = 'api/images/' + fanArt;
+            src = fanArt;
         }
         app.setRepeatBackgroundImg( src );
     },

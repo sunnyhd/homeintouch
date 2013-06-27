@@ -24,6 +24,8 @@ module.exports = FilteredListView.extend({
 
     matchers: function(album) {
         return album.get('label');
-    }
+    },
+
+    onRender: function() {}
     
 });

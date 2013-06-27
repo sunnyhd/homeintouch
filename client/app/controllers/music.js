@@ -6,7 +6,6 @@ var PaginatedSongs = require('collections/songs_paginated');
 var Album = require('models/album');
 var Artist = require('models/artist');
 var Song = require('models/song');
-var ArtistAlbumListView = require('views/music/artist_album_list');
 var playlistsController = require('controllers/playlists');
 var ArtistDetailView = require('views/music/artist_detail_container');
 
