@@ -80,7 +80,12 @@ var Albums = module.exports = Backbone.Collection.extend({
     },
 
     comparator: function(album) {
-        return album.get('label');
+        var albumLabel = album.get('label');
+        if (albumLabel) {
+            return albumLabel.toLowerCase();
+        } else {
+            return album.get('label');
+        }
     }
 
 });

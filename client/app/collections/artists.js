@@ -63,7 +63,12 @@ var Artists = module.exports = Backbone.Collection.extend({
     },
 
     comparator: function(artist) {
-        return artist.get('label');
+        var artistLabel = artist.get('label');
+        if (artistLabel) {
+            return artistLabel.toLowerCase();
+        } else {
+            return artist.get('label');
+        }
     }
 
 });
