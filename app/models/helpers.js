@@ -40,22 +40,7 @@ var retrieveSourceUrl = function(self, attrs, callback) {
         return self[attrs.src];
     }
 }
-/*
-var buildImageUrl = function(url) {
 
-    var tempURL = url.substring(imagePrefix.length);
-    tempURL = removeLastSlash(tempURL);
-    
-    if (tempURL.indexOf('http') === 0) {
-        return decodeURIComponent(tempURL);
-    } else {
-        var imagePath = encodeURIComponent(tempURL);
-        // The URL is encoded again because it is decoded in Image Cache Server
-        //imagePath = encodeURIComponent(imagePath);
-        return settings.cache.xbmcRoute + '/' + imagePrefix + imagePath;
-    }
-};
-*/
 var buildImageUrl = function(url) {
 
     var tempURL = url.substring(imagePrefix.length);
@@ -102,7 +87,6 @@ exports.cacheImages = function(Model, fields) {
                 }
 
                 if (imageUrl === '') {
-                    console.log('Skip empty URL');
                     return callback();
                 }
 
@@ -111,7 +95,7 @@ exports.cacheImages = function(Model, fields) {
                     encoding: 'binary'
                 };
 
-                console.log('Caching Image - Image URL: ' + options.url);
+                //console.log('Caching Image - Image URL: ' + options.url);
 
                 if (imageUrl.indexOf(settings.cache.xbmcRoute) === 0) {
                     self[attrs.dest] = imageUrl;

@@ -30,10 +30,9 @@ exports.svgGet = function(req, res, next) {
     imgPath = './public/img/svg/' + imgPath;
     var cacheKey = imgPath + '/' + color;
 
-    console.log('color: ' + color + ' - imgPath: ' + imgPath);
+    //console.log('color: ' + color + ' - imgPath: ' + imgPath);
 
     if (svgImageCache[cacheKey]) {
-        console.log('Image cached');
         res.writeHead(200, { 'Content-Type': 'image/svg+xml' });
         res.end(svgImageCache[cacheKey], 'binary');
     } else {
