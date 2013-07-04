@@ -95,7 +95,7 @@ exports.cacheImages = function(Model, fields) {
                     encoding: 'binary'
                 };
 
-                //console.log('Caching Image - Image URL: ' + options.url);
+                console.trace('Caching Image - Image URL: %s', options.url);
 
                 if (imageUrl.indexOf(settings.cache.xbmcRoute) === 0) {
                     self[attrs.dest] = imageUrl;
@@ -113,7 +113,7 @@ exports.cacheImages = function(Model, fields) {
                         callback();
                     })
                     .fail(function(err) {
-                        console.log(err);
+                        console.error(err);
                         callback();
                     })
                     .done();
