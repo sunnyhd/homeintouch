@@ -12,11 +12,16 @@ var settings = require('./config');
 var fs = require('fs');
 var compressor = require('node-minify');
 
+var consoleEnhancer = require('./lib/console');
+
 var app = express.createServer();
 var io = socket.listen(app);
 
 // Config
 // ---------------
+
+// Enhance the console logging
+consoleEnhancer.init(settings.logging.level);
 
 app.configure(function() {
     app.set('views', __dirname + '/app/views');

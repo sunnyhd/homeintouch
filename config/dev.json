@@ -35,5 +35,8 @@
     "compileLess": false,
     "minify": false,
     "minifyCssLibrary": false
+  },
+  "logging": {
+    "level": 3
   }
 }
