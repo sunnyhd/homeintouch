@@ -37,6 +37,6 @@
     "minifyCssLibrary": false
   },
   "logging": {
-    "level": 3
+    "level": 2
   }
 }
