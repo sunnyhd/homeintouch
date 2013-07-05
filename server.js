@@ -61,12 +61,12 @@ io.sockets.on('connection', function (socket) {
 });
 
 eib.on('address', function(id, value) {
-    console.log('eib:address', id, value);
+    console.trace('eib:address', id, value);
     io.sockets.emit('eib:address', id, value);
 });
 
 xbmc.on('notification', function(data) {
-    console.log('xbmc:notification', JSON.stringify(data));
+    console.trace('xbmc:notification', JSON.stringify(data));
     
     // Let the media manager try to process the notification first, and then notify the client app.
     mediaManager.onMediaCenterLibraryUpdate(data)
@@ -74,17 +74,17 @@ xbmc.on('notification', function(data) {
         io.sockets.emit('xbmc:notification', notificationData);
     })
     .fail(function(err) {
-        console.log('Error while processing xbmc notification: ' + err);
+        console.error('Error while processing xbmc notification', err);
     });
 });
 
 mediaManager.on('done', function(time) {
-    console.log('mediaManager:done', time);
+    console.trace('mediaManager:done', time);
     io.sockets.emit('media:data-changed'); // Notifies the client that the media data has changed
 });
 
 mediaManager.on('error', function(err) {
-    console.log('mediaManager:error', err);
+    console.error('mediaManager:error', err);
 });
 
 // Bootstrap
@@ -95,5 +95,5 @@ eib.connect();
 xbmc.connect();
 
 app.listen(settings.hosts.web.port, function() {
-    console.log('now listening on %s...', settings.hosts.web.port);
+    console.info('Now listening on %s...', settings.hosts.web.port);
 });
