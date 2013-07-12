@@ -244,7 +244,7 @@ script(id="movie-recently-added", type="text/template")
     span.mediaSubtitle <%=data.genre%>  
 
 script(id="episode-recently-added", type="text/template")  
-  .hit-icon.mediaWidget(data-hit-icon-href="#")
+  .hit-icon.mediaWidget(data-hit-icon-href="#", data-media-action!="tvshows/<%= data.tvshowid %>")
     span.mediaTitle <%=data.showtitle + ' - ' + data.season%>
     .mediaThumbnail
       <% if (!_.isUndefined(data.thumbnailUrl)) { %>

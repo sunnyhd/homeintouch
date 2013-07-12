@@ -26,7 +26,7 @@ exports.label = function(req, res, next) {
 };
 
 exports.lastN = function(req, res, next) {
-    var episodeProperties = ['showtitle', 'season', 'thumbnailUrl', 'label'];
+    var episodeProperties = ['showtitle', 'season', 'thumbnailUrl', 'label', 'tvshowid'];
     q.lastN(Episode, req.params.n, episodeProperties, function(err, episodes) {
         if (err) return next(err);
         res.json(episodes);

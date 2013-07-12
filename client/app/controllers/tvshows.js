@@ -49,6 +49,9 @@ exports.showTVShowSeasonList = function(tvshowid) {
     var tvshow = new TVShow({ tvshowid: tvshowid });
 
     var successCallback = function(model) {
+        
+        updateNavs();
+
         updateTvShowNavs(model.get('tvshowid'), model.get('label'));
         var view = new TVShowSeasonListView({ model: tvshow });
         app.main.show(view);
