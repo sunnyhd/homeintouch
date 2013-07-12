@@ -3,7 +3,7 @@ SETLOCAL
 set CONFIG_PORT="server.port=8181"
 set CONFIG_URL="mongo.url=localhost"
 set CONFIG_DB="mongo.dbname=storage"
-set JAVA_CMD="C:\Program Files\Java\jdk1.7.0_21\bin\java"
+set JAVA_CMD="C:\Program Files\Java\jdk1.7.0\bin\java"
 set APP_HOME="."
 
 IF "%1" == "start" (
