@@ -40,17 +40,26 @@ exports.index = function(req, res, next) {
 
             if (files) {
                 files.forEach(function(file) {
-                    console.log('Filename: ', file.file);
+
+                    var pathToHash = '';
+                    var path = encodeURIComponent(file.file).toLowerCase();
                     
-                    if(file.filetype === 'file') {
-                        // Create the path to XBMC thumbnails using the CRC32 of the path
-                        var thumb = crc.generate(file.file.toLowerCase()); 
-                        file.thumbnail = THUMBNAIL_URL + thumb.charAt(0) + '/' + thumb + '.jpg';
+                    // Create the path to XBMC thumbnails using the CRC32 of the path
+                    if (file.filetype === 'file') {
+                        pathToHash = 'image://' + path + '/transform?size=thumb';
+                    } else if (file.filetype === 'directory') {
+
+                        pathToHash = 'image://picturefolder@' + path + '/';
                     }
 
+                    var thumb = crc.generate(pathToHash); 
+                    file.thumbnail = THUMBNAIL_URL + thumb.charAt(0) + '/' + thumb + '.jpg';
+
+                    /*
                     if (file.file.indexOf('\\') > 0) {
                         file.file = file.file.replace(/\\/g, '/');
                     }
+                    */
                 });
             }
 
