@@ -37,6 +37,7 @@ app.addRegions({
     desktopTopConfig: '#desktop-top-config ul.dropdown-menu',
     desktopTopOpts: '#desktop-top-opts ul.dropdown-menu',
     desktopTopSwitch: '#desktop-top-switch',
+    desktopTopNowPlaying: '#desktop-top-now-playing',
     desktopNowPlaying: '#desktop-now-playing',
 
     // Touch device (tablets & phones) regions
@@ -58,6 +59,7 @@ app.closeRegions = function() {
     app.desktopTopConfig.close();
     app.desktopTopOpts.close();
     app.desktopTopSwitch.close();
+    app.desktopTopNowPlaying.close();
     app.desktopNowPlaying.close();
 
     app.touchBottomContent.close();
@@ -74,10 +76,12 @@ app.closeRegions = function() {
 
 app.vent.on('touch-shortcut:show', function() {
     $(app.touchShortcutContainer.el).removeClass('hidden');
+    $(app.desktopTopNowPlaying.el).removeClass('hidden');
 });
 
 app.vent.on('touch-shortcut:hide', function() {
     $(app.touchShortcutContainer.el).addClass('hidden');
+    $(app.desktopTopNowPlaying.el).addClass('hidden');
 });
 
 app.setBackgroundImg = function(img) {

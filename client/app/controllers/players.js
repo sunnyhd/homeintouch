@@ -27,18 +27,18 @@ function getLoading() {
 
 
 // mobile shortcut to players
-function showMobileShortcut() {
+function showNowPlayingShortcut() {
 	app.vent.trigger('touch-shortcut:show');
 }
 
-function hideMobileShortcut() {
+function hideNowPlayingShortcut() {
 	app.vent.trigger('touch-shortcut:hide');
 }
 
 
 exports.init = function(players) {
 
-	hideMobileShortcut();
+	hideNowPlayingShortcut();
 
 	setPlayerIds(players);
 	exports.loadActivePlayers();
@@ -83,7 +83,7 @@ exports.showPlayersOnRegion = function(region) {
 	exports.loadActivePlayers().then(function() {
 
 		if (players.length > 0) {
-			showMobileShortcut();
+			showNowPlayingShortcut();
 		}
 
 		var view = new PlayerList({ collection: players });
@@ -288,7 +288,7 @@ app.vent.on('player:onstop', function(id) {
 	}
 
 	if ( !isAnyPlayerActive() ) {
-		hideMobileShortcut();
+		hideNowPlayingShortcut();
 	}
 });
 
@@ -309,7 +309,7 @@ app.vent.on('playlist:open', function(data) {
  */
 app.vent.on('xbmc:player:onplay xbmc:player:onpause', function(data) {
 
-	showMobileShortcut();
+	showNowPlayingShortcut();
 
 	// Get the player
     exports.loading = exports.findPlayer(data.player.playerid)
