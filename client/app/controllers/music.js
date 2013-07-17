@@ -37,27 +37,7 @@ exports.loadingSongData = null;
 
 exports.showHomeView = function() {
 
-    // Removes previous link texts
-    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
-    $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
-
-    app.updateDesktopBreadcrumbNav( { 
-        itemType: 'floor',
-        name: 'Music', 
-        handler: function(e) {
-            app.router.navigate('#music', {trigger: true});
-            return false;
-        }
-    });
-
-    app.updateTouchNav({
-        name: 'Music', 
-        previous: 'Home',
-        handler: function(e) {
-            app.router.navigate('', {trigger: true});
-            return false;
-        }
-    });
+    updateMainNav();
 
     var view = new MusicHomeView();
     app.main.show(view);
@@ -159,6 +139,31 @@ exports.findSong = function(id) {
         });
     }
     return Q.when(song);
+};
+
+var updateMainNav = function() {
+    
+    // Removes previous link texts
+    $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
+    $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
+
+    app.updateDesktopBreadcrumbNav( { 
+        itemType: 'floor',
+        name: 'Music', 
+        handler: function(e) {
+            app.router.navigate('#music', {trigger: true});
+            return false;
+        }
+    });
+
+    app.updateTouchNav({
+        name: 'Music', 
+        previous: 'Home',
+        handler: function(e) {
+            app.router.navigate('', {trigger: true});
+            return false;
+        }
+    });
 };
 
 var updateListNav = function(title, url) {
@@ -352,6 +357,9 @@ exports.showAlbumSongList = function(albumid) {
 
     // When the artist instance is loaded, displays its data
     loadingArtist.done(function() {
+
+        updateMainNav();
+        updateListNav('Albums', '#music/albums');
 
         updateAlbumNav(exports.currentArtist);
         var view = new ArtistDetailView({ model: exports.currentArtist, mode: 'album' });

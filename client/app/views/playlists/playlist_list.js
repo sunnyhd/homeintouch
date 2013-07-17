@@ -8,6 +8,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     itemView: PlaylistItemView,
 
+    editing: false,
+
     initialize: function() {
         this.bindTo(this.collection, 'add remove reset', this.render, this);
 
@@ -27,6 +29,12 @@ module.exports = Backbone.Marionette.CompositeView.extend({
         this.bindTo(iv, 'swap-down', this.swapDown, this);
 
         this.$('.items').append(iv.el);
+
+        if(this.editing) this.editOrderView(); 
+    },
+
+    onClose: function(){
+        this.editing = false;
     },
 
     clearMoreOptions: function() {
@@ -41,6 +49,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     },
 
     clear: function() {
+        this.editing = false;
         return playlistsController.clearPlaylist(this.model);
     },
 
@@ -68,6 +77,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
         // Displays swap buttons
         this.$el.find('.swap-button').show();
+
+        this.editing = true;
     },
 
     editOrderDone: function() {
@@ -77,6 +88,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
         // Hides swap buttons
         this.$el.find('.swap-button').hide();
+
+        this.editing = false;
     },
 
     togglePlaylists: function() {
