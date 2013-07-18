@@ -16,6 +16,7 @@ module.exports = FilteredListView.extend({
     },
 
     onRender: function() {
+        FilteredListView.prototype.onRender.call(this);
         this.breadcrumb = new PictureBreadcrumbView( {el: 'ul.breadcrumb'} );
         this.breadcrumb.on('breadcrumb:navigate', this.navigate, this); 
         this.breadcrumb.build(this.options.breadcrumb);

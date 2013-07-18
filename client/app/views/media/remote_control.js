@@ -1,5 +1,4 @@
-var app = require('app');
-var RemoteControl = require('models/remote_control')
+var RemoteControl = require('models/remote_control');
 
 module.exports = Backbone.Marionette.ItemView.extend({
     
@@ -16,6 +15,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
     	console.log('Action [' + action + ']');
 
     	RemoteControl.execute(action);
+    },
+
+    onRender: function() {
+        var app = require('app');
+        var bodyPatternConfiguration = app.controller('homes').currentHome.getDefaultBackgroundStyle();
+        this.applyStyle(bodyPatternConfiguration, true);
     }
 
 });
