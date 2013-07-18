@@ -11,11 +11,11 @@ exports.create = function(req, res, next) {
 };
 
 exports.show = function(req, res, next) {
-    res.json({ state: importer.state });
+    res.json({ state: mediaManager.state });
 };
 
 // Forces the media data update on the clients
 exports.refresh = function(req, res, next) {
     res.json( { state: 'Updating media data on clients' } );
-    importer.emit('done', Date.now());
+    mediaManager.emit('done', Date.now());
 };

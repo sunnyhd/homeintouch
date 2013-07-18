@@ -535,14 +535,13 @@ app.loadMediaData = function () {
     // TV Shows media data
     var tvShowsController = app.controller('tvshows');
     tvShowsController.loadShows();
-
-    // Music media data
-    var musicController = app.controller('music');
-    musicController.loadMusic();
 }
 
 app.vent.on('media:data-changed', function(address, value) {
     app.loadMediaData();
+    if (app.modal.currentView) {
+        app.modal.currentView.model.fetch();
+    }
     console.log('Media data updated on client.');
 });
 

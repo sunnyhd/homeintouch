@@ -1,6 +1,14 @@
 module.exports = Backbone.Model.extend({
 
-    url: '/api/imports',
+    url: function() {
+    	var urlRoot = '/api/imports'
+    	
+    	if (this.has('mediaType')) {
+    		return urlRoot + '/' + this.get('mediaType');
+    	} else {
+    		return urlRoot;
+    	}
+    },
 
     isNew: function() {
         return true;

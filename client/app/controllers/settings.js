@@ -18,9 +18,9 @@ exports.showImport = function() {
     var i = new Import();
 
     var view = new ImportView({ model: i });
-    app.main.show(view);
+    app.modal.show(view);
 
-    return i;
+    i.fetch();
 };
 
 exports.showDatabaseSettings = function() {
@@ -40,3 +40,7 @@ exports.showMovieStyleSettings = function() {
 	var view = new MovieStyleSettingsView({model: exports.mediaSettings});
 	app.modal.show(view);	
 }
+
+app.vent.on('xbmc:import', function() {
+    exports.showImport();
+});

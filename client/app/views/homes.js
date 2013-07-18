@@ -21,7 +21,8 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
         'click a#home-settings' : 'editHomeHandler',
         'click a#editStyle': 'editStyle',
         'click a#deleteHome': 'deleteHome',
-        'click #startXbmc': 'startXbmc'
+        'click #startXbmc': 'startXbmc',
+        'click #importModal': 'importModal'
     },
 
     addFloorHandler: function(e) {
@@ -53,6 +54,10 @@ exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
     startXbmc: function() {
         var command = 'start';
         app.vent.trigger('xbmc:command', command);
+    },
+
+    importModal: function() {
+        app.vent.trigger('xbmc:import');
     },
 
     onRender: function() {

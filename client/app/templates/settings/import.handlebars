@@ -1,8 +1,20 @@
-<h3>Import</h3>
+<div class="modal-header">
+    <a class="close" href="#">x</a>
+    <h2>Import</h2>
+</div>
 
-State: {{ state }}
+<div class="modal-body">
 
-{{#if idle}}
-    <br>
-    <a href="#" class="btn start">Start</a>
-{{/if}}
+	<div class="import-status">
+		Importer status: <span class="importer-status-value">{{ state }}</span>
+	</div>
+
+
+	{{#if idle}}
+	    <div class="btn-toolbar">
+		    <a href="#" class="btn" data-import="movie">Import Movies</a>
+		    <a href="#" class="btn" data-import="tvshow">Import Series</a>
+		    <a href="#" class="btn" data-import="music">Import Music</a>
+		</div>
+	{{/if}}
+</div>

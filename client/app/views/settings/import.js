@@ -3,7 +3,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     template: require('templates/settings/import'),
 
     events: {
-        'click .start': 'start'
+        'click [data-import]': 'start',
+        'click .close': 'cancel'
     },
 
     initialize: function() {
@@ -12,8 +13,15 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     // Event Handlers
 
-    start: function() {
+    start: function(event) {
+        var $target = $(event.currentTarget);
+        this.model.set('mediaType', $target.data('import'));
         this.model.save();
+        this.model.unset('mediaType');
+    },
+
+    cancel: function () {
+        this.close();
     }
 
 });
