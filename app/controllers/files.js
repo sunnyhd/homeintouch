@@ -1,6 +1,8 @@
 var xbmc = require('../../lib/xbmc');
 var crc = require('../../lib/crc');
 
+var settings = require('../../config');
+
 var THUMBNAIL_URL = 'special://profile/Thumbnails/';
 
 exports.index = function(req, res, next) {
@@ -53,13 +55,13 @@ exports.index = function(req, res, next) {
                     }
 
                     var thumb = crc.generate(pathToHash); 
-                    file.thumbnail = THUMBNAIL_URL + thumb.charAt(0) + '/' + thumb + '.jpg';
+                    file.thumbnail = THUMBNAIL_URL + thumb.charAt(0) + '/' + thumb + ((file.filetype === 'file') ? '.jpg' : '.png');
 
-                    /*
+                    file.encodedPath = settings.images.url + encodeURIComponent(file.file);
+
                     if (file.file.indexOf('\\') > 0) {
                         file.file = file.file.replace(/\\/g, '/');
                     }
-                    */
                 });
             }
 
