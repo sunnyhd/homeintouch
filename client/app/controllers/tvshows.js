@@ -49,8 +49,6 @@ exports.showTVShowSeasonList = function(tvshowid) {
     var tvshow = new TVShow({ tvshowid: tvshowid });
 
     var successCallback = function(model) {
-        
-        updateNavs();
 
         updateTvShowNavs(model.get('tvshowid'), model.get('label'));
         var view = new TVShowSeasonListView({ model: tvshow });
@@ -111,7 +109,18 @@ exports.findEpisode = function(id) {
     });
 };
 
-function updateNavs () {
+function ensureHomeNav() {
+    var homesController = app.controller('homes');
+    if (!homesController.currentHome) {
+        var home = homesController.homes.defaultHome();
+        homesController.setHomeData(home);
+    }
+};
+
+function updateNavs() {
+
+    ensureHomeNav();
+
     // Removes previous link texts
     $('#desktop-breadcrumb-nav').find('li.hit-room span').html('');
     $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
@@ -136,6 +145,9 @@ function updateNavs () {
 };
 
 function updateTvShowNavs (tvShowId, tvShowName) {
+
+    updateNavs();
+
     // Removes previous link texts
     $('#desktop-breadcrumb-nav').find('li.hit-room span').html('');
     $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
@@ -160,6 +172,9 @@ function updateTvShowNavs (tvShowId, tvShowName) {
 };
 
 function updateSeasonNavs (tvShowId, season, tvShowName, seasonName) {
+
+    updateTvShowNavs(tvShowId, tvShowName);
+
     $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
     app.updateDesktopBreadcrumbNav( { 
         itemType: 'inner-room',
