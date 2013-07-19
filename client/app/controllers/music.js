@@ -141,7 +141,17 @@ exports.findSong = function(id) {
     return Q.when(song);
 };
 
+function ensureHomeNav() {
+    var homesController = app.controller('homes');
+    if (!homesController.currentHome) {
+        var home = homesController.homes.defaultHome();
+        homesController.setHomeData(home);
+    }
+};
+
 var updateMainNav = function() {
+
+    ensureHomeNav();
     
     // Removes previous link texts
     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
@@ -168,6 +178,8 @@ var updateMainNav = function() {
 
 var updateListNav = function(title, url) {
 
+    updateMainNav();
+
     // Removes previous link texts
     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); 
     $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html('');
@@ -192,6 +204,8 @@ var updateListNav = function(title, url) {
 };
 
 var updateArtistNav = function(artist) {
+
+    updateListNav('Artists', '#music/artists');
 
     $('#desktop-breadcrumb-nav').find('li.hit-inner-room span').html(''); // Removes previous link texts
     app.updateDesktopBreadcrumbNav( { 
@@ -358,7 +372,6 @@ exports.showAlbumSongList = function(albumid) {
     // When the artist instance is loaded, displays its data
     loadingArtist.done(function() {
 
-        updateMainNav();
         updateListNav('Albums', '#music/albums');
 
         updateAlbumNav(exports.currentArtist);

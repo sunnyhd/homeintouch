@@ -20,7 +20,15 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     onRender: function() {
         var app = require('app');
-        var bodyPatternConfiguration = app.controller('homes').currentHome.getDefaultBackgroundStyle();
+        var homesController = app.controller('homes');
+        var home;
+        if (!homesController.currentHome) {
+            home = homesController.homes.defaultHome();
+        } else {
+            home = homesController.currentHome;            
+        }
+
+        var bodyPatternConfiguration = home.getDefaultBackgroundStyle();
         this.applyStyle(bodyPatternConfiguration, true);
     },
 
