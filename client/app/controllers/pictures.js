@@ -108,7 +108,18 @@ var buildLabel = function(path) {
     return pathArray[pathArray.length - 1];
 };
 
+function ensureHomeNav() {
+    var homesController = app.controller('homes');
+    if (!homesController.currentHome) {
+        var home = homesController.homes.defaultHome();
+        homesController.setHomeData(home);
+    }
+};
+
 var updateNavs = function() {
+
+    ensureHomeNav();
+
     $('#desktop-breadcrumb-nav').find('li.hit-room span').html(''); // Removes previous link texts
     app.updateDesktopBreadcrumbNav( { 
         itemType: 'floor',
