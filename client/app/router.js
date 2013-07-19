@@ -25,8 +25,6 @@ module.exports = Backbone.Router.extend({
 
         'music/songs': 'songs',
         
-        'import': 'importSettings',
-
         'pictures/cover-view': 'pictures',
         'pictures/list-view': 'picturesListView',
         'pictures': 'pictures',
@@ -113,10 +111,6 @@ module.exports = Backbone.Router.extend({
 
         albumSongs: function(albumid) {
             this.app.controller('music').showAlbumSongList(albumid);
-        },
-
-        importSettings: function() {
-            this.app.controller('settings').showImport().fetch();
         },
 
         pictures: function(path) {
