@@ -9,9 +9,9 @@
   <div class="carousel-inner">
     {{#each files}}
       {{#if this.firstItem}}
-        <div class="active item"><img class='carousel-image' src="{{ image this.file }}"></div>
+        <div class="active item"><img class='carousel-image' src="{{ this.encodedPath }}"></div>
       {{else}}
-        <div class="item"><img class='carousel-image' src="{{ image this.file }}"></div>
+        <div class="item"><img class='carousel-image' src="{{ this.encodedPath }}"></div>
       {{/if}}
     {{/each}}
   </div>
