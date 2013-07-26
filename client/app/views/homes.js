@@ -11,6 +11,7 @@ var Albums = require('collections/albums');
 
 var StyleConfigurationView = require('views/settings/style_settings');
 
+exports.EditStyleWidgetForm = require('views/homes/abstract_edit_widget');
 exports.EditTimeWeatherForm = require('views/homes/edit_time_wheater');
 
 exports.OptionsContextMenuView = Backbone.Marionette.ItemView.extend({
